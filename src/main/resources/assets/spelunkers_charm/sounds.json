@@ -1,0 +1,35 @@
+{
+  "rumble": {
+    "subtitle": "sounds.spelunkers_charm.rumble",
+    "sounds": [
+      "spelunkers_charm:ambient/cave/rumble_0"
+      ]
+  },
+  "tremor": {
+    "subtitle": "sounds.spelunkers_charm.tremor",
+    "sounds": [
+      {
+        "name": "spelunkers_charm:ambient/cave/tremor_0",
+        "stream": true,
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "geyser_charge": {
+    "subtitle": "sounds.spelunkers_charm.geyser_charge",
+    "sounds": [
+      "spelunkers_charm:block/geyser/charge_0",
+      "spelunkers_charm:block/geyser/charge_1"
+    ]
+  },
+  "geyser_erupt_water": {
+    "subtitle": "sounds.spelunkers_charm.geyser_erupt_water",
+    "sounds": [
+      "spelunkers_charm:block/geyser/erupt_water_0",
+      "spelunkers_charm:block/geyser/erupt_water_1",
+      "spelunkers_charm:block/geyser/erupt_water_2",
+      "spelunkers_charm:block/geyser/erupt_water_3",
+      "spelunkers_charm:block/geyser/erupt_water_4"
+    ]
+  }
+}
