@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "spelunkers_charm:block/basalt_geyser_top",
+    "side": "minecraft:block/basalt_side"
+  }
+}

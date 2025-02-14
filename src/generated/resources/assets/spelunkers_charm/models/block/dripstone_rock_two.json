@@ -1,0 +1,7 @@
+{
+  "parent": "spelunkers_charm:block/template_rock_two",
+  "textures": {
+    "all": "spelunkers_charm:block/dripstone_rock",
+    "particle": "minecraft:block/dripstone_block"
+  }
+}

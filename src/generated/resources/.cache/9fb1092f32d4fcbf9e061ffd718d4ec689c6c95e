@@ -1,3 +1,9 @@
-// 1.21.1	2025-02-10T18:56:51.3855266	Recipes
-5e41c173e8be4a12f71f43109ad8938a1ad9dff7 data/minecraft/advancement/recipes/building_blocks/stone_from_rock.json
-9dc8ddd1384763369f9e75151ecdfeb531943847 data/minecraft/recipe/stone_from_rock.json
+// 1.21.1	2025-02-12T22:33:40.9269786	Recipes
+4e8b2e954219d38d5201c2a3997759cf6da90e56 data/minecraft/advancement/recipes/building_blocks/basalt.json
+ed4d37f1abfc4125607190b9402957bc452c5b9c data/minecraft/advancement/recipes/building_blocks/deepslate.json
+2731568ba05ff9f25bb88ba5002371ea7f5fed0f data/minecraft/advancement/recipes/building_blocks/dripstone_block.json
+36cf60866489bd4f6e56eba191b0559a966ce2c8 data/minecraft/advancement/recipes/building_blocks/stone.json
+89ff6dcae9b84318b5eeaa9c03ba4dc4b6e7f658 data/minecraft/recipe/basalt.json
+9038ca87755639311604b255d3e375a2090b0d3a data/minecraft/recipe/deepslate.json
+f26e5371798777f50bac90a5c7154a46c87db5b8 data/minecraft/recipe/dripstone_block.json
+9dc8ddd1384763369f9e75151ecdfeb531943847 data/minecraft/recipe/stone.json

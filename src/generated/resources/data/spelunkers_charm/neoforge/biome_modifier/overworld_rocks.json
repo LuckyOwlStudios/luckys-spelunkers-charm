@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": [
+    "spelunkers_charm:rock_placed",
+    "spelunkers_charm:deepslate_rock_placed",
+    "spelunkers_charm:cave_mushroom_placed"
+  ],
+  "step": "vegetal_decoration"
+}

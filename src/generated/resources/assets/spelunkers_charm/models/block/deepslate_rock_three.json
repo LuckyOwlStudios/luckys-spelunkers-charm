@@ -1,0 +1,7 @@
+{
+  "parent": "spelunkers_charm:block/template_rock_three",
+  "textures": {
+    "all": "spelunkers_charm:block/deepslate_rock",
+    "particle": "minecraft:block/deepslate"
+  }
+}

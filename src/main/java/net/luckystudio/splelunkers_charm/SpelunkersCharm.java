@@ -5,18 +5,19 @@ import net.luckystudio.splelunkers_charm.entity.ModEntityType;
 import net.luckystudio.splelunkers_charm.item.ModCreativeModeTabs;
 import net.luckystudio.splelunkers_charm.item.ModItems;
 import net.luckystudio.splelunkers_charm.sound.ModSoundEvents;
+import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
-import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -29,6 +30,11 @@ public class SpelunkersCharm
 {
     // Define mod id in a common place for everything to reference
     public static final String MODID = "spelunkers_charm";
+
+    public static ResourceLocation id(String name) {
+        return ResourceLocation.fromNamespaceAndPath(SpelunkersCharm.MODID, name);
+    }
+
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
     // The constructor for the mod class is the first code that is run when your mod is loaded.
@@ -43,7 +49,6 @@ public class SpelunkersCharm
         NeoForge.EVENT_BUS.register(this);
 
         ModCreativeModeTabs.register(modEventBus);
-
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModEntityType.register(modEventBus);
@@ -54,7 +59,7 @@ public class SpelunkersCharm
         modEventBus.addListener(this::addCreative);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
-        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        modContainer.registerConfig(net.neoforged.fml.config.ModConfig.Type.COMMON, ModConfig.SPEC);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
@@ -68,10 +73,8 @@ public class SpelunkersCharm
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event)
-    {
-        // Do something when the server starts
-        LOGGER.info("HELLO from server starting");
+    public void onServerStarting(ServerStartingEvent event) {
+
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
@@ -81,9 +84,11 @@ public class SpelunkersCharm
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
-            // Some client setup code
-            LOGGER.info("HELLO FROM CLIENT SETUP");
-            LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+            // How did we find this? We searched all projects in Minecraft to see where the SnowBall projectile was registered in client and copied this.
+            EntityRenderers.register(ModEntityType.ROCK.get(), ThrownItemRenderer::new);
+            EntityRenderers.register(ModEntityType.DEEPSLATE_ROCK.get(), ThrownItemRenderer::new);
+            EntityRenderers.register(ModEntityType.DRIPSTONE_ROCK.get(), ThrownItemRenderer::new);
+            EntityRenderers.register(ModEntityType.BASALT_ROCK.get(), ThrownItemRenderer::new);
         }
     }
 }

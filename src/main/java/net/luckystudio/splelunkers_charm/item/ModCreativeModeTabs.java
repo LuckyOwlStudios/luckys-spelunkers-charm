@@ -1,6 +1,7 @@
 package net.luckystudio.splelunkers_charm.item;
 
 import net.luckystudio.splelunkers_charm.SpelunkersCharm;
+import net.luckystudio.splelunkers_charm.block.ModBlocks;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -17,10 +18,16 @@ public class ModCreativeModeTabs {
 
     public static final Supplier<CreativeModeTab> SPELUNKERS_CHARM = CREATIVE_MODE_TABS.register("spelunkers_charm",
             () -> CreativeModeTab.builder()
-                    .icon(() -> new ItemStack(ModItems.ROCK.get()))
+                    .icon(() -> new ItemStack(ModBlocks.ROCK.get()))
                     .title(Component.translatable("creative_tab.spelunkers_charm"))
                     .displayItems((itemDisplayParameters, output) -> {
-                        output.accept(ModItems.ROCK);
+                        output.accept(ModBlocks.DEEPSLATE_GEYSER);
+                        output.accept(ModBlocks.BASALT_GEYSER);
+                        output.accept(ModBlocks.ROCK);
+                        output.accept(ModBlocks.DEEPSLATE_ROCK);
+                        output.accept(ModBlocks.DRIPSTONE_ROCK);
+                        output.accept(ModBlocks.BASALT_ROCK);
+                        output.accept(ModBlocks.CAVE_MUSHROOM);
                     })
                     .build());
 

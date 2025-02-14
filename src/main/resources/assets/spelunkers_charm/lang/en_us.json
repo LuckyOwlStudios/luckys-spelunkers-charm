@@ -1,5 +1,10 @@
 {
-  "itemGroup.spelunkers_charm": "Example Mod Tab",
-  "block.spelunkers_charm.example_block": "Example Block",
-  "item.spelunkers_charm.example_item": "Example Item"
+  "creative_tab.spelunkers_charm": "Spelunking",
+  "block.spelunkers_charm.deepslate_geyser": "Deepslate Geyser",
+  "block.spelunkers_charm_basalt_geyser": "Basalt Geyser",
+  "block.spelunkers_charm.rock": "Rock",
+  "block.spelunkers_charm.deepslate_rock": "Deepslate Rock",
+  "block.spelunkers_charm.dripstone_rock": "Dripstone Rock",
+  "block.spelunkers_charm.basalt_rock": "Basalt Rock",
+  "block.spelunkers_charm.cave_mushroom": "Cave Mushroom"
 }

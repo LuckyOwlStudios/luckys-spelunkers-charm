@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=east,rocks=1": {
+      "model": "spelunkers_charm:block/rock_one",
+      "y": 90
+    },
+    "facing=east,rocks=2": {
+      "model": "spelunkers_charm:block/rock_two",
+      "y": 90
+    },
+    "facing=east,rocks=3": {
+      "model": "spelunkers_charm:block/rock_three",
+      "y": 90
+    },
+    "facing=north,rocks=1": {
+      "model": "spelunkers_charm:block/rock_one"
+    },
+    "facing=north,rocks=2": {
+      "model": "spelunkers_charm:block/rock_two"
+    },
+    "facing=north,rocks=3": {
+      "model": "spelunkers_charm:block/rock_three"
+    },
+    "facing=south,rocks=1": {
+      "model": "spelunkers_charm:block/rock_one",
+      "y": 180
+    },
+    "facing=south,rocks=2": {
+      "model": "spelunkers_charm:block/rock_two",
+      "y": 180
+    },
+    "facing=south,rocks=3": {
+      "model": "spelunkers_charm:block/rock_three",
+      "y": 180
+    },
+    "facing=west,rocks=1": {
+      "model": "spelunkers_charm:block/rock_one",
+      "y": 270
+    },
+    "facing=west,rocks=2": {
+      "model": "spelunkers_charm:block/rock_two",
+      "y": 270
+    },
+    "facing=west,rocks=3": {
+      "model": "spelunkers_charm:block/rock_three",
+      "y": 270
+    }
+  }
+}

@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_stone": {
+    "has_rock": {
       "conditions": {
         "items": [
           {
-            "items": "spelunkers_charm:rock"
+            "items": "spelunkers_charm:deepslate_rock"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:stone_from_rock"
+        "recipe": "minecraft:deepslate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_stone"
+      "has_rock"
     ]
   ],
   "rewards": {
     "recipes": [
-      "minecraft:stone_from_rock"
+      "minecraft:deepslate"
     ]
   }
 }

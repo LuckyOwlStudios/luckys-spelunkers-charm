@@ -1,0 +1,63 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "conditions": [
+                {
+                  "block": "spelunkers_charm:deepslate_rock",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "rocks": "2"
+                  }
+                }
+              ],
+              "count": 2.0,
+              "function": "minecraft:set_count"
+            },
+            {
+              "add": false,
+              "conditions": [
+                {
+                  "block": "spelunkers_charm:deepslate_rock",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "rocks": "3"
+                  }
+                }
+              ],
+              "count": 3.0,
+              "function": "minecraft:set_count"
+            },
+            {
+              "add": false,
+              "conditions": [
+                {
+                  "block": "spelunkers_charm:deepslate_rock",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "rocks": "4"
+                  }
+                }
+              ],
+              "count": 4.0,
+              "function": "minecraft:set_count"
+            },
+            {
+              "function": "minecraft:explosion_decay"
+            }
+          ],
+          "name": "spelunkers_charm:deepslate_rock"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "spelunkers_charm:blocks/deepslate_rock"
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "spelunkers_charm:block/template_rock_one",
+  "textures": {
+    "all": "spelunkers_charm:block/rock",
+    "particle": "minecraft:block/stone"
+  }
+}

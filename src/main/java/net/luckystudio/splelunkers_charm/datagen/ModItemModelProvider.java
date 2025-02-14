@@ -1,6 +1,7 @@
 package net.luckystudio.splelunkers_charm.datagen;
 
 import net.luckystudio.splelunkers_charm.SpelunkersCharm;
+import net.luckystudio.splelunkers_charm.block.ModBlocks;
 import net.luckystudio.splelunkers_charm.item.ModItems;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
@@ -13,6 +14,5 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        basicItem(ModItems.ROCK.get());
     }
 }

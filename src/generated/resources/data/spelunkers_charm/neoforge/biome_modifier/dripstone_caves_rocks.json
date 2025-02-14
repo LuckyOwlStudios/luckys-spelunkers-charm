@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "minecraft:dripstone_caves",
+  "features": "spelunkers_charm:dripstone_rock_placed",
+  "step": "vegetal_decoration"
+}
