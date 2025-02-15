@@ -11,14 +11,15 @@ import net.luckystudio.splelunkers_charm.item.custom.DeepslateRockItem;
 import net.luckystudio.splelunkers_charm.item.custom.DripstoneRockItem;
 import net.luckystudio.splelunkers_charm.item.custom.RockItem;
 import net.luckystudio.splelunkers_charm.item.util.ModFoods;
+import net.luckystudio.splelunkers_charm.worldgen.types.ModTreeFeatures;
 import net.minecraft.core.BlockPos;
-import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
@@ -81,7 +82,7 @@ public class ModBlocks {
 
     // Copied from the Brown Mushroom Block
     public static final DeferredBlock<Block> CAVE_MUSHROOM = registerBlockAndBlockItem("cave_mushroom",
-            () -> new CaveMushroomBlock(TreeFeatures.HUGE_BROWN_MUSHROOM, BlockBehaviour.Properties.of()
+            () -> new CaveMushroomBlock(ModTreeFeatures.HUGE_CAVE_MUSHROOM, BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_BROWN)
                     .noCollission()
                     .randomTicks()
@@ -92,6 +93,15 @@ public class ModBlocks {
                     .pushReaction(PushReaction.DESTROY)),
             block -> new BlockItem(block, new Item.Properties().food(ModFoods.CAVE_MUSHROOM))
     );
+
+    public static final DeferredBlock<Block> CAVE_MUSHROOM_BLOCK = registerBlock("cave_mushroom_block",
+            () -> new HugeMushroomBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_BROWN)
+                    .instrument(NoteBlockInstrument.BASS)
+                    .strength(0.2F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava()
+    ));
 
     public static final DeferredBlock<Block> SHORT_UNDER_BRUSH = BLOCKS.register("short_under_brush",
             () -> new UnderBrushBlock(BlockBehaviour.Properties.of()

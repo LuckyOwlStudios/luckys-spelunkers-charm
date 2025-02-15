@@ -2,6 +2,7 @@ package net.luckystudio.splelunkers_charm;
 
 import net.luckystudio.splelunkers_charm.block.ModBlocks;
 import net.luckystudio.splelunkers_charm.entity.ModEntityType;
+import net.luckystudio.splelunkers_charm.worldgen.feature.ModFeature;
 import net.luckystudio.splelunkers_charm.item.ModCreativeModeTabs;
 import net.luckystudio.splelunkers_charm.item.ModItems;
 import net.luckystudio.splelunkers_charm.sound.ModSoundEvents;
@@ -32,11 +33,12 @@ public class SpelunkersCharm
     public static final String MODID = "spelunkers_charm";
 
     public static ResourceLocation id(String name) {
-        return ResourceLocation.fromNamespaceAndPath(SpelunkersCharm.MODID, name);
+        return ResourceLocation.fromNamespaceAndPath(MODID, name);
     }
 
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
+
     // The constructor for the mod class is the first code that is run when your mod is loaded.
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     public SpelunkersCharm(IEventBus modEventBus, ModContainer modContainer) {
@@ -54,6 +56,8 @@ public class SpelunkersCharm
         ModEntityType.register(modEventBus);
 
         ModSoundEvents.register(modEventBus);
+
+        ModFeature.register(modEventBus);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);

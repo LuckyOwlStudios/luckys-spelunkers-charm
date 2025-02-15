@@ -1,12 +1,12 @@
 {
-  "feature": "spelunkers_charm:rock",
+  "feature": "spelunkers_charm:basalt_rock_pile",
   "placement": [
     {
       "type": "minecraft:count",
       "count": {
         "type": "minecraft:uniform",
-        "max_inclusive": 12,
-        "min_inclusive": 6
+        "max_inclusive": 24,
+        "min_inclusive": 8
       }
     },
     {
@@ -17,10 +17,10 @@
       "height": {
         "type": "minecraft:uniform",
         "max_inclusive": {
-          "below_top": 0
+          "below_top": 8
         },
         "min_inclusive": {
-          "absolute": 0
+          "above_bottom": 8
         }
       }
     },

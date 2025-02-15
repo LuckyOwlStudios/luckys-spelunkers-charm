@@ -1,7 +1,8 @@
-// 1.21.1	2025-02-13T15:08:35.2070586	Loot Tables
+// 1.21.1	2025-02-14T15:57:30.0634285	Loot Tables
 339eb307612091671010f17e0bf3d81a46539ad2 data/spelunkers_charm/loot_table/blocks/basalt_geyser.json
 97fcd58802d56127905a98d14cd943b8233193af data/spelunkers_charm/loot_table/blocks/basalt_rock.json
 9b312e5355045bb77c13f94ba109c0bb56c73a67 data/spelunkers_charm/loot_table/blocks/cave_mushroom.json
+ddc655d787122d3a9df38a02b57ea8805a5508e4 data/spelunkers_charm/loot_table/blocks/cave_mushroom_block.json
 eff72b6c7e4ded22c2bb9f9cf7c7bbad8c7053a5 data/spelunkers_charm/loot_table/blocks/clay_ball.json
 39a2f2225dd719e9df7f2d7e32a65edce058cc57 data/spelunkers_charm/loot_table/blocks/deepslate_geyser.json
 35b67bb5ba5db6ebcd6046beafac5deb7bf349d9 data/spelunkers_charm/loot_table/blocks/deepslate_rock.json

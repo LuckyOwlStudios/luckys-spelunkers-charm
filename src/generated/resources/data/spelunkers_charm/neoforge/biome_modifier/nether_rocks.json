@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_nether",
+  "features": "spelunkers_charm:basalt_rock_pile",
+  "step": "vegetal_decoration"
+}

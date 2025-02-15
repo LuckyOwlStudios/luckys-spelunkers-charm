@@ -31,6 +31,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockWithItem(ModBlocks.DEEPSLATE_GEYSER.get(), models().cubeColumn("deepslate_geyser", ResourceLocation.withDefaultNamespace("block/deepslate"), ResourceLocation.fromNamespaceAndPath(SpelunkersCharm.MODID,"block/deepslate_geyser_top")));
         simpleBlockWithItem(ModBlocks.BASALT_GEYSER.get(), models().cubeColumn("basalt_geyser", ResourceLocation.withDefaultNamespace("block/basalt_side"), ResourceLocation.fromNamespaceAndPath(SpelunkersCharm.MODID,"block/basalt_geyser_top")));
         simpleBlockWithGeneratedItem(ModBlocks.CAVE_MUSHROOM.get());
+        createHugeMushroomBlock(ModBlocks.CAVE_MUSHROOM_BLOCK.get());
     }
 
     /**
@@ -39,7 +40,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
      */
     private void simpleBlockWithGeneratedItem(Block block) {
         String name = BuiltInRegistries.BLOCK.getKey(block).getPath();
-        simpleBlock(block, models().cross(name, SpelunkersCharm.id("block/" + name)).renderType("cutout"));
+        simpleBlock(block, models().cross(name, modLoc("block/" + name)).renderType("cutout"));
         ResourceLocation item = ResourceLocation.fromNamespaceAndPath(SpelunkersCharm.MODID, name);
         itemModels().getBuilder(item.toString())
                 .parent(new ModelFile.UncheckedModelFile("item/generated"))
@@ -51,11 +52,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
      * @param block
      * @param breakParticle
      */
-    public void rockBlock(Block block, ResourceLocation breakParticle) {
+    private void rockBlock(Block block, ResourceLocation breakParticle) {
         String name = BuiltInRegistries.BLOCK.getKey(block).getPath();
-        ModelFile rockOne = models().withExistingParent(name + "_one", SpelunkersCharm.id("block/template_rock_one")).texture("all", SpelunkersCharm.id("block/" + name)).texture("particle", breakParticle);
-        ModelFile rockTwo = models().withExistingParent(name + "_two", SpelunkersCharm.id("block/template_rock_two")).texture("all", SpelunkersCharm.id("block/" + name)).texture("particle", breakParticle);
-        ModelFile rockThree = models().withExistingParent(name + "_three", SpelunkersCharm.id("block/template_rock_three")).texture("all", SpelunkersCharm.id("block/" + name)).texture("particle", breakParticle);
+        ModelFile rockOne = models().withExistingParent(name + "_one", modLoc("block/template_rock_one")).texture("all", modLoc("block/" + name)).texture("particle", breakParticle);
+        ModelFile rockTwo = models().withExistingParent(name + "_two", modLoc("block/template_rock_two")).texture("all", modLoc("block/" + name)).texture("particle", breakParticle);
+        ModelFile rockThree = models().withExistingParent(name + "_three", modLoc("block/template_rock_three")).texture("all", modLoc("block/" + name)).texture("particle", breakParticle);
 
         // Skipping item model of Clay Ball because it is a vanilla item
         if (block != ModBlocks.CLAY_BALL.get()) {
@@ -75,5 +76,98 @@ public class ModBlockStateProvider extends BlockStateProvider {
                     .rotationY((int) (facing.getOpposite()).toYRot())
                     .build();
         }, BlockStateProperties.WATERLOGGED);
+    }
+
+    private void createHugeMushroomBlock(Block block) {
+        MultiPartBlockStateBuilder builder = getMultipartBuilder(block);
+
+        // Outer texture
+        builder.part()
+                .modelFile(models().singleTexture("cave_mushroom_block", mcLoc("block/template_single_face"), modLoc("block/cave_mushroom_block")))
+                .addModel()
+                .condition(BlockStateProperties.NORTH, true)
+                .end();
+
+        builder.part()
+                .modelFile(models().singleTexture("cave_mushroom_block", mcLoc("block/template_single_face"), modLoc("block/cave_mushroom_block")))
+                .rotationY(90)
+                .uvLock(true)
+                .addModel()
+                .condition(BlockStateProperties.EAST, true)
+                .end();
+
+        builder.part()
+                .modelFile(models().singleTexture("cave_mushroom_block", mcLoc("block/template_single_face"), modLoc("block/cave_mushroom_block")))
+                .rotationY(180)
+                .uvLock(true)
+                .addModel()
+                .condition(BlockStateProperties.SOUTH, true)
+                .end();
+
+        builder.part()
+                .modelFile(models().singleTexture("cave_mushroom_block", mcLoc("block/template_single_face"), modLoc("block/cave_mushroom_block")))
+                .rotationY(270)
+                .uvLock(true)
+                .addModel()
+                .condition(BlockStateProperties.WEST, true)
+                .end();
+
+        builder.part()
+                .modelFile(models().singleTexture("cave_mushroom_block", mcLoc("block/template_single_face"), modLoc("block/cave_mushroom_block")))
+                .rotationX(270)
+                .uvLock(true)
+                .addModel()
+                .condition(BlockStateProperties.UP, true)
+                .end();
+
+        builder.part()
+                .modelFile(models().singleTexture("cave_mushroom_block", mcLoc("block/template_single_face"), modLoc("block/cave_mushroom_block")))
+                .rotationX(90)
+                .uvLock(true)
+                .addModel()
+                .condition(BlockStateProperties.DOWN, true)
+                .end();
+
+        // Inner texture (mushroom block inside)
+        builder.part()
+                .modelFile(models().getExistingFile(mcLoc("block/mushroom_block_inside")))
+                .addModel()
+                .condition(BlockStateProperties.NORTH, false)
+                .end();
+
+        builder.part()
+                .modelFile(models().getExistingFile(mcLoc("block/mushroom_block_inside")))
+                .rotationY(90)
+                .addModel()
+                .condition(BlockStateProperties.EAST, false)
+                .end();
+
+        builder.part()
+                .modelFile(models().getExistingFile(mcLoc("block/mushroom_block_inside")))
+                .rotationY(180)
+                .addModel()
+                .condition(BlockStateProperties.SOUTH, false)
+                .end();
+
+        builder.part()
+                .modelFile(models().getExistingFile(mcLoc("block/mushroom_block_inside")))
+                .rotationY(270)
+                .addModel()
+                .condition(BlockStateProperties.WEST, false)
+                .end();
+
+        builder.part()
+                .modelFile(models().getExistingFile(mcLoc("block/mushroom_block_inside")))
+                .rotationX(270)
+                .addModel()
+                .condition(BlockStateProperties.UP, false)
+                .end();
+
+        builder.part()
+                .modelFile(models().getExistingFile(mcLoc("block/mushroom_block_inside")))
+                .rotationX(90)
+                .addModel()
+                .condition(BlockStateProperties.DOWN, false)
+                .end();
     }
 }

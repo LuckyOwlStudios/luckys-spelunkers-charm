@@ -1,5 +1,6 @@
 package net.luckystudio.splelunkers_charm.entity.custom.tremor;
 
+import net.luckystudio.splelunkers_charm.ModConfig;
 import net.luckystudio.splelunkers_charm.entity.ModEntityType;
 import net.luckystudio.splelunkers_charm.sound.ModSoundEvents;
 import net.minecraft.core.BlockPos;
@@ -25,24 +26,26 @@ import java.util.Random;
 public class TremorManager {
 
     public static void spawnTremor(Level level, BlockPos pos, int length, int intensity) {
-        if (canTremor(level, pos)) {
-            AABB searchBox = new AABB(pos).inflate(64);
-            List<Tremor> tremors = level.getEntitiesOfClass(Tremor.class, searchBox);
-            if (!tremors.isEmpty()) {
-                for (Tremor tremor : tremors) {
-                    tremor.setLength(tremor.getLength() + length);
-                    if (intensity > tremor.getMagnitude()) {
-                        tremor.setMagnitude(tremor.getMagnitude() + intensity);
+        if (ModConfig.TREMORS.get()) {
+            if (canTremor(level, pos)) {
+                AABB searchBox = new AABB(pos).inflate(64);
+                List<Tremor> tremors = level.getEntitiesOfClass(Tremor.class, searchBox);
+                if (!tremors.isEmpty()) {
+                    for (Tremor tremor : tremors) {
+                        tremor.setLength(tremor.getLength() + length);
+                        if (intensity > tremor.getMagnitude()) {
+                            tremor.setMagnitude(tremor.getMagnitude() + intensity);
+                        }
                     }
+                } else {
+                    Tremor tremor = new Tremor(ModEntityType.TREMOR.get(), level);
+                    tremor.setLength(length);
+                    tremor.setMagnitude(intensity);
+                    tremor.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+                    level.addFreshEntity(tremor);
                 }
-            } else {
-                Tremor tremor = new Tremor(ModEntityType.TREMOR.get(), level);
-                tremor.setLength(length);
-                tremor.setMagnitude(intensity);
-                tremor.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-                level.addFreshEntity(tremor);
+                System.out.println("Tremor spawned at " + pos);
             }
-            System.out.println("Tremor spawned at " + pos);
         }
     }
 
@@ -72,13 +75,9 @@ public class TremorManager {
                 Optional<BlockPos> validTopEffectPos = findValidEffectPos(level, pos, Direction.UP);
                 Optional<BlockPos> validBottomEffectPos = findValidEffectPos(level, pos, Direction.DOWN);
 
-                if (validTopEffectPos.isPresent()) {
-                    breakBlockEffectAt(level, validTopEffectPos.get());
-                }
+                validTopEffectPos.ifPresent(blockPos -> breakBlockEffectAt(level, blockPos));
 
-                if (validBottomEffectPos.isPresent()) {
-                    breakBlockEffectAt(level, validBottomEffectPos.get());
-                }
+                validBottomEffectPos.ifPresent(blockPos -> breakBlockEffectAt(level, blockPos));
             }
         }
 

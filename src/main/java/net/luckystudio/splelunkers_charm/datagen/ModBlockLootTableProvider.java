@@ -38,6 +38,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         rockDrops(ModBlocks.DRIPSTONE_ROCK.get());
         rockDrops(ModBlocks.BASALT_ROCK.get());
         dropSelf(ModBlocks.CAVE_MUSHROOM.get());
+        this.add(ModBlocks.CAVE_MUSHROOM_BLOCK.get(), createMushroomBlockDrop(ModBlocks.CAVE_MUSHROOM_BLOCK.get(), ModBlocks.CAVE_MUSHROOM));
         this.add(ModBlocks.CAVE_MUSHROOM.get(), createSilkTouchOrShearsDispatchTable(ModBlocks.CAVE_MUSHROOM.get(), LootItem.lootTableItem(ModBlocks.CAVE_MUSHROOM)));
         this.add(ModBlocks.SHORT_UNDER_BRUSH.get(), createShearsOnlyDrop(ModBlocks.SHORT_UNDER_BRUSH));
         this.add(ModBlocks.TALL_UNDER_BRUSH.get(), createDoublePlantShearsDrop(ModBlocks.TALL_UNDER_BRUSH.get()));
