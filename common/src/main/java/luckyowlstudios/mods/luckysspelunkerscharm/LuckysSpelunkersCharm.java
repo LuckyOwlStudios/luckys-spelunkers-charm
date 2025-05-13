@@ -1,5 +1,6 @@
 package luckyowlstudios.mods.luckysspelunkerscharm;
 
+import luckyowlstudios.mods.luckysspelunkerscharm.sounds.ModSoundEvents;
 import net.blay09.mods.balm.api.Balm;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ public class LuckysSpelunkersCharm {
         ModNetworking.initialize(Balm.getNetworking());
         ModBlocks.initialize(Balm.getBlocks());
         ModItems.initialize(Balm.getItems());
+        ModSoundEvents.initialize(Balm.getSounds());
     }
 
     public static ResourceLocation id(String path) {

@@ -7,10 +7,10 @@ import net.neoforged.fml.common.Mod;
 import luckyowlstudios.mods.luckysspelunkerscharm.LuckysSpelunkersCharm;
 
 @Mod(LuckysSpelunkersCharm.MOD_ID)
-public class NeoForgeYourMod {
+public class NeoForgeLuckysSpelunkersCharm {
 
-    public NeoForgeYourMod(IEventBus modEventBus) {
+    public NeoForgeLuckysSpelunkersCharm(IEventBus modEventBus) {
         final var context = new NeoForgeLoadContext(modEventBus);
-        Balm.initialize(LuckysSpelunkersCharm.MOD_ID, context, LuckysSpelunkersCharm::initialize);
+        Balm.initializeMod(LuckysSpelunkersCharm.MOD_ID, context, LuckysSpelunkersCharm::initialize);
     }
 }

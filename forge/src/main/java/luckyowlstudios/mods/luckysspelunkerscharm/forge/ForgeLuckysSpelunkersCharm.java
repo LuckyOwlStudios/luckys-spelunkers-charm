@@ -11,11 +11,10 @@ import luckyowlstudios.mods.luckysspelunkerscharm.LuckysSpelunkersCharm;
 import luckyowlstudios.mods.luckysspelunkerscharm.client.YourModClient;
 
 @Mod(LuckysSpelunkersCharm.MOD_ID)
-public class ForgeYourMod {
+public class ForgeLuckysSpelunkersCharm {
 
-    public ForgeYourMod(FMLJavaModLoadingContext context) {
+    public ForgeLuckysSpelunkersCharm(FMLJavaModLoadingContext context) {
         Balm.initializeMod(LuckysSpelunkersCharm.MOD_ID, EmptyLoadContext.INSTANCE, LuckysSpelunkersCharm::initialize);
-        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> BalmClient.initializeMod(LuckysSpelunkersCharm.MOD_ID, EmptyLoadContext.INSTANCE, YourModClient::initialize));
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> BalmClient.initializeMod(LuckysSpelunkersCharm.MOD_ID, EmptyLoadContext.INSTANCE, YourModClient::initialize));
     }
-
 }
