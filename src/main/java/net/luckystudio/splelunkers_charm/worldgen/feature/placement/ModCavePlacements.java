@@ -1,5 +1,6 @@
-package net.luckystudio.splelunkers_charm.worldgen.types;
+package net.luckystudio.splelunkers_charm.worldgen.feature.placement;
 
+import net.luckystudio.splelunkers_charm.worldgen.feature.features.ModCaveFeatures;
 import net.luckystudio.splelunkers_charm.worldgen.util.ModPlacementUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
@@ -17,6 +18,8 @@ import net.minecraft.world.level.levelgen.placement.*;
 import java.util.List;
 
 // CF -> PF -> BM
+
+// This class is responsible for how the cave features are placed in the world.
 public class ModCavePlacements {
     public static final ResourceKey<PlacedFeature> CLAY_PILE = ModPlacementUtils.createKey("clay_pile");
     public static final ResourceKey<PlacedFeature> ROCK_PILE = ModPlacementUtils.createKey("rock_pile");

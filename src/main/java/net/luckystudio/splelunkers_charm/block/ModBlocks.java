@@ -11,7 +11,7 @@ import net.luckystudio.splelunkers_charm.item.custom.DeepslateRockItem;
 import net.luckystudio.splelunkers_charm.item.custom.DripstoneRockItem;
 import net.luckystudio.splelunkers_charm.item.custom.RockItem;
 import net.luckystudio.splelunkers_charm.item.util.ModFoods;
-import net.luckystudio.splelunkers_charm.worldgen.types.ModTreeFeatures;
+import net.luckystudio.splelunkers_charm.worldgen.feature.features.ModTreeFeatures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -34,10 +34,10 @@ public class ModBlocks {
 
     public static final DeferredBlock<Block> DEEPSLATE_GEYSER = registerBlock("deepslate_geyser", () -> new GeyserBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE)));
     public static final DeferredBlock<Block> BASALT_GEYSER = registerBlock("basalt_geyser", () -> new GeyserBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BASALT)));
+    public static final DeferredBlock<Block> ICY_POINTED_DRIPSTONE = registerBlock("icy_pointed_dripstone", () -> new PointedDripstoneBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.PACKED_ICE)));
 
     public static final DeferredBlock<Block> CLAY_BALL = BLOCKS.register("clay_ball",
-            () -> new RockBlock(BlockBehaviour.Properties.of().instabreak().noCollission().replaceable())
-    );
+            () -> new RockBlock(BlockBehaviour.Properties.of().instabreak().noCollission().replaceable()));
 
     public static final DeferredBlock<Block> ROCK = registerBlockAndBlockItem("rock",
             () -> new RockBlock(BlockBehaviour.Properties.of()

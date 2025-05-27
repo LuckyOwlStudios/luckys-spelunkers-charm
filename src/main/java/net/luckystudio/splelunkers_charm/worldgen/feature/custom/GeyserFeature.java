@@ -12,8 +12,8 @@ import net.minecraft.world.level.levelgen.feature.AbstractHugeMushroomFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.HugeMushroomFeatureConfiguration;
 
 // Copy this class from the HugeBrownMushroomFeature class in the Minecraft source code
-public class HugeCaveMushroomFeature extends AbstractHugeMushroomFeature {
-    public HugeCaveMushroomFeature(Codec<HugeMushroomFeatureConfiguration> codec) {
+public class GeyserFeature extends AbstractHugeMushroomFeature {
+    public GeyserFeature(Codec<HugeMushroomFeatureConfiguration> codec) {
         super(codec);
     }
 

@@ -1,7 +1,7 @@
 package net.luckystudio.splelunkers_charm.worldgen;
 
 import net.luckystudio.splelunkers_charm.SpelunkersCharm;
-import net.luckystudio.splelunkers_charm.worldgen.types.ModCavePlacements;
+import net.luckystudio.splelunkers_charm.worldgen.feature.placement.ModCavePlacements;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
@@ -14,18 +14,19 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.List;
 
+// This class is responsible for where the features are placed in the world.
+
 // CF -> PF -> BM
 public class ModBiomeModifier {
-    public static final ResourceKey<BiomeModifier> OVERWORLD_ROCKS = registerKey("overworld_rocks");
-    public static final ResourceKey<BiomeModifier> DRIPSTONE_ROCKS = registerKey("dripstone_rocks");
-    public static final ResourceKey<BiomeModifier> NETHER_ROCKS = registerKey("nether_rocks");
+    public static final ResourceKey<BiomeModifier> OVERWORLD_CAVE_MODIFIER = registerKey("overworld_cave_modifier");
+    public static final ResourceKey<BiomeModifier> NETHER_CAVE_MODIFIER = registerKey("nether_cave_modifier");
 
     public static void bootstrap(BootstrapContext<BiomeModifier> context) {
         var placedFeatures = context.lookup(Registries.PLACED_FEATURE);
         var biomes = context.lookup(Registries.BIOME);
 
         // We register all rocks to spawn in everywhere in the overworld because we want our rocks to be compatible with modded biomes, the ConfiguredFeature will handle the filtering
-        context.register(OVERWORLD_ROCKS, new BiomeModifiers.AddFeaturesBiomeModifier(
+        context.register(OVERWORLD_CAVE_MODIFIER, new BiomeModifiers.AddFeaturesBiomeModifier(
                 biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
                 HolderSet.direct(List.of(
                         placedFeatures.getOrThrow(ModCavePlacements.CLAY_PILE),
@@ -38,7 +39,7 @@ public class ModBiomeModifier {
                 )),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
 
-        context.register(NETHER_ROCKS, new BiomeModifiers.AddFeaturesBiomeModifier(
+        context.register(NETHER_CAVE_MODIFIER, new BiomeModifiers.AddFeaturesBiomeModifier(
                 biomes.getOrThrow(BiomeTags.IS_NETHER),
                 HolderSet.direct(List.of(
                         placedFeatures.getOrThrow(ModCavePlacements.BASALT_ROCK_PILE)

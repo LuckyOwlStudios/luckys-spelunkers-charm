@@ -23,6 +23,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
+        simpleBlock();
         rockBlock(ModBlocks.CLAY_BALL.get(), ResourceLocation.withDefaultNamespace("block/clay"));
         rockBlock(ModBlocks.ROCK.get(), ResourceLocation.withDefaultNamespace("block/stone"));
         rockBlock(ModBlocks.DEEPSLATE_ROCK.get(), ResourceLocation.withDefaultNamespace("block/deepslate"));

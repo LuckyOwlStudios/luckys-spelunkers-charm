@@ -1,4 +1,4 @@
-package net.luckystudio.splelunkers_charm.worldgen.types;
+package net.luckystudio.splelunkers_charm.worldgen.feature.features;
 
 import net.luckystudio.splelunkers_charm.block.ModBlocks;
 import net.luckystudio.splelunkers_charm.block.util.ModBlockStateProperties;
@@ -28,6 +28,8 @@ import java.util.List;
 // 2. VegetationPlacements
 
 // CF -> PF -> BM
+
+// This class is responsible for registering all the cave features
 public class ModCaveFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> CLAY_PILE = ModFeatureUtils.createKey("clay_pile");
     public static final ResourceKey<ConfiguredFeature<?, ?>> ROCK_PILE = ModFeatureUtils.createKey("rock_pile");
@@ -38,6 +40,7 @@ public class ModCaveFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> PATCH_SHORT_UNDERGROWTH = ModFeatureUtils.createKey("patch_short_undergrowth");
     public static final ResourceKey<ConfiguredFeature<?, ?>> PATCH_TALL_UNDERGROWTH = ModFeatureUtils.createKey("patch_tall_undergrowth");
 
+    // Just some list of blocks for features to use.
     static List<Block> generalOverworldBlocks = List.of(Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE, Blocks.DRIPSTONE_BLOCK);
     static List<Block> generalNetherBlocks = List.of(Blocks.NETHERRACK, Blocks.BASALT, Blocks.BLACKSTONE);
 
@@ -59,7 +62,7 @@ public class ModCaveFeatures {
         );
     }
 
-    // The exact same class copied from the one in the VegetationFeatures class
+    // The exact same class copied from the one in the VegetationFeatures class, its a helper method for grass like generation
     private static RandomPatchConfiguration grassPatch(BlockStateProvider stateProvider, int tries) {
         return FeatureUtils.simpleRandomPatchConfiguration(
                 tries, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(stateProvider))

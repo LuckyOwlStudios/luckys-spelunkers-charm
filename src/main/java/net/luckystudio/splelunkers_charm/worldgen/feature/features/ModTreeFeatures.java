@@ -1,4 +1,4 @@
-package net.luckystudio.splelunkers_charm.worldgen.types;
+package net.luckystudio.splelunkers_charm.worldgen.feature.features;
 
 import net.luckystudio.splelunkers_charm.block.ModBlocks;
 import net.luckystudio.splelunkers_charm.worldgen.feature.ModFeature;
@@ -16,10 +16,7 @@ public class ModTreeFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> HUGE_CAVE_MUSHROOM = ModFeatureUtils.createKey("huge_cave_mushroom");
 
     public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
-        FeatureUtils.register(
-                context,
-                HUGE_CAVE_MUSHROOM,
-                ModFeature.HUGE_CAVE_MUSHROOM.get(),
+        FeatureUtils.register(context, HUGE_CAVE_MUSHROOM, ModFeature.HUGE_CAVE_MUSHROOM.get(),
                 new HugeMushroomFeatureConfiguration(
                         BlockStateProvider.simple(
                                 ModBlocks.CAVE_MUSHROOM_BLOCK.get()

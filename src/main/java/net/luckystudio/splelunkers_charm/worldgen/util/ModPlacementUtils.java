@@ -1,7 +1,7 @@
 package net.luckystudio.splelunkers_charm.worldgen.util;
 
 import net.luckystudio.splelunkers_charm.SpelunkersCharm;
-import net.luckystudio.splelunkers_charm.worldgen.types.ModCavePlacements;
+import net.luckystudio.splelunkers_charm.worldgen.feature.placement.ModCavePlacements;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
