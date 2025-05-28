@@ -5,6 +5,8 @@ import net.luckystudio.splelunkers_charm.block.ModBlocks;
 import net.luckystudio.splelunkers_charm.block.custom.RockBlock;
 import net.luckystudio.splelunkers_charm.block.util.ModBlockStateProperties;
 import net.luckystudio.splelunkers_charm.entity.custom.tremor.TremorManager;
+import net.luckystudio.splelunkers_charm.item.ModItems;
+import net.luckystudio.splelunkers_charm.item.potion.ModPotions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
@@ -15,12 +17,15 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionBrewing;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import net.neoforged.neoforge.event.entity.player.UseItemOnBlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +34,15 @@ import java.util.Objects;
 
 @EventBusSubscriber(modid = SpelunkersCharm.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ModEvents {
+
+    @SubscribeEvent
+    public static void onBrewingRecipeRegister(RegisterBrewingRecipesEvent event) {
+        PotionBrewing.Builder builder = event.getBuilder();
+
+        builder.addMix(Potions.AWKWARD, ModBlocks.CAVE_MUSHROOM.asItem(), ModPotions.HASTE_POTION);
+        builder.addMix(ModPotions.HASTE_POTION, Items.REDSTONE, ModPotions.LONG_HASTE_POTION);
+        builder.addMix(ModPotions.HASTE_POTION, Items.GLOWSTONE_DUST, ModPotions.STRONG_HASTE_POTION);
+    }
 
     /**
      *     This event is fired when an explosion occurs in the game.
