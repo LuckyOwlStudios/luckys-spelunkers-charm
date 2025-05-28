@@ -14,5 +14,8 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
+        basicItem(ModItems.MINING_HELMET.get());
+        simpleBlockItem(ModBlocks.COLD_STONE.get());
+        simpleBlockItem(ModBlocks.SILT.get());
     }
 }

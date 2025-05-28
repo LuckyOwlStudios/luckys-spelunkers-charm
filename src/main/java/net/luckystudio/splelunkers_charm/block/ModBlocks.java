@@ -1,10 +1,9 @@
 package net.luckystudio.splelunkers_charm.block;
 
 import net.luckystudio.splelunkers_charm.SpelunkersCharm;
-import net.luckystudio.splelunkers_charm.block.custom.CaveMushroomBlock;
-import net.luckystudio.splelunkers_charm.block.custom.GeyserBlock;
-import net.luckystudio.splelunkers_charm.block.custom.RockBlock;
-import net.luckystudio.splelunkers_charm.block.custom.UnderBrushBlock;
+import net.luckystudio.splelunkers_charm.block.custom.*;
+import net.luckystudio.splelunkers_charm.block.util.ModBlockStateProperties;
+import net.luckystudio.splelunkers_charm.block.util.enums.GeyserState;
 import net.luckystudio.splelunkers_charm.item.ModItems;
 import net.luckystudio.splelunkers_charm.item.custom.BasaltRockItem;
 import net.luckystudio.splelunkers_charm.item.custom.DeepslateRockItem;
@@ -13,6 +12,7 @@ import net.luckystudio.splelunkers_charm.item.custom.RockItem;
 import net.luckystudio.splelunkers_charm.item.util.ModFoods;
 import net.luckystudio.splelunkers_charm.worldgen.feature.features.ModTreeFeatures;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.ColorRGBA;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
@@ -26,15 +26,43 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.awt.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.ToIntFunction;
 
 public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(SpelunkersCharm.MODID);
 
-    public static final DeferredBlock<Block> DEEPSLATE_GEYSER = registerBlock("deepslate_geyser", () -> new GeyserBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE)));
-    public static final DeferredBlock<Block> BASALT_GEYSER = registerBlock("basalt_geyser", () -> new GeyserBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BASALT)));
-    public static final DeferredBlock<Block> ICY_POINTED_DRIPSTONE = registerBlock("icy_pointed_dripstone", () -> new PointedDripstoneBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.PACKED_ICE)));
+    public static Block geyserBlock(Block copyFrom) {
+        return new GeyserBlock(BlockBehaviour.Properties.ofFullCopy(copyFrom)
+                .emissiveRendering((blockState, blockGetter, blockPos) -> blockState.getValue(ModBlockStateProperties.GEYSER_STATE) == GeyserState.ERUPTING)
+                .lightLevel(litBlockEmissionFromGeyserState(15)));
+    }
+
+    // Ice Cave Blocks
+    public static final DeferredBlock<Block> COLD_STONE = registerBlock("cold_stone",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)));
+    public static final DeferredBlock<Block> SILT = registerBlock("silt",
+            () -> new ColoredFallingBlock(new ColorRGBA(Color.BLACK.brighter().getAlpha()), BlockBehaviour.Properties.ofFullCopy(Blocks.GRAVEL)));
+    public static final DeferredBlock<Block> ICICLE = registerBlock("icicle", () -> new ModPointedBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.PACKED_ICE)));
+    public static final DeferredBlock<Block> AQUAMARINE_CLUSTER = registerBlock("aquamarine_cluster",
+            () -> new AmethystClusterBlock(
+                    7.0F,
+                    3.0F,
+                    BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.COLOR_CYAN)
+                            .forceSolidOn()
+                            .noOcclusion()
+                            .sound(SoundType.AMETHYST_CLUSTER)
+                            .strength(1.5F)
+                            .lightLevel(blockState -> 8)
+                            .emissiveRendering(ModBlocks::always)
+                            .pushReaction(PushReaction.DESTROY)
+            ));
+
+    public static final DeferredBlock<Block> DEEPSLATE_GEYSER = registerBlock("deepslate_geyser", () -> geyserBlock(Blocks.DEEPSLATE));
+    public static final DeferredBlock<Block> BASALT_GEYSER = registerBlock("basalt_geyser", () -> geyserBlock(Blocks.BASALT));
 
     public static final DeferredBlock<Block> CLAY_BALL = BLOCKS.register("clay_ball",
             () -> new RockBlock(BlockBehaviour.Properties.of().instabreak().noCollission().replaceable()));
@@ -129,6 +157,10 @@ public class ModBlocks {
 
     private static boolean always(BlockState state, BlockGetter blockGetter, BlockPos pos) {
         return true;
+    }
+
+    private static ToIntFunction<BlockState> litBlockEmissionFromGeyserState(int lightValue) {
+        return blockState -> blockState.getValue(ModBlockStateProperties.GEYSER_STATE) == GeyserState.ERUPTING ? lightValue : 0;
     }
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {

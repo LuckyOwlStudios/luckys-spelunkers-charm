@@ -3,8 +3,8 @@ package net.luckystudio.splelunkers_charm.block.util.enums;
 import net.minecraft.util.StringRepresentable;
 
 public enum GeyserState implements StringRepresentable {
-    INACTIVE("inactive"),
-    ACTIVE("active"),
+    DORMANT("inactive"),
+    CHARGING("charging"),
     ERUPTING("erupting");
 
     private final String name;

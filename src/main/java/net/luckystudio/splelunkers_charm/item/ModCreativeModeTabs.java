@@ -21,6 +21,8 @@ public class ModCreativeModeTabs {
                     .icon(() -> new ItemStack(ModBlocks.ROCK.get()))
                     .title(Component.translatable("creative_tab.spelunkers_charm"))
                     .displayItems((itemDisplayParameters, output) -> {
+                        output.accept(ModBlocks.COLD_STONE);
+                        output.accept(ModBlocks.SILT);
                         output.accept(ModBlocks.DEEPSLATE_GEYSER);
                         output.accept(ModBlocks.BASALT_GEYSER);
                         output.accept(ModBlocks.ROCK);

@@ -156,13 +156,7 @@
               },
               {
                 "type": "minecraft:matching_blocks",
-                "blocks": [
-                  "minecraft:stone",
-                  "minecraft:granite",
-                  "minecraft:diorite",
-                  "minecraft:andesite",
-                  "minecraft:dripstone_block"
-                ],
+                "blocks": "minecraft:dripstone_block",
                 "offset": [
                   0,
                   -1,

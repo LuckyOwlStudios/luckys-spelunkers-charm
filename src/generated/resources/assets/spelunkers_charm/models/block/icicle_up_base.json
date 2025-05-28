@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/pointed_dripstone_up_base",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "cross": "spelunkers_charm:block/icicle_up_base",
+    "particle": "minecraft:block/packed_ice"
+  }
+}

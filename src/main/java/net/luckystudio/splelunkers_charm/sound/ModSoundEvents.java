@@ -15,6 +15,8 @@ public class ModSoundEvents {
 
     public static final Supplier<SoundEvent> RUMBLE = registerSoundEvent("rumble");
     public static final Supplier<SoundEvent> TREMOR = registerSoundEvent("tremor");
+    public static Supplier<SoundEvent> GEYSER_CHARGE = registerSoundEvent("geyser_charge");
+    public static Supplier<SoundEvent> GEYSER_ERUPT_WATER = registerSoundEvent("geyser_erupt_water");
 //    public static final Holder.Reference<SoundEvent> TREMOR = registerSoundHolder("tremor");
 
 //    private static Holder.Reference<SoundEvent> registerSoundHolder(String name) {

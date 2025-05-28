@@ -3,13 +3,16 @@ package net.luckystudio.splelunkers_charm.datagen;
 import net.luckystudio.splelunkers_charm.SpelunkersCharm;
 import net.luckystudio.splelunkers_charm.block.ModBlocks;
 import net.luckystudio.splelunkers_charm.block.util.ModBlockStateProperties;
+import net.minecraft.client.model.Model;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.models.model.ModelTemplates;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DripstoneThickness;
 import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
@@ -23,7 +26,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        simpleBlock();
+        // Cave Blocks
         rockBlock(ModBlocks.CLAY_BALL.get(), ResourceLocation.withDefaultNamespace("block/clay"));
         rockBlock(ModBlocks.ROCK.get(), ResourceLocation.withDefaultNamespace("block/stone"));
         rockBlock(ModBlocks.DEEPSLATE_ROCK.get(), ResourceLocation.withDefaultNamespace("block/deepslate"));
@@ -33,6 +36,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockWithItem(ModBlocks.BASALT_GEYSER.get(), models().cubeColumn("basalt_geyser", ResourceLocation.withDefaultNamespace("block/basalt_side"), ResourceLocation.fromNamespaceAndPath(SpelunkersCharm.MODID,"block/basalt_geyser_top")));
         simpleBlockWithGeneratedItem(ModBlocks.CAVE_MUSHROOM.get());
         createHugeMushroomBlock(ModBlocks.CAVE_MUSHROOM_BLOCK.get());
+
+        // Ice Cave Blocks
+        simpleBlock(ModBlocks.COLD_STONE.get());
+        simpleBlock(ModBlocks.SILT.get());
+        icicle(ModBlocks.ICICLE.get(), mcLoc("block/packed_ice"));
+        directionalBlock(ModBlocks.AQUAMARINE_CLUSTER.get(), models().withExistingParent("aquamarine_cluster", mcLoc("block/amethyst_cluster")).texture("cross", modLoc("block/aquamarine_cluster")).renderType("cutout"));
     }
 
     /**
@@ -170,5 +179,40 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 .addModel()
                 .condition(BlockStateProperties.DOWN, false)
                 .end();
+    }
+
+    // This is just copied from the vanilla pointed dripstone block state provider, but with different textures.
+    private void icicle(Block block, ResourceLocation breakParticle) {
+        String name = BuiltInRegistries.BLOCK.getKey(block).getPath();
+
+        ModelFile down_base = models().withExistingParent(name + "_down_base", mcLoc("block/pointed_dripstone_down_base")).texture("cross", modLoc("block/icicle_down_base")).texture("particle", breakParticle).renderType("cutout");
+        ModelFile up_base = models().withExistingParent(name + "_up_base", mcLoc("block/pointed_dripstone_up_base")).texture("cross", modLoc("block/icicle_up_base")).texture("particle", breakParticle).renderType("cutout");
+        ModelFile down_frustum = models().withExistingParent(name + "_down_frustum", mcLoc("block/pointed_dripstone_down_frustum")).texture("cross", modLoc("block/icicle_down_frustum")).texture("particle", breakParticle).renderType("cutout");
+        ModelFile up_frustum = models().withExistingParent(name + "_up_frustum", mcLoc("block/pointed_dripstone_up_frustum")).texture("cross", modLoc("block/icicle_up_frustum")).texture("particle", breakParticle).renderType("cutout");
+        ModelFile down_middle = models().withExistingParent(name + "_down_middle", mcLoc("block/pointed_dripstone_down_middle")).texture("cross", modLoc("block/icicle_down_middle")).texture("particle", breakParticle).renderType("cutout");
+        ModelFile up_middle = models().withExistingParent(name + "_up_middle", mcLoc("block/pointed_dripstone_up_middle")).texture("cross", modLoc("block/icicle_up_middle")).texture("particle", breakParticle).renderType("cutout");
+        ModelFile down_tip = models().withExistingParent(name + "_down_tip", mcLoc("block/pointed_dripstone_down_tip")).texture("cross", modLoc("block/icicle_down_tip")).texture("particle", breakParticle).renderType("cutout");
+        ModelFile up_tip = models().withExistingParent(name + "_up_tip", mcLoc("block/pointed_dripstone_up_tip")).texture("cross", modLoc("block/icicle_up_tip")).texture("particle", breakParticle).renderType("cutout");
+        ModelFile down_tip_merge = models().withExistingParent(name + "_down_tip_merge", mcLoc("block/pointed_dripstone_down_tip_merge")).texture("cross", modLoc("block/icicle_down_tip_merge")).texture("particle", breakParticle).renderType("cutout");
+        ModelFile up_tip_merge = models().withExistingParent(name + "_up_tip_merge", mcLoc("block/pointed_dripstone_up_tip_merge")).texture("cross", modLoc("block/icicle_up_tip_merge")).texture("particle", breakParticle).renderType("cutout");
+
+        itemModels().basicItem(block.asItem());
+
+        getVariantBuilder(block).forAllStatesExcept(state -> {
+            DripstoneThickness thickness = state.getValue(BlockStateProperties.DRIPSTONE_THICKNESS);
+            Direction vertical_direction = state.getValue(BlockStateProperties.VERTICAL_DIRECTION);
+
+            ModelFile model = switch (thickness) {
+                case BASE -> vertical_direction == Direction.DOWN ? down_base : up_base;
+                case FRUSTUM -> vertical_direction == Direction.DOWN ? down_frustum : up_frustum;
+                case MIDDLE -> vertical_direction == Direction.DOWN ? down_middle : up_middle;
+                case TIP -> vertical_direction == Direction.DOWN ? down_tip : up_tip;
+                case TIP_MERGE -> vertical_direction == Direction.DOWN ? down_tip_merge : up_tip_merge;
+            };
+
+            return ConfiguredModel.builder()
+                    .modelFile(model)
+                    .build();
+        }, BlockStateProperties.WATERLOGGED);
     }
 }

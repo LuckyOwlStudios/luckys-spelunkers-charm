@@ -27,7 +27,7 @@ public class Tremor extends Marker {
     }
 
     public void setLength(int length) {
-        this.entityData.set(LENGTH, length > 1000 ? 1000 : length); // Make sure length is capped at 1000
+        this.entityData.set(LENGTH, Math.min(length, 1000)); // Make sure length is capped at 1000
     }
 
     public int getMagnitude() {

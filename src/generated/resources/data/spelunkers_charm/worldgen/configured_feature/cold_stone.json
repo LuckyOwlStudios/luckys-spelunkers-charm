@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:random_patch",
+  "config": {
+    "feature": {
+      "feature": {
+        "type": "minecraft:netherrack_replace_blobs",
+        "config": {
+          "radius": {
+            "type": "minecraft:uniform",
+            "max_inclusive": 7,
+            "min_inclusive": 3
+          },
+          "state": {
+            "Name": "spelunkers_charm:cold_stone"
+          },
+          "target": {
+            "Name": "minecraft:stone"
+          }
+        }
+      },
+      "placement": [
+        {
+          "type": "minecraft:block_predicate_filter",
+          "predicate": {
+            "type": "minecraft:matching_blocks",
+            "blocks": "minecraft:air"
+          }
+        }
+      ]
+    },
+    "tries": 96,
+    "xz_spread": 7,
+    "y_spread": 3
+  }
+}

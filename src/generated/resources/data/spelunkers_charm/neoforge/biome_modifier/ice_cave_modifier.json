@@ -1,0 +1,11 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:spawns_snow_foxes",
+  "features": [
+    "spelunkers_charm:cold_stone",
+    "spelunkers_charm:ore_silt",
+    "spelunkers_charm:large_icicle",
+    "spelunkers_charm:icicle_cluster"
+  ],
+  "step": "vegetal_decoration"
+}

@@ -20,8 +20,16 @@ public class ModBlockTagProvider extends BlockTagsProvider {
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .add(ModBlocks.COLD_STONE.get())
+                .add(ModBlocks.AQUAMARINE_CLUSTER.get())
                 .add(ModBlocks.DEEPSLATE_GEYSER.get())
                 .add(ModBlocks.BASALT_GEYSER.get())
         ;
+
+        tag(BlockTags.MINEABLE_WITH_SHOVEL)
+                .add(ModBlocks.SILT.get());
+
+        tag(BlockTags.BASE_STONE_OVERWORLD)
+                .add(ModBlocks.COLD_STONE.get());
     }
 }

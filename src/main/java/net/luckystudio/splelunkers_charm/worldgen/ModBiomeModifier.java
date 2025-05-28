@@ -19,6 +19,7 @@ import java.util.List;
 // CF -> PF -> BM
 public class ModBiomeModifier {
     public static final ResourceKey<BiomeModifier> OVERWORLD_CAVE_MODIFIER = registerKey("overworld_cave_modifier");
+    public static final ResourceKey<BiomeModifier> ICE_CAVE_MODIFIER = registerKey("ice_cave_modifier");
     public static final ResourceKey<BiomeModifier> NETHER_CAVE_MODIFIER = registerKey("nether_cave_modifier");
 
     public static void bootstrap(BootstrapContext<BiomeModifier> context) {
@@ -36,6 +37,16 @@ public class ModBiomeModifier {
                         placedFeatures.getOrThrow(ModCavePlacements.PATCH_CAVE_MUSHROOM),
                         placedFeatures.getOrThrow(ModCavePlacements.PATCH_SHORT_UNDERGROWTH),
                         placedFeatures.getOrThrow(ModCavePlacements.PATCH_TALL_UNDERGROWTH)
+                )),
+                GenerationStep.Decoration.VEGETAL_DECORATION));
+
+        context.register(ICE_CAVE_MODIFIER, new BiomeModifiers.AddFeaturesBiomeModifier(
+                biomes.getOrThrow(BiomeTags.SPAWNS_SNOW_FOXES),
+                HolderSet.direct(List.of(
+                        placedFeatures.getOrThrow(ModCavePlacements.COLD_STONE),
+                        placedFeatures.getOrThrow(ModCavePlacements.ORE_SILT),
+                        placedFeatures.getOrThrow(ModCavePlacements.LARGE_ICICLE),
+                        placedFeatures.getOrThrow(ModCavePlacements.ICICLE_CLUSTER)
                 )),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
 

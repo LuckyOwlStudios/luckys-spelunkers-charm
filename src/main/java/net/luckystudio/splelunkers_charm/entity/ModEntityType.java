@@ -51,7 +51,6 @@ public class ModEntityType {
             ENTITY_TYPES.register("tremor", () -> EntityType.Builder.of(Tremor::new, MobCategory.MISC)
                     .sized(0.0F, 0.0F)
                     .clientTrackingRange(0)
-                    .noSummon()
                     .build("tremor"));
 
     public static void register(IEventBus eventBus) {

@@ -2,6 +2,7 @@ package net.luckystudio.splelunkers_charm;
 
 import net.luckystudio.splelunkers_charm.block.ModBlocks;
 import net.luckystudio.splelunkers_charm.entity.ModEntityType;
+import net.luckystudio.splelunkers_charm.item.potion.ModPotions;
 import net.luckystudio.splelunkers_charm.worldgen.feature.ModFeature;
 import net.luckystudio.splelunkers_charm.item.ModCreativeModeTabs;
 import net.luckystudio.splelunkers_charm.item.ModItems;
@@ -52,11 +53,10 @@ public class SpelunkersCharm
 
         ModCreativeModeTabs.register(modEventBus);
         ModItems.register(modEventBus);
+        ModPotions.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModEntityType.register(modEventBus);
-
         ModSoundEvents.register(modEventBus);
-
         ModFeature.register(modEventBus);
 
         // Register the item to a creative tab
@@ -79,20 +79,5 @@ public class SpelunkersCharm
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
 
-    }
-
-    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-    @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents
-    {
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event)
-        {
-            // How did we find this? We searched all projects in Minecraft to see where the SnowBall projectile was registered in client and copied this.
-            EntityRenderers.register(ModEntityType.ROCK.get(), ThrownItemRenderer::new);
-            EntityRenderers.register(ModEntityType.DEEPSLATE_ROCK.get(), ThrownItemRenderer::new);
-            EntityRenderers.register(ModEntityType.DRIPSTONE_ROCK.get(), ThrownItemRenderer::new);
-            EntityRenderers.register(ModEntityType.BASALT_ROCK.get(), ThrownItemRenderer::new);
-        }
     }
 }
