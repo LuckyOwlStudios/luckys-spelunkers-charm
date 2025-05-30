@@ -63,6 +63,9 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         this.add(ModBlocks.SILT.get(), this.createSiltDrops(ModBlocks.SILT.get()));
         dropSelf(ModBlocks.ICICLE.get());
         dropSelf(ModBlocks.AQUAMARINE_CLUSTER.get());
+
+        // Desert Cave Blocks
+        dropSelf(ModBlocks.HOT_STONE.get());
     }
 
     private LootTable.Builder createSiltDrops(Block block) {

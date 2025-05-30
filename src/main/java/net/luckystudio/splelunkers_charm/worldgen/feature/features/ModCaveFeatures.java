@@ -65,6 +65,9 @@ public class ModCaveFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> LARGE_ICICLE = ModFeatureUtils.createKey("large_icicle");
     public static final ResourceKey<ConfiguredFeature<?, ?>> ICICLE_CLUSTER = ModFeatureUtils.createKey("icicle_cluster");
 
+    // Desert Cave Features
+    public static final ResourceKey<ConfiguredFeature<?, ?>> HOT_STONE = ModFeatureUtils.createKey("hot_stone");
+
     // Nether Cave Features
     public static final ResourceKey<ConfiguredFeature<?, ?>> BASALT_ROCK_PILE = ModFeatureUtils.createKey("basalt_rock_pile");
 
@@ -141,6 +144,17 @@ public class ModCaveFeatures {
                         0.1F,
                         3,
                         8
+                )
+        );
+
+        // Desert Cave Features
+        FeatureUtils.register(
+                context,
+                HOT_STONE,
+                Feature.RANDOM_PATCH,
+                FeatureUtils.simplePatchConfiguration(
+                        Feature.REPLACE_BLOBS,
+                        new ReplaceSphereConfiguration(Blocks.STONE.defaultBlockState(), ModBlocks.HOT_STONE.get().defaultBlockState(), UniformInt.of(3, 7))
                 )
         );
 

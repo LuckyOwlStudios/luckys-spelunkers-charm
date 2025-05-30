@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#spelunkers_charm:is_hot_cave",
+  "features": [
+    "spelunkers_charm:hot_stone",
+    "minecraft:dripstone_cluster",
+    "minecraft:large_dripstone"
+  ],
+  "step": "vegetal_decoration"
+}

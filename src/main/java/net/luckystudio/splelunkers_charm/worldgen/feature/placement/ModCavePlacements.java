@@ -6,7 +6,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
-import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.valueproviders.ConstantInt;
@@ -38,6 +37,9 @@ public class ModCavePlacements {
     public static final ResourceKey<PlacedFeature> ORE_SILT = ModPlacementUtils.createKey("ore_silt");
     public static final ResourceKey<PlacedFeature> LARGE_ICICLE = ModPlacementUtils.createKey("large_icicle");
     public static final ResourceKey<PlacedFeature> ICICLE_CLUSTER = ModPlacementUtils.createKey("icicle_cluster");
+
+    // Desert Cave Placements
+    public static final ResourceKey<PlacedFeature> HOT_STONE = ModPlacementUtils.createKey("hot_stone");
 
     // Nether Cave Placements
     public static final ResourceKey<PlacedFeature> BASALT_ROCK_PILE = ModPlacementUtils.createKey("basalt_rock_pile");
@@ -156,6 +158,12 @@ public class ModCavePlacements {
                 InSquarePlacement.spread(),
                 PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
                 BiomeFilter.biome()
+        );
+
+        // Desert Cave Placements
+        PlacementUtils.register(
+                context, HOT_STONE, holdergetter.getOrThrow(ModCaveFeatures.HOT_STONE), commonOrePlacement(16,
+                        HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.belowTop(16)))
         );
     }
 

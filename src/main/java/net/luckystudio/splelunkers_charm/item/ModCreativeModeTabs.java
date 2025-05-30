@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 public class ModCreativeModeTabs {
 
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
-            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, SpelunkersCharm.MODID);
+            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, SpelunkersCharm.MOD_ID);
 
     public static final Supplier<CreativeModeTab> SPELUNKERS_CHARM = CREATIVE_MODE_TABS.register("spelunkers_charm",
             () -> CreativeModeTab.builder()
@@ -30,6 +30,10 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.DRIPSTONE_ROCK);
                         output.accept(ModBlocks.BASALT_ROCK);
                         output.accept(ModBlocks.CAVE_MUSHROOM);
+                        output.accept(ModItems.MINING_HELMET);
+                        output.accept(ModItems.SMALL_LIFT);
+                        output.accept(ModItems.MEDIUM_LIFT);
+                        output.accept(ModItems.LARGE_LIFT);
                     })
                     .build());
 

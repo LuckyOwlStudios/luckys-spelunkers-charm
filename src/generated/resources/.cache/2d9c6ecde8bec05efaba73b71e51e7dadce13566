@@ -1,4 +1,4 @@
-// 1.21.1	2025-05-27T22:42:23.5497506	Block States: spelunkers_charm
+// 1.21.1	2025-05-28T02:14:27.6920467	Block States: spelunkers_charm
 d86a4c3eda302fb676cea7c459be8b8de270773c assets/spelunkers_charm/blockstates/aquamarine_cluster.json
 5fa6b2529fbf2cf4d6fb9734b5fac2731fc26fca assets/spelunkers_charm/blockstates/basalt_geyser.json
 94252c182bfda3ec92489d3d535d9e97bf726449 assets/spelunkers_charm/blockstates/basalt_rock.json
@@ -9,6 +9,7 @@ f6a2f0b603cb6c5def2cd644c2f19cf4603012f7 assets/spelunkers_charm/blockstates/cav
 047a743516e23a04a2fca9fcd84519be3e387e21 assets/spelunkers_charm/blockstates/deepslate_geyser.json
 c22a955d257a6787dbddb3160ff6d49cc9fd7d4d assets/spelunkers_charm/blockstates/deepslate_rock.json
 0155d7a005565054ed45c0211ba73e0f0db1cb14 assets/spelunkers_charm/blockstates/dripstone_rock.json
+8204c6e482b27daa9bff10d95ef35324b4fb163c assets/spelunkers_charm/blockstates/hot_stone.json
 d74a4074245b8d07db8a7201159d0f0168842644 assets/spelunkers_charm/blockstates/icicle.json
 0feb208c5d41459b1d69685284a5d488b521101a assets/spelunkers_charm/blockstates/rock.json
 a1b1cc1cd46c1ca4ec4e0ac98a83bc597de97249 assets/spelunkers_charm/blockstates/silt.json
@@ -30,6 +31,7 @@ cda4f3b750721db914f7acd161030bb64dba9ebe assets/spelunkers_charm/models/block/de
 df564f5032756dc153f9fcc7360b946708670fd4 assets/spelunkers_charm/models/block/dripstone_rock_one.json
 318d6eaf25ae02ec26a6dabaafa5db56957f223b assets/spelunkers_charm/models/block/dripstone_rock_three.json
 ab4974d842ae08e63b78b06b022e4ed68a0c0105 assets/spelunkers_charm/models/block/dripstone_rock_two.json
+aff9e7da65e3ed1364e2e68a20b0336bac7ecc71 assets/spelunkers_charm/models/block/hot_stone.json
 7fbd4ca41768c3ae15ebe6f5b182a37d633d0edc assets/spelunkers_charm/models/block/icicle_down_base.json
 1b9aa8ca44b861f208d4ad555010712ea6bbed4f assets/spelunkers_charm/models/block/icicle_down_frustum.json
 642183a3ee29bd25240c71c218ed7a2cb1ac9c40 assets/spelunkers_charm/models/block/icicle_down_middle.json

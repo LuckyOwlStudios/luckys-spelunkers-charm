@@ -3,11 +3,9 @@ package net.luckystudio.splelunkers_charm.datagen;
 import net.luckystudio.splelunkers_charm.SpelunkersCharm;
 import net.luckystudio.splelunkers_charm.block.ModBlocks;
 import net.luckystudio.splelunkers_charm.block.util.ModBlockStateProperties;
-import net.minecraft.client.model.Model;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.models.model.ModelTemplates;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ButtonBlock;
@@ -21,7 +19,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
     public static final String BLOCK_FOLDER = "block";
 
     public ModBlockStateProvider(PackOutput output, ExistingFileHelper exFileHelper) {
-        super(output, SpelunkersCharm.MODID, exFileHelper);
+        super(output, SpelunkersCharm.MOD_ID, exFileHelper);
     }
 
     @Override
@@ -32,8 +30,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         rockBlock(ModBlocks.DEEPSLATE_ROCK.get(), ResourceLocation.withDefaultNamespace("block/deepslate"));
         rockBlock(ModBlocks.DRIPSTONE_ROCK.get(), ResourceLocation.withDefaultNamespace("block/dripstone_block"));
         rockBlock(ModBlocks.BASALT_ROCK.get(), ResourceLocation.withDefaultNamespace("block/basalt_side"));
-        simpleBlockWithItem(ModBlocks.DEEPSLATE_GEYSER.get(), models().cubeColumn("deepslate_geyser", ResourceLocation.withDefaultNamespace("block/deepslate"), ResourceLocation.fromNamespaceAndPath(SpelunkersCharm.MODID,"block/deepslate_geyser_top")));
-        simpleBlockWithItem(ModBlocks.BASALT_GEYSER.get(), models().cubeColumn("basalt_geyser", ResourceLocation.withDefaultNamespace("block/basalt_side"), ResourceLocation.fromNamespaceAndPath(SpelunkersCharm.MODID,"block/basalt_geyser_top")));
+        simpleBlockWithItem(ModBlocks.DEEPSLATE_GEYSER.get(), models().cubeColumn("deepslate_geyser", ResourceLocation.withDefaultNamespace("block/deepslate"), ResourceLocation.fromNamespaceAndPath(SpelunkersCharm.MOD_ID,"block/deepslate_geyser_top")));
+        simpleBlockWithItem(ModBlocks.BASALT_GEYSER.get(), models().cubeColumn("basalt_geyser", ResourceLocation.withDefaultNamespace("block/basalt_side"), ResourceLocation.fromNamespaceAndPath(SpelunkersCharm.MOD_ID,"block/basalt_geyser_top")));
         simpleBlockWithGeneratedItem(ModBlocks.CAVE_MUSHROOM.get());
         createHugeMushroomBlock(ModBlocks.CAVE_MUSHROOM_BLOCK.get());
 
@@ -42,6 +40,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(ModBlocks.SILT.get());
         icicle(ModBlocks.ICICLE.get(), mcLoc("block/packed_ice"));
         directionalBlock(ModBlocks.AQUAMARINE_CLUSTER.get(), models().withExistingParent("aquamarine_cluster", mcLoc("block/amethyst_cluster")).texture("cross", modLoc("block/aquamarine_cluster")).renderType("cutout"));
+
+        // Desert Cave Blocks
+        simpleBlock(ModBlocks.HOT_STONE.get());
     }
 
     /**
@@ -51,7 +52,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
     private void simpleBlockWithGeneratedItem(Block block) {
         String name = BuiltInRegistries.BLOCK.getKey(block).getPath();
         simpleBlock(block, models().cross(name, modLoc("block/" + name)).renderType("cutout"));
-        ResourceLocation item = ResourceLocation.fromNamespaceAndPath(SpelunkersCharm.MODID, name);
+        ResourceLocation item = ResourceLocation.fromNamespaceAndPath(SpelunkersCharm.MOD_ID, name);
         itemModels().getBuilder(item.toString())
                 .parent(new ModelFile.UncheckedModelFile("item/generated"))
                 .texture("layer0", ResourceLocation.fromNamespaceAndPath(item.getNamespace(), "block/" + item.getPath()));

@@ -11,21 +11,18 @@ import java.util.function.Supplier;
 
 public class ModSoundEvents {
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS =
-            DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, SpelunkersCharm.MODID);
+            DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, SpelunkersCharm.MOD_ID);
 
-    public static final Supplier<SoundEvent> RUMBLE = registerSoundEvent("rumble");
-    public static final Supplier<SoundEvent> TREMOR = registerSoundEvent("tremor");
+    public static final Supplier<SoundEvent> RUMBLE_GENERIC = registerSoundEvent("rumble_generic");
+    public static final Supplier<SoundEvent> RUMBLE_ICY = registerSoundEvent("rumble_icy");
+    public static final Supplier<SoundEvent> TREMOR_GENERIC = registerSoundEvent("tremor_generic");
+    public static final Supplier<SoundEvent> TREMOR_ICY = registerSoundEvent("tremor_icy");
+
     public static Supplier<SoundEvent> GEYSER_CHARGE = registerSoundEvent("geyser_charge");
     public static Supplier<SoundEvent> GEYSER_ERUPT_WATER = registerSoundEvent("geyser_erupt_water");
-//    public static final Holder.Reference<SoundEvent> TREMOR = registerSoundHolder("tremor");
-
-//    private static Holder.Reference<SoundEvent> registerSoundHolder(String name) {
-//        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(SpelunkersCharm.MODID, name);
-//        return Registry.registerForHolder(BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id));
-//    }
 
     private static Supplier<SoundEvent> registerSoundEvent(String name) {
-        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(SpelunkersCharm.MODID, name);
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(SpelunkersCharm.MOD_ID, name);
         return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(id));
     }
 

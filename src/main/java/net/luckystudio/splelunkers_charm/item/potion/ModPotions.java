@@ -11,7 +11,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class ModPotions {
     public static final DeferredRegister<Potion> POTIONS =
-            DeferredRegister.create(BuiltInRegistries.POTION, SpelunkersCharm.MODID);
+            DeferredRegister.create(BuiltInRegistries.POTION, SpelunkersCharm.MOD_ID);
 
     public static final Holder<Potion> HASTE_POTION = POTIONS.register("haste_potion",
             () -> new Potion(new MobEffectInstance(MobEffects.DIG_SPEED, 3600, 0)));

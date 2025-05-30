@@ -32,7 +32,7 @@ import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
 
 public class ModBlocks {
-    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(SpelunkersCharm.MODID);
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(SpelunkersCharm.MOD_ID);
 
     public static Block geyserBlock(Block copyFrom) {
         return new GeyserBlock(BlockBehaviour.Properties.ofFullCopy(copyFrom)
@@ -60,6 +60,10 @@ public class ModBlocks {
                             .emissiveRendering(ModBlocks::always)
                             .pushReaction(PushReaction.DESTROY)
             ));
+
+    // Desert Cave Blocks
+    public static final DeferredBlock<Block> HOT_STONE = registerBlock("hot_stone",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)));
 
     public static final DeferredBlock<Block> DEEPSLATE_GEYSER = registerBlock("deepslate_geyser", () -> geyserBlock(Blocks.DEEPSLATE));
     public static final DeferredBlock<Block> BASALT_GEYSER = registerBlock("basalt_geyser", () -> geyserBlock(Blocks.BASALT));

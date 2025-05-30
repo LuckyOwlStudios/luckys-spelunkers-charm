@@ -1,4 +1,6 @@
-// 1.21.1	2025-05-27T22:40:46.7262037	Tags for minecraft:block mod id spelunkers_charm
-b559a0601777801b5d1376b1ca9598fe008e9dce data/minecraft/tags/block/base_stone_overworld.json
-c8663c28a488d87e543ea1eb2d3a4aa1c09fb7a3 data/minecraft/tags/block/mineable/pickaxe.json
+// 1.21.1	2025-05-28T02:42:25.76769	Tags for minecraft:block mod id spelunkers_charm
+31d13a3e3142000aa2dc5bc99be69792c8f3b586 data/minecraft/tags/block/base_stone_overworld.json
+31d13a3e3142000aa2dc5bc99be69792c8f3b586 data/minecraft/tags/block/dripstone_replaceable_blocks.json
+961b8c44939ada7a8b0776f596806c06342bc23e data/minecraft/tags/block/mineable/pickaxe.json
 ab15814dffb8de1440172221059ce3c439b50b43 data/minecraft/tags/block/mineable/shovel.json
+31d13a3e3142000aa2dc5bc99be69792c8f3b586 data/minecraft/tags/block/stone_ore_replaceables.json

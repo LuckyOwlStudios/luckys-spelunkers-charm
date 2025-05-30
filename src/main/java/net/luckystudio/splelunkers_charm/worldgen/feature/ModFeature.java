@@ -4,8 +4,6 @@ import net.luckystudio.splelunkers_charm.SpelunkersCharm;
 import net.luckystudio.splelunkers_charm.worldgen.feature.custom.HugeCaveMushroomFeature;
 import net.luckystudio.splelunkers_charm.worldgen.feature.custom.geyser.GeyserConfiguration;
 import net.luckystudio.splelunkers_charm.worldgen.feature.custom.geyser.GeyserFeature;
-import net.luckystudio.splelunkers_charm.worldgen.feature.custom.icicle.IcicleConfiguration;
-import net.luckystudio.splelunkers_charm.worldgen.feature.custom.icicle.PointedBlockFeature;
 import net.luckystudio.splelunkers_charm.worldgen.feature.custom.large_icicle.LargeIcicleFeature;
 import net.luckystudio.splelunkers_charm.worldgen.feature.custom.large_icicle.LargeIcicleFeatureConfiguration;
 import net.luckystudio.splelunkers_charm.worldgen.feature.custom.packed_ice_cluster.IcicleClusterConfiguration;
@@ -21,7 +19,7 @@ import java.util.function.Supplier;
 public class ModFeature {
 
     public static final DeferredRegister<Feature<?>> FEATURES =
-            DeferredRegister.create(BuiltInRegistries.FEATURE, SpelunkersCharm.MODID);
+            DeferredRegister.create(BuiltInRegistries.FEATURE, SpelunkersCharm.MOD_ID);
 
     public static final Supplier<Feature<HugeMushroomFeatureConfiguration>> HUGE_CAVE_MUSHROOM =
             FEATURES.register("huge_cave_mushroom", () -> new HugeCaveMushroomFeature(HugeMushroomFeatureConfiguration.CODEC));

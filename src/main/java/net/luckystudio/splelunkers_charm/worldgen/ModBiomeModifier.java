@@ -1,10 +1,12 @@
 package net.luckystudio.splelunkers_charm.worldgen;
 
 import net.luckystudio.splelunkers_charm.SpelunkersCharm;
+import net.luckystudio.splelunkers_charm.datagen.biomeTags.ModBiomeTags;
 import net.luckystudio.splelunkers_charm.worldgen.feature.placement.ModCavePlacements;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.data.worldgen.placement.CavePlacements;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -20,6 +22,7 @@ import java.util.List;
 public class ModBiomeModifier {
     public static final ResourceKey<BiomeModifier> OVERWORLD_CAVE_MODIFIER = registerKey("overworld_cave_modifier");
     public static final ResourceKey<BiomeModifier> ICE_CAVE_MODIFIER = registerKey("ice_cave_modifier");
+    public static final ResourceKey<BiomeModifier> DESERT_CAVE_MODIFIER = registerKey("desert_cave_modifier");
     public static final ResourceKey<BiomeModifier> NETHER_CAVE_MODIFIER = registerKey("nether_cave_modifier");
 
     public static void bootstrap(BootstrapContext<BiomeModifier> context) {
@@ -41,12 +44,21 @@ public class ModBiomeModifier {
                 GenerationStep.Decoration.VEGETAL_DECORATION));
 
         context.register(ICE_CAVE_MODIFIER, new BiomeModifiers.AddFeaturesBiomeModifier(
-                biomes.getOrThrow(BiomeTags.SPAWNS_SNOW_FOXES),
+                biomes.getOrThrow(ModBiomeTags.IS_COLD_CAVE),
                 HolderSet.direct(List.of(
                         placedFeatures.getOrThrow(ModCavePlacements.COLD_STONE),
                         placedFeatures.getOrThrow(ModCavePlacements.ORE_SILT),
                         placedFeatures.getOrThrow(ModCavePlacements.LARGE_ICICLE),
                         placedFeatures.getOrThrow(ModCavePlacements.ICICLE_CLUSTER)
+                )),
+                GenerationStep.Decoration.VEGETAL_DECORATION));
+
+        context.register(DESERT_CAVE_MODIFIER, new BiomeModifiers.AddFeaturesBiomeModifier(
+                biomes.getOrThrow(ModBiomeTags.IS_HOT_CAVE),
+                HolderSet.direct(List.of(
+                        placedFeatures.getOrThrow(ModCavePlacements.HOT_STONE),
+                        placedFeatures.getOrThrow(CavePlacements.DRIPSTONE_CLUSTER),
+                        placedFeatures.getOrThrow(CavePlacements.LARGE_DRIPSTONE)
                 )),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
 

@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.brewing.BrewingRecipe;
 import net.neoforged.neoforge.common.brewing.BrewingRecipeRegistry;
 import net.neoforged.neoforge.common.conditions.IConditionBuilder;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -32,7 +33,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     }
 
     @Override
-    protected void buildRecipes(RecipeOutput recipeOutput) {
+    protected void buildRecipes(@NotNull RecipeOutput recipeOutput) {
         rockRecipe(ModBlocks.ROCK.asItem(), Blocks.STONE.asItem(), recipeOutput);
         rockRecipe(ModBlocks.DEEPSLATE_ROCK.asItem(), Blocks.DEEPSLATE.asItem(), recipeOutput);
         rockRecipe(ModBlocks.DRIPSTONE_ROCK.asItem(), Blocks.DRIPSTONE_BLOCK.asItem(), recipeOutput);

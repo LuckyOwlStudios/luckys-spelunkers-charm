@@ -33,25 +33,23 @@ public class IcicleClusterFeature extends Feature<IcicleClusterConfiguration> {
         BlockPos blockpos = context.origin();
         IcicleClusterConfiguration config = context.config();
         RandomSource randomsource = context.random();
-        if (!PointedBlockUtil.isEmptyOrWater(worldgenlevel, blockpos)) {
-            return false;
-        } else {
-            int i = config.height.sample(randomsource);
-            float f = config.wetness.sample(randomsource);
-            float f1 = config.density.sample(randomsource);
-            int j = config.radius.sample(randomsource);
-            int k = config.radius.sample(randomsource);
 
-            for (int l = -j; l <= j; l++) {
-                for (int i1 = -k; i1 <= k; i1++) {
-                    double d0 = this.getChanceOfStalagmiteOrStalactite(j, k, l, i1, config);
-                    BlockPos blockpos1 = blockpos.offset(l, 0, i1);
-                    this.placeColumn(worldgenlevel, randomsource, blockpos1, l, i1, f, d0, i, f1, config);
-                }
+        if (!PointedBlockUtil.isEmptyOrWater(worldgenlevel, blockpos)) return false;
+
+        int i = config.height.sample(randomsource);
+        float f = config.wetness.sample(randomsource);
+        float f1 = config.density.sample(randomsource);
+        int j = config.radius.sample(randomsource);
+        int k = config.radius.sample(randomsource);
+
+        for (int l = -j; l <= j; l++) {
+            for (int i1 = -k; i1 <= k; i1++) {
+                double d0 = this.getChanceOfStalagmiteOrStalactite(j, k, l, i1, config);
+                BlockPos blockpos1 = blockpos.offset(l, 0, i1);
+                this.placeColumn(worldgenlevel, randomsource, blockpos1, l, i1, f, d0, i, f1, config);
             }
-
-            return true;
         }
+        return true;
     }
 
     private void placeColumn(

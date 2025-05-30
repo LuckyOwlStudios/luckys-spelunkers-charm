@@ -1,6 +1,7 @@
 package net.luckystudio.splelunkers_charm.entity.custom.tremor;
 
 import net.luckystudio.splelunkers_charm.ModConfig;
+import net.luckystudio.splelunkers_charm.datagen.biomeTags.ModBiomeTags;
 import net.luckystudio.splelunkers_charm.entity.ModEntityType;
 import net.luckystudio.splelunkers_charm.sound.ModSoundEvents;
 import net.minecraft.core.BlockPos;
@@ -8,6 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
@@ -135,7 +137,7 @@ public class TremorManager {
         Random random = new Random();
         serverPlayer.connection.send(
                 new ClientboundSoundPacket(
-                        (Holder<SoundEvent>) ModSoundEvents.TREMOR,            // Sound event
+                        BuiltInRegistries.SOUND_EVENT.wrapAsHolder(getTremorSound(serverPlayer)),            // Sound event
                         SoundSource.NEUTRAL,         // Sound category
                         pos.getX(),                  // Sound position X
                         pos.getY(),                  // Sound position Y
@@ -145,5 +147,18 @@ public class TremorManager {
                         random.nextLong()
                 )
         );
+    }
+
+    // Get the sound event for the tremor based on the player's biome
+    private static SoundEvent getTremorSound(ServerPlayer serverPlayer) {
+        Level level = serverPlayer.level();
+        Holder<Biome> biomeKey = level.getBiome(serverPlayer.blockPosition());
+        if (biomeKey.is(ModBiomeTags.IS_COLD_CAVE)) {
+            System.out.println("Playing icy tremor sound");
+            return ModSoundEvents.TREMOR_ICY.get();
+        } else {
+            System.out.println("Playing generic tremor sound");
+            return ModSoundEvents.TREMOR_GENERIC.get();
+        }
     }
 }

@@ -7,34 +7,27 @@ import net.luckystudio.splelunkers_charm.worldgen.feature.ModFeature;
 import net.luckystudio.splelunkers_charm.item.ModCreativeModeTabs;
 import net.luckystudio.splelunkers_charm.item.ModItems;
 import net.luckystudio.splelunkers_charm.sound.ModSoundEvents;
-import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
-
 import com.mojang.logging.LogUtils;
-
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
-@Mod(SpelunkersCharm.MODID)
+@Mod(SpelunkersCharm.MOD_ID)
 public class SpelunkersCharm
 {
     // Define mod id in a common place for everything to reference
-    public static final String MODID = "spelunkers_charm";
+    public static final String MOD_ID = "spelunkers_charm";
 
     public static ResourceLocation id(String name) {
-        return ResourceLocation.fromNamespaceAndPath(MODID, name);
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, name);
     }
 
     // Directly reference a slf4j logger

@@ -5,7 +5,6 @@ import net.luckystudio.splelunkers_charm.block.ModBlocks;
 import net.luckystudio.splelunkers_charm.block.custom.RockBlock;
 import net.luckystudio.splelunkers_charm.block.util.ModBlockStateProperties;
 import net.luckystudio.splelunkers_charm.entity.custom.tremor.TremorManager;
-import net.luckystudio.splelunkers_charm.item.ModItems;
 import net.luckystudio.splelunkers_charm.item.potion.ModPotions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,8 +31,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-@EventBusSubscriber(modid = SpelunkersCharm.MODID, bus = EventBusSubscriber.Bus.GAME)
-public class ModEvents {
+@EventBusSubscriber(modid = SpelunkersCharm.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
+public class GameEvents {
 
     @SubscribeEvent
     public static void onBrewingRecipeRegister(RegisterBrewingRecipesEvent event) {

@@ -2,6 +2,7 @@ package net.luckystudio.splelunkers_charm.block.custom;
 
 import com.google.common.annotations.VisibleForTesting;
 import net.luckystudio.splelunkers_charm.block.ModBlocks;
+import net.luckystudio.splelunkers_charm.particles.ModParticleTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -195,6 +196,8 @@ public class ModPointedBlock extends PointedDripstoneBlock {
     public void onBrokenAfterFall(Level level, BlockPos pos, FallingBlockEntity fallingBlock) {
         if (!fallingBlock.isSilent()) {
             level.levelEvent(1045, pos, 0);
+            ModParticleTypes.spawnParticlesToServer(level, pos.getX() + 0.5, pos.getY() + 0.25, pos.getZ() + 0.5, 10, 0.1, 0.1, 0.1, 0.05,
+                    ParticleTypes.SNOWFLAKE);
         }
     }
 
@@ -300,13 +303,8 @@ public class ModPointedBlock extends PointedDripstoneBlock {
         createDripstone(level, blockpos1, Direction.UP, DripstoneThickness.TIP_MERGE);
     }
 
-    public static void spawnDripParticle(Level level, BlockPos pos, BlockState state) {
-        getFluidAboveStalactite(level, pos, state).ifPresent(p_221856_ -> spawnDripParticle(level, pos, state, p_221856_.fluid));
-    }
-
     private static void spawnDripParticle(Level level, BlockPos pos, BlockState state, Fluid p_fluid) {
         Vec3 vec3 = state.getOffset(level, pos);
-        double d0 = 0.0625;
         double d1 = (double)pos.getX() + 0.5 + vec3.x;
         double d2 = (double)((float)(pos.getY() + 1) - 0.6875F) - 0.0625;
         double d3 = (double)pos.getZ() + 0.5 + vec3.z;
@@ -497,6 +495,6 @@ public class ModPointedBlock extends PointedDripstoneBlock {
         }
     }
 
-    static record FluidInfo(BlockPos pos, Fluid fluid, BlockState sourceState) {
+    record FluidInfo(BlockPos pos, Fluid fluid, BlockState sourceState) {
     }
 }

@@ -1,15 +1,44 @@
 {
-  "rumble": {
+  "rumble_generic": {
     "subtitle": "sounds.spelunkers_charm.rumble",
     "sounds": [
-      "spelunkers_charm:ambient/cave/rumble_0"
-      ]
+      {
+        "name": "spelunkers_charm:ambient/cave/rumble_generic_001",
+        "stream": true,
+        "attenuation_distance": 64
+      }
+    ]
   },
-  "tremor": {
+  "rumble_icy": {
+    "subtitle": "sounds.spelunkers_charm.rumble",
+    "sounds": [
+      {
+        "name": "spelunkers_charm:ambient/cave/rumble_icy_001",
+        "stream": true,
+        "attenuation_distance": 64
+      },
+      {
+        "name": "spelunkers_charm:ambient/cave/rumble_icy_002",
+        "stream": true,
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "tremor_generic": {
     "subtitle": "sounds.spelunkers_charm.tremor",
     "sounds": [
       {
-        "name": "spelunkers_charm:ambient/cave/tremor_0",
+        "name": "spelunkers_charm:ambient/cave/tremor_generic_001",
+        "stream": true,
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "tremor_icy": {
+    "subtitle": "sounds.spelunkers_charm.tremor",
+    "sounds": [
+      {
+        "name": "spelunkers_charm:ambient/cave/tremor_icy_001",
         "stream": true,
         "attenuation_distance": 64
       }

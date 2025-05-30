@@ -1,0 +1,13 @@
+{
+  "values": [
+    "minecraft:iron_ingot",
+    "minecraft:copper_ingot",
+    "minecraft:gold_ingot",
+    "minecraft:diamond",
+    "minecraft:netherite_ingot",
+    {
+      "id": "create:brass_ingot",
+      "required": false
+    }
+  ]
+}

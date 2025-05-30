@@ -20,6 +20,6 @@ public class ModDataPackProvider extends DatapackBuiltinEntriesProvider {
             .add(Registries.PLACED_FEATURE, ModPlacementUtils::bootstrap)
             .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ModBiomeModifier::bootstrap);
     public ModDataPackProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(output, registries, BUILDER, Set.of(SpelunkersCharm.MODID));
+        super(output, registries, BUILDER, Set.of(SpelunkersCharm.MOD_ID));
     }
 }

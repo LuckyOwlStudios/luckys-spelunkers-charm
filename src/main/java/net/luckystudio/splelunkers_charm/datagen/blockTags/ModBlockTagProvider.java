@@ -1,4 +1,4 @@
-package net.luckystudio.splelunkers_charm.datagen;
+package net.luckystudio.splelunkers_charm.datagen.blockTags;
 
 import net.luckystudio.splelunkers_charm.SpelunkersCharm;
 import net.luckystudio.splelunkers_charm.block.ModBlocks;
@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ModBlockTagProvider extends BlockTagsProvider {
     public ModBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
-        super(output, lookupProvider, SpelunkersCharm.MODID, existingFileHelper);
+        super(output, lookupProvider, SpelunkersCharm.MOD_ID, existingFileHelper);
     }
 
     @Override
@@ -22,6 +22,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(ModBlocks.COLD_STONE.get())
                 .add(ModBlocks.AQUAMARINE_CLUSTER.get())
+                .add(ModBlocks.HOT_STONE.get())
                 .add(ModBlocks.DEEPSLATE_GEYSER.get())
                 .add(ModBlocks.BASALT_GEYSER.get())
         ;
@@ -29,7 +30,20 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.MINEABLE_WITH_SHOVEL)
                 .add(ModBlocks.SILT.get());
 
+        tag(BlockTags.DRIPSTONE_REPLACEABLE)
+                .add(ModBlocks.COLD_STONE.get())
+                .add(ModBlocks.HOT_STONE.get())
+        ;
+
         tag(BlockTags.BASE_STONE_OVERWORLD)
-                .add(ModBlocks.COLD_STONE.get());
+                .add(ModBlocks.COLD_STONE.get())
+                .add(ModBlocks.HOT_STONE.get())
+        ;
+
+        // This is so all ores still generate over the new stones.
+        tag(BlockTags.STONE_ORE_REPLACEABLES)
+                .add(ModBlocks.COLD_STONE.get())
+                .add(ModBlocks.HOT_STONE.get())
+        ;
     }
 }
