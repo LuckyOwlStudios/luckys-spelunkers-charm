@@ -1,0 +1,13 @@
+Worldgen isn't has hard as it seems.
+
+The way it happens is as follows:
+
+// CF -> PF -> BM
+
+ConfiguredFeature -> Placed Feature -> Biome Modifier
+
+Great examples of Configured Features can be found in the `package net.minecraft.data.worldgen.features` package.
+
+Great examples of Placed Features can be found in the `package net.minecraft.data.worldgen.placement` package.
+
+In the end, the Biome Modifier is what actually adds the feature to the biome.

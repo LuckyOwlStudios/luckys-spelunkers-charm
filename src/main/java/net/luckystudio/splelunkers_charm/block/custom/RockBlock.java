@@ -28,6 +28,7 @@ import java.util.Objects;
 public class RockBlock extends Block {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final IntegerProperty ROCKS = ModBlockStateProperties.ROCKS;
+    public static final BooleanProperty DISPLAY = ModBlockStateProperties.DISPLAY;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private static final VoxelShape SMALL_AABB = Block.box(4.0, 0.0, 4.0, 12.0, 3.0, 12.0);
@@ -39,6 +40,7 @@ public class RockBlock extends Block {
         this.registerDefaultState(
                 this.stateDefinition
                         .any()
+                        .setValue(DISPLAY, false)
                         .setValue(FACING, Direction.NORTH)
                         .setValue(ROCKS, 1)
                         .setValue(WATERLOGGED, false));
@@ -115,7 +117,7 @@ public class RockBlock extends Block {
     @Override
     protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(FACING, ROCKS, WATERLOGGED);
+        builder.add(FACING, ROCKS, DISPLAY, WATERLOGGED);
     }
 
     @Override

@@ -1,2 +1,17 @@
-// 1.21.1	2025-05-28T23:30:55.1563657	Tags for minecraft:item mod id spelunkers_charm
+// 1.21.1	2025-06-11T17:40:54.6385275	Tags for minecraft:item mod id spelunkers_charm
+0151f990e75f6ada4c5ccb2e8e42a24ad7a32a66 data/minecraft/tags/item/coal_ores.json
+62bb56ba343179b6fd74eaedb3f084f12d0a757e data/minecraft/tags/item/copper_ores.json
+d9cf83e5562f2f847694e00e82c211bd5e9e355e data/minecraft/tags/item/diamond_ores.json
+2060efd71872202733c93d03dd210b032cd98034 data/minecraft/tags/item/emerald_ores.json
+e2de164594c05507b64173a14d6a2a0a83b46527 data/minecraft/tags/item/gold_ores.json
+f21f6370268f3c903fcb884d231c47054149d189 data/minecraft/tags/item/iron_ores.json
+d796058b3c19152d301b6641482f8d1f4af456bf data/minecraft/tags/item/lapis_ores.json
+fe64d3edd218aa86e31e3aa6ebb1eb2d97d70a5e data/minecraft/tags/item/redstone_ores.json
+ecd1cf7f8a9d4dd1903d32064ffd9518b6cd2ff1 data/minecraft/tags/item/slabs.json
+b310acf9f254fa066051e981066e15441fea0cfa data/minecraft/tags/item/stairs.json
+adbbac0f36e5d30d6a204725c42c1954151deffd data/minecraft/tags/item/stone_bricks.json
+8cdbf239477775a8775f75197b7d1ccd656b766d data/minecraft/tags/item/stone_crafting_materials.json
+8cdbf239477775a8775f75197b7d1ccd656b766d data/minecraft/tags/item/stone_tool_materials.json
+c2aaf027d4ba75917ba9029443ac221c13e85ec4 data/minecraft/tags/item/walls.json
+9be797903d02b92c84a6290a6ec90b27d312a5fd data/spelunkers_charm/tags/item/geysers.json
 746dbba9770bb0019800e96f59e1bb4cc0d9395e data/spelunkers_charm/tags/item/minerals.json

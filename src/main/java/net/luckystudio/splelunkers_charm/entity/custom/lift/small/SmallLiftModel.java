@@ -2,7 +2,6 @@ package net.luckystudio.splelunkers_charm.entity.custom.lift.small;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.luckystudio.splelunkers_charm.entity.util.MovementDirection;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -13,8 +12,8 @@ public class SmallLiftModel<T extends SmallLift> extends HierarchicalModel<T> {
 	public final ModelPart root;
 	private final ModelPart body;
 	private final ModelPart lever;
-	private final ModelPart rightGear;
-	private final ModelPart leftGear;
+	public final ModelPart rightGear;
+	public final ModelPart leftGear;
 
 	public SmallLiftModel(ModelPart root) {
 		this.root = root;
@@ -99,14 +98,8 @@ public class SmallLiftModel<T extends SmallLift> extends HierarchicalModel<T> {
 		entity.setLeverAngle(entity, this.lever);
 	}
 
-
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
 		root.render(poseStack, buffer, packedLight, packedOverlay);
-	}
-
-	@Override
-	public void prepareMobModel(T entity, float limbSwing, float limbSwingAmount, float partialTick) {
-		super.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTick);
 	}
 }

@@ -8,7 +8,8 @@ import java.util.function.IntFunction;
 public enum MovementType implements StringRepresentable {
     STATIONARY("stationary"),
     UP("up"),
-    DOWN("down");
+    DOWN("down"),
+    FALLING("falling");
 
     private final String name;
     public static final EnumCodec<MovementType> CODEC = StringRepresentable.fromEnum(MovementType::values);

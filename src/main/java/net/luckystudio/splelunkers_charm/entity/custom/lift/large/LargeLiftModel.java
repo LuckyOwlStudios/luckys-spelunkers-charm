@@ -11,15 +11,15 @@ public class LargeLiftModel<T extends LargeLift> extends HierarchicalModel<T> {
 
 	private final ModelPart root;
 	private final ModelPart body;
-	private final ModelPart gear1;
-	private final ModelPart gear2;
-	private final ModelPart gear3;
-	private final ModelPart gear4;
-	private final ModelPart gear5;
-	private final ModelPart gear6;
-	private final ModelPart gear7;
-	private final ModelPart gear8;
-	private final ModelPart lever;
+	public final ModelPart gear1;
+	public final ModelPart gear2;
+	public final ModelPart gear3;
+	public final ModelPart gear4;
+	public final ModelPart gear5;
+	public final ModelPart gear6;
+	public final ModelPart gear7;
+	public final ModelPart gear8;
+	public final ModelPart lever;
 
 	public LargeLiftModel(ModelPart root) {
 		this.root = root;

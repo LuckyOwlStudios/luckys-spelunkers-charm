@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/amethyst_cluster",
-  "render_type": "minecraft:cutout",
-  "textures": {
-    "cross": "spelunkers_charm:block/aquamarine_cluster"
-  }
-}

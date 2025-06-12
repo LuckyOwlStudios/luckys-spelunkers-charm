@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 public enum GeyserType implements StringRepresentable {
     NONE("none"),
     WATER("water"),
+    SNOW("snow"),
     LAVA("lava");
 
     private final String name;

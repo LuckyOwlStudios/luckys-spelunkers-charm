@@ -9,11 +9,11 @@ public class MediumLiftModel<T extends MediumLift> extends HierarchicalModel<T> 
 
 	private final ModelPart root;
 	private final ModelPart body;
-	private final ModelPart gear1;
-	private final ModelPart gear2;
-	private final ModelPart gear3;
-	private final ModelPart gear4;
-	private final ModelPart lever;
+	public final ModelPart gear1;
+	public final ModelPart gear2;
+	public final ModelPart gear3;
+	public final ModelPart gear4;
+	public final ModelPart lever;
 
 	public MediumLiftModel(ModelPart root) {
 		this.root = root;

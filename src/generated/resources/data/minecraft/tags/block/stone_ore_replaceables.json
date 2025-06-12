@@ -1,6 +1,7 @@
 {
   "values": [
-    "spelunkers_charm:cold_stone",
-    "spelunkers_charm:hot_stone"
+    "spelunkers_charm:permafrost",
+    "spelunkers_charm:dunestone",
+    "spelunkers_charm:wildstone"
   ]
 }

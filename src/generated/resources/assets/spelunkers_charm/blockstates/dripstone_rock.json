@@ -1,48 +1,93 @@
 {
   "variants": {
-    "facing=east,rocks=1": {
+    "display=false,facing=east,rocks=1": {
       "model": "spelunkers_charm:block/dripstone_rock_one",
       "y": 90
     },
-    "facing=east,rocks=2": {
+    "display=false,facing=east,rocks=2": {
       "model": "spelunkers_charm:block/dripstone_rock_two",
       "y": 90
     },
-    "facing=east,rocks=3": {
+    "display=false,facing=east,rocks=3": {
       "model": "spelunkers_charm:block/dripstone_rock_three",
       "y": 90
     },
-    "facing=north,rocks=1": {
+    "display=false,facing=north,rocks=1": {
       "model": "spelunkers_charm:block/dripstone_rock_one"
     },
-    "facing=north,rocks=2": {
+    "display=false,facing=north,rocks=2": {
       "model": "spelunkers_charm:block/dripstone_rock_two"
     },
-    "facing=north,rocks=3": {
+    "display=false,facing=north,rocks=3": {
       "model": "spelunkers_charm:block/dripstone_rock_three"
     },
-    "facing=south,rocks=1": {
+    "display=false,facing=south,rocks=1": {
       "model": "spelunkers_charm:block/dripstone_rock_one",
       "y": 180
     },
-    "facing=south,rocks=2": {
+    "display=false,facing=south,rocks=2": {
       "model": "spelunkers_charm:block/dripstone_rock_two",
       "y": 180
     },
-    "facing=south,rocks=3": {
+    "display=false,facing=south,rocks=3": {
       "model": "spelunkers_charm:block/dripstone_rock_three",
       "y": 180
     },
-    "facing=west,rocks=1": {
+    "display=false,facing=west,rocks=1": {
       "model": "spelunkers_charm:block/dripstone_rock_one",
       "y": 270
     },
-    "facing=west,rocks=2": {
+    "display=false,facing=west,rocks=2": {
       "model": "spelunkers_charm:block/dripstone_rock_two",
       "y": 270
     },
-    "facing=west,rocks=3": {
+    "display=false,facing=west,rocks=3": {
       "model": "spelunkers_charm:block/dripstone_rock_three",
+      "y": 270
+    },
+    "display=true,facing=east,rocks=1": {
+      "model": "spelunkers_charm:block/dripstone_rock_display",
+      "y": 90
+    },
+    "display=true,facing=east,rocks=2": {
+      "model": "spelunkers_charm:block/dripstone_rock_display",
+      "y": 90
+    },
+    "display=true,facing=east,rocks=3": {
+      "model": "spelunkers_charm:block/dripstone_rock_display",
+      "y": 90
+    },
+    "display=true,facing=north,rocks=1": {
+      "model": "spelunkers_charm:block/dripstone_rock_display"
+    },
+    "display=true,facing=north,rocks=2": {
+      "model": "spelunkers_charm:block/dripstone_rock_display"
+    },
+    "display=true,facing=north,rocks=3": {
+      "model": "spelunkers_charm:block/dripstone_rock_display"
+    },
+    "display=true,facing=south,rocks=1": {
+      "model": "spelunkers_charm:block/dripstone_rock_display",
+      "y": 180
+    },
+    "display=true,facing=south,rocks=2": {
+      "model": "spelunkers_charm:block/dripstone_rock_display",
+      "y": 180
+    },
+    "display=true,facing=south,rocks=3": {
+      "model": "spelunkers_charm:block/dripstone_rock_display",
+      "y": 180
+    },
+    "display=true,facing=west,rocks=1": {
+      "model": "spelunkers_charm:block/dripstone_rock_display",
+      "y": 270
+    },
+    "display=true,facing=west,rocks=2": {
+      "model": "spelunkers_charm:block/dripstone_rock_display",
+      "y": 270
+    },
+    "display=true,facing=west,rocks=3": {
+      "model": "spelunkers_charm:block/dripstone_rock_display",
       "y": 270
     }
   }

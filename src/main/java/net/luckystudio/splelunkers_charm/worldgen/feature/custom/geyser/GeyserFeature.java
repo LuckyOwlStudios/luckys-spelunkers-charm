@@ -1,6 +1,7 @@
 package net.luckystudio.splelunkers_charm.worldgen.feature.custom.geyser;
 
 import com.mojang.serialization.Codec;
+import net.luckystudio.splelunkers_charm.SpelunkersCharmConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
@@ -16,6 +17,7 @@ public class GeyserFeature extends Feature<GeyserConfiguration> {
 
     @Override
     public boolean place(FeaturePlaceContext<GeyserConfiguration> context) {
+        if (!SpelunkersCharmConfig.GEYSERS.get()) return false;
         WorldGenLevel worldgenlevel = context.level();
         BlockPos blockpos = context.origin();
         GeyserConfiguration geyserConfiguration = context.config();

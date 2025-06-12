@@ -1,8 +1,8 @@
 package net.luckystudio.splelunkers_charm.block.custom;
 
 import com.google.common.annotations.VisibleForTesting;
-import net.luckystudio.splelunkers_charm.block.ModBlocks;
-import net.luckystudio.splelunkers_charm.particles.ModParticleTypes;
+import net.luckystudio.splelunkers_charm.init.ModBlocks;
+import net.luckystudio.splelunkers_charm.init.ModParticleTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;

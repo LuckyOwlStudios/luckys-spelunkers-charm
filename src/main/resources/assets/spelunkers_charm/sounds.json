@@ -3,9 +3,9 @@
     "subtitle": "sounds.spelunkers_charm.rumble",
     "sounds": [
       {
-        "name": "spelunkers_charm:ambient/cave/rumble_generic_001",
+        "name": "spelunkers_charm:ambient/cave/rumble_generic_0",
         "stream": true,
-        "attenuation_distance": 64
+        "attenuation_distance": 128
       }
     ]
   },
@@ -13,14 +13,14 @@
     "subtitle": "sounds.spelunkers_charm.rumble",
     "sounds": [
       {
-        "name": "spelunkers_charm:ambient/cave/rumble_icy_001",
+        "name": "spelunkers_charm:ambient/cave/rumble_icy_0",
         "stream": true,
-        "attenuation_distance": 64
+        "attenuation_distance": 96
       },
       {
-        "name": "spelunkers_charm:ambient/cave/rumble_icy_002",
+        "name": "spelunkers_charm:ambient/cave/rumble_icy_1",
         "stream": true,
-        "attenuation_distance": 64
+        "attenuation_distance": 96
       }
     ]
   },
@@ -28,9 +28,9 @@
     "subtitle": "sounds.spelunkers_charm.tremor",
     "sounds": [
       {
-        "name": "spelunkers_charm:ambient/cave/tremor_generic_001",
+        "name": "spelunkers_charm:ambient/cave/tremor_generic_mono",
         "stream": true,
-        "attenuation_distance": 64
+        "attenuation_distance": 96
       }
     ]
   },
@@ -38,12 +38,22 @@
     "subtitle": "sounds.spelunkers_charm.tremor",
     "sounds": [
       {
-        "name": "spelunkers_charm:ambient/cave/tremor_icy_001",
+        "name": "spelunkers_charm:ambient/cave/tremor_icy_mono",
         "stream": true,
-        "attenuation_distance": 64
+        "attenuation_distance": 96
       }
     ]
   },
+  "spider_cave_additions": {
+    "subtitle": "sounds.spelunkers_charm.spider_cave_additions",
+    "sounds": [
+      "spelunkers_charm:ambient/cave/spider_cave_additions_0",
+      "spelunkers_charm:ambient/cave/spider_cave_additions_1",
+      "spelunkers_charm:ambient/cave/spider_cave_additions_2",
+      "spelunkers_charm:ambient/cave/spider_cave_additions_3"
+    ]
+  },
+
   "geyser_charge": {
     "subtitle": "sounds.spelunkers_charm.geyser_charge",
     "sounds": [
@@ -52,13 +62,49 @@
     ]
   },
   "geyser_erupt_water": {
-    "subtitle": "sounds.spelunkers_charm.geyser_erupt_water",
+    "subtitle": "sounds.spelunkers_charm.erupt",
     "sounds": [
       "spelunkers_charm:block/geyser/erupt_water_0",
       "spelunkers_charm:block/geyser/erupt_water_1",
       "spelunkers_charm:block/geyser/erupt_water_2",
       "spelunkers_charm:block/geyser/erupt_water_3",
       "spelunkers_charm:block/geyser/erupt_water_4"
+    ]
+  },
+  "boulder_land": {
+    "subtitle": "sounds.spelunkers_charm.boulder_land",
+    "sounds": [
+      "spelunkers_charm:entity/boulder/boulder_land"
+    ]
+  },
+  "spider_egg_crack": {
+    "subtitle": "sounds.spelunkers_charm.spider_egg_crack",
+    "sounds": [
+      "spelunkers_charm:block/spider_egg/spider_egg_crack_0",
+      "spelunkers_charm:block/spider_egg/spider_egg_crack_1",
+      "spelunkers_charm:block/spider_egg/spider_egg_crack_2",
+      "spelunkers_charm:block/spider_egg/spider_egg_crack_3",
+      "spelunkers_charm:block/spider_egg/spider_egg_crack_4",
+      "spelunkers_charm:block/spider_egg/spider_egg_crack_5"
+    ]
+  },
+
+  "lift_start": {
+    "subtitle": "sounds.spelunkers_charm.lift_start",
+    "sounds": [
+      "spelunkers_charm:entity/lift/lift_start"
+    ]
+  },
+  "lift_loop": {
+    "subtitle": "sounds.spelunkers_charm.lift_loop",
+    "sounds": [
+      "spelunkers_charm:entity/lift/lift_loop"
+    ]
+  },
+  "lift_stop": {
+    "subtitle": "sounds.spelunkers_charm.lift_stop",
+    "sounds": [
+      "spelunkers_charm:entity/lift/lift_stop"
     ]
   }
 }

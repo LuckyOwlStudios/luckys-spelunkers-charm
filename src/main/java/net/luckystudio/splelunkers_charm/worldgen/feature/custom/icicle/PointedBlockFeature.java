@@ -29,17 +29,17 @@ public class PointedBlockFeature extends Feature<IcicleConfiguration> {
             BlockPos blockpos1 = blockpos.relative(optional.get().getOpposite());
             createPatchOfDripstoneBlocks(levelaccessor, randomsource, blockpos1, IcicleConfiguration);
             int i = randomsource.nextFloat() < IcicleConfiguration.chanceOfTallerDripstone
-                    && PointedBlockUtil.isEmptyOrWater(levelaccessor.getBlockState(blockpos.relative(optional.get())))
+                    && IcicleBlockUtil.isEmptyOrWater(levelaccessor.getBlockState(blockpos.relative(optional.get())))
                     ? 2
                     : 1;
-            PointedBlockUtil.growPointedDripstone(levelaccessor, blockpos, optional.get(), i, false);
+            IcicleBlockUtil.growPointedIcicle(levelaccessor, blockpos, optional.get(), i, false);
             return true;
         }
     }
 
     private static Optional<Direction> getTipDirection(LevelAccessor level, BlockPos pos, RandomSource random) {
-        boolean flag = PointedBlockUtil.isDripstoneBase(level.getBlockState(pos.above()));
-        boolean flag1 = PointedBlockUtil.isDripstoneBase(level.getBlockState(pos.below()));
+        boolean flag = IcicleBlockUtil.isIcicleBase(level.getBlockState(pos.above()));
+        boolean flag1 = IcicleBlockUtil.isIcicleBase(level.getBlockState(pos.below()));
         if (flag && flag1) {
             return Optional.of(random.nextBoolean() ? Direction.DOWN : Direction.UP);
         } else if (flag) {
@@ -52,18 +52,18 @@ public class PointedBlockFeature extends Feature<IcicleConfiguration> {
     private static void createPatchOfDripstoneBlocks(
             LevelAccessor level, RandomSource random, BlockPos pos, IcicleConfiguration config
     ) {
-        PointedBlockUtil.placeDripstoneBlockIfPossible(level, pos);
+        IcicleBlockUtil.placeIcicleBlockIfPossible(level, pos);
 
         for (Direction direction : Direction.Plane.HORIZONTAL) {
             if (!(random.nextFloat() > config.chanceOfDirectionalSpread)) {
                 BlockPos blockpos = pos.relative(direction);
-                PointedBlockUtil.placeDripstoneBlockIfPossible(level, blockpos);
+                IcicleBlockUtil.placeIcicleBlockIfPossible(level, blockpos);
                 if (!(random.nextFloat() > config.chanceOfSpreadRadius2)) {
                     BlockPos blockpos1 = blockpos.relative(Direction.getRandom(random));
-                    PointedBlockUtil.placeDripstoneBlockIfPossible(level, blockpos1);
+                    IcicleBlockUtil.placeIcicleBlockIfPossible(level, blockpos1);
                     if (!(random.nextFloat() > config.chanceOfSpreadRadius3)) {
                         BlockPos blockpos2 = blockpos1.relative(Direction.getRandom(random));
-                        PointedBlockUtil.placeDripstoneBlockIfPossible(level, blockpos2);
+                        IcicleBlockUtil.placeIcicleBlockIfPossible(level, blockpos2);
                     }
                 }
             }

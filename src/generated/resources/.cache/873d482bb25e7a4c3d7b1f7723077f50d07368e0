@@ -1,6 +1,26 @@
-// 1.21.1	2025-05-28T02:42:25.76769	Tags for minecraft:block mod id spelunkers_charm
-31d13a3e3142000aa2dc5bc99be69792c8f3b586 data/minecraft/tags/block/base_stone_overworld.json
-31d13a3e3142000aa2dc5bc99be69792c8f3b586 data/minecraft/tags/block/dripstone_replaceable_blocks.json
-961b8c44939ada7a8b0776f596806c06342bc23e data/minecraft/tags/block/mineable/pickaxe.json
+// 1.21.1	2025-06-11T17:40:54.634818	Tags for minecraft:block mod id spelunkers_charm
+f053bd3893a0581d00fdb9bb39c97ed31a354c2f data/minecraft/tags/block/base_stone_overworld.json
+0151f990e75f6ada4c5ccb2e8e42a24ad7a32a66 data/minecraft/tags/block/coal_ores.json
+62bb56ba343179b6fd74eaedb3f084f12d0a757e data/minecraft/tags/block/copper_ores.json
+d9cf83e5562f2f847694e00e82c211bd5e9e355e data/minecraft/tags/block/diamond_ores.json
+e2bb2b793256170652eaa0471fbfbada1c082976 data/minecraft/tags/block/dripstone_replaceable_blocks.json
+2060efd71872202733c93d03dd210b032cd98034 data/minecraft/tags/block/emerald_ores.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/minecraft/tags/block/features_cannot_replace.json
+685d9f33300e177f54c689e7236066e6f870918c data/minecraft/tags/block/goats_spawnable_on.json
+e2de164594c05507b64173a14d6a2a0a83b46527 data/minecraft/tags/block/gold_ores.json
+f21f6370268f3c903fcb884d231c47054149d189 data/minecraft/tags/block/iron_ores.json
+d796058b3c19152d301b6641482f8d1f4af456bf data/minecraft/tags/block/lapis_ores.json
+be17b8cab791506dcf795d88eea8aeeb280e8b14 data/minecraft/tags/block/mineable/axe.json
+2c1f7b1616e3665c69268132c08ed181b3d7ea92 data/minecraft/tags/block/mineable/pickaxe.json
 ab15814dffb8de1440172221059ce3c439b50b43 data/minecraft/tags/block/mineable/shovel.json
-31d13a3e3142000aa2dc5bc99be69792c8f3b586 data/minecraft/tags/block/stone_ore_replaceables.json
+533b31de782a5efdea7f04eb541863debf4e3a57 data/minecraft/tags/block/needs_iron_tool.json
+71ca642f02f545637ddac31b69b391aa024f3067 data/minecraft/tags/block/needs_stone_tool.json
+fe64d3edd218aa86e31e3aa6ebb1eb2d97d70a5e data/minecraft/tags/block/redstone_ores.json
+88c5274537c15253cdb63c22b849c41a38d916fd data/minecraft/tags/block/replaceable.json
+f053bd3893a0581d00fdb9bb39c97ed31a354c2f data/minecraft/tags/block/stone_ore_replaceables.json
+0d89f428bef319cad2f1886ed3f56fe2ea7b42cd data/minecraft/tags/block/sword_efficient.json
+c2aaf027d4ba75917ba9029443ac221c13e85ec4 data/minecraft/tags/block/walls.json
+ecc9e22371d7fa794a255306b894a534b879f624 data/spelunkers_charm/tags/block/dunestone_replaceable.json
+ab25bb6d7e9dd03f6aaecf6d5212cf53a4dba15e data/spelunkers_charm/tags/block/overworld_replaceable.json
+426404a235e1ed01b82000d19581257503e919ce data/spelunkers_charm/tags/block/permafrost_replaceable.json
+ecc9e22371d7fa794a255306b894a534b879f624 data/spelunkers_charm/tags/block/wildstone_replaceable.json

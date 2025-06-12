@@ -1,6 +1,6 @@
 package net.luckystudio.splelunkers_charm.entity.custom.lift.medium;
 
-import net.luckystudio.splelunkers_charm.entity.ModEntityType;
+import net.luckystudio.splelunkers_charm.init.ModEntityType;
 import net.luckystudio.splelunkers_charm.entity.custom.lift.AbstractLift;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

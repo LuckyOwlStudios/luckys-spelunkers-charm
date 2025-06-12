@@ -1,7 +1,7 @@
 package net.luckystudio.splelunkers_charm.worldgen.feature.custom.large_icicle;
 
 import com.mojang.serialization.Codec;
-import net.luckystudio.splelunkers_charm.worldgen.feature.custom.icicle.PointedBlockUtil;
+import net.luckystudio.splelunkers_charm.worldgen.feature.custom.icicle.IcicleBlockUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
@@ -40,15 +40,15 @@ public class LargeIcicleFeature extends Feature<LargeIcicleFeatureConfiguration>
         BlockPos blockpos = context.origin();
         LargeIcicleFeatureConfiguration config = context.config();
         RandomSource randomsource = context.random();
-        if (!PointedBlockUtil.isEmptyOrWater(worldgenlevel, blockpos)) {
+        if (!IcicleBlockUtil.isEmptyOrWater(worldgenlevel, blockpos)) {
             return false;
         } else {
             Optional<Column> optional = Column.scan(
                     worldgenlevel,
                     blockpos,
                     config.floorToCeilingSearchRange,
-                    PointedBlockUtil::isEmptyOrWater,
-                    PointedBlockUtil::isDripstoneBaseOrLava
+                    IcicleBlockUtil::isEmptyOrWater,
+                    IcicleBlockUtil::isIcicleBaseOrLava
             );
             if (!optional.isEmpty() && optional.get() instanceof Column.Range) {
                 Column.Range column$range = (Column.Range)optional.get();
@@ -143,7 +143,7 @@ public class LargeIcicleFeature extends Feature<LargeIcicleFeatureConfiguration>
                         return false;
                     }
 
-                    if (PointedBlockUtil.isCircleMostlyEmbeddedInStone(level, windOffsetter.offset(blockpos$mutableblockpos), this.radius)) {
+                    if (IcicleBlockUtil.isCircleMostlyEmbeddedInStone(level, windOffsetter.offset(blockpos$mutableblockpos), this.radius)) {
                         this.root = blockpos$mutableblockpos;
                         return true;
                     }
@@ -158,7 +158,7 @@ public class LargeIcicleFeature extends Feature<LargeIcicleFeatureConfiguration>
         }
 
         private int getHeightAtRadius(float radius) {
-            return (int)PointedBlockUtil.getDripstoneHeight((double)radius, (double)this.radius, this.scale, this.bluntness);
+            return (int) IcicleBlockUtil.getIcicleHeight((double)radius, (double)this.radius, this.scale, this.bluntness);
         }
 
         void placeBlocks(WorldGenLevel level, RandomSource random, LargeIcicleFeature.WindOffsetter windOffsetter) {
@@ -180,7 +180,7 @@ public class LargeIcicleFeature extends Feature<LargeIcicleFeatureConfiguration>
 
                             for (int i1 = 0; i1 < k && blockpos$mutableblockpos.getY() < l; i1++) {
                                 BlockPos blockpos = windOffsetter.offset(blockpos$mutableblockpos);
-                                if (PointedBlockUtil.isEmptyOrWaterOrLava(level, blockpos)) {
+                                if (IcicleBlockUtil.isEmptyOrWaterOrLava(level, blockpos)) {
                                     flag = true;
                                     Block block = Blocks.ICE;
                                     level.setBlock(blockpos, block.defaultBlockState(), 2);

@@ -1,8 +1,10 @@
 package net.luckystudio.splelunkers_charm.datagen;
 
 import net.luckystudio.splelunkers_charm.SpelunkersCharm;
-import net.luckystudio.splelunkers_charm.datagen.biomeTags.ModBiomeTagProvider;
+import net.luckystudio.splelunkers_charm.datagen.advancements.ModAdvancements;
+import net.luckystudio.splelunkers_charm.datagen.biomes.biomeTags.ModBiomeTagProvider;
 import net.luckystudio.splelunkers_charm.datagen.blockTags.ModBlockTagProvider;
+import net.luckystudio.splelunkers_charm.datagen.itemTags.ModItemTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -18,10 +20,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-@EventBusSubscriber(modid = SpelunkersCharm.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+//@EventBusSubscriber(modid = SpelunkersCharm.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class DataGenerators {
 
-    @SubscribeEvent
+//    @SubscribeEvent
     public static void gatherData(GatherDataEvent event) {
 
         // I do not frickin know...
@@ -35,7 +37,7 @@ public class DataGenerators {
                 List.of(new LootTableProvider.SubProviderEntry(ModBlockLootTableProvider::new, LootContextParamSets.BLOCK)), lookupProvider));
 
         generator.addProvider(event.includeServer(), new ModRecipeProvider(packOutput, lookupProvider));
-
+        generator.addProvider(event.includeServer(), new ModAdvancements(packOutput, lookupProvider, existingFileHelper));
         BlockTagsProvider blockTagsProvider = new ModBlockTagProvider(packOutput, lookupProvider, existingFileHelper);
         generator.addProvider(event.includeServer(), blockTagsProvider);
         generator.addProvider(event.includeServer(), new ModItemTagProvider(packOutput, lookupProvider, blockTagsProvider.contentsGetter(), existingFileHelper));

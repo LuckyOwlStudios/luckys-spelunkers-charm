@@ -1,7 +1,7 @@
 package net.luckystudio.splelunkers_charm.block.custom;
 
 import com.mojang.serialization.MapCodec;
-import net.luckystudio.splelunkers_charm.block.ModBlocks;
+import net.luckystudio.splelunkers_charm.init.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;

@@ -2,6 +2,8 @@ package net.luckystudio.splelunkers_charm.datagen;
 
 import net.luckystudio.splelunkers_charm.SpelunkersCharm;
 import net.luckystudio.splelunkers_charm.worldgen.ModBiomeModifier;
+import net.luckystudio.splelunkers_charm.worldgen.biomes.ModBiomeData;
+import net.luckystudio.splelunkers_charm.worldgen.biomes.ModBiomes;
 import net.luckystudio.splelunkers_charm.worldgen.util.ModFeatureUtils;
 import net.luckystudio.splelunkers_charm.worldgen.util.ModPlacementUtils;
 import net.minecraft.core.HolderLookup;
@@ -18,7 +20,9 @@ public class ModDataPackProvider extends DatapackBuiltinEntriesProvider {
     public static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
             .add(Registries.CONFIGURED_FEATURE, ModFeatureUtils::bootstrap)
             .add(Registries.PLACED_FEATURE, ModPlacementUtils::bootstrap)
-            .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ModBiomeModifier::bootstrap);
+            .add(Registries.BIOME, ModBiomeData::bootstrap)
+            .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ModBiomeModifier::bootstrap)
+            ;
     public ModDataPackProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BUILDER, Set.of(SpelunkersCharm.MOD_ID));
     }

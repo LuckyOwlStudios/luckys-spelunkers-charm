@@ -1,7 +1,8 @@
 package net.luckystudio.splelunkers_charm.worldgen.feature.custom.packed_ice_cluster;
 
 import com.mojang.serialization.Codec;
-import net.luckystudio.splelunkers_charm.worldgen.feature.custom.icicle.PointedBlockUtil;
+import net.luckystudio.splelunkers_charm.init.ModBlocks;
+import net.luckystudio.splelunkers_charm.worldgen.feature.custom.icicle.IcicleBlockUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
@@ -34,7 +35,7 @@ public class IcicleClusterFeature extends Feature<IcicleClusterConfiguration> {
         IcicleClusterConfiguration config = context.config();
         RandomSource randomsource = context.random();
 
-        if (!PointedBlockUtil.isEmptyOrWater(worldgenlevel, blockpos)) return false;
+        if (!IcicleBlockUtil.isEmptyOrWater(worldgenlevel, blockpos)) return false;
 
         int i = config.height.sample(randomsource);
         float f = config.wetness.sample(randomsource);
@@ -65,7 +66,7 @@ public class IcicleClusterFeature extends Feature<IcicleClusterConfiguration> {
             IcicleClusterConfiguration config
     ) {
         Optional<Column> optional = Column.scan(
-                level, pos, config.floorToCeilingSearchRange, PointedBlockUtil::isEmptyOrWater, PointedBlockUtil::isNeitherEmptyNorWater
+                level, pos, config.floorToCeilingSearchRange, IcicleBlockUtil::isEmptyOrWater, IcicleBlockUtil::isNeitherEmptyNorWater
         );
         if (!optional.isEmpty()) {
             OptionalInt optionalint = optional.get().getCeiling();
@@ -85,7 +86,7 @@ public class IcicleClusterFeature extends Feature<IcicleClusterConfiguration> {
                 boolean flag1 = random.nextDouble() < chance;
                 int j;
                 if (optionalint.isPresent() && flag1 && !this.isLava(level, pos.atY(optionalint.getAsInt()))) {
-                    int k = config.dripstoneBlockLayerThickness.sample(random);
+                    int k = config.icicleBlockLayerThickness.sample(random);
                     this.replaceBlocksWithBlocks(level, pos.atY(optionalint.getAsInt()), k, Direction.UP);
                     int l;
                     if (optionalint2.isPresent()) {
@@ -94,7 +95,7 @@ public class IcicleClusterFeature extends Feature<IcicleClusterConfiguration> {
                         l = height;
                     }
 
-                    j = this.getDripstoneHeight(random, x, z, density, l, config);
+                    j = this.getIcicleHeight(random, x, z, density, l, config);
                 } else {
                     j = 0;
                 }
@@ -102,7 +103,7 @@ public class IcicleClusterFeature extends Feature<IcicleClusterConfiguration> {
                 boolean flag2 = random.nextDouble() < chance;
                 int i3;
                 if (optionalint2.isPresent() && flag2 && !this.isLava(level, pos.atY(optionalint2.getAsInt()))) {
-                    int i1 = config.dripstoneBlockLayerThickness.sample(random);
+                    int i1 = config.icicleBlockLayerThickness.sample(random);
                     this.replaceBlocksWithBlocks(level, pos.atY(optionalint2.getAsInt()), i1, Direction.DOWN);
                     if (optionalint.isPresent()) {
                         i3 = Math.max(
@@ -113,7 +114,7 @@ public class IcicleClusterFeature extends Feature<IcicleClusterConfiguration> {
                                 )
                         );
                     } else {
-                        i3 = this.getDripstoneHeight(random, x, z, density, height, config);
+                        i3 = this.getIcicleHeight(random, x, z, density, height, config);
                     }
                 } else {
                     i3 = 0;
@@ -137,11 +138,11 @@ public class IcicleClusterFeature extends Feature<IcicleClusterConfiguration> {
 
                 boolean flag3 = random.nextBoolean() && j3 > 0 && j1 > 0 && column.getHeight().isPresent() && j3 + j1 == column.getHeight().getAsInt();
                 if (optionalint.isPresent()) {
-                    PointedBlockUtil.growPointedDripstone(level, pos.atY(optionalint.getAsInt() - 1), Direction.DOWN, j3, flag3);
+                    IcicleBlockUtil.growPointedIcicle(level, pos.atY(optionalint.getAsInt() - 1), Direction.DOWN, j3, flag3);
                 }
 
                 if (optionalint2.isPresent()) {
-                    PointedBlockUtil.growPointedDripstone(level, pos.atY(optionalint2.getAsInt() + 1), Direction.UP, j1, flag3);
+                    IcicleBlockUtil.growPointedIcicle(level, pos.atY(optionalint2.getAsInt() + 1), Direction.UP, j1, flag3);
                 }
             }
         }
@@ -151,7 +152,7 @@ public class IcicleClusterFeature extends Feature<IcicleClusterConfiguration> {
         return level.getBlockState(pos).is(Blocks.LAVA);
     }
 
-    private int getDripstoneHeight(
+    private int getIcicleHeight(
             RandomSource random, int x, int z, float chance, int height, IcicleClusterConfiguration config
     ) {
         if (random.nextFloat() > chance) {
@@ -165,7 +166,7 @@ public class IcicleClusterFeature extends Feature<IcicleClusterConfiguration> {
 
     private boolean canPlacePool(WorldGenLevel level, BlockPos pos) {
         BlockState blockstate = level.getBlockState(pos);
-        if (!blockstate.is(Blocks.WATER) && !blockstate.is(Blocks.DRIPSTONE_BLOCK) && !blockstate.is(Blocks.POINTED_DRIPSTONE)) {
+        if (!blockstate.is(Blocks.WATER) && !blockstate.is(Blocks.PACKED_ICE) && !blockstate.is(ModBlocks.ICICLE)) {
             if (level.getBlockState(pos.above()).getFluidState().is(FluidTags.WATER)) {
                 return false;
             } else {
@@ -191,7 +192,7 @@ public class IcicleClusterFeature extends Feature<IcicleClusterConfiguration> {
         BlockPos.MutableBlockPos blockpos$mutableblockpos = pos.mutable();
 
         for (int i = 0; i < thickness; i++) {
-            if (!PointedBlockUtil.placeDripstoneBlockIfPossible(level, blockpos$mutableblockpos)) {
+            if (!IcicleBlockUtil.placeIcicleBlockIfPossible(level, blockpos$mutableblockpos)) {
                 return;
             }
 

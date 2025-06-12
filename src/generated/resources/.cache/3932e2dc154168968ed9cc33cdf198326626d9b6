@@ -1,4 +1,4 @@
-// 1.21.1	2025-05-28T03:05:09.154577	Tags for minecraft:worldgen/biome mod id spelunkers_charm
+// 1.21.1	2025-06-10T19:45:29.7247106	Tags for minecraft:worldgen/biome mod id spelunkers_charm
 6525dda69924a36f16797ed873bffc083e1f4de5 data/minecraft/tags/worldgen/biome/allows_surface_slime_spawns.json
 0f241c94b10e4b16b4304f66ad949bb089955b1e data/minecraft/tags/worldgen/biome/allows_tropical_fish_spawns_at_any_height.json
 6525dda69924a36f16797ed873bffc083e1f4de5 data/minecraft/tags/worldgen/biome/has_closer_water_fog.json
@@ -70,5 +70,6 @@ e230510c9f5c1188c61cd1ad728a3d9a6bd3125f data/minecraft/tags/worldgen/biome/with
 378840c455ad2277df61b86384bba36f3ec8b253 data/minecraft/tags/worldgen/biome/without_wandering_trader_spawns.json
 e230510c9f5c1188c61cd1ad728a3d9a6bd3125f data/minecraft/tags/worldgen/biome/without_zombie_sieges.json
 7a6207cbf7b61e7823ff557ca7e8e46deca64eab data/spelunkers_charm/tags/worldgen/biome/is_beach.json
-177f4b39bde624dd2bb951274a86e8b47616f69b data/spelunkers_charm/tags/worldgen/biome/is_cold_cave.json
+a0947dbe77e8e9e70b13df97b1d8d1c812aa6def data/spelunkers_charm/tags/worldgen/biome/is_cold_cave.json
 5e63c9b0598a7143bc2765fceeb54e2faa893c68 data/spelunkers_charm/tags/worldgen/biome/is_hot_cave.json
+be55bacd55dfb2cd43d5dde0f1cf5aaae32d60a1 data/spelunkers_charm/tags/worldgen/biome/no_tremors.json

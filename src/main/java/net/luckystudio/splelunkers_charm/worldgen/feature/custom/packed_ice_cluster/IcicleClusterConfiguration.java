@@ -14,14 +14,14 @@ public class IcicleClusterConfiguration implements FeatureConfiguration {
                             IntProvider.codec(1, 128).fieldOf("radius").forGetter(packedIceClusterConfiguration -> packedIceClusterConfiguration.radius),
                             Codec.intRange(0, 64).fieldOf("max_stalagmite_stalactite_height_diff").forGetter(packedIceClusterConfiguration -> packedIceClusterConfiguration.maxStalagmiteStalactiteHeightDiff),
                             Codec.intRange(1, 64).fieldOf("height_deviation").forGetter(packedIceClusterConfiguration -> packedIceClusterConfiguration.heightDeviation),
-                            IntProvider.codec(0, 128).fieldOf("dripstone_block_layer_thickness").forGetter(packedIceClusterConfiguration -> packedIceClusterConfiguration.dripstoneBlockLayerThickness),
+                            IntProvider.codec(0, 128).fieldOf("icicle_block_layer_thickness").forGetter(packedIceClusterConfiguration -> packedIceClusterConfiguration.icicleBlockLayerThickness),
                             FloatProvider.codec(0.0F, 2.0F).fieldOf("density").forGetter(packedIceClusterConfiguration -> packedIceClusterConfiguration.density),
                             FloatProvider.codec(0.0F, 2.0F).fieldOf("wetness").forGetter(packedIceClusterConfiguration -> packedIceClusterConfiguration.wetness),
                             Codec.floatRange(0.0F, 1.0F)
-                                    .fieldOf("chance_of_dripstone_column_at_max_distance_from_center")
+                                    .fieldOf("chance_of_icicle_column_at_max_distance_from_center")
                                     .forGetter(packedIceClusterConfiguration -> packedIceClusterConfiguration.chanceOfDripstoneColumnAtMaxDistanceFromCenter),
                             Codec.intRange(1, 64)
-                                    .fieldOf("max_distance_from_edge_affecting_chance_of_dripstone_column")
+                                    .fieldOf("max_distance_from_edge_affecting_chance_of_icicle_column")
                                     .forGetter(packedIceClusterConfiguration -> packedIceClusterConfiguration.maxDistanceFromEdgeAffectingChanceOfDripstoneColumn),
                             Codec.intRange(1, 64)
                                     .fieldOf("max_distance_from_center_affecting_height_bias")
@@ -34,7 +34,7 @@ public class IcicleClusterConfiguration implements FeatureConfiguration {
     public final IntProvider radius;
     public final int maxStalagmiteStalactiteHeightDiff;
     public final int heightDeviation;
-    public final IntProvider dripstoneBlockLayerThickness;
+    public final IntProvider icicleBlockLayerThickness;
     public final FloatProvider density;
     public final FloatProvider wetness;
     public final float chanceOfDripstoneColumnAtMaxDistanceFromCenter;
@@ -47,7 +47,7 @@ public class IcicleClusterConfiguration implements FeatureConfiguration {
             IntProvider radius,
             int maxStalagmiteStalactiteHeightDiff,
             int heightDeviation,
-            IntProvider dripstoneBlockLayerThickness,
+            IntProvider icicleBlockLayerThickness,
             FloatProvider density,
             FloatProvider wetness,
             float chanceOfDripstoneColumnAtMaxDistanceFromCenter,
@@ -59,7 +59,7 @@ public class IcicleClusterConfiguration implements FeatureConfiguration {
         this.radius = radius;
         this.maxStalagmiteStalactiteHeightDiff = maxStalagmiteStalactiteHeightDiff;
         this.heightDeviation = heightDeviation;
-        this.dripstoneBlockLayerThickness = dripstoneBlockLayerThickness;
+        this.icicleBlockLayerThickness = icicleBlockLayerThickness;
         this.density = density;
         this.wetness = wetness;
         this.chanceOfDripstoneColumnAtMaxDistanceFromCenter = chanceOfDripstoneColumnAtMaxDistanceFromCenter;

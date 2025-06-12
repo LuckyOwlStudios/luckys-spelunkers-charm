@@ -1,23 +1,22 @@
 package net.luckystudio.splelunkers_charm;
 
-import net.luckystudio.splelunkers_charm.block.ModBlocks;
-import net.luckystudio.splelunkers_charm.entity.ModEntityType;
+import net.luckystudio.splelunkers_charm.block.custom.blaster.ModMenuTypes;
+import net.luckystudio.splelunkers_charm.init.*;
+import net.luckystudio.splelunkers_charm.datagen.DataGenerators;
 import net.luckystudio.splelunkers_charm.item.potion.ModPotions;
-import net.luckystudio.splelunkers_charm.worldgen.feature.ModFeature;
-import net.luckystudio.splelunkers_charm.item.ModCreativeModeTabs;
-import net.luckystudio.splelunkers_charm.item.ModItems;
-import net.luckystudio.splelunkers_charm.sound.ModSoundEvents;
+import net.luckystudio.splelunkers_charm.worldgen.biomes.ModRegion;
+import net.luckystudio.splelunkers_charm.worldgen.biomes.ModSurfaceRuleData;
 import net.minecraft.resources.ResourceLocation;
-import org.slf4j.Logger;
-import com.mojang.logging.LogUtils;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import terrablender.api.Regions;
+import terrablender.api.SurfaceRuleManager;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(SpelunkersCharm.MOD_ID)
@@ -30,12 +29,10 @@ public class SpelunkersCharm
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, name);
     }
 
-    // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
-
-    // The constructor for the mod class is the first code that is run when your mod is loaded.
+    // The constructor for the mod class is the first code run when your mod is loaded.
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     public SpelunkersCharm(IEventBus modEventBus, ModContainer modContainer) {
+
         // Register the commonSetup method for mod-loading
         modEventBus.addListener(this::commonSetup);
 
@@ -48,24 +45,34 @@ public class SpelunkersCharm
         ModItems.register(modEventBus);
         ModPotions.register(modEventBus);
         ModBlocks.register(modEventBus);
+        ModBlockEntityType.register(modEventBus);
         ModEntityType.register(modEventBus);
         ModSoundEvents.register(modEventBus);
         ModFeature.register(modEventBus);
+        ModMenuTypes.register(modEventBus);
 
-        // Register the item to a creative tab
-        modEventBus.addListener(this::addCreative);
+        // Needed for advanced structures
+        ModStructureProcessorType.register(modEventBus);
+
+        // Register the modded items to vanilla creative tab
+        modEventBus.addListener(ModCreativeModeTabs::addCreative);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
-        modContainer.registerConfig(net.neoforged.fml.config.ModConfig.Type.COMMON, ModConfig.SPEC);
+        modContainer.registerConfig(ModConfig.Type.COMMON, SpelunkersCharmConfig.COMMON_CONFIG);
+        modContainer.registerConfig(ModConfig.Type.CLIENT, SpelunkersCharmConfig.CLIENT_CONFIG);
+
+        modEventBus.addListener(DataGenerators::gatherData);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(() ->
+        {
+            // Weights are kept intentionally low as we add minimal biomes
+            Regions.register(new ModRegion(SpelunkersCharm.id("spelunkers_charm"), 2));
 
-    }
-
-    // Add the example block item to the building blocks tab
-    private void addCreative(BuildCreativeModeTabContentsEvent event) {
-
+            // Register our surface rules
+            SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, ModSurfaceRuleData.makeRules());
+        });
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

@@ -1,20 +1,23 @@
 package net.luckystudio.splelunkers_charm.block.custom;
 
 import com.mojang.serialization.MapCodec;
+import net.luckystudio.splelunkers_charm.block.custom.blaster.BlasterUtil;
 import net.luckystudio.splelunkers_charm.block.util.ModBlockStateProperties;
 import net.luckystudio.splelunkers_charm.block.util.enums.GeyserState;
 import net.luckystudio.splelunkers_charm.block.util.enums.GeyserType;
-import net.luckystudio.splelunkers_charm.sound.ModSoundEvents;
+import net.luckystudio.splelunkers_charm.init.ModSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -27,12 +30,16 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Random;
 
 public class GeyserBlock extends Block {
@@ -107,7 +114,8 @@ public class GeyserBlock extends Block {
         super.randomTick(pState, pLevel, pPos, pRandom);
     }
 
-    private void tryAndStartCharging(Level world, BlockPos pos, BlockState state) {
+    // Also used by the tremor event to start charging the geyser
+    public void tryAndStartCharging(Level world, BlockPos pos, BlockState state) {
         if (world.getBlockState(pos.below()).getBlock() == Blocks.LAVA || world.getBlockState(pos.below()).getBlock() == Blocks.WATER) {
             world.setBlock(pos, state.setValue(GEYSER_STATE, GeyserState.CHARGING).setValue(DURATION, 0), 3);
             world.playSound(null, pos, ModSoundEvents.GEYSER_CHARGE.get(), SoundSource.BLOCKS, 1.0f, 0.5F);
@@ -120,10 +128,9 @@ public class GeyserBlock extends Block {
         super.tick(pState, pLevel, pPos, pRandom);
         int duration = pState.getValue(DURATION);
         GeyserState geyserState = pState.getValue(GEYSER_STATE);
-        Random random = new Random();
         switch (geyserState) {
             case CHARGING -> handleChargingState(pState, pLevel, pPos, duration);
-            case ERUPTING -> handleActiveState(pState, pLevel, pPos, random, duration);
+            case ERUPTING -> handleActiveState(pState, pLevel, pPos, duration);
             default -> {}
         }
     }
@@ -179,33 +186,14 @@ public class GeyserBlock extends Block {
         }
     }
 
-    private void handleActiveState(BlockState state, ServerLevel world, BlockPos pos, Random random, int duration) {
+    private void handleActiveState(BlockState state, ServerLevel level, BlockPos pos, int duration) {
         GeyserType geyserType = state.getValue(GEYSER_TYPE);
-        double xx = pos.getX() + random.nextDouble();
-        double yy = pos.getY() + 1.1;
-        double zz = pos.getZ() + random.nextDouble();
         if (duration < 100) {
-            if (geyserType == GeyserType.LAVA) {
-                if (duration % 5 == 0) {
-                    world.playSound(null, pos, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 0.25f, random.nextFloat() * 0.7F + 0.3F);
-                }
-                for (int i = 0; i < 3; i++) {
-                    world.sendParticles(ParticleTypes.FLAME, xx, yy, zz, 0, 0.0, 1.0, 0.0, 0.5);
-                    world.sendParticles(ParticleTypes.LARGE_SMOKE, xx, yy, zz, 0, 0.0, 1.0, 0.0, 0.25);
-                }
-            } else if (geyserType == GeyserType.WATER) {
-                if (duration % 10 == 0) {
-                    world.playSound(null, pos, SoundEvents.WATER_AMBIENT, SoundSource.BLOCKS, 0.25f, random.nextFloat() * 0.7F + 0.3F);
-                }
-                for (int i = 0; i < 3; i++) {
-                    world.sendParticles(ParticleTypes.CLOUD, xx, yy, zz, 0, 0.0, 1.0, 0.0, 0.5);
-                    world.sendParticles(ParticleTypes.FALLING_WATER, xx, yy, zz, 0, 0.0, 1.0, 0.0, 0.25);
-                }
-            }
-            world.setBlock(pos, state.setValue(DURATION, duration + 1), 3);
-            world.scheduleTick(pos, this, 1);
+            BlasterUtil.shoot(level, pos, geyserType, Direction.UP);
+            level.setBlock(pos, state.setValue(DURATION, duration + 1), 3);
+            level.scheduleTick(pos, this, 1);
         } else {
-            world.setBlock(pos, state.setValue(GEYSER_STATE, GeyserState.DORMANT).setValue(DURATION, 0), 3);
+            level.setBlock(pos, state.setValue(GEYSER_STATE, GeyserState.DORMANT).setValue(DURATION, 0), 3);
         }
     }
 

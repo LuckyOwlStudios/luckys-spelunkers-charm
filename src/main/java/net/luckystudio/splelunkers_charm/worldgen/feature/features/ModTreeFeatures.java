@@ -1,7 +1,7 @@
 package net.luckystudio.splelunkers_charm.worldgen.feature.features;
 
-import net.luckystudio.splelunkers_charm.block.ModBlocks;
-import net.luckystudio.splelunkers_charm.worldgen.feature.ModFeature;
+import net.luckystudio.splelunkers_charm.init.ModBlocks;
+import net.luckystudio.splelunkers_charm.init.ModFeature;
 import net.luckystudio.splelunkers_charm.worldgen.util.ModFeatureUtils;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.FeatureUtils;
