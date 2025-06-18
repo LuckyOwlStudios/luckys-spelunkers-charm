@@ -18,7 +18,6 @@ import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import terrablender.api.Regions;
 import terrablender.api.SurfaceRuleManager;
 
-// The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(SpelunkersCharm.MOD_ID)
 public class SpelunkersCharm
 {
