@@ -152,7 +152,8 @@ public class ModCreativeModeTabs {
             event.insertAfter(ModBlocks.POWERED_LIFT_TRACK.toStack(), ModItems.SMALL_LIFT.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(ModItems.SMALL_LIFT.toStack(), ModItems.MEDIUM_LIFT.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(ModItems.MEDIUM_LIFT.toStack(), ModItems.LARGE_LIFT.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(ModItems.LARGE_LIFT.toStack(), ModItems.MINING_HELMET.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModItems.LARGE_LIFT.toStack(), ModItems.CANDLE_HELMET.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModItems.CANDLE_HELMET.toStack(), ModItems.MINING_HELMET.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
         }
 
         if (event.getTabKey() == CreativeModeTabs.FOOD_AND_DRINKS && event.getTab().contains(Items.SPIDER_EYE.getDefaultInstance())) {

@@ -14,6 +14,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     @Override
     protected void registerModels() {
 
+        basicItem(ModItems.CANDLE_HELMET.get());
         basicItem(ModItems.MINING_HELMET.get());
         basicItem(ModItems.SMALL_LIFT.get());
         basicItem(ModItems.MEDIUM_LIFT.get());

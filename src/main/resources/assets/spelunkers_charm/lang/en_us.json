@@ -125,7 +125,7 @@
   "item.minecraft.lingering_potion.effect.strong_haste_potion": "Lingering Potion of Haste",
 
   "tooltip.spelunkers_charm.minecart": "Can add an infinite amount of a single block",
-  "tooltip.spelunkers_charm.lift_item": "This feature will be available for 1.21.5+, where the new entity collision physics exist because of the addition of the Happy Ghast.",
+  "tooltip.spelunkers_charm.lift_item": "This feature will be available for 1.21.6+, where the new entity collision physics exist because of the addition of the Happy Ghast.",
   "entity.spelunkers_charm.block_minecart": "Block Minecart",
   "entity.spelunkers_charm.boulder": "Boulder",
   "entity.spelunkers_charm.rock": "Rock",

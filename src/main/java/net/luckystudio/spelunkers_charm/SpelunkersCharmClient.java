@@ -14,6 +14,7 @@ import net.luckystudio.spelunkers_charm.entity.custom.lift.small.SmallLiftRender
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.override.OverrideMinecartRenderer;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.override.NewMinecartModel;
 import net.luckystudio.spelunkers_charm.init.ModItems;
+import net.luckystudio.spelunkers_charm.item.custom.CandleHelmetModel;
 import net.luckystudio.spelunkers_charm.item.custom.MiningHelmetModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
@@ -78,6 +79,7 @@ public class SpelunkersCharmClient {
 
     @SubscribeEvent
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(CandleHelmetModel.LAYER_LOCATION, CandleHelmetModel::createBodyLayer);
         event.registerLayerDefinition(MiningHelmetModel.LAYER_LOCATION, MiningHelmetModel::createBodyLayer);
         event.registerLayerDefinition(BOULDER, BoulderModel::createBodyLayer);
         event.registerLayerDefinition(NEW_MINECART_MODEL, NewMinecartModel::createBodyLayer);
@@ -93,6 +95,7 @@ public class SpelunkersCharmClient {
 
     @SubscribeEvent
     public static void registerItemExtensions(RegisterClientExtensionsEvent event) {
+        registerArmorModel(event, ModItems.CANDLE_HELMET.get(), CandleHelmetModel.LAYER_LOCATION);
         registerArmorModel(event, ModItems.MINING_HELMET.get(), MiningHelmetModel.LAYER_LOCATION);
     }
 
