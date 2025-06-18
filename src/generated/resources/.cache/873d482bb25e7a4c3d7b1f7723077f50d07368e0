@@ -1,4 +1,4 @@
-// 1.21.1	2025-06-11T17:40:54.634818	Tags for minecraft:block mod id spelunkers_charm
+// 1.21.1	2025-06-12T20:36:20.8138039	Tags for minecraft:block mod id spelunkers_charm
 f053bd3893a0581d00fdb9bb39c97ed31a354c2f data/minecraft/tags/block/base_stone_overworld.json
 0151f990e75f6ada4c5ccb2e8e42a24ad7a32a66 data/minecraft/tags/block/coal_ores.json
 62bb56ba343179b6fd74eaedb3f084f12d0a757e data/minecraft/tags/block/copper_ores.json
@@ -21,6 +21,6 @@ f053bd3893a0581d00fdb9bb39c97ed31a354c2f data/minecraft/tags/block/stone_ore_rep
 0d89f428bef319cad2f1886ed3f56fe2ea7b42cd data/minecraft/tags/block/sword_efficient.json
 c2aaf027d4ba75917ba9029443ac221c13e85ec4 data/minecraft/tags/block/walls.json
 ecc9e22371d7fa794a255306b894a534b879f624 data/spelunkers_charm/tags/block/dunestone_replaceable.json
-ab25bb6d7e9dd03f6aaecf6d5212cf53a4dba15e data/spelunkers_charm/tags/block/overworld_replaceable.json
+f92c41ce4c3dd51d875dafefe81e048bf6b8f9ed data/spelunkers_charm/tags/block/overworld_replaceable.json
 426404a235e1ed01b82000d19581257503e919ce data/spelunkers_charm/tags/block/permafrost_replaceable.json
 ecc9e22371d7fa794a255306b894a534b879f624 data/spelunkers_charm/tags/block/wildstone_replaceable.json

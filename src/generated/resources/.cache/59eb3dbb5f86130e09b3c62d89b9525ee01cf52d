@@ -1,4 +1,4 @@
-// 1.21.1	2025-06-11T17:40:54.6470124	Loot Tables
+// 1.21.1	2025-06-12T16:30:07.6887407	Loot Tables
 21770d72477a39c92827e54cafd4ec86e1d770ae data/spelunkers_charm/loot_table/blocks/amethyst_bricks.json
 df73c5fcf44eb5d2f90000ad9e59df3a8d3ce714 data/spelunkers_charm/loot_table/blocks/amethyst_brick_slab.json
 7056782aa17f970a41cf09a44ce9e0c5ebd74f1a data/spelunkers_charm/loot_table/blocks/amethyst_brick_stairs.json
@@ -74,10 +74,8 @@ aa381218144922ad5ae7f89168c09d7437ef3acc data/spelunkers_charm/loot_table/blocks
 38525188aa87645664920481d8c24b3ba75e05a7 data/spelunkers_charm/loot_table/blocks/permafrost_wall.json
 6a0bc182b497cfaa57794d303aa772a7a68554f7 data/spelunkers_charm/loot_table/blocks/powered_lift_track.json
 06d175baeb85e4f538f0d91f86369b98cdadc0bc data/spelunkers_charm/loot_table/blocks/rock.json
-2888159460628c598716a7615acc79a4fcbc66fc data/spelunkers_charm/loot_table/blocks/short_under_brush.json
 fe13b2ba0d78c1bb316837ce6ecaddf4af268613 data/spelunkers_charm/loot_table/blocks/silt.json
 53369dc5c52b173be6ce5575cdf0422ff073864f data/spelunkers_charm/loot_table/blocks/spider_egg.json
-e3ccd0fd6176fc81708c5f44af78bc3fb35a21db data/spelunkers_charm/loot_table/blocks/tall_under_brush.json
 cd7fd608eed7f58964d139f3bccc23732fc0e720 data/spelunkers_charm/loot_table/blocks/web_vein.json
 14d2d4b0d80544277be3a21634755d29982b73b1 data/spelunkers_charm/loot_table/blocks/wildstone.json
 aaf79bbc52c8ea60797430f2722af45a74052859 data/spelunkers_charm/loot_table/blocks/wildstone_bricks.json

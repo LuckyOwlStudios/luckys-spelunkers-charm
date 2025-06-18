@@ -107,6 +107,8 @@
   "block.spelunkers_charm.wooden_lift_track": "§6[BETA] §7Wooden Lift Track",
   "block.spelunkers_charm.powered_lift_track": "§6[BETA] §7Powered Lift Track",
 
+  "tooltip.spelunkers_charm.boulder_block": "3x3 Block. Can fall. Can be suspended in air by chain",
+
   "item.spelunkers_charm.small_lift": "§6[BETA] §7Small Lift",
   "item.spelunkers_charm.medium_lift": "§6[BETA] §7Medium Lift",
   "item.spelunkers_charm.large_lift": "§6[BETA] §7Large Lift",

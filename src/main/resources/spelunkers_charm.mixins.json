@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "net.luckystudio.spelunkers_charm.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "NoiseBasedChunkGeneratorMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "mixins.spelunkers_charm.refmap.json"
+}
