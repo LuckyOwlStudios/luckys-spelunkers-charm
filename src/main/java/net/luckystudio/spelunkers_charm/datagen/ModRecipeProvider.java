@@ -3,12 +3,14 @@ package net.luckystudio.spelunkers_charm.datagen;
 import com.google.common.collect.ImmutableList;
 import net.luckystudio.spelunkers_charm.datagen.itemTags.ModItemTags;
 import net.luckystudio.spelunkers_charm.init.ModBlocks;
+import net.luckystudio.spelunkers_charm.init.ModItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -96,6 +98,18 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(recipeOutput);
     }
 
+    private void candleHelmet(RecipeOutput recipeOutput) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModItems.CANDLE_HELMET, 1)
+                .pattern(" % ")
+                .pattern("@#@")
+                .pattern("# #")
+                .define('%', Items.CANDLE)
+                .define('#', Items.IRON_INGOT)
+                .define('@', ItemTags.PLANKS)
+                .unlockedBy("has_iron", has(Items.IRON_INGOT))
+                .save(recipeOutput);
+    }
+
     @Override
     protected void buildRecipes(@NotNull RecipeOutput recipeOutput) {
         stairBuilder(ModBlocks.DUNESTONE_STAIRS.get(), Ingredient.of(ModBlocks.DUNESTONE.asItem()));
@@ -164,6 +178,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         rockRecipe(ModBlocks.DEEPSLATE_ROCK.asItem(), Blocks.COBBLED_DEEPSLATE.asItem(), recipeOutput);
         rockRecipe(ModBlocks.DRIPSTONE_ROCK.asItem(), Blocks.DRIPSTONE_BLOCK.asItem(), recipeOutput);
         rockRecipe(ModBlocks.BASALT_ROCK.asItem(), Blocks.BASALT.asItem(), recipeOutput);
+
+        candleHelmet(recipeOutput);
 
         blaster(recipeOutput);
     }

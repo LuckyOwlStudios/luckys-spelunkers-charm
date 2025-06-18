@@ -37,7 +37,6 @@ public class ReplaceMultiBlockBlobFeature extends Feature<ReplaceMultiBlockSpher
         if (targetPos == null) {
             return false;
         }
-        System.out.println("Pos is not null: ");
         int radiusX = config.radius().sample(random);
         int radiusY = config.radius().sample(random);
         int radiusZ = config.radius().sample(random);
