@@ -1,7 +1,7 @@
 {
   "match": {
-    "item": "spelunkers_charm:mining_helmet"
+    "items": "spelunkers_charm:candle_helmet"
   },
-  "luminance": 8,
+  "luminance": 10,
   "water_sensitive": true
 }

@@ -20,10 +20,10 @@ public class MiningHelmet extends ArmorItem {
 
     public MiningHelmet(Properties properties) {
         super(ArmorMaterials.GOLD, Type.HELMET, properties.attributes(
-                        ItemAttributeModifiers.builder()
-                                .add(Attributes.ARMOR, new AttributeModifier(SpelunkersCharm.id("armor"), 3.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.HEAD)
-                                .add(Attributes.EXPLOSION_KNOCKBACK_RESISTANCE, new AttributeModifier(SpelunkersCharm.id("explosion_resistance"), 2.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.HEAD)
-                                .build()
+                ItemAttributeModifiers.builder()
+                        .add(Attributes.ARMOR, new AttributeModifier(SpelunkersCharm.id("armor"), 3.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.HEAD)
+                        .add(Attributes.EXPLOSION_KNOCKBACK_RESISTANCE, new AttributeModifier(SpelunkersCharm.id("explosion_resistance"), 2.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.HEAD)
+                        .build()
         ));
     }
 

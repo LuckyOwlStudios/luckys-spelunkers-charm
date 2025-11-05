@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.PointedDripstoneBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.fml.ModLoadingContext;
 
 import java.util.Map;
 import java.util.Random;
@@ -60,14 +61,16 @@ public class TremorBlockPosEvents {
         if (state.getBlock() instanceof GeyserBlock) {
             level.scheduleTick(pos, state.getBlock(), 1);
         }
-        breakBlockEffectAt(level, pos);
+        if (level.isClientSide()) {
+            breakBlockEffectAt(level, pos);
+        }
     }
 
-    // CLIENT SIDE ONLY
     private static void breakBlockEffectAt(Level level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
         Random random = new Random();
-        double particleAmount = SpelunkersCharmConfig.TREMOR_PARTICLE_INTENSITY.get() / 2;
+
+        double particleAmount = 0.5;
         if ((random.nextFloat() < (float) particleAmount)) {
             level.levelEvent(null, 2001, pos, Block.getId(state));
         }

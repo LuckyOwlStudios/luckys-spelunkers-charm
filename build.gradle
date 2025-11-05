@@ -27,6 +27,11 @@ repositories {
         name = 'Forge'
         url = "https://maven.minecraftforge.net"
     }
+    // Dynamic Lights
+    maven {
+        name = "Gegy"
+        url = uri("https://maven.gegy.dev")
+    }
 }
 
 base {
@@ -120,8 +125,31 @@ configurations {
     runtimeClasspath.extendsFrom localRuntime
 }
 
+def mappingsAttribute = Attribute.of("net.minecraft.mappings", String)
+
 dependencies {
     implementation 'com.github.glitchfiend:TerraBlender-neoforge:' + minecraft_version + '-' + terrablender_version
+
+    attributesSchema {
+        attribute(mappingsAttribute)
+    }
+
+    // The API of LambDynamicLights.
+    // This is only required for compilation if you're using the Java API.
+    compileOnly("dev.lambdaurora.lambdynamiclights:lambdynamiclights-api:4.8.6+1.21.1") {
+        attributes {
+            attribute(mappingsAttribute, "mojmap")
+        }
+    }
+
+    // For runtime of LambDynamicLights.
+    // Include only if you need to test in your dev env compatibility with LambDynamicLights.
+    // Replace with runtimeOnly if you want the dependency to be transitive.
+    localRuntime("dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime:4.8.6+1.21.1") {
+        attributes {
+            attribute(mappingsAttribute, "mojmap")
+        }
+    }
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

@@ -17,7 +17,7 @@ public class ModItems {
 
     // Items
     public static final DeferredItem<Item> CANDLE_HELMET = ITEMS.register("candle_helmet", () -> new CandleHelmet(new Item.Properties().stacksTo(1).durability(250).rarity(Rarity.UNCOMMON)));
-    public static final DeferredItem<Item> MINING_HELMET = ITEMS.register("mining_helmet", () -> new MiningHelmet(new Item.Properties().stacksTo(1).durability(250).rarity(Rarity.UNCOMMON)));
+    public static final DeferredItem<Item> MINING_HELMET = ITEMS.register("mining_helmet", () -> new MiningHelmet(new Item.Properties().stacksTo(1).durability(250).rarity(Rarity.UNCOMMON).component(ModDataComponents.LIGHT, true)));
     public static final DeferredItem<Item> SMALL_LIFT = ITEMS.register("small_lift", () -> new LiftItem(AbstractLift.Type.SMALL, new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> MEDIUM_LIFT = ITEMS.register("medium_lift", () -> new LiftItem(AbstractLift.Type.MEDIUM, new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> LARGE_LIFT = ITEMS.register("large_lift", () -> new LiftItem(AbstractLift.Type.LARGE, new Item.Properties().stacksTo(1)));

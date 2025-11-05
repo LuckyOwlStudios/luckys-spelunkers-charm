@@ -40,6 +40,10 @@ public class SpelunkersCharm
         // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
         NeoForge.EVENT_BUS.register(this);
 
+        // Register our mod's ModConfigSpec so that FML can create and load the config file for us
+        modContainer.registerConfig(ModConfig.Type.COMMON, SpelunkersCharmConfig.COMMON_CONFIG);
+        modContainer.registerConfig(ModConfig.Type.CLIENT, SpelunkersCharmConfig.CLIENT_CONFIG);
+
         ModCreativeModeTabs.register(modEventBus);
         ModItems.register(modEventBus);
         ModPotions.register(modEventBus);
@@ -49,16 +53,13 @@ public class SpelunkersCharm
         ModSoundEvents.register(modEventBus);
         ModFeature.register(modEventBus);
         ModMenuTypes.register(modEventBus);
+        ModDataComponents.register(modEventBus);
 
         // Needed for advanced structures
         ModStructureProcessorType.register(modEventBus);
 
         // Register the modded items to vanilla creative tab
         modEventBus.addListener(ModCreativeModeTabs::addCreative);
-
-        // Register our mod's ModConfigSpec so that FML can create and load the config file for us
-        modContainer.registerConfig(ModConfig.Type.COMMON, SpelunkersCharmConfig.COMMON_CONFIG);
-        modContainer.registerConfig(ModConfig.Type.CLIENT, SpelunkersCharmConfig.CLIENT_CONFIG);
 
         modEventBus.addListener(DataGenerators::gatherData);
     }

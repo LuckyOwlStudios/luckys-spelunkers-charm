@@ -133,9 +133,6 @@ public class SpiderEgg extends RodBlock {
             if (!level.isClientSide && level.random.nextInt(chance) == 0 && state.is(ModBlocks.SPIDER_EGG)) {
                 level.playSound(null, pos, ModSoundEvents.SPIDER_EGG_CRACK.get(), SoundSource.BLOCKS, 0.7F, 0.9F + level.random.nextFloat() * 0.2F);
                 level.destroyBlock(pos, false);
-                if (ModList.get().isLoaded("cameraoverhaul")) {
-                    System.out.println("Camera Overhaul is loaded, skipping hatching logic.");
-                }
             }
         }
     }
