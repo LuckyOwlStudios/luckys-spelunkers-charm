@@ -18,7 +18,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -141,51 +140,27 @@ public class GameEvents {
         ItemStack stack = event.getItemStack();
         BlockPos pos = event.getPos();
         BlockState state = level.getBlockState(pos);
+        BlockPos offset = event.getPos().relative(Objects.requireNonNull(event.getFace()));
         Player player = event.getPlayer();
-        Direction face = event.getFace();
-
-        // Only proceed if using clay ball while crouching
-        if (!stack.is(Items.CLAY_BALL) || !player.isCrouching()) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        if (stack.getItem() == Items.CLAY_BALL) {
+            if (state.getBlock() == ModBlocks.CLAY_PILE.get() && state.getValue(ModBlockStateProperties.ROCKS) < 3) {
+                level.setBlock(pos, state.cycle(RockBlock.ROCKS), 3);
+                useClayBall(player, level, pos, stack);
+                player.swing(event.getHand());
+                return ItemInteractionResult.SUCCESS;
+            } else if (event.getFace() == Direction.UP && (!state.isAir() && !state.canBeReplaced() && player.isCrouching())) {
+                level.setBlock(offset, ModBlocks.CLAY_PILE.get().defaultBlockState().setValue(RockBlock.FACING, Direction.fromYRot(player.getYRot()).getOpposite()), 3);
+                useClayBall(player, level, pos, stack);
+                player.swing(event.getHand());
+                return ItemInteractionResult.SUCCESS;
+            }
         }
-
-        // Case 1: Adding to existing clay pile
-        if (state.is(ModBlocks.CLAY_PILE.get()) && canAddToPile(state)) {
-            level.setBlock(pos, state.cycle(ModBlockStateProperties.ROCKS), 3);
-            useClayBall(player, level, pos, stack, event.getHand());
-            return ItemInteractionResult.SUCCESS;
-        }
-
-        // Case 2: Creating new clay pile on top of solid block
-        if (face == Direction.UP && isValidSurface(state)) {
-            BlockPos abovePos = pos.above();
-            Direction facing = Direction.fromYRot(player.getYRot()).getOpposite();
-
-            BlockState newPile = ModBlocks.CLAY_PILE.get()
-                    .defaultBlockState()
-                    .setValue(RockBlock.FACING, facing);
-
-            level.setBlock(abovePos, newPile, 3);
-            useClayBall(player, level, pos, stack, event.getHand());
-            return ItemInteractionResult.SUCCESS;
-        }
-
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
-    private static boolean canAddToPile(BlockState state) {
-        return state.hasProperty(ModBlockStateProperties.ROCKS) &&
-                state.getValue(ModBlockStateProperties.ROCKS) < 3;
-    }
-
-    private static boolean isValidSurface(BlockState state) {
-        return !state.isAir() && !state.canBeReplaced();
-    }
-
-    private static void useClayBall(@NotNull Player player, Level level, BlockPos pos, ItemStack stack, InteractionHand hand) {
+    private static void useClayBall(@NotNull Player player, Level level, BlockPos pos, ItemStack stack) {
         level.playSound(null, pos, SoundEvents.WET_GRASS_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
         player.awardStat(Stats.ITEM_USED.get(Items.CLAY_BALL));
-        player.swing(hand); // Swing the hand that was used
         stack.consume(1, player);
     }
 }
