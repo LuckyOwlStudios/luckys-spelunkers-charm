@@ -144,7 +144,7 @@ public class GameEvents {
         Player player = event.getPlayer();
         if (stack.getItem() == Items.CLAY_BALL) {
             if (state.getBlock() == ModBlocks.CLAY_PILE.get() && state.getValue(ModBlockStateProperties.ROCKS) < 3) {
-                level.setBlock(pos, state.cycle(RockBlock.ROCKS), 3);
+                level.setBlock(pos, state.setValue(RockBlock.ROCKS, state.getValue(RockBlock.ROCKS) + 1), 3);
                 useClayBall(player, level, pos, stack);
                 player.swing(event.getHand());
                 return ItemInteractionResult.SUCCESS;
