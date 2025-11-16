@@ -19,6 +19,7 @@ public class SmallLift extends AbstractLift {
 
     public SmallLift(Level level, double x, double y, double z) {
         super(ModEntityType.SMALL_LIFT.get(), level, Type.SMALL, x, y, z);
+        this.maxUpStep();
     }
 
     @Override
