@@ -18,6 +18,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -151,7 +152,7 @@ public class GameEvents {
         // Case 1: Adding to existing clay pile
         if (state.is(ModBlocks.CLAY_PILE.get()) && canAddToPile(state)) {
             level.setBlock(pos, state.cycle(ModBlockStateProperties.ROCKS), 3);
-            useClayBall(player, level, pos, stack);
+            useClayBall(player, level, pos, stack, event.getHand());
             return ItemInteractionResult.SUCCESS;
         }
 
@@ -165,7 +166,7 @@ public class GameEvents {
                     .setValue(RockBlock.FACING, facing);
 
             level.setBlock(abovePos, newPile, 3);
-            useClayBall(player, level, pos, stack);
+            useClayBall(player, level, pos, stack, event.getHand());
             return ItemInteractionResult.SUCCESS;
         }
 
@@ -181,9 +182,10 @@ public class GameEvents {
         return !state.isAir() && !state.canBeReplaced();
     }
 
-    private static void useClayBall(@NotNull Player player, Level level, BlockPos pos, ItemStack stack) {
+    private static void useClayBall(@NotNull Player player, Level level, BlockPos pos, ItemStack stack, InteractionHand hand) {
         level.playSound(null, pos, SoundEvents.WET_GRASS_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
         player.awardStat(Stats.ITEM_USED.get(Items.CLAY_BALL));
+        player.swing(hand); // Swing the hand that was used
         stack.consume(1, player);
     }
 }
