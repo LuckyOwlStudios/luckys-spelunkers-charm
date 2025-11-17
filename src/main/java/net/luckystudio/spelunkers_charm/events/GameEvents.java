@@ -18,6 +18,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -27,11 +28,13 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.entity.player.UseItemOnBlockEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -124,7 +127,6 @@ public class GameEvents {
         }
     }
 
-
     @SubscribeEvent
     public static void onBrewingRecipeRegister(RegisterBrewingRecipesEvent event) {
         PotionBrewing.Builder builder = event.getBuilder();
@@ -134,33 +136,40 @@ public class GameEvents {
         builder.addMix(ModPotions.HASTE_POTION, Items.GLOWSTONE_DUST, ModPotions.STRONG_HASTE_POTION);
     }
 
-    @SubscribeEvent
-    public static ItemInteractionResult onUseClayBallOnBlock(UseItemOnBlockEvent event) {
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static ItemInteractionResult onUseClayBallOnBlock(PlayerInteractEvent.RightClickBlock event) {
         Level level = event.getLevel();
         ItemStack stack = event.getItemStack();
         BlockPos pos = event.getPos();
         BlockState state = level.getBlockState(pos);
         BlockPos offset = event.getPos().relative(Objects.requireNonNull(event.getFace()));
-        Player player = event.getPlayer();
-        if (stack.getItem() == Items.CLAY_BALL) {
-            if (state.getBlock() == ModBlocks.CLAY_PILE.get() && state.getValue(ModBlockStateProperties.ROCKS) < 3) {
-                level.setBlock(pos, state.setValue(RockBlock.ROCKS, state.getValue(RockBlock.ROCKS) + 1), 3);
-                useClayBall(player, level, pos, stack);
-                player.swing(event.getHand());
-                return ItemInteractionResult.SUCCESS;
-            } else if (event.getFace() == Direction.UP && (!state.isAir() && !state.canBeReplaced() && player.isCrouching())) {
-                level.setBlock(offset, ModBlocks.CLAY_PILE.get().defaultBlockState().setValue(RockBlock.FACING, Direction.fromYRot(player.getYRot()).getOpposite()), 3);
-                useClayBall(player, level, pos, stack);
-                player.swing(event.getHand());
-                return ItemInteractionResult.SUCCESS;
-            }
+        Player player = event.getEntity();
+        InteractionHand hand = event.getHand();
+
+//        if (level.isClientSide()) return ItemInteractionResult.FAIL;
+
+        // Only process if this hand actually has a clay ball
+        if (stack.getItem() != Items.CLAY_BALL) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+
+        // Only process main hand
+        if (event.getHand().equals(InteractionHand.OFF_HAND)) return ItemInteractionResult.FAIL;
+
+        if (state.is(ModBlocks.CLAY_PILE.get()) && state.getValue(ModBlockStateProperties.ROCKS) < 3) {
+            level.setBlock(pos, state.cycle(ModBlockStateProperties.ROCKS), 3);
+            useClayBall(player, level, pos, stack, hand);
+            return ItemInteractionResult.SUCCESS;
+        } else if (player.isCrouching() && level.getBlockState(offset).canBeReplaced() && ModBlocks.CLAY_PILE.get().defaultBlockState().canSurvive(level, offset)) {
+            level.setBlock(offset, ModBlocks.CLAY_PILE.get().defaultBlockState(), 3);
+            useClayBall(player, level, pos, stack, hand);
         }
+
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
-    private static void useClayBall(@NotNull Player player, Level level, BlockPos pos, ItemStack stack) {
+    private static void useClayBall(@NotNull Player player, Level level, BlockPos pos, ItemStack stack, InteractionHand hand) {
         level.playSound(null, pos, SoundEvents.WET_GRASS_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
         player.awardStat(Stats.ITEM_USED.get(Items.CLAY_BALL));
         stack.consume(1, player);
+        player.swing(hand);
     }
 }
