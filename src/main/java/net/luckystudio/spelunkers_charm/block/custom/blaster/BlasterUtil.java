@@ -82,7 +82,6 @@ public class BlasterUtil {
             if (!isWater && damageSource != null) {
                 entity.hurt(damageSource, 2.0F);
             }
-            System.out.println("BlasterUtil: Entity hurt by geyser at " + pos + " with type " + geyserType);
             entity.addDeltaMovement(directionVec.scale(0.1));
 
             if (isLava) {

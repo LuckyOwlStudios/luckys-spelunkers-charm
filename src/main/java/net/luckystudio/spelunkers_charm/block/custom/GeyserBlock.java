@@ -121,7 +121,6 @@ public class GeyserBlock extends Block {
     @Override
     protected void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
         super.tick(pState, pLevel, pPos, pRandom);
-        System.out.println("Tick");
         int duration = pState.getValue(DURATION);
         GeyserState geyserState = pState.getValue(GEYSER_STATE);
         switch (geyserState) {
