@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "spelunkers_charm:block/wildstone",
+    "side": "spelunkers_charm:block/wildstone",
+    "top": "spelunkers_charm:block/wildstone"
+  }
+}

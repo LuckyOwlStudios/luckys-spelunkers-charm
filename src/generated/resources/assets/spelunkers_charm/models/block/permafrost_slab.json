@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "spelunkers_charm:block/permafrost",
+    "side": "spelunkers_charm:block/permafrost",
+    "top": "spelunkers_charm:block/permafrost"
+  }
+}

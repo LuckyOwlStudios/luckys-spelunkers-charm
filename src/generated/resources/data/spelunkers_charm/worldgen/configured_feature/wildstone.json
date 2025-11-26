@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:random_patch",
+  "config": {
+    "feature": {
+      "feature": {
+        "type": "spelunkers_charm:replace_multi_block_blob",
+        "config": {
+          "blocksToReplace": "#spelunkers_charm:wildstone_replaceable",
+          "radius": {
+            "type": "minecraft:uniform",
+            "max_inclusive": 8,
+            "min_inclusive": 4
+          },
+          "state": {
+            "Name": "spelunkers_charm:wildstone"
+          }
+        }
+      },
+      "placement": [
+        {
+          "type": "minecraft:block_predicate_filter",
+          "predicate": {
+            "type": "minecraft:matching_blocks",
+            "blocks": "minecraft:air"
+          }
+        }
+      ]
+    },
+    "tries": 96,
+    "xz_spread": 7,
+    "y_spread": 3
+  }
+}

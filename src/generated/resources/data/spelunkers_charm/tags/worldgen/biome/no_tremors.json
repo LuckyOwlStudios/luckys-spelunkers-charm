@@ -1,0 +1,10 @@
+{
+  "values": [
+    "minecraft:lush_caves",
+    "minecraft:deep_dark",
+    {
+      "id": "spelunkers_charm:spider_cave",
+      "required": false
+    }
+  ]
+}

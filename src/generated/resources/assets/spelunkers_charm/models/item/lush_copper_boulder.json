@@ -1,0 +1,6 @@
+{
+  "parent": "spelunkers_charm:block/template_boulder_bottom_corner",
+  "textures": {
+    "all": "spelunkers_charm:block/boulder/lush_copper_boulder"
+  }
+}

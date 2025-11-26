@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "spelunkers_charm:item/medium_lift"
+  }
+}

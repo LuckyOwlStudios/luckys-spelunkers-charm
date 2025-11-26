@@ -1,0 +1,7 @@
+{
+  "parent": "spelunkers_charm:block/template_rock_pile_display",
+  "textures": {
+    "all": "spelunkers_charm:block/rock",
+    "particle": "minecraft:block/stone"
+  }
+}

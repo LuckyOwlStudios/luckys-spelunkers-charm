@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "end=false": {
+      "model": "spelunkers_charm:block/hanging_web"
+    },
+    "end=true": {
+      "model": "spelunkers_charm:block/hanging_web_end"
+    }
+  }
+}

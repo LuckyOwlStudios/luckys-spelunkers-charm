@@ -1,0 +1,44 @@
+{
+  "parent": "minecraft:adventure/adventuring_time",
+  "criteria": {
+    "ride_a_boat_with_a_goat": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "vehicle": {
+                "type": "spelunkers_charm:boulder"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:started_riding"
+    }
+  },
+  "display": {
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancement.luckysarmory.sit_on_boulder.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "spelunkers_charm:iron_boulder"
+    },
+    "title": {
+      "translate": "advancement.luckysarmory.sit_on_boulder.title"
+    }
+  },
+  "requirements": [
+    [
+      "ride_a_boat_with_a_goat"
+    ]
+  ],
+  "rewards": {
+    "experience": 10
+  },
+  "sends_telemetry_event": true
+}

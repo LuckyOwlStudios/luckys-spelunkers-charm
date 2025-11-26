@@ -1,0 +1,27 @@
+{
+  "values": [
+    "spelunkers_charm:dunestone_gold_ore",
+    "spelunkers_charm:wildstone_gold_ore",
+    "spelunkers_charm:permafrost_gold_ore",
+    "spelunkers_charm:dunestone_redstone_ore",
+    "spelunkers_charm:wildstone_redstone_ore",
+    "spelunkers_charm:permafrost_redstone_ore",
+    "spelunkers_charm:dunestone_emerald_ore",
+    "spelunkers_charm:wildstone_emerald_ore",
+    "spelunkers_charm:permafrost_emerald_ore",
+    "spelunkers_charm:dunestone_lapis_ore",
+    "spelunkers_charm:wildstone_lapis_ore",
+    "spelunkers_charm:permafrost_lapis_ore",
+    "spelunkers_charm:dunestone_diamond_ore",
+    "spelunkers_charm:wildstone_diamond_ore",
+    "spelunkers_charm:permafrost_diamond_ore",
+    "spelunkers_charm:boulder",
+    "spelunkers_charm:iron_boulder",
+    "spelunkers_charm:copper_boulder",
+    "spelunkers_charm:gold_boulder",
+    "spelunkers_charm:lush_boulder",
+    "spelunkers_charm:lush_iron_boulder",
+    "spelunkers_charm:lush_copper_boulder",
+    "spelunkers_charm:lush_gold_boulder"
+  ]
+}

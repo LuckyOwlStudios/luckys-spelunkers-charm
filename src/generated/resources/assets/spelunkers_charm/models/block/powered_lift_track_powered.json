@@ -1,0 +1,10 @@
+{
+  "parent": "spelunkers_charm:block/template_lift_track",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "end": "spelunkers_charm:block/powered_lift_track_end_powered",
+    "front": "spelunkers_charm:block/powered_lift_track_front_powered",
+    "particle": "spelunkers_charm:block/powered_lift_track_front_powered",
+    "side": "spelunkers_charm:block/powered_lift_track_side"
+  }
+}

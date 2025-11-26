@@ -1,0 +1,193 @@
+{
+  "type": "minecraft:random_patch",
+  "config": {
+    "feature": {
+      "feature": {
+        "type": "minecraft:simple_block",
+        "config": {
+          "to_place": {
+            "type": "minecraft:weighted_state_provider",
+            "entries": [
+              {
+                "data": {
+                  "Name": "spelunkers_charm:rock",
+                  "Properties": {
+                    "display": "false",
+                    "facing": "north",
+                    "rocks": "1",
+                    "waterlogged": "false"
+                  }
+                },
+                "weight": 1
+              },
+              {
+                "data": {
+                  "Name": "spelunkers_charm:rock",
+                  "Properties": {
+                    "display": "false",
+                    "facing": "east",
+                    "rocks": "1",
+                    "waterlogged": "false"
+                  }
+                },
+                "weight": 1
+              },
+              {
+                "data": {
+                  "Name": "spelunkers_charm:rock",
+                  "Properties": {
+                    "display": "false",
+                    "facing": "south",
+                    "rocks": "1",
+                    "waterlogged": "false"
+                  }
+                },
+                "weight": 1
+              },
+              {
+                "data": {
+                  "Name": "spelunkers_charm:rock",
+                  "Properties": {
+                    "display": "false",
+                    "facing": "west",
+                    "rocks": "1",
+                    "waterlogged": "false"
+                  }
+                },
+                "weight": 1
+              },
+              {
+                "data": {
+                  "Name": "spelunkers_charm:rock",
+                  "Properties": {
+                    "display": "false",
+                    "facing": "north",
+                    "rocks": "2",
+                    "waterlogged": "false"
+                  }
+                },
+                "weight": 1
+              },
+              {
+                "data": {
+                  "Name": "spelunkers_charm:rock",
+                  "Properties": {
+                    "display": "false",
+                    "facing": "east",
+                    "rocks": "2",
+                    "waterlogged": "false"
+                  }
+                },
+                "weight": 1
+              },
+              {
+                "data": {
+                  "Name": "spelunkers_charm:rock",
+                  "Properties": {
+                    "display": "false",
+                    "facing": "south",
+                    "rocks": "2",
+                    "waterlogged": "false"
+                  }
+                },
+                "weight": 1
+              },
+              {
+                "data": {
+                  "Name": "spelunkers_charm:rock",
+                  "Properties": {
+                    "display": "false",
+                    "facing": "west",
+                    "rocks": "2",
+                    "waterlogged": "false"
+                  }
+                },
+                "weight": 1
+              },
+              {
+                "data": {
+                  "Name": "spelunkers_charm:rock",
+                  "Properties": {
+                    "display": "false",
+                    "facing": "north",
+                    "rocks": "3",
+                    "waterlogged": "false"
+                  }
+                },
+                "weight": 1
+              },
+              {
+                "data": {
+                  "Name": "spelunkers_charm:rock",
+                  "Properties": {
+                    "display": "false",
+                    "facing": "east",
+                    "rocks": "3",
+                    "waterlogged": "false"
+                  }
+                },
+                "weight": 1
+              },
+              {
+                "data": {
+                  "Name": "spelunkers_charm:rock",
+                  "Properties": {
+                    "display": "false",
+                    "facing": "south",
+                    "rocks": "3",
+                    "waterlogged": "false"
+                  }
+                },
+                "weight": 1
+              },
+              {
+                "data": {
+                  "Name": "spelunkers_charm:rock",
+                  "Properties": {
+                    "display": "false",
+                    "facing": "west",
+                    "rocks": "3",
+                    "waterlogged": "false"
+                  }
+                },
+                "weight": 1
+              }
+            ]
+          }
+        }
+      },
+      "placement": [
+        {
+          "type": "minecraft:block_predicate_filter",
+          "predicate": {
+            "type": "minecraft:all_of",
+            "predicates": [
+              {
+                "type": "minecraft:matching_blocks",
+                "blocks": "minecraft:air"
+              },
+              {
+                "type": "minecraft:matching_blocks",
+                "blocks": [
+                  "minecraft:stone",
+                  "minecraft:granite",
+                  "minecraft:diorite",
+                  "minecraft:andesite",
+                  "minecraft:dripstone_block"
+                ],
+                "offset": [
+                  0,
+                  -1,
+                  0
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "tries": 96,
+    "xz_spread": 7,
+    "y_spread": 3
+  }
+}

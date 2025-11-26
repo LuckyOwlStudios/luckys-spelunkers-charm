@@ -1,0 +1,25 @@
+{
+  "feature": "spelunkers_charm:bottom_ice_sheet",
+  "placement": [
+    {
+      "type": "minecraft:carving_mask",
+      "step": "air"
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "absolute": 8
+      }
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:matching_blocks",
+        "blocks": "minecraft:air"
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

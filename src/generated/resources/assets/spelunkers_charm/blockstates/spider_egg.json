@@ -1,0 +1,82 @@
+{
+  "variants": {
+    "facing=down,hatch=0": {
+      "model": "spelunkers_charm:block/spider_egg_stage_0",
+      "x": 180
+    },
+    "facing=down,hatch=1": {
+      "model": "spelunkers_charm:block/spider_egg_stage_1",
+      "x": 180
+    },
+    "facing=down,hatch=2": {
+      "model": "spelunkers_charm:block/spider_egg_stage_2",
+      "x": 180
+    },
+    "facing=east,hatch=0": {
+      "model": "spelunkers_charm:block/spider_egg_stage_0",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,hatch=1": {
+      "model": "spelunkers_charm:block/spider_egg_stage_1",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,hatch=2": {
+      "model": "spelunkers_charm:block/spider_egg_stage_2",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north,hatch=0": {
+      "model": "spelunkers_charm:block/spider_egg_stage_0",
+      "x": 90
+    },
+    "facing=north,hatch=1": {
+      "model": "spelunkers_charm:block/spider_egg_stage_1",
+      "x": 90
+    },
+    "facing=north,hatch=2": {
+      "model": "spelunkers_charm:block/spider_egg_stage_2",
+      "x": 90
+    },
+    "facing=south,hatch=0": {
+      "model": "spelunkers_charm:block/spider_egg_stage_0",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,hatch=1": {
+      "model": "spelunkers_charm:block/spider_egg_stage_1",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,hatch=2": {
+      "model": "spelunkers_charm:block/spider_egg_stage_2",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up,hatch=0": {
+      "model": "spelunkers_charm:block/spider_egg_stage_0"
+    },
+    "facing=up,hatch=1": {
+      "model": "spelunkers_charm:block/spider_egg_stage_1"
+    },
+    "facing=up,hatch=2": {
+      "model": "spelunkers_charm:block/spider_egg_stage_2"
+    },
+    "facing=west,hatch=0": {
+      "model": "spelunkers_charm:block/spider_egg_stage_0",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,hatch=1": {
+      "model": "spelunkers_charm:block/spider_egg_stage_1",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,hatch=2": {
+      "model": "spelunkers_charm:block/spider_egg_stage_2",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

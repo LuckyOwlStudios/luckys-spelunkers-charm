@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "spelunkers_charm:block/dunestone_slab"
+    },
+    "type=double": {
+      "model": "spelunkers_charm:block/dunestone"
+    },
+    "type=top": {
+      "model": "spelunkers_charm:block/dunestone_slab_top"
+    }
+  }
+}

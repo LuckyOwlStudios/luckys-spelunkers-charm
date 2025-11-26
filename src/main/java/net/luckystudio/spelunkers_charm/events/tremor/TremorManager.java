@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.PointedDripstoneBlock;
@@ -54,14 +55,13 @@ public class TremorManager {
     // This checks if the tremor can occur based on the level and position.
     static boolean canTremor(Level level, BlockPos pos) {
         // Check the config setting
-        if (!SpelunkersCharmConfig.TREMORS.get()) {
-            return false;
-        }
+        if (!SpelunkersCharmConfig.TREMORS.get()) return false;
 
         // Must be in the Overworld and not exposed to the sky
-        if (level.dimension() != Level.OVERWORLD || level.canSeeSky(pos)) {
-            return false;
-        }
+        if (level.dimension() != Level.OVERWORLD || level.canSeeSky(pos)) return false;
+
+        // Must not be peaceful
+        if (level.getDifficulty() == Difficulty.PEACEFUL) return false;
 
         ResourceKey<Biome> biomeKey = level.getBiome(pos).getKey();
         if (biomeKey == null) {
@@ -88,7 +88,7 @@ public class TremorManager {
 
         if (tremor.tickCount % soundInterval == 0) {
             float pitch = 0.75F + level.random.nextFloat() * 0.5F; // 0.75 + [0.0 - 0.5] = [0.75 - 1.25]
-            level.playSound(null, pos, getTremorSound(level, pos), SoundSource.AMBIENT, SpelunkersCharmConfig.TREMOR_VOLUME.get().floatValue(), pitch);
+            level.playSound(null, pos, getTremorSound(level, pos), SoundSource.AMBIENT, 0.75F, pitch);
         }
 
         for (int i = 0; i < repeatCount; i++) {
@@ -150,7 +150,9 @@ public class TremorManager {
     private static SoundEvent getRumbleSound(ServerPlayer serverPlayer) {
         Level level = serverPlayer.level();
         Holder<Biome> biomeKey = level.getBiome(serverPlayer.blockPosition());
-        if (biomeKey.is(ModBiomeTags.IS_COLD_CAVE) && SpelunkersCharmConfig.STONE_REPLACERS.get()) {
+        if (biomeKey.is(ModBiomeTags.IS_COLD_CAVE)
+//                && SpelunkersCharmConfig.STONE_REPLACERS.get()
+        ) {
             return ModSoundEvents.RUMBLE_ICY.get();
         } else {
             return ModSoundEvents.RUMBLE_GENERIC.get();
@@ -160,7 +162,9 @@ public class TremorManager {
     // Get the sound event for the tremor based on the player's biome
     private static SoundEvent getTremorSound(Level level, BlockPos pos) {
         Holder<Biome> biomeKey = level.getBiome(pos);
-        if (biomeKey.is(ModBiomeTags.IS_COLD_CAVE) && SpelunkersCharmConfig.STONE_REPLACERS.get()) {
+        if (biomeKey.is(ModBiomeTags.IS_COLD_CAVE)
+//                && SpelunkersCharmConfig.STONE_REPLACERS.get()
+        ) {
             return ModSoundEvents.TREMOR_ICY.get();
         } else {
             return ModSoundEvents.TREMOR_GENERIC.get();

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "spelunkers_charm:block/wildstone_emerald_ore"
+  }
+}

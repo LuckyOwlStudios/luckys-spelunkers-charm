@@ -1,0 +1,13 @@
+{
+  "values": [
+    "spelunkers_charm:dunestone_slab",
+    "spelunkers_charm:permafrost_slab",
+    "spelunkers_charm:wildstone_slab",
+    "spelunkers_charm:dunestone_brick_slab",
+    "spelunkers_charm:permafrost_brick_slab",
+    "spelunkers_charm:wildstone_brick_slab",
+    "spelunkers_charm:cobbled_dunestone_slab",
+    "spelunkers_charm:cobbled_permafrost_slab",
+    "spelunkers_charm:cobbled_wildstone_slab"
+  ]
+}

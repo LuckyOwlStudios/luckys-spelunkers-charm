@@ -1,0 +1,11 @@
+{
+  "values": [
+    "spelunkers_charm:dunestone_iron_ore",
+    "spelunkers_charm:dunestone_copper_ore",
+    "spelunkers_charm:wildstone_iron_ore",
+    "spelunkers_charm:wildstone_copper_ore",
+    "spelunkers_charm:permafrost_iron_ore",
+    "spelunkers_charm:permafrost_copper_ore",
+    "spelunkers_charm:blaster"
+  ]
+}

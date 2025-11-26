@@ -1,0 +1,1108 @@
+{
+  "variants": {
+    "block_part=bottom_corner,facing=down,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_chained",
+      "y": 90
+    },
+    "block_part=bottom_corner,facing=down,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner",
+      "y": 90
+    },
+    "block_part=bottom_corner,facing=down,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_tied",
+      "y": 90
+    },
+    "block_part=bottom_corner,facing=down,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_chained",
+      "y": 90
+    },
+    "block_part=bottom_corner,facing=down,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner",
+      "y": 90
+    },
+    "block_part=bottom_corner,facing=down,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_tied",
+      "y": 90
+    },
+    "block_part=bottom_corner,facing=east,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_chained",
+      "y": 90
+    },
+    "block_part=bottom_corner,facing=east,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner",
+      "y": 90
+    },
+    "block_part=bottom_corner,facing=east,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_tied",
+      "y": 90
+    },
+    "block_part=bottom_corner,facing=east,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_chained",
+      "y": 90
+    },
+    "block_part=bottom_corner,facing=east,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner",
+      "y": 90
+    },
+    "block_part=bottom_corner,facing=east,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_tied",
+      "y": 90
+    },
+    "block_part=bottom_corner,facing=north,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_chained"
+    },
+    "block_part=bottom_corner,facing=north,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner"
+    },
+    "block_part=bottom_corner,facing=north,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_tied"
+    },
+    "block_part=bottom_corner,facing=north,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_chained"
+    },
+    "block_part=bottom_corner,facing=north,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner"
+    },
+    "block_part=bottom_corner,facing=north,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_tied"
+    },
+    "block_part=bottom_corner,facing=south,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_chained",
+      "y": 180
+    },
+    "block_part=bottom_corner,facing=south,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner",
+      "y": 180
+    },
+    "block_part=bottom_corner,facing=south,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_tied",
+      "y": 180
+    },
+    "block_part=bottom_corner,facing=south,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_chained",
+      "y": 180
+    },
+    "block_part=bottom_corner,facing=south,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner",
+      "y": 180
+    },
+    "block_part=bottom_corner,facing=south,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_tied",
+      "y": 180
+    },
+    "block_part=bottom_corner,facing=up,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_chained",
+      "y": 90
+    },
+    "block_part=bottom_corner,facing=up,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner",
+      "y": 90
+    },
+    "block_part=bottom_corner,facing=up,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_tied",
+      "y": 90
+    },
+    "block_part=bottom_corner,facing=up,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_chained",
+      "y": 90
+    },
+    "block_part=bottom_corner,facing=up,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner",
+      "y": 90
+    },
+    "block_part=bottom_corner,facing=up,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_tied",
+      "y": 90
+    },
+    "block_part=bottom_corner,facing=west,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_chained",
+      "y": 270
+    },
+    "block_part=bottom_corner,facing=west,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner",
+      "y": 270
+    },
+    "block_part=bottom_corner,facing=west,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_tied",
+      "y": 270
+    },
+    "block_part=bottom_corner,facing=west,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_chained",
+      "y": 270
+    },
+    "block_part=bottom_corner,facing=west,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner",
+      "y": 270
+    },
+    "block_part=bottom_corner,facing=west,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_corner_tied",
+      "y": 270
+    },
+    "block_part=bottom_middle,facing=down,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_chained",
+      "y": 90
+    },
+    "block_part=bottom_middle,facing=down,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle",
+      "y": 90
+    },
+    "block_part=bottom_middle,facing=down,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_tied",
+      "y": 90
+    },
+    "block_part=bottom_middle,facing=down,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_chained",
+      "y": 90
+    },
+    "block_part=bottom_middle,facing=down,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle",
+      "y": 90
+    },
+    "block_part=bottom_middle,facing=down,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_tied",
+      "y": 90
+    },
+    "block_part=bottom_middle,facing=east,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_chained",
+      "y": 90
+    },
+    "block_part=bottom_middle,facing=east,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle",
+      "y": 90
+    },
+    "block_part=bottom_middle,facing=east,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_tied",
+      "y": 90
+    },
+    "block_part=bottom_middle,facing=east,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_chained",
+      "y": 90
+    },
+    "block_part=bottom_middle,facing=east,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle",
+      "y": 90
+    },
+    "block_part=bottom_middle,facing=east,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_tied",
+      "y": 90
+    },
+    "block_part=bottom_middle,facing=north,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_chained"
+    },
+    "block_part=bottom_middle,facing=north,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle"
+    },
+    "block_part=bottom_middle,facing=north,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_tied"
+    },
+    "block_part=bottom_middle,facing=north,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_chained"
+    },
+    "block_part=bottom_middle,facing=north,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle"
+    },
+    "block_part=bottom_middle,facing=north,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_tied"
+    },
+    "block_part=bottom_middle,facing=south,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_chained",
+      "y": 180
+    },
+    "block_part=bottom_middle,facing=south,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle",
+      "y": 180
+    },
+    "block_part=bottom_middle,facing=south,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_tied",
+      "y": 180
+    },
+    "block_part=bottom_middle,facing=south,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_chained",
+      "y": 180
+    },
+    "block_part=bottom_middle,facing=south,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle",
+      "y": 180
+    },
+    "block_part=bottom_middle,facing=south,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_tied",
+      "y": 180
+    },
+    "block_part=bottom_middle,facing=up,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_chained",
+      "y": 90
+    },
+    "block_part=bottom_middle,facing=up,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle",
+      "y": 90
+    },
+    "block_part=bottom_middle,facing=up,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_tied",
+      "y": 90
+    },
+    "block_part=bottom_middle,facing=up,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_chained",
+      "y": 90
+    },
+    "block_part=bottom_middle,facing=up,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle",
+      "y": 90
+    },
+    "block_part=bottom_middle,facing=up,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_tied",
+      "y": 90
+    },
+    "block_part=bottom_middle,facing=west,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_chained",
+      "y": 270
+    },
+    "block_part=bottom_middle,facing=west,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle",
+      "y": 270
+    },
+    "block_part=bottom_middle,facing=west,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_tied",
+      "y": 270
+    },
+    "block_part=bottom_middle,facing=west,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_chained",
+      "y": 270
+    },
+    "block_part=bottom_middle,facing=west,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle",
+      "y": 270
+    },
+    "block_part=bottom_middle,facing=west,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_middle_tied",
+      "y": 270
+    },
+    "block_part=bottom_side,facing=down,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_chained",
+      "y": 90
+    },
+    "block_part=bottom_side,facing=down,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side",
+      "y": 90
+    },
+    "block_part=bottom_side,facing=down,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_tied",
+      "y": 90
+    },
+    "block_part=bottom_side,facing=down,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_chained",
+      "y": 90
+    },
+    "block_part=bottom_side,facing=down,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side",
+      "y": 90
+    },
+    "block_part=bottom_side,facing=down,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_tied",
+      "y": 90
+    },
+    "block_part=bottom_side,facing=east,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_chained",
+      "y": 90
+    },
+    "block_part=bottom_side,facing=east,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side",
+      "y": 90
+    },
+    "block_part=bottom_side,facing=east,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_tied",
+      "y": 90
+    },
+    "block_part=bottom_side,facing=east,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_chained",
+      "y": 90
+    },
+    "block_part=bottom_side,facing=east,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side",
+      "y": 90
+    },
+    "block_part=bottom_side,facing=east,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_tied",
+      "y": 90
+    },
+    "block_part=bottom_side,facing=north,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_chained"
+    },
+    "block_part=bottom_side,facing=north,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side"
+    },
+    "block_part=bottom_side,facing=north,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_tied"
+    },
+    "block_part=bottom_side,facing=north,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_chained"
+    },
+    "block_part=bottom_side,facing=north,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side"
+    },
+    "block_part=bottom_side,facing=north,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_tied"
+    },
+    "block_part=bottom_side,facing=south,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_chained",
+      "y": 180
+    },
+    "block_part=bottom_side,facing=south,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side",
+      "y": 180
+    },
+    "block_part=bottom_side,facing=south,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_tied",
+      "y": 180
+    },
+    "block_part=bottom_side,facing=south,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_chained",
+      "y": 180
+    },
+    "block_part=bottom_side,facing=south,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side",
+      "y": 180
+    },
+    "block_part=bottom_side,facing=south,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_tied",
+      "y": 180
+    },
+    "block_part=bottom_side,facing=up,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_chained",
+      "y": 90
+    },
+    "block_part=bottom_side,facing=up,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side",
+      "y": 90
+    },
+    "block_part=bottom_side,facing=up,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_tied",
+      "y": 90
+    },
+    "block_part=bottom_side,facing=up,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_chained",
+      "y": 90
+    },
+    "block_part=bottom_side,facing=up,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side",
+      "y": 90
+    },
+    "block_part=bottom_side,facing=up,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_tied",
+      "y": 90
+    },
+    "block_part=bottom_side,facing=west,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_chained",
+      "y": 270
+    },
+    "block_part=bottom_side,facing=west,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side",
+      "y": 270
+    },
+    "block_part=bottom_side,facing=west,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_tied",
+      "y": 270
+    },
+    "block_part=bottom_side,facing=west,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_chained",
+      "y": 270
+    },
+    "block_part=bottom_side,facing=west,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side",
+      "y": 270
+    },
+    "block_part=bottom_side,facing=west,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_bottom_side_tied",
+      "y": 270
+    },
+    "block_part=middle_corner,facing=down,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_chained",
+      "y": 90
+    },
+    "block_part=middle_corner,facing=down,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner",
+      "y": 90
+    },
+    "block_part=middle_corner,facing=down,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_tied",
+      "y": 90
+    },
+    "block_part=middle_corner,facing=down,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_chained",
+      "y": 90
+    },
+    "block_part=middle_corner,facing=down,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner",
+      "y": 90
+    },
+    "block_part=middle_corner,facing=down,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_tied",
+      "y": 90
+    },
+    "block_part=middle_corner,facing=east,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_chained",
+      "y": 90
+    },
+    "block_part=middle_corner,facing=east,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner",
+      "y": 90
+    },
+    "block_part=middle_corner,facing=east,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_tied",
+      "y": 90
+    },
+    "block_part=middle_corner,facing=east,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_chained",
+      "y": 90
+    },
+    "block_part=middle_corner,facing=east,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner",
+      "y": 90
+    },
+    "block_part=middle_corner,facing=east,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_tied",
+      "y": 90
+    },
+    "block_part=middle_corner,facing=north,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_chained"
+    },
+    "block_part=middle_corner,facing=north,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner"
+    },
+    "block_part=middle_corner,facing=north,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_tied"
+    },
+    "block_part=middle_corner,facing=north,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_chained"
+    },
+    "block_part=middle_corner,facing=north,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner"
+    },
+    "block_part=middle_corner,facing=north,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_tied"
+    },
+    "block_part=middle_corner,facing=south,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_chained",
+      "y": 180
+    },
+    "block_part=middle_corner,facing=south,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner",
+      "y": 180
+    },
+    "block_part=middle_corner,facing=south,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_tied",
+      "y": 180
+    },
+    "block_part=middle_corner,facing=south,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_chained",
+      "y": 180
+    },
+    "block_part=middle_corner,facing=south,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner",
+      "y": 180
+    },
+    "block_part=middle_corner,facing=south,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_tied",
+      "y": 180
+    },
+    "block_part=middle_corner,facing=up,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_chained",
+      "y": 90
+    },
+    "block_part=middle_corner,facing=up,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner",
+      "y": 90
+    },
+    "block_part=middle_corner,facing=up,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_tied",
+      "y": 90
+    },
+    "block_part=middle_corner,facing=up,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_chained",
+      "y": 90
+    },
+    "block_part=middle_corner,facing=up,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner",
+      "y": 90
+    },
+    "block_part=middle_corner,facing=up,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_tied",
+      "y": 90
+    },
+    "block_part=middle_corner,facing=west,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_chained",
+      "y": 270
+    },
+    "block_part=middle_corner,facing=west,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner",
+      "y": 270
+    },
+    "block_part=middle_corner,facing=west,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_tied",
+      "y": 270
+    },
+    "block_part=middle_corner,facing=west,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_chained",
+      "y": 270
+    },
+    "block_part=middle_corner,facing=west,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner",
+      "y": 270
+    },
+    "block_part=middle_corner,facing=west,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_corner_tied",
+      "y": 270
+    },
+    "block_part=middle_side,facing=down,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_chained",
+      "y": 90
+    },
+    "block_part=middle_side,facing=down,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side",
+      "y": 90
+    },
+    "block_part=middle_side,facing=down,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_tied",
+      "y": 90
+    },
+    "block_part=middle_side,facing=down,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_chained",
+      "y": 90
+    },
+    "block_part=middle_side,facing=down,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side",
+      "y": 90
+    },
+    "block_part=middle_side,facing=down,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_tied",
+      "y": 90
+    },
+    "block_part=middle_side,facing=east,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_chained",
+      "y": 90
+    },
+    "block_part=middle_side,facing=east,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side",
+      "y": 90
+    },
+    "block_part=middle_side,facing=east,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_tied",
+      "y": 90
+    },
+    "block_part=middle_side,facing=east,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_chained",
+      "y": 90
+    },
+    "block_part=middle_side,facing=east,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side",
+      "y": 90
+    },
+    "block_part=middle_side,facing=east,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_tied",
+      "y": 90
+    },
+    "block_part=middle_side,facing=north,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_chained"
+    },
+    "block_part=middle_side,facing=north,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side"
+    },
+    "block_part=middle_side,facing=north,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_tied"
+    },
+    "block_part=middle_side,facing=north,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_chained"
+    },
+    "block_part=middle_side,facing=north,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side"
+    },
+    "block_part=middle_side,facing=north,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_tied"
+    },
+    "block_part=middle_side,facing=south,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_chained",
+      "y": 180
+    },
+    "block_part=middle_side,facing=south,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side",
+      "y": 180
+    },
+    "block_part=middle_side,facing=south,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_tied",
+      "y": 180
+    },
+    "block_part=middle_side,facing=south,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_chained",
+      "y": 180
+    },
+    "block_part=middle_side,facing=south,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side",
+      "y": 180
+    },
+    "block_part=middle_side,facing=south,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_tied",
+      "y": 180
+    },
+    "block_part=middle_side,facing=up,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_chained",
+      "y": 90
+    },
+    "block_part=middle_side,facing=up,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side",
+      "y": 90
+    },
+    "block_part=middle_side,facing=up,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_tied",
+      "y": 90
+    },
+    "block_part=middle_side,facing=up,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_chained",
+      "y": 90
+    },
+    "block_part=middle_side,facing=up,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side",
+      "y": 90
+    },
+    "block_part=middle_side,facing=up,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_tied",
+      "y": 90
+    },
+    "block_part=middle_side,facing=west,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_chained",
+      "y": 270
+    },
+    "block_part=middle_side,facing=west,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side",
+      "y": 270
+    },
+    "block_part=middle_side,facing=west,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_tied",
+      "y": 270
+    },
+    "block_part=middle_side,facing=west,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_chained",
+      "y": 270
+    },
+    "block_part=middle_side,facing=west,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side",
+      "y": 270
+    },
+    "block_part=middle_side,facing=west,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_middle_side_tied",
+      "y": 270
+    },
+    "block_part=top_corner,facing=down,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_chained",
+      "y": 90
+    },
+    "block_part=top_corner,facing=down,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner",
+      "y": 90
+    },
+    "block_part=top_corner,facing=down,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_tied",
+      "y": 90
+    },
+    "block_part=top_corner,facing=down,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_chained",
+      "y": 90
+    },
+    "block_part=top_corner,facing=down,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner",
+      "y": 90
+    },
+    "block_part=top_corner,facing=down,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_tied",
+      "y": 90
+    },
+    "block_part=top_corner,facing=east,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_chained",
+      "y": 90
+    },
+    "block_part=top_corner,facing=east,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner",
+      "y": 90
+    },
+    "block_part=top_corner,facing=east,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_tied",
+      "y": 90
+    },
+    "block_part=top_corner,facing=east,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_chained",
+      "y": 90
+    },
+    "block_part=top_corner,facing=east,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner",
+      "y": 90
+    },
+    "block_part=top_corner,facing=east,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_tied",
+      "y": 90
+    },
+    "block_part=top_corner,facing=north,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_chained"
+    },
+    "block_part=top_corner,facing=north,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner"
+    },
+    "block_part=top_corner,facing=north,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_tied"
+    },
+    "block_part=top_corner,facing=north,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_chained"
+    },
+    "block_part=top_corner,facing=north,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner"
+    },
+    "block_part=top_corner,facing=north,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_tied"
+    },
+    "block_part=top_corner,facing=south,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_chained",
+      "y": 180
+    },
+    "block_part=top_corner,facing=south,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner",
+      "y": 180
+    },
+    "block_part=top_corner,facing=south,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_tied",
+      "y": 180
+    },
+    "block_part=top_corner,facing=south,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_chained",
+      "y": 180
+    },
+    "block_part=top_corner,facing=south,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner",
+      "y": 180
+    },
+    "block_part=top_corner,facing=south,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_tied",
+      "y": 180
+    },
+    "block_part=top_corner,facing=up,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_chained",
+      "y": 90
+    },
+    "block_part=top_corner,facing=up,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner",
+      "y": 90
+    },
+    "block_part=top_corner,facing=up,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_tied",
+      "y": 90
+    },
+    "block_part=top_corner,facing=up,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_chained",
+      "y": 90
+    },
+    "block_part=top_corner,facing=up,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner",
+      "y": 90
+    },
+    "block_part=top_corner,facing=up,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_tied",
+      "y": 90
+    },
+    "block_part=top_corner,facing=west,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_chained",
+      "y": 270
+    },
+    "block_part=top_corner,facing=west,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner",
+      "y": 270
+    },
+    "block_part=top_corner,facing=west,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_tied",
+      "y": 270
+    },
+    "block_part=top_corner,facing=west,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_chained",
+      "y": 270
+    },
+    "block_part=top_corner,facing=west,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner",
+      "y": 270
+    },
+    "block_part=top_corner,facing=west,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_corner_tied",
+      "y": 270
+    },
+    "block_part=top_middle,facing=down,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_chained",
+      "y": 90
+    },
+    "block_part=top_middle,facing=down,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle",
+      "y": 90
+    },
+    "block_part=top_middle,facing=down,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_tied",
+      "y": 90
+    },
+    "block_part=top_middle,facing=down,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_chained",
+      "y": 90
+    },
+    "block_part=top_middle,facing=down,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle",
+      "y": 90
+    },
+    "block_part=top_middle,facing=down,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_tied",
+      "y": 90
+    },
+    "block_part=top_middle,facing=east,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_chained",
+      "y": 90
+    },
+    "block_part=top_middle,facing=east,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle",
+      "y": 90
+    },
+    "block_part=top_middle,facing=east,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_tied",
+      "y": 90
+    },
+    "block_part=top_middle,facing=east,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_chained",
+      "y": 90
+    },
+    "block_part=top_middle,facing=east,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle",
+      "y": 90
+    },
+    "block_part=top_middle,facing=east,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_tied",
+      "y": 90
+    },
+    "block_part=top_middle,facing=north,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_chained"
+    },
+    "block_part=top_middle,facing=north,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle"
+    },
+    "block_part=top_middle,facing=north,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_tied"
+    },
+    "block_part=top_middle,facing=north,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_chained"
+    },
+    "block_part=top_middle,facing=north,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle"
+    },
+    "block_part=top_middle,facing=north,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_tied"
+    },
+    "block_part=top_middle,facing=south,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_chained",
+      "y": 180
+    },
+    "block_part=top_middle,facing=south,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle",
+      "y": 180
+    },
+    "block_part=top_middle,facing=south,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_tied",
+      "y": 180
+    },
+    "block_part=top_middle,facing=south,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_chained",
+      "y": 180
+    },
+    "block_part=top_middle,facing=south,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle",
+      "y": 180
+    },
+    "block_part=top_middle,facing=south,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_tied",
+      "y": 180
+    },
+    "block_part=top_middle,facing=up,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_chained",
+      "y": 90
+    },
+    "block_part=top_middle,facing=up,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle",
+      "y": 90
+    },
+    "block_part=top_middle,facing=up,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_tied",
+      "y": 90
+    },
+    "block_part=top_middle,facing=up,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_chained",
+      "y": 90
+    },
+    "block_part=top_middle,facing=up,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle",
+      "y": 90
+    },
+    "block_part=top_middle,facing=up,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_tied",
+      "y": 90
+    },
+    "block_part=top_middle,facing=west,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_chained",
+      "y": 270
+    },
+    "block_part=top_middle,facing=west,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle",
+      "y": 270
+    },
+    "block_part=top_middle,facing=west,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_tied",
+      "y": 270
+    },
+    "block_part=top_middle,facing=west,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_chained",
+      "y": 270
+    },
+    "block_part=top_middle,facing=west,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle",
+      "y": 270
+    },
+    "block_part=top_middle,facing=west,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_middle_tied",
+      "y": 270
+    },
+    "block_part=top_side,facing=down,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_chained",
+      "y": 90
+    },
+    "block_part=top_side,facing=down,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side",
+      "y": 90
+    },
+    "block_part=top_side,facing=down,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_tied",
+      "y": 90
+    },
+    "block_part=top_side,facing=down,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_chained",
+      "y": 90
+    },
+    "block_part=top_side,facing=down,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side",
+      "y": 90
+    },
+    "block_part=top_side,facing=down,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_tied",
+      "y": 90
+    },
+    "block_part=top_side,facing=east,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_chained",
+      "y": 90
+    },
+    "block_part=top_side,facing=east,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side",
+      "y": 90
+    },
+    "block_part=top_side,facing=east,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_tied",
+      "y": 90
+    },
+    "block_part=top_side,facing=east,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_chained",
+      "y": 90
+    },
+    "block_part=top_side,facing=east,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side",
+      "y": 90
+    },
+    "block_part=top_side,facing=east,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_tied",
+      "y": 90
+    },
+    "block_part=top_side,facing=north,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_chained"
+    },
+    "block_part=top_side,facing=north,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side"
+    },
+    "block_part=top_side,facing=north,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_tied"
+    },
+    "block_part=top_side,facing=north,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_chained"
+    },
+    "block_part=top_side,facing=north,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side"
+    },
+    "block_part=top_side,facing=north,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_tied"
+    },
+    "block_part=top_side,facing=south,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_chained",
+      "y": 180
+    },
+    "block_part=top_side,facing=south,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side",
+      "y": 180
+    },
+    "block_part=top_side,facing=south,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_tied",
+      "y": 180
+    },
+    "block_part=top_side,facing=south,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_chained",
+      "y": 180
+    },
+    "block_part=top_side,facing=south,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side",
+      "y": 180
+    },
+    "block_part=top_side,facing=south,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_tied",
+      "y": 180
+    },
+    "block_part=top_side,facing=up,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_chained",
+      "y": 90
+    },
+    "block_part=top_side,facing=up,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side",
+      "y": 90
+    },
+    "block_part=top_side,facing=up,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_tied",
+      "y": 90
+    },
+    "block_part=top_side,facing=up,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_chained",
+      "y": 90
+    },
+    "block_part=top_side,facing=up,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side",
+      "y": 90
+    },
+    "block_part=top_side,facing=up,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_tied",
+      "y": 90
+    },
+    "block_part=top_side,facing=west,full=false,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_chained",
+      "y": 270
+    },
+    "block_part=top_side,facing=west,full=false,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side",
+      "y": 270
+    },
+    "block_part=top_side,facing=west,full=false,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_tied",
+      "y": 270
+    },
+    "block_part=top_side,facing=west,full=true,hanging_type=chain": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_chained",
+      "y": 270
+    },
+    "block_part=top_side,facing=west,full=true,hanging_type=none": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side",
+      "y": 270
+    },
+    "block_part=top_side,facing=west,full=true,hanging_type=rope": {
+      "model": "spelunkers_charm:block/lush_copper_boulder_top_side_tied",
+      "y": 270
+    }
+  }
+}

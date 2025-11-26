@@ -1,0 +1,94 @@
+{
+  "variants": {
+    "display=false,facing=east,rocks=1": {
+      "model": "spelunkers_charm:block/ice_ball_one",
+      "y": 90
+    },
+    "display=false,facing=east,rocks=2": {
+      "model": "spelunkers_charm:block/ice_ball_two",
+      "y": 90
+    },
+    "display=false,facing=east,rocks=3": {
+      "model": "spelunkers_charm:block/ice_ball_three",
+      "y": 90
+    },
+    "display=false,facing=north,rocks=1": {
+      "model": "spelunkers_charm:block/ice_ball_one"
+    },
+    "display=false,facing=north,rocks=2": {
+      "model": "spelunkers_charm:block/ice_ball_two"
+    },
+    "display=false,facing=north,rocks=3": {
+      "model": "spelunkers_charm:block/ice_ball_three"
+    },
+    "display=false,facing=south,rocks=1": {
+      "model": "spelunkers_charm:block/ice_ball_one",
+      "y": 180
+    },
+    "display=false,facing=south,rocks=2": {
+      "model": "spelunkers_charm:block/ice_ball_two",
+      "y": 180
+    },
+    "display=false,facing=south,rocks=3": {
+      "model": "spelunkers_charm:block/ice_ball_three",
+      "y": 180
+    },
+    "display=false,facing=west,rocks=1": {
+      "model": "spelunkers_charm:block/ice_ball_one",
+      "y": 270
+    },
+    "display=false,facing=west,rocks=2": {
+      "model": "spelunkers_charm:block/ice_ball_two",
+      "y": 270
+    },
+    "display=false,facing=west,rocks=3": {
+      "model": "spelunkers_charm:block/ice_ball_three",
+      "y": 270
+    },
+    "display=true,facing=east,rocks=1": {
+      "model": "spelunkers_charm:block/ice_ball_display",
+      "y": 90
+    },
+    "display=true,facing=east,rocks=2": {
+      "model": "spelunkers_charm:block/ice_ball_display",
+      "y": 90
+    },
+    "display=true,facing=east,rocks=3": {
+      "model": "spelunkers_charm:block/ice_ball_display",
+      "y": 90
+    },
+    "display=true,facing=north,rocks=1": {
+      "model": "spelunkers_charm:block/ice_ball_display"
+    },
+    "display=true,facing=north,rocks=2": {
+      "model": "spelunkers_charm:block/ice_ball_display"
+    },
+    "display=true,facing=north,rocks=3": {
+      "model": "spelunkers_charm:block/ice_ball_display"
+    },
+    "display=true,facing=south,rocks=1": {
+      "model": "spelunkers_charm:block/ice_ball_display",
+      "y": 180
+    },
+    "display=true,facing=south,rocks=2": {
+      "model": "spelunkers_charm:block/ice_ball_display",
+      "y": 180
+    },
+    "display=true,facing=south,rocks=3": {
+      "model": "spelunkers_charm:block/ice_ball_display",
+      "y": 180
+    },
+    "display=true,facing=west,rocks=1": {
+      "model": "spelunkers_charm:block/ice_ball_display",
+      "y": 270
+    },
+    "display=true,facing=west,rocks=2": {
+      "model": "spelunkers_charm:block/ice_ball_display",
+      "y": 270
+    },
+    "display=true,facing=west,rocks=3": {
+      "model": "spelunkers_charm:block/ice_ball_display",
+      "y": 270
+    }
+  }
+}

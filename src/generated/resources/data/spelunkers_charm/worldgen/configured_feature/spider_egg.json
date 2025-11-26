@@ -1,0 +1,21 @@
+{
+  "type": "spelunkers_charm:directional_block",
+  "config": {
+    "blockProvider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "spelunkers_charm:spider_egg",
+        "Properties": {
+          "facing": "up",
+          "hatch": "0"
+        }
+      }
+    },
+    "supportingBlockProvider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "spelunkers_charm:packed_web"
+      }
+    }
+  }
+}

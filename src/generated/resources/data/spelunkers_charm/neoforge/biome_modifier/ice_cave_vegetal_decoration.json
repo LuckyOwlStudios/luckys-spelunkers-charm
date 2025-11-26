@@ -1,0 +1,13 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#spelunkers_charm:is_cold_cave",
+  "features": [
+    "spelunkers_charm:permafrost",
+    "spelunkers_charm:permafrost_ore_silt",
+    "spelunkers_charm:ice_pile",
+    "spelunkers_charm:large_icicle",
+    "spelunkers_charm:icicle_cluster",
+    "spelunkers_charm:bottom_ice_sheet"
+  ],
+  "step": "underground_decoration"
+}

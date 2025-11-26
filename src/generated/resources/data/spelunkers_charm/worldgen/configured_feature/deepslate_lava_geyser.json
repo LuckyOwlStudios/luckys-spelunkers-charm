@@ -1,0 +1,34 @@
+{
+  "type": "spelunkers_charm:geyser",
+  "config": {
+    "blockProvider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:deepslate",
+        "Properties": {
+          "axis": "y"
+        }
+      }
+    },
+    "geyserProvider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "spelunkers_charm:deepslate_geyser",
+        "Properties": {
+          "type": "lava",
+          "duration": "0",
+          "state": "inactive"
+        }
+      }
+    },
+    "liquidProvider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:lava",
+        "Properties": {
+          "level": "0"
+        }
+      }
+    }
+  }
+}

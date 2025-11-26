@@ -1,6 +1,7 @@
 package net.luckystudio.spelunkers_charm.block.custom;
 
 import com.mojang.serialization.MapCodec;
+import net.luckystudio.spelunkers_charm.SpelunkersCharmConfig;
 import net.luckystudio.spelunkers_charm.block.custom.blaster.BlasterUtil;
 import net.luckystudio.spelunkers_charm.block.util.ModBlockStateProperties;
 import net.luckystudio.spelunkers_charm.block.util.enums.GeyserState;
@@ -108,6 +109,8 @@ public class GeyserBlock extends Block {
 
     // Also used by the tremor event to start charging the geyser
     public void tryAndStartCharging(Level world, BlockPos pos, BlockState state) {
+        // Will need to add
+//        if (!SpelunkersCharmConfig.ACTIVE_GEYSERS.get()) return;
         if (world.getBlockState(pos.below()).getBlock() == Blocks.LAVA || world.getBlockState(pos.below()).getBlock() == Blocks.WATER) {
             world.setBlock(pos, state.setValue(GEYSER_STATE, GeyserState.CHARGING).setValue(DURATION, 0), 3);
             world.playSound(null, pos, ModSoundEvents.GEYSER_CHARGE.get(), SoundSource.BLOCKS, 1.0f, 0.5F);
@@ -118,6 +121,7 @@ public class GeyserBlock extends Block {
     @Override
     protected void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
         super.tick(pState, pLevel, pPos, pRandom);
+        System.out.println("Tick");
         int duration = pState.getValue(DURATION);
         GeyserState geyserState = pState.getValue(GEYSER_STATE);
         switch (geyserState) {

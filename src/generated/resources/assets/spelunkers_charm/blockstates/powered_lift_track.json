@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=east,powered=false": {
+      "model": "spelunkers_charm:block/powered_lift_track",
+      "y": 90
+    },
+    "facing=east,powered=true": {
+      "model": "spelunkers_charm:block/powered_lift_track_powered",
+      "y": 90
+    },
+    "facing=north,powered=false": {
+      "model": "spelunkers_charm:block/powered_lift_track"
+    },
+    "facing=north,powered=true": {
+      "model": "spelunkers_charm:block/powered_lift_track_powered"
+    },
+    "facing=south,powered=false": {
+      "model": "spelunkers_charm:block/powered_lift_track",
+      "y": 180
+    },
+    "facing=south,powered=true": {
+      "model": "spelunkers_charm:block/powered_lift_track_powered",
+      "y": 180
+    },
+    "facing=west,powered=false": {
+      "model": "spelunkers_charm:block/powered_lift_track",
+      "y": 270
+    },
+    "facing=west,powered=true": {
+      "model": "spelunkers_charm:block/powered_lift_track_powered",
+      "y": 270
+    }
+  }
+}

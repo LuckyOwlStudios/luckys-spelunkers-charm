@@ -1,0 +1,14 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": [
+    "spelunkers_charm:deepslate_lava_geyser",
+    "spelunkers_charm:clay_pile",
+    "spelunkers_charm:rock_pile",
+    "spelunkers_charm:deepslate_rock_pile",
+    "spelunkers_charm:dripstone_rock_pile",
+    "spelunkers_charm:patch_cave_mushroom",
+    "spelunkers_charm:boulders"
+  ],
+  "step": "underground_decoration"
+}

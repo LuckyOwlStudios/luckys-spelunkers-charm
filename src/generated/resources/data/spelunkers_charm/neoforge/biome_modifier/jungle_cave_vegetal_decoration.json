@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#spelunkers_charm:is_beach",
+  "features": [
+    "spelunkers_charm:wildstone",
+    "spelunkers_charm:new_lush_vegetation",
+    "minecraft:lush_caves_ceiling_vegetation"
+  ],
+  "step": "underground_decoration"
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "spelunkers_charm:block/template_boulder_top_middle",
+  "textures": {
+    "all": "spelunkers_charm:block/boulder/boulder_tied",
+    "particle": "spelunkers_charm:block/boulder_break"
+  }
+}

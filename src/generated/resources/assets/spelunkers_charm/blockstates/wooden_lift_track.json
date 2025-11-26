@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "spelunkers_charm:block/wooden_lift_track",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "spelunkers_charm:block/wooden_lift_track"
+    },
+    "facing=south": {
+      "model": "spelunkers_charm:block/wooden_lift_track",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "spelunkers_charm:block/wooden_lift_track",
+      "y": 270
+    }
+  }
+}

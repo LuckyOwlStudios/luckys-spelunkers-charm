@@ -1,0 +1,56 @@
+{
+  "variants": {
+    "facing=down,triggered=false": {
+      "model": "spelunkers_charm:block/blaster_off",
+      "x": 180
+    },
+    "facing=down,triggered=true": {
+      "model": "spelunkers_charm:block/blaster_on",
+      "x": 180
+    },
+    "facing=east,triggered=false": {
+      "model": "spelunkers_charm:block/blaster_off",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,triggered=true": {
+      "model": "spelunkers_charm:block/blaster_on",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north,triggered=false": {
+      "model": "spelunkers_charm:block/blaster_off",
+      "x": 90
+    },
+    "facing=north,triggered=true": {
+      "model": "spelunkers_charm:block/blaster_on",
+      "x": 90
+    },
+    "facing=south,triggered=false": {
+      "model": "spelunkers_charm:block/blaster_off",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,triggered=true": {
+      "model": "spelunkers_charm:block/blaster_on",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up,triggered=false": {
+      "model": "spelunkers_charm:block/blaster_off"
+    },
+    "facing=up,triggered=true": {
+      "model": "spelunkers_charm:block/blaster_on"
+    },
+    "facing=west,triggered=false": {
+      "model": "spelunkers_charm:block/blaster_off",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,triggered=true": {
+      "model": "spelunkers_charm:block/blaster_on",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

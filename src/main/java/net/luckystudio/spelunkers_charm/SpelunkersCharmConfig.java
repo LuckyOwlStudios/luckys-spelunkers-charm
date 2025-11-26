@@ -15,6 +15,7 @@ public class SpelunkersCharmConfig {
     public static ModConfigSpec.BooleanValue TREMORS;
     public static ModConfigSpec.BooleanValue ROCKS;
     public static ModConfigSpec.BooleanValue GEYSERS;
+    public static ModConfigSpec.BooleanValue ACTIVE_GEYSERS;
     public static ModConfigSpec.BooleanValue BOULDERS;
 
     // === CLIENT CONFIGURATION ===
@@ -43,6 +44,10 @@ public class SpelunkersCharmConfig {
                 .comment("Whether the geysers generate around the world")
                 .define("geysers", true);
 
+//        ACTIVE_GEYSERS = COMMON_BUILDER
+//                .comment("Whether geysers can explode. This can be turned off for performance")
+//                .define("active_geysers", true);
+
         BOULDERS = COMMON_BUILDER
                 .comment("Whether the geysers generate around the world")
                 .define("geysers", true);
@@ -53,8 +58,8 @@ public class SpelunkersCharmConfig {
         ModConfigSpec.Builder CLIENT_BUILDER = new ModConfigSpec.Builder();
 
         CLIENT_BUILDER.comment("Client settings").push(CATEGORY_CLIENT);
-        TREMOR_VOLUME = CLIENT_BUILDER.comment("The volume of tremors")
-                .defineInRange("tremorVolume", 0.75, 0.0,1.0);
+//        TREMOR_VOLUME = CLIENT_BUILDER.comment("The volume of tremors")
+//                .defineInRange("tremorVolume", 0.75, 0.0,1.0);
         CLIENT_BUILDER.pop();
 
         CLIENT_CONFIG = CLIENT_BUILDER.build();

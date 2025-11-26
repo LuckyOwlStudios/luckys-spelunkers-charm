@@ -120,7 +120,7 @@ public class ModCavePlacements {
         // Overworld Cave Placements
         // Copied from CaveFeature class, the SPORE_BLOSSOM. We just inverted the direction to down make it work for our geyser.
         PlacementUtils.register(context, DEEPSLATE_LAVA_GEYSER, holdergetter.getOrThrow(ModCaveFeatures.DEEPSLATE_LAVA_GEYSER), List.of(
-                CountPlacement.of(16),
+                CountPlacement.of(8),
                 InSquarePlacement.spread(),
                 PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
                 HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(4), VerticalAnchor.aboveBottom(24)),

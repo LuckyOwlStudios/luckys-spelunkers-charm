@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "spelunkers_charm:block/cobbled_wildstone_slab"
+    },
+    "type=double": {
+      "model": "spelunkers_charm:block/cobbled_wildstone"
+    },
+    "type=top": {
+      "model": "spelunkers_charm:block/cobbled_wildstone_slab_top"
+    }
+  }
+}

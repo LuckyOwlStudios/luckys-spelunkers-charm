@@ -27,7 +27,7 @@ public class BlasterUtil {
         boolean isSnow = geyserType == GeyserType.SNOW;
 
         if (level.getGameTime() % 5 == 0) {
-            level.playSound(null, pos.above(), SoundEvents.BLAZE_SHOOT, SoundSource.BLOCKS, 1.0f, 1.0f);
+            level.playSound(null, pos.above(), SoundEvents.BLAZE_SHOOT, SoundSource.BLOCKS, 1.0f, 0.75f);
         }
 
         ParticleOptions mainParticle = isLava ? ParticleTypes.FLAME :

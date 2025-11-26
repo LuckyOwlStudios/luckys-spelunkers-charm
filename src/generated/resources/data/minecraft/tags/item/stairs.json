@@ -1,0 +1,13 @@
+{
+  "values": [
+    "spelunkers_charm:dunestone_stairs",
+    "spelunkers_charm:permafrost_stairs",
+    "spelunkers_charm:wildstone_stairs",
+    "spelunkers_charm:dunestone_brick_stairs",
+    "spelunkers_charm:permafrost_brick_stairs",
+    "spelunkers_charm:wildstone_brick_stairs",
+    "spelunkers_charm:cobbled_dunestone_stairs",
+    "spelunkers_charm:cobbled_permafrost_stairs",
+    "spelunkers_charm:cobbled_wildstone_stairs"
+  ]
+}

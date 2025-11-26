@@ -1,0 +1,13 @@
+{
+  "values": [
+    "spelunkers_charm:dunestone_wall",
+    "spelunkers_charm:permafrost_wall",
+    "spelunkers_charm:wildstone_wall",
+    "spelunkers_charm:dunestone_brick_wall",
+    "spelunkers_charm:permafrost_brick_wall",
+    "spelunkers_charm:wildstone_brick_wall",
+    "spelunkers_charm:cobbled_dunestone_wall",
+    "spelunkers_charm:cobbled_permafrost_wall",
+    "spelunkers_charm:cobbled_wildstone_wall"
+  ]
+}
