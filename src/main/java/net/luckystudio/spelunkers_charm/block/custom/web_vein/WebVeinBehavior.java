@@ -24,7 +24,7 @@ public interface WebVeinBehavior {
                         .spreadAll(levelAccessor.getBlockState(blockPos), levelAccessor, blockPos, markForPostprocessing)
                         > 0L;
             } else if (!directions.isEmpty()) {
-                return (blockState.isAir() || blockState.getFluidState().is(Fluids.WATER)) && SculkVeinBlock.regrow(levelAccessor, blockPos, blockState, directions);
+                return (blockState.isAir() || blockState.getFluidState().is(Fluids.WATER)) && WebVeinBlock.regrow(levelAccessor, blockPos, blockState, directions);
             } else {
                 return WebVeinBehavior.super.attemptSpreadVein(levelAccessor, blockPos, blockState, directions, markForPostprocessing);
             }

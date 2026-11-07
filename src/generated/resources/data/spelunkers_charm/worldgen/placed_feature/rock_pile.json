@@ -2,6 +2,10 @@
   "feature": "spelunkers_charm:rock_pile",
   "placement": [
     {
+      "type": "spelunkers_charm:config",
+      "option": "rocks"
+    },
+    {
       "type": "minecraft:count",
       "count": {
         "type": "minecraft:uniform",

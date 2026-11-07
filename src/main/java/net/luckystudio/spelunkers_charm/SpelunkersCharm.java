@@ -52,6 +52,7 @@ public class SpelunkersCharm
         ModEntityType.register(modEventBus);
         ModSoundEvents.register(modEventBus);
         ModFeature.register(modEventBus);
+        ModPlacementModifiers.register(modEventBus);
         ModMenuTypes.register(modEventBus);
         ModDataComponents.register(modEventBus);
 
