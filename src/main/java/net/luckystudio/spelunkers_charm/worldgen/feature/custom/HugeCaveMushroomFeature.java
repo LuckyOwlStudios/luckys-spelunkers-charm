@@ -120,7 +120,6 @@ public class HugeCaveMushroomFeature extends AbstractHugeMushroomFeature {
 
     @Override
     protected void placeTrunk(LevelAccessor level, RandomSource random, BlockPos pos, HugeMushroomFeatureConfiguration config, int maxHeight, BlockPos.MutableBlockPos mutablePos) {
-        System.out.println("Placing trunk");
         // Define the layers of the mushroom stem shape
         int[][][] shape = {
                 { // Bottom Layer (0)

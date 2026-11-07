@@ -1,5 +1,6 @@
 package net.luckystudio.spelunkers_charm.block.custom.blaster;
 
+import com.mojang.logging.LogUtils;
 import net.luckystudio.spelunkers_charm.init.ModBlocks;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -11,8 +12,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.items.SlotItemHandler;
+import org.slf4j.Logger;
 
 public class BlasterMenu extends AbstractContainerMenu {
+    private static final Logger LOGGER = LogUtils.getLogger();
     public final BlasterBlockEntity blasterBlockEntity;
     private final Level level;
 
@@ -70,7 +73,7 @@ public class BlasterMenu extends AbstractContainerMenu {
                 return ItemStack.EMPTY;
             }
         } else {
-            System.out.println("Invalid slotIndex:" + pIndex);
+            LOGGER.warn("Invalid slotIndex: {}", pIndex);
             return ItemStack.EMPTY;
         }
         // If stack size == 0 (the entire stack was moved) set slot contents to null
