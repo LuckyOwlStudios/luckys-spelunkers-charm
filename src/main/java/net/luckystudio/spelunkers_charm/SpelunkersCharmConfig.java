@@ -64,9 +64,9 @@ public class SpelunkersCharmConfig {
                 .comment("Whether the geysers generate around the world")
                 .define("geysers", true);
 
-//        ACTIVE_GEYSERS = COMMON_BUILDER
-//                .comment("Whether geysers can explode. This can be turned off for performance")
-//                .define("active_geysers", true);
+        ACTIVE_GEYSERS = COMMON_BUILDER
+                .comment("Whether geysers can erupt. Turn this off to keep geysers as decoration only")
+                .define("activeGeysers", true);
 
         BOULDERS = COMMON_BUILDER
                 .comment("Whether boulders generate in caves")
