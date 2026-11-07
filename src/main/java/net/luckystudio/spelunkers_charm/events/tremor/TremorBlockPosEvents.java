@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.fml.ModLoadingContext;
 
 import java.util.Map;
-import java.util.Random;
 
 public class TremorBlockPosEvents {
 
@@ -34,7 +33,7 @@ public class TremorBlockPosEvents {
         map.put(Blocks.ICE, AbstractThrowableRock.Type.ICE_BALL);
     });
 
-    public static void topEffectPos(Level level, BlockPos pos) {
+    public static void topEffectPos(Level level, BlockPos pos, TremorManager.RockBudget rockBudget) {
         breakBlockEffectAt(level, pos);
         BlockState state = level.getBlockState(pos);
 
@@ -50,8 +49,8 @@ public class TremorBlockPosEvents {
             return;
         }
 
-        // If the block is a stone block, drop a rock
-        if (state.is(BlockTags.BASE_STONE_OVERWORLD)) {
+        // If the block is a stone block, maybe drop a rock (limited by the tremor's rock budget)
+        if (state.is(BlockTags.BASE_STONE_OVERWORLD) && rockBudget.tryDropRock(pos)) {
             dropRock(level, state, pos);
         }
     }
@@ -68,10 +67,8 @@ public class TremorBlockPosEvents {
 
     private static void breakBlockEffectAt(Level level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
-        Random random = new Random();
-
         double particleAmount = 0.5;
-        if ((random.nextFloat() < (float) particleAmount)) {
+        if (level.getRandom().nextFloat() < (float) particleAmount) {
             level.levelEvent(null, 2001, pos, Block.getId(state));
         }
     }
