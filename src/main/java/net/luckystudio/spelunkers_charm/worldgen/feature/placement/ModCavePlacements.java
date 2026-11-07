@@ -137,6 +137,7 @@ public class ModCavePlacements {
 
         // Based on Fire Feature in the Nether
         PlacementUtils.register(context, ROCK_PILE, holdergetter.getOrThrow(ModCaveFeatures.ROCK_PILE), List.of(
+                ConfigFilter.of("rocks"),
                 CountPlacement.of(UniformInt.of(6, 12)),
                 InSquarePlacement.spread(),
                 HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.top()),
@@ -144,6 +145,7 @@ public class ModCavePlacements {
         ));
 
         PlacementUtils.register(context, DEEPSLATE_ROCK_PILE, holdergetter.getOrThrow(ModCaveFeatures.DEEPSLATE_ROCK_PILE), List.of(
+                ConfigFilter.of("rocks"),
                 CountPlacement.of(UniformInt.of(6, 12)),
                 InSquarePlacement.spread(),
                 HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(0)),
@@ -151,6 +153,7 @@ public class ModCavePlacements {
         ));
 
         PlacementUtils.register(context, DRIPSTONE_ROCK_PILE, holdergetter.getOrThrow(ModCaveFeatures.DRIPSTONE_ROCK_PILE), List.of(
+                ConfigFilter.of("rocks"),
                 CountPlacement.of(UniformInt.of(6, 12)),
                 InSquarePlacement.spread(),
                 HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.top()),
@@ -158,6 +161,7 @@ public class ModCavePlacements {
         ));
 
         PlacementUtils.register(context, BASALT_ROCK_PILE, holdergetter.getOrThrow(ModCaveFeatures.BASALT_ROCK_PILE), List.of(
+                ConfigFilter.of("rocks"),
                 CountPlacement.of(UniformInt.of(8, 24)),
                 InSquarePlacement.spread(),
                 HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(8), VerticalAnchor.belowTop(8)),

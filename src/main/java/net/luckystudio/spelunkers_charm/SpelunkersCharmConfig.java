@@ -37,7 +37,7 @@ public class SpelunkersCharmConfig {
                 .define("tremors", true);
 
         ROCKS = COMMON_BUILDER
-                .comment("Do rocks generate around the world")
+                .comment("Whether small rock piles (stone, deepslate, dripstone and basalt rocks) generate around the world")
                 .define("rocks", true);
 
         GEYSERS = COMMON_BUILDER
@@ -49,8 +49,8 @@ public class SpelunkersCharmConfig {
 //                .define("active_geysers", true);
 
         BOULDERS = COMMON_BUILDER
-                .comment("Whether the geysers generate around the world")
-                .define("geysers", true);
+                .comment("Whether boulders generate in caves")
+                .define("boulders", true);
 
         COMMON_BUILDER.pop();
         COMMON_CONFIG = COMMON_BUILDER.build();
