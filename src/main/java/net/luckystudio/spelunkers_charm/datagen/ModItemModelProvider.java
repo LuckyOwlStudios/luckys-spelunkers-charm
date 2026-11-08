@@ -19,5 +19,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.SMALL_LIFT.get());
         basicItem(ModItems.MEDIUM_LIFT.get());
         basicItem(ModItems.LARGE_LIFT.get());
+        basicItem(ModItems.CART_COUPLER.get());
     }
 }

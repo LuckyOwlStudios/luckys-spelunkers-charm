@@ -1,5 +1,6 @@
 package net.luckystudio.spelunkers_charm.entity.custom.minecart;
 
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartLinking;
 import net.luckystudio.spelunkers_charm.init.ModEntityType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -105,14 +106,15 @@ public class BlockMinecart extends AbstractMinecart {
             if (getBlockAmount() <= 0) {
                 this.setCustomDisplay(false);
                 this.setDisplayBlockState(Blocks.AIR.defaultBlockState());
-                Entity newMinecart = new Minecart(level(), this.getX(), this.getY(), this.getZ());
+                Minecart newMinecart = new Minecart(level(), this.getX(), this.getY(), this.getZ());
                 // Copy motion and rotation from the original minecart
                 newMinecart.setPosRaw(this.getX(), this.getY(), this.getZ());
                 newMinecart.setDeltaMovement(this.getDeltaMovement());
                 newMinecart.setYRot(this.getYRot());
                 newMinecart.setXRot(this.getXRot());
-                this.remove(RemovalReason.DISCARDED);
                 level().addFreshEntity(newMinecart);
+                CartLinking.transferLinks(this, newMinecart);
+                this.remove(RemovalReason.DISCARDED);
             }
             player.playNotifySound(SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1.0F, 1.0F);
             updateName();

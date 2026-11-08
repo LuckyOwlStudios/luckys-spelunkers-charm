@@ -17,8 +17,14 @@ Work In Progress section is started.
 # Work In Progress
 
 **Added:**
+- Locomotive: shift-right-click a blast furnace onto a minecart. Right-click it to open its fuel slot (anything that burns in a furnace works, and lasts twice as long). Shift-right-click to start it driving away from you, or to stop it. It's faster than a furnace minecart and pulls any carts coupled to it.
+- Minecart with Jukebox: shift-right-click a jukebox onto a minecart. Put a music disc in and the music follows the cart. Right-click again to take the disc out. Detector rails give the same comparator signal as a jukebox.
+- Cart Coupler: click one minecart, then another, to couple them with a chain. Coupled carts stay together, so a locomotive can pull a whole train. Each cart can couple to two others, one in front and one behind. Sneak-click a cart to uncouple it. Crafted from two iron ingots and a chain.
 - Create and Supplementaries are now listed as optional dependencies. Create adds zinc boulders; Supplementaries lets you tie a boulder to a rope and suspend it in the air, just like a chain. Other rope blocks can be added with the `spelunkers_charm:boulder_ropes` block tag.
 - Tremors shake your camera when [Camera Overhaul](https://modrinth.com/mod/cameraoverhaul) is installed. The shake builds and fades with the tremor, is stronger for bigger tremors and weaker the farther away you are. Camera Overhaul is optional. It can be turned off or scaled with `tremorCameraShake` and `tremorCameraShakeStrength` in the client config.
+
+**Fixed:**
+- Putting a chest, hopper, furnace or TNT into a minecart now uses up the block. It used to be free.
 
 # 5.1.1
 
