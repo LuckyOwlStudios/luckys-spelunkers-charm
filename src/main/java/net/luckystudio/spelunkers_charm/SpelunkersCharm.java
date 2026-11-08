@@ -75,9 +75,12 @@ public class SpelunkersCharm
             SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, ModSurfaceRuleData.cave());
             // Biome stones are generated as part of the terrain (surface step), replacing base stone per biome.
             // The config option needs a restart, it's read once here.
+            // This must be BEFORE_BEDROCK: TerraBlender puts AFTER_BEDROCK rules inside vanilla's
+            // "above preliminary surface" check, so a rule that only runs below the surface would never fire there.
+            // Our rule skips the deepslate gradient (y 8 and below), so it never touches the bedrock floor.
             if (SpelunkersCharmConfig.STONE_REPLACERS.get()) {
                 SurfaceRuleManager.addToDefaultSurfaceRulesAtStage(SurfaceRuleManager.RuleCategory.OVERWORLD,
-                        SurfaceRuleManager.RuleStage.AFTER_BEDROCK, 0, ModSurfaceRuleData.biomeStones());
+                        SurfaceRuleManager.RuleStage.BEFORE_BEDROCK, 0, ModSurfaceRuleData.biomeStones());
             }
         });
     }
