@@ -23,7 +23,7 @@ public class ModEntityType {
     public static final Supplier<EntityType<Tremor>>TREMOR =
             ENTITY_TYPES.register("tremor", () -> EntityType.Builder.of(Tremor::new, MobCategory.MISC)
                     .sized(0.0F, 0.0F)
-                    .clientTrackingRange(0)
+                    .clientTrackingRange(4) // 4 chunks, so nearby clients get the tremor for camera shake
                     .build("tremor"));
 
     public static final Supplier<EntityType<Boulder>> BOULDER =

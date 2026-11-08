@@ -21,6 +21,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -77,6 +78,7 @@ public class SpelunkersCharmClient {
         event.registerEntityRenderer(ModEntityType.MEDIUM_LIFT.get(), MediumLiftRenderer::new);
         event.registerEntityRenderer(ModEntityType.LARGE_LIFT.get(), LargeLiftRenderer::new);
         event.registerEntityRenderer(ModEntityType.BOULDER.get(), BoulderRenderer::new);
+        event.registerEntityRenderer(ModEntityType.TREMOR.get(), NoopRenderer::new);
         event.registerEntityRenderer(ModEntityType.ROCK.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(ModEntityType.ICE_BALL.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(ModEntityType.DEEPSLATE_ROCK.get(), ThrownItemRenderer::new);

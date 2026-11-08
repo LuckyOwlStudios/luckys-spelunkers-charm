@@ -15,7 +15,9 @@ Work In Progress section is started.
 | [5.0.6](#506)                         | `2025-11-25` |
 
 # Work In Progress
-- Nothing yet.
+
+**Added:**
+- Tremors shake your camera when [Camera Overhaul](https://modrinth.com/mod/cameraoverhaul) is installed. The shake builds and fades with the tremor, is stronger for bigger tremors and weaker the farther away you are. Camera Overhaul is optional. It can be turned off or scaled with `tremorCameraShake` and `tremorCameraShakeStrength` in the client config.
 
 # 5.1.1
 
