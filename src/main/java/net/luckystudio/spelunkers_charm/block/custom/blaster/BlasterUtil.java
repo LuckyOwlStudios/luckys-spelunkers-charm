@@ -5,11 +5,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -17,77 +16,87 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
-public class BlasterUtil {
+/**
+ * Shared jet logic for blasters and erupting geysers. Called every tick on both sides:
+ * the client spawns the particles locally (no particle packets), the server plays the sound,
+ * and both sides push entities (the client side is what moves the local player smoothly).
+ */
+public final class BlasterUtil {
+    private static final int PARTICLES_PER_TICK = 2;
+    private static final double PARTICLE_SPREAD = 0.75;
+    private static final double PARTICLE_SPEED = 0.25;
+    private static final double RANGE = 5.0;
+    private static final double PUSH = 0.1;
+    private static final float DAMAGE = 2.0F;
+    private static final int EFFECT_TICKS = 40;
 
-    public static void shoot(Level level, BlockPos pos, GeyserType geyserType, Direction facing) {
-        if (geyserType == GeyserType.NONE) return;
+    private BlasterUtil() {}
 
-        boolean isLava = geyserType == GeyserType.LAVA;
-        boolean isWater = geyserType == GeyserType.WATER;
-        boolean isSnow = geyserType == GeyserType.SNOW;
+    public static void shoot(Level level, BlockPos pos, GeyserType type, Direction facing) {
+        if (type == GeyserType.NONE) return;
 
-        if (level.getGameTime() % 5 == 0) {
-            level.playSound(null, pos.above(), SoundEvents.BLAZE_SHOOT, SoundSource.BLOCKS, 1.0f, 0.75f);
+        if (level.isClientSide) {
+            spawnParticles(level, pos, type, facing);
+        } else if (level.getGameTime() % 5 == 0) {
+            level.playSound(null, pos.above(), SoundEvents.BLAZE_SHOOT, SoundSource.BLOCKS, 1.0F, 0.75F);
         }
 
-        ParticleOptions mainParticle = isLava ? ParticleTypes.FLAME :
-                isWater ? ParticleTypes.CLOUD :
-                        ParticleTypes.SNOWFLAKE;
+        affectEntities(level, pos, type, facing);
+    }
 
-        ParticleOptions secondaryParticle = isLava ? ParticleTypes.SMOKE :
-                ParticleTypes.DRIPPING_WATER;
+    private static void spawnParticles(Level level, BlockPos pos, GeyserType type, Direction facing) {
+        ParticleOptions main = switch (type) {
+            case LAVA -> ParticleTypes.FLAME;
+            case WATER -> ParticleTypes.CLOUD;
+            default -> ParticleTypes.SNOWFLAKE;
+        };
+        ParticleOptions secondary = type == GeyserType.LAVA ? ParticleTypes.SMOKE : ParticleTypes.DRIPPING_WATER;
 
-        Vec3 blockCenter = Vec3.atCenterOf(pos);
-        Vec3 directionVec = Vec3.atLowerCornerOf(facing.getNormal()).normalize();
-        Vec3 particleOrigin = blockCenter.add(directionVec.scale(0.6));
-        Vec3 particleVelocity = directionVec.scale(0.25);
+        double vx = facing.getStepX() * PARTICLE_SPEED;
+        double vy = facing.getStepY() * PARTICLE_SPEED;
+        double vz = facing.getStepZ() * PARTICLE_SPEED;
+        double originX = pos.getX() + 0.5 + facing.getStepX() * 0.6;
+        double originY = pos.getY() + 0.5 + facing.getStepY() * 0.6;
+        double originZ = pos.getZ() + 0.5 + facing.getStepZ() * 0.6;
+        RandomSource random = level.random;
 
-        if (level instanceof ServerLevel serverLevel) {
-            for (int i = 0; i < 2; i++) { // Increase to 5 particles per tick for visibility
-                double offsetX = 0, offsetY = 0, offsetZ = 0;
-
-                // Randomize offset perpendicular to facing axis
-                switch (facing.getAxis()) {
-                    case X -> {
-                        offsetY = (level.random.nextDouble() - 0.5) * 0.75;
-                        offsetZ = (level.random.nextDouble() - 0.5) * 0.75;
-                    }
-                    case Y -> {
-                        offsetX = (level.random.nextDouble() - 0.5) * 0.75;
-                        offsetZ = (level.random.nextDouble() - 0.5) * 0.75;
-                    }
-                    case Z -> {
-                        offsetX = (level.random.nextDouble() - 0.5) * 0.75;
-                        offsetY = (level.random.nextDouble() - 0.5) * 0.75;
-                    }
-                }
-
-                double px = particleOrigin.x + offsetX;
-                double py = particleOrigin.y + offsetY;
-                double pz = particleOrigin.z + offsetZ;
-
-                serverLevel.sendParticles(mainParticle, px, py, pz, 0, particleVelocity.x, particleVelocity.y, particleVelocity.z, 1.0);
-                serverLevel.sendParticles(secondaryParticle, px, py, pz, 0, particleVelocity.x, particleVelocity.y, particleVelocity.z, 1.0);
+        for (int i = 0; i < PARTICLES_PER_TICK; i++) {
+            // Spread the particles across the face the jet comes out of
+            double a = (random.nextDouble() - 0.5) * PARTICLE_SPREAD;
+            double b = (random.nextDouble() - 0.5) * PARTICLE_SPREAD;
+            double x = originX, y = originY, z = originZ;
+            switch (facing.getAxis()) {
+                case X -> { y += a; z += b; }
+                case Y -> { x += a; z += b; }
+                case Z -> { x += a; y += b; }
             }
+            level.addParticle(main, x, y, z, vx, vy, vz);
+            level.addParticle(secondary, x, y, z, vx, vy, vz);
         }
+    }
 
-        // Damage logic
-        DamageSource damageSource = isLava ? level.damageSources().source(DamageTypes.ON_FIRE) :
-                isSnow ? level.damageSources().source(DamageTypes.FREEZE) :
-                        null;
+    private static void affectEntities(Level level, BlockPos pos, GeyserType type, Direction facing) {
+        Vec3 direction = Vec3.atLowerCornerOf(facing.getNormal());
+        AABB area = new AABB(pos).move(direction).expandTowards(direction.scale(RANGE));
+        List<LivingEntity> targets = level.getEntitiesOfClass(LivingEntity.class, area);
+        if (targets.isEmpty()) return;
 
-        AABB damageBox = new AABB(pos).move(directionVec).expandTowards(directionVec.scale(5));
-        List<LivingEntity> targets = level.getEntitiesOfClass(LivingEntity.class, damageBox);
+        DamageSource damage = switch (type) {
+            case LAVA -> level.damageSources().onFire();
+            case SNOW -> level.damageSources().freeze();
+            default -> null;
+        };
+        Vec3 push = direction.scale(PUSH);
+
         for (LivingEntity entity : targets) {
-            if (!isWater && damageSource != null) {
-                entity.hurt(damageSource, 2.0F);
+            if (damage != null) {
+                entity.hurt(damage, DAMAGE);
             }
-            entity.addDeltaMovement(directionVec.scale(0.1));
-
-            if (isLava) {
-                entity.setRemainingFireTicks(40);
-            } else if (isSnow) {
-                entity.setTicksFrozen(40);
+            entity.addDeltaMovement(push);
+            if (type == GeyserType.LAVA) {
+                entity.setRemainingFireTicks(EFFECT_TICKS);
+            } else if (type == GeyserType.SNOW) {
+                entity.setTicksFrozen(EFFECT_TICKS);
             }
         }
     }

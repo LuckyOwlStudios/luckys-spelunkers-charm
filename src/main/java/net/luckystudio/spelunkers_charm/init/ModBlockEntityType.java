@@ -1,6 +1,7 @@
 package net.luckystudio.spelunkers_charm.init;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
+import net.luckystudio.spelunkers_charm.block.custom.GeyserBlockEntity;
 import net.luckystudio.spelunkers_charm.block.custom.blaster.BlasterBlockEntity;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -16,6 +17,10 @@ public class ModBlockEntityType {
     public static final Supplier<BlockEntityType<BlasterBlockEntity>> BLASTER_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("blaster_block_entity", () -> BlockEntityType.Builder.of(
                     BlasterBlockEntity::new, ModBlocks.BLASTER.get()).build(null));
+
+    public static final Supplier<BlockEntityType<GeyserBlockEntity>> GEYSER_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("geyser_block_entity", () -> BlockEntityType.Builder.of(
+                    GeyserBlockEntity::new, ModBlocks.BASALT_GEYSER.get(), ModBlocks.DEEPSLATE_GEYSER.get()).build(null));
 
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);

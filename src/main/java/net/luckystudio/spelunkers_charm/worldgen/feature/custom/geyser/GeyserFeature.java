@@ -3,15 +3,17 @@ package net.luckystudio.spelunkers_charm.worldgen.feature.custom.geyser;
 import com.mojang.serialization.Codec;
 import net.luckystudio.spelunkers_charm.SpelunkersCharmConfig;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
-// Copy this class from the HugeBrownMushroomFeature class in the Minecraft source code
+/**
+ * Places a geyser with two blocks of fluid under it, walled in on the sides of the top fluid block.
+ */
 public class GeyserFeature extends Feature<GeyserConfiguration> {
 
     public GeyserFeature(Codec<GeyserConfiguration> codec) {
@@ -21,18 +23,25 @@ public class GeyserFeature extends Feature<GeyserConfiguration> {
     @Override
     public boolean place(FeaturePlaceContext<GeyserConfiguration> context) {
         if (!SpelunkersCharmConfig.GEYSERS.get()) return false;
-        WorldGenLevel worldgenlevel = context.level();
-        BlockPos blockpos = context.origin();
-        ResourceKey<Biome> biome = worldgenlevel.getBiome(blockpos).getKey();
-        if (biome == Biomes.DEEP_DARK) return false;
-        GeyserConfiguration geyserConfiguration = context.config();
-        this.setBlock(worldgenlevel, blockpos, geyserConfiguration.geyserProvider.getState(RandomSource.create(), blockpos));
-        this.setBlock(worldgenlevel, blockpos.north().below(), geyserConfiguration.blockProvider.getState(RandomSource.create(), blockpos.north().below()));
-        this.setBlock(worldgenlevel, blockpos.south().below(), geyserConfiguration.blockProvider.getState(RandomSource.create(), blockpos.south().below()));
-        this.setBlock(worldgenlevel, blockpos.east().below(), geyserConfiguration.blockProvider.getState(RandomSource.create(), blockpos.east().below()));
-        this.setBlock(worldgenlevel, blockpos.west().below(), geyserConfiguration.blockProvider.getState(RandomSource.create(), blockpos.west().below()));
-        this.setBlock(worldgenlevel, blockpos.below().below(), geyserConfiguration.liquidProvider.getState(RandomSource.create(), blockpos.below().below()));
-        this.setBlock(worldgenlevel, blockpos.below(), geyserConfiguration.liquidProvider.getState(RandomSource.create(), blockpos.below()));
+
+        WorldGenLevel level = context.level();
+        BlockPos origin = context.origin();
+        if (level.getBiome(origin).is(Biomes.DEEP_DARK)) return false;
+
+        GeyserConfiguration config = context.config();
+        RandomSource random = context.random();
+        BlockPos fluidPos = origin.below();
+
+        place(level, random, origin, config.geyserProvider);
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
+            place(level, random, fluidPos.relative(direction), config.blockProvider);
+        }
+        place(level, random, fluidPos.below(), config.liquidProvider);
+        place(level, random, fluidPos, config.liquidProvider);
         return true;
+    }
+
+    private void place(WorldGenLevel level, RandomSource random, BlockPos pos, BlockStateProvider provider) {
+        this.setBlock(level, pos, provider.getState(random, pos));
     }
 }
