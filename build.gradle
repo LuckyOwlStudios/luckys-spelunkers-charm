@@ -32,6 +32,18 @@ repositories {
         name = "Gegy"
         url = uri("https://maven.gegy.dev")
     }
+    // Curse Maven, used only for dev-only runtime mods like Configured
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Curse Maven"
+                url = "https://cursemaven.com"
+            }
+        }
+        filter {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 base {
@@ -150,6 +162,11 @@ dependencies {
             attribute(mappingsAttribute, "mojmap")
         }
     }
+
+    // Configured (MrCrayfish): in-game config editor for dev runs only.
+    // localRuntime keeps it off the compile classpath, out of the built jar and out of neoforge.mods.toml.
+    // 2.6.0 is used because later 1.21.1 builds require NeoForge 21.1.211+, newer than neo_version.
+    localRuntime "curse.maven:configured-457570:${configured_file_id}"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
