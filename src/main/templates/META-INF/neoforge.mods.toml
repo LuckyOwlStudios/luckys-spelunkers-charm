@@ -99,6 +99,22 @@ side="BOTH"
     ordering="AFTER"
     side="CLIENT"
 
+[[dependencies.${mod_id}]]
+    modId="create"
+    type="optional"
+    reason="New modded ores support: zinc boulders generate when Create is installed."
+    versionRange="*"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="supplementaries"
+    type="optional"
+    reason="Able to tie and suspend boulders in the air with a rope."
+    versionRange="*"
+    ordering="NONE"
+    side="BOTH"
+
 #[modproperties.${mod_id}."yumi:entrypoints"]
 #"lambdynlights:initializer" = "net.luckystudio.spelunkers_charm.SpelunkersCharmDynamicLightsInitializer"
 

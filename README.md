@@ -136,6 +136,13 @@ These are in the mod but not finished yet:
 
 **Recommended:** a dynamic lights mod such as [LambDynamicLights](https://modrinth.com/mod/lambdynamiclights) so the helmets give off light.
 
+**Optional dependencies** (none are needed, they just add extra features when installed):
+
+| Mod | What it adds |
+|---|---|
+| [Create](https://modrinth.com/mod/create) | New modded ores support: zinc boulders. |
+| [Supplementaries](https://modrinth.com/mod/supplementaries) | Able to tie and suspend boulders in the air with a rope. |
+
 Install it like any other NeoForge mod: drop the jar (and TerraBlender) into your `mods` folder. It's needed on both the client and the server.
 
 ## Configuration
@@ -188,6 +195,7 @@ Settings live in `config/spelunkers_charm-common.toml`.
 - **Tremor-free biomes:** add a biome to `spelunkers_charm:no_tremors` to keep tremors out of it.
 - **Modded ores:** boulders read the common `c:` tags, and the optional stone replacers only replace vanilla ores they have a counterpart for.
 - **Dynamic lights:** both helmets ship with LambDynamicLights data.
+- **Hanging boulders:** a boulder placed under a vertical chain hangs from it instead of falling. With Supplementaries, a rope works too. Other rope blocks can be added to the `spelunkers_charm:boulder_ropes` block tag.
 
 ## Building from source
 

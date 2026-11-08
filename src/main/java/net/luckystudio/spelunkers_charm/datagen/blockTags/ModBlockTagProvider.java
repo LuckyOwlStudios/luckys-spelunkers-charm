@@ -4,6 +4,7 @@ import net.luckystudio.spelunkers_charm.SpelunkersCharm;
 import net.luckystudio.spelunkers_charm.init.ModBlocks;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -52,6 +53,11 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .addTag(ModBlockTags.OVERWORLD_REPLACEABLE)
                 .add(Blocks.DIORITE)
                 .add(Blocks.ANDESITE)
+        ;
+
+        // Optional: only present when Supplementaries is installed
+        tag(ModBlockTags.BOULDER_ROPES)
+                .addOptional(ResourceLocation.fromNamespaceAndPath("supplementaries", "rope"))
         ;
 
         tag(ModBlockTags.PERMAFROST_REPLACEABLE)

@@ -15,7 +15,9 @@ Work In Progress section is started.
 | [5.0.6](#506)                         | `2025-11-25` |
 
 # Work In Progress
-- Nothing yet.
+
+**Added:**
+- Create and Supplementaries are now listed as optional dependencies. Create adds zinc boulders; Supplementaries lets you tie a boulder to a rope and suspend it in the air, just like a chain. Other rope blocks can be added with the `spelunkers_charm:boulder_ropes` block tag.
 
 # 5.1.1
 

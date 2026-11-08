@@ -13,6 +13,9 @@ public class ModBlockTags {
     public static final TagKey<Block> WILDSTONE_REPLACEABLE = createTag("wildstone_replaceable");
     public static final TagKey<Block> PERMAFROST_REPLACEABLE = createTag("permafrost_replaceable");
 
+    // Blocks a boulder can hang from as a rope (e.g. Supplementaries' rope)
+    public static final TagKey<Block> BOULDER_ROPES = createTag("boulder_ropes");
+
     private static TagKey<Block> createTag(String name) {
         return BlockTags.create(SpelunkersCharm.id(name));
     }
