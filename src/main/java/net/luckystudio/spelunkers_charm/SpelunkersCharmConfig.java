@@ -46,6 +46,8 @@ public class SpelunkersCharmConfig {
     // === CLIENT CONFIGURATION ===
     public static String CATEGORY_CLIENT = "client";
     public static ModConfigSpec.DoubleValue TREMOR_VOLUME;
+    public static ModConfigSpec.BooleanValue TREMOR_CAMERA_SHAKE;
+    public static ModConfigSpec.DoubleValue TREMOR_CAMERA_SHAKE_STRENGTH;
 
     static {
         ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
@@ -167,6 +169,12 @@ public class SpelunkersCharmConfig {
         CLIENT_BUILDER.comment("Client settings").push(CATEGORY_CLIENT);
 //        TREMOR_VOLUME = CLIENT_BUILDER.comment("The volume of tremors")
 //                .defineInRange("tremorVolume", 0.75, 0.0,1.0);
+        TREMOR_CAMERA_SHAKE = CLIENT_BUILDER
+                .comment("Shake the camera during nearby tremors. Needs the Camera Overhaul mod, does nothing without it")
+                .define("tremorCameraShake", true);
+        TREMOR_CAMERA_SHAKE_STRENGTH = CLIENT_BUILDER
+                .comment("How strong tremor camera shake is. 1.0 is the default, 0.0 turns it off")
+                .defineInRange("tremorCameraShakeStrength", 1.0, 0.0, 3.0);
         CLIENT_BUILDER.pop();
 
         CLIENT_CONFIG = CLIENT_BUILDER.build();
