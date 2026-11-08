@@ -3,6 +3,7 @@ package net.luckystudio.spelunkers_charm.block.custom.boulder;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.luckystudio.spelunkers_charm.block.util.ModBlockStateProperties;
+import net.luckystudio.spelunkers_charm.datagen.blockTags.ModBlockTags;
 import net.luckystudio.spelunkers_charm.block.util.enums.BlockPart;
 import net.luckystudio.spelunkers_charm.block.custom.boulder.entity.Boulder;
 import net.minecraft.ChatFormatting;
@@ -104,9 +105,12 @@ public class BoulderBlock extends Block {
                 .setValue(BLOCK_PART, BlockPart.BOTTOM_MIDDLE);
     }
 
-    private HangingType getHangType(BlockState hangingFromState) {
+    private static HangingType getHangType(BlockState hangingFromState) {
         if (hangingFromState.getBlock() instanceof ChainBlock && hangingFromState.getValue(BlockStateProperties.AXIS) == Direction.Axis.Y) {
             return HangingType.CHAINED;
+        }
+        if (hangingFromState.is(ModBlockTags.BOULDER_ROPES)) {
+            return HangingType.TIED;
         }
         return HangingType.NONE;
     }
@@ -262,9 +266,7 @@ public class BoulderBlock extends Block {
     }
 
     private boolean isSuspended(Level level, BlockPos bottomMiddlePos) {
-        BlockState state = level.getBlockState(bottomMiddlePos.above(3));
-        return state.getBlock() instanceof ChainBlock &&
-                state.getValue(BlockStateProperties.AXIS) == Direction.Axis.Y;
+        return getHangType(level.getBlockState(bottomMiddlePos.above(3))) != HangingType.NONE;
     }
 
     @Override
