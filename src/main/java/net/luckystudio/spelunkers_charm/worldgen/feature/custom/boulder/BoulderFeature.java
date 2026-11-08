@@ -37,9 +37,13 @@ public class BoulderFeature extends Feature<NoneFeatureConfiguration> {
         BoulderOre ore = BoulderUtils.pickOre(context.random(), isBelowZero);
         BoulderType boulderType = BoulderType.of(ore, isLushCave);
 
-        // Handle the outer blocks around the boulder
+        // The base under the boulder copies the natural floor it landed on, so it blends in.
+        // Only falls back to a biome-based block when the floor is something unnatural (ores, wood, our own blocks...).
+        BlockState floorState = world.getBlockState(origin.below());
         BlockState surroundingBlockState;
-        if (isBelowZero) {
+        if (isNaturalFloor(floorState)) {
+            surroundingBlockState = floorState;
+        } else if (isBelowZero) {
             surroundingBlockState = Blocks.COBBLED_DEEPSLATE.defaultBlockState();
         } else if (isLushCave) {
             surroundingBlockState = Blocks.MOSS_BLOCK.defaultBlockState();
@@ -51,15 +55,35 @@ public class BoulderFeature extends Feature<NoneFeatureConfiguration> {
 
         BoulderUtils.placeBoulder(world, origin, boulderType, HangingType.NONE, Block.UPDATE_ALL);
 
-        // Set surrounding blocks in a 5x5 under the origin
+        // Fill gaps in a 5x5 under the boulder so it never hangs over a hole. Existing solid floor is left alone.
         for (int x = -2; x <= 2; x++) {
             for (int z = -2; z <= 2; z++) {
                 BlockPos pos = origin.offset(x, -1, z);
-                if (world.getBlockState(pos).canBeReplaced() || world.getBlockState(pos).is(BlockTags.AZALEA_ROOT_REPLACEABLE)) {
+                if (world.getBlockState(pos).canBeReplaced()) {
                     this.setBlock(world, pos, surroundingBlockState);
                 }
             }
         }
         return true;
+    }
+
+    private static boolean isNaturalFloor(BlockState state) {
+        if (!state.isSolid() || state.hasBlockEntity()) return false;
+        return state.is(BlockTags.BASE_STONE_OVERWORLD)
+                || state.is(BlockTags.DIRT)
+                || state.is(BlockTags.SAND)
+                || state.is(BlockTags.TERRACOTTA)
+                || state.is(BlockTags.ICE)
+                || state.is(BlockTags.SNOW)
+                || state.is(Blocks.GRAVEL)
+                || state.is(Blocks.CLAY)
+                || state.is(Blocks.COBBLESTONE)
+                || state.is(Blocks.COBBLED_DEEPSLATE)
+                || state.is(Blocks.MOSSY_COBBLESTONE)
+                || state.is(Blocks.DRIPSTONE_BLOCK)
+                || state.is(Blocks.CALCITE)
+                || state.is(Blocks.SMOOTH_BASALT)
+                || state.is(Blocks.SANDSTONE)
+                || state.is(Blocks.RED_SANDSTONE);
     }
 }
