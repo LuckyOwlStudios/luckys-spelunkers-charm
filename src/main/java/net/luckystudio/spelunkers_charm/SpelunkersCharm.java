@@ -53,6 +53,7 @@ public class SpelunkersCharm
         ModSoundEvents.register(modEventBus);
         ModFeature.register(modEventBus);
         ModPlacementModifiers.register(modEventBus);
+        ModSurfaceRules.register(modEventBus);
         ModMenuTypes.register(modEventBus);
         ModDataComponents.register(modEventBus);
 
@@ -72,6 +73,12 @@ public class SpelunkersCharm
             Regions.register(new ModRegion(SpelunkersCharm.id("spelunkers_charm"), 1));
             // Register our surface rules
             SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, ModSurfaceRuleData.cave());
+            // Biome stones are generated as part of the terrain (surface step), replacing base stone per biome.
+            // The config option needs a restart, it's read once here.
+            if (SpelunkersCharmConfig.STONE_REPLACERS.get()) {
+                SurfaceRuleManager.addToDefaultSurfaceRulesAtStage(SurfaceRuleManager.RuleCategory.OVERWORLD,
+                        SurfaceRuleManager.RuleStage.AFTER_BEDROCK, 0, ModSurfaceRuleData.biomeStones());
+            }
         });
     }
 
