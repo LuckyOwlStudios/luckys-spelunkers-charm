@@ -34,8 +34,6 @@ public class ModBiomeModifier {
 
     public static final ResourceKey<BiomeModifier> ICE_CAVE_UNDERGROUND_DECORATION = registerKey("ice_cave_vegetal_decoration");
 
-    public static final ResourceKey<BiomeModifier> DESERT_CAVE_UNDERGROUND_DECORATION = registerKey("desert_cave_vegetal_decoration");
-
     public static final ResourceKey<BiomeModifier> JUNGLE_CAVE_UNDERGROUND_DECORATION = registerKey("jungle_cave_vegetal_decoration");
 
     public static final ResourceKey<BiomeModifier> NETHER_UNDERGROUND_DECORATION = registerKey("nether_vegetal_decoration");
@@ -58,8 +56,6 @@ public class ModBiomeModifier {
 
         context.register(ICE_CAVE_UNDERGROUND_DECORATION, new BiomeModifiers.AddFeaturesBiomeModifier(biomes.getOrThrow(ModBiomeTags.IS_COLD_CAVE),
                 HolderSet.direct(List.of(
-                        placedFeatures.getOrThrow(ModCavePlacements.PERMAFROST),
-
                         placedFeatures.getOrThrow(ModCavePlacements.ORE_SILT),
                         placedFeatures.getOrThrow(ModCavePlacements.ICE_PILE),
                         placedFeatures.getOrThrow(ModCavePlacements.LARGE_ICICLE),
@@ -67,16 +63,8 @@ public class ModBiomeModifier {
                         placedFeatures.getOrThrow(ModCavePlacements.BOTTOM_ICE_SHEET)
                 )), GenerationStep.Decoration.UNDERGROUND_DECORATION));
 
-        context.register(DESERT_CAVE_UNDERGROUND_DECORATION, new BiomeModifiers.AddFeaturesBiomeModifier(
-                biomes.getOrThrow(ModBiomeTags.IS_HOT_CAVE),
-                HolderSet.direct(List.of(
-                        placedFeatures.getOrThrow(ModCavePlacements.DUNESTONE)
-                )), GenerationStep.Decoration.UNDERGROUND_ORES));
-
         context.register(JUNGLE_CAVE_UNDERGROUND_DECORATION, new BiomeModifiers.AddFeaturesBiomeModifier(biomes.getOrThrow(ModBiomeTags.IS_JUNGLE_CAVE),
                 HolderSet.direct(List.of(
-                        placedFeatures.getOrThrow(ModCavePlacements.WILDSTONE),
-
                         placedFeatures.getOrThrow(ModCavePlacements.NEW_LUSH_VEGETATION),
                         placedFeatures.getOrThrow(CavePlacements.LUSH_CAVES_CEILING_VEGETATION)
                 )), GenerationStep.Decoration.UNDERGROUND_DECORATION));
