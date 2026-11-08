@@ -4,8 +4,10 @@ import net.luckystudio.spelunkers_charm.SpelunkersCharm;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.BlockMinecart;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.JukeboxMinecart;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.LocomotiveMinecart;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartLantern;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartLanterns;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartLinking;
-import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.ClientCartLinks;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.ClientCartData;
 import net.luckystudio.spelunkers_charm.init.ModItems;
 import net.luckystudio.spelunkers_charm.item.custom.CartCouplerItem;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,10 +16,12 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.*;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -138,11 +142,41 @@ public class MinecartEvents {
         }
     }
 
-    /** Keeps coupled carts together. */
+    /** Hangs a lantern on any minecart, or takes it off with shears. */
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void onLanternUse(PlayerInteractEvent.EntityInteract event) {
+        if (!(event.getTarget() instanceof AbstractMinecart cart)) return;
+        ItemStack stack = event.getItemStack();
+        Player player = event.getEntity();
+        boolean clientSide = event.getLevel().isClientSide();
+
+        if (stack.is(Items.SHEARS)) {
+            if (CartLanterns.getLantern(cart) == CartLantern.NONE) return;
+            if (!clientSide) {
+                CartLanterns.takeOff(cart, player);
+                stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(event.getHand()));
+            }
+        } else if (CartLantern.fromStack(stack) != CartLantern.NONE && !player.isSecondaryUseActive()) {
+            // Sneaking puts the lantern inside the cart as a block instead, and block carts keep adding their own block.
+            if (cart instanceof BlockMinecart) return;
+            if (CartLanterns.getLantern(cart) != CartLantern.NONE) return;
+            if (!clientSide) {
+                CartLanterns.hang(cart, stack, player);
+            }
+        } else {
+            return;
+        }
+        player.swing(event.getHand());
+        event.setCanceled(true);
+        event.setCancellationResult(InteractionResult.sidedSuccess(clientSide));
+    }
+
+    /** Keeps coupled carts together and moves lantern light along with carts. */
     @SubscribeEvent
     public static void onCartTick(EntityTickEvent.Post event) {
         if (event.getEntity() instanceof AbstractMinecart cart && !cart.level().isClientSide()) {
             CartLinking.tick(cart);
+            CartLanterns.tick(cart);
         }
     }
 
@@ -151,12 +185,15 @@ public class MinecartEvents {
     public static void onCartRemoved(EntityLeaveLevelEvent event) {
         if (!(event.getEntity() instanceof AbstractMinecart cart)) return;
         if (event.getLevel().isClientSide()) {
-            ClientCartLinks.remove(cart.getId());
+            ClientCartData.remove(cart.getId());
             return;
         }
         Entity.RemovalReason reason = cart.getRemovalReason();
         if (reason != null && reason.shouldDestroy()) {
             CartLinking.onCartRemoved(cart);
+            CartLanterns.onCartRemoved(cart, reason == Entity.RemovalReason.KILLED);
+        } else {
+            CartLanterns.forget(cart);
         }
     }
 

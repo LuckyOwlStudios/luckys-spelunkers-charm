@@ -23,14 +23,14 @@ public final class CartLinkRenderer {
 
     /** Call with the pose stack at the cart's render position, before the cart itself is rotated. */
     public static void renderLinks(AbstractMinecart cart, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
-        int[] linked = ClientCartLinks.get(cart.getId());
+        int[] linked = ClientCartData.get(cart.getId());
         if (linked.length == 0) return;
 
         for (int otherId : linked) {
             Entity other = cart.level().getEntity(otherId);
             if (!(other instanceof AbstractMinecart)) continue;
             // Draw each chain once: from the cart with the lower id, unless only this cart knows about the link.
-            if (cart.getId() > otherId && ClientCartLinks.isLinked(otherId, cart.getId())) continue;
+            if (cart.getId() > otherId && ClientCartData.isLinked(otherId, cart.getId())) continue;
             renderChain(cart.getPosition(partialTicks), other.getPosition(partialTicks), poseStack, buffer, packedLight);
         }
     }

@@ -3,6 +3,7 @@ package net.luckystudio.spelunkers_charm.entity.custom.minecart.override;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
 import net.luckystudio.spelunkers_charm.SpelunkersCharmClient;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartLanternRenderer;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartLinkRenderer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -31,5 +32,6 @@ public class OverrideMinecartRenderer extends MinecartRenderer<AbstractMinecart>
     public void render(AbstractMinecart entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
         CartLinkRenderer.renderLinks(entity, partialTicks, poseStack, buffer, packedLight);
+        CartLanternRenderer.renderLantern(entity, entityYaw, poseStack, buffer);
     }
 }

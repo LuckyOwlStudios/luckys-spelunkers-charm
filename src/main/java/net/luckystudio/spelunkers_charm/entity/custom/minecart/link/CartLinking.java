@@ -1,7 +1,7 @@
 package net.luckystudio.spelunkers_charm.entity.custom.minecart.link;
 
 import net.luckystudio.spelunkers_charm.init.ModAttachmentTypes;
-import net.luckystudio.spelunkers_charm.network.CartLinkPayload;
+import net.luckystudio.spelunkers_charm.network.CartSyncPayload;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -102,12 +102,16 @@ public final class CartLinking {
     }
 
     /**
-     * Moves couplings from one cart to its replacement, for when a minecart is turned into
+     * Moves couplings (and the lantern) from one cart to its replacement, for when a minecart is turned into
      * another kind of cart (like putting a chest or jukebox in it).
      */
     public static void transferLinks(AbstractMinecart from, AbstractMinecart to) {
+        CartLanterns.transfer(from, to);
         CartLinks links = getLinks(from);
-        if (links.isEmpty()) return;
+        if (links.isEmpty()) {
+            sync(to);
+            return;
+        }
         for (UUID id : links.links()) {
             if (findCart(from, id) instanceof AbstractMinecart other) {
                 setLinks(other, getLinks(other).without(from.getUUID()).with(to.getUUID()));
@@ -117,6 +121,7 @@ public final class CartLinking {
         setLinks(to, links);
         // Clear the old cart so removing it doesn't unlink the partners again.
         setLinks(from, CartLinks.EMPTY);
+        sync(to);
     }
 
     /**
@@ -156,13 +161,13 @@ public final class CartLinking {
         return null;
     }
 
-    public static CartLinkPayload payloadFor(AbstractMinecart cart) {
+    public static CartSyncPayload payloadFor(AbstractMinecart cart) {
         List<Integer> ids = new ArrayList<>();
         for (UUID id : getLinks(cart).links()) {
             Entity other = findCart(cart, id);
             if (other != null) ids.add(other.getId());
         }
-        return new CartLinkPayload(cart.getId(), ids);
+        return new CartSyncPayload(cart.getId(), ids, CartLanterns.getLantern(cart).ordinal());
     }
 
     /** Sends this cart's links to everyone who can see it. */
@@ -173,7 +178,7 @@ public final class CartLinking {
 
     /** Sends this cart's links to one player, when they start seeing it. */
     public static void syncTo(AbstractMinecart cart, ServerPlayer player) {
-        if (getLinks(cart).isEmpty()) return;
+        if (getLinks(cart).isEmpty() && CartLanterns.getLantern(cart) == CartLantern.NONE) return;
         PacketDistributor.sendToPlayer(player, payloadFor(cart));
     }
 }

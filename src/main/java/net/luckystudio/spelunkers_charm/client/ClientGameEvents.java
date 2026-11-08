@@ -1,7 +1,7 @@
 package net.luckystudio.spelunkers_charm.client;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
-import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.ClientCartLinks;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.ClientCartData;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -12,6 +12,6 @@ public class ClientGameEvents {
 
     @SubscribeEvent
     public static void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
-        ClientCartLinks.clear();
+        ClientCartData.clear();
     }
 }
