@@ -68,20 +68,54 @@ public class CandleHelmet extends ArmorItem {
         }
     }
 
+    // Wick position in CandleHelmetModel space, in model pixels relative to the head pivot.
+    // The candle part sits at (0, -12.5, -5): 12.5px above the pivot and 5px in front of the face.
+    private static final double WICK_UP_PX = 12.5;
+    private static final double WICK_FORWARD_PX = 5.0;
+    // PlayerRenderer scales the player model by 15/16.
+    private static final double PLAYER_MODEL_SCALE = 0.9375;
+    // Head pivot height above the feet in model pixels (24px), and how far HumanoidModel lowers it when crouching.
+    private static final double HEAD_PIVOT_PX = 24.0;
+    private static final double CROUCH_HEAD_DROP_PX = 4.2;
+
     private void spawnCandleParticles(Level level, LivingEntity living) {
         Random random = new Random();
         if (random.nextFloat() >= 0.1f) return; // 10% chance to spawn particles
 
-        Vec3 position = living.trackingPosition();
-        float yOffset = living.getBbHeight() + 0.25f;
+        Vec3 position = getWickPosition(living);
 
         // Spawn candle flame particles
         level.addParticle(ParticleTypes.SMALL_FLAME,
-                position.x, position.y + yOffset, position.z,
+                position.x, position.y, position.z,
                 0, 0.01, 0);
         level.addParticle(ParticleTypes.SMOKE,
-                position.x, position.y + yOffset, position.z,
+                position.x, position.y, position.z,
                 0, 0.01, 0);
+    }
+
+    /**
+     * World position of the candle wick, following the head's yaw and pitch.
+     */
+    private static Vec3 getWickPosition(LivingEntity living) {
+        double pxToBlocks = living.getScale() * PLAYER_MODEL_SCALE / 16.0;
+        double pivotPx = HEAD_PIVOT_PX;
+        double crouchOffset = 0.0;
+        if (living.isCrouching()) {
+            pivotPx -= CROUCH_HEAD_DROP_PX;
+            // PlayerRenderer#getRenderOffset shifts a crouching player down by 2px (unscaled by the model scale)
+            crouchOffset = -2.0 / 16.0 * living.getScale();
+        }
+        Vec3 headPivot = living.position().add(0.0, pivotPx * pxToBlocks + crouchOffset, 0.0);
+
+        float pitch = living.getXRot();
+        float yaw = living.getYHeadRot();
+        // Forward and up axes of the head, rotated by its pitch and yaw
+        Vec3 forward = Vec3.directionFromRotation(pitch, yaw);
+        Vec3 up = Vec3.directionFromRotation(pitch - 90.0f, yaw);
+
+        return headPivot
+                .add(forward.scale(WICK_FORWARD_PX * pxToBlocks))
+                .add(up.scale(WICK_UP_PX * pxToBlocks));
     }
 
     private boolean isEntityInRain(LivingEntity entity, Level level) {
