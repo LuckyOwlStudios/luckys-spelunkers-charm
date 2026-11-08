@@ -5,9 +5,11 @@ import net.luckystudio.spelunkers_charm.init.ModBlocks;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.DeferredBlock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -135,14 +137,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.WILDSTONE_DIAMOND_ORE.get())
 
                 // Boulders
-                .add(ModBlocks.BOULDER.get())
-                .add(ModBlocks.IRON_BOULDER.get())
-                .add(ModBlocks.COPPER_BOULDER.get())
-                .add(ModBlocks.GOLD_BOULDER.get())
-                .add(ModBlocks.LUSH_BOULDER.get())
-                .add(ModBlocks.LUSH_IRON_BOULDER.get())
-                .add(ModBlocks.LUSH_COPPER_BOULDER.get())
-                .add(ModBlocks.LUSH_GOLD_BOULDER.get())
+                .add(boulders())
 
                 // Geysers
                 .add(ModBlocks.DEEPSLATE_GEYSER.get())
@@ -188,14 +183,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.DUNESTONE_DIAMOND_ORE.get())
                 .add(ModBlocks.WILDSTONE_DIAMOND_ORE.get())
                 .add(ModBlocks.PERMAFROST_DIAMOND_ORE.get())
-                .add(ModBlocks.BOULDER.get())
-                .add(ModBlocks.IRON_BOULDER.get())
-                .add(ModBlocks.COPPER_BOULDER.get())
-                .add(ModBlocks.GOLD_BOULDER.get())
-                .add(ModBlocks.LUSH_BOULDER.get())
-                .add(ModBlocks.LUSH_IRON_BOULDER.get())
-                .add(ModBlocks.LUSH_COPPER_BOULDER.get())
-                .add(ModBlocks.LUSH_GOLD_BOULDER.get())
+                .add(boulders())
         ;
 
         tag(BlockTags.SWORD_EFFICIENT)
@@ -292,5 +280,9 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.COBBLED_PERMAFROST_WALL.get())
                 .add(ModBlocks.COBBLED_WILDSTONE_WALL.get())
         ;
+    }
+
+    private static Block[] boulders() {
+        return ModBlocks.BOULDERS.values().stream().map(DeferredBlock::get).toArray(Block[]::new);
     }
 }

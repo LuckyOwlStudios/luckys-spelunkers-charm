@@ -1,5 +1,7 @@
 package net.luckystudio.spelunkers_charm.datagen;
 
+import net.luckystudio.spelunkers_charm.block.custom.boulder.BoulderOre;
+import net.luckystudio.spelunkers_charm.block.custom.boulder.BoulderType;
 import net.luckystudio.spelunkers_charm.init.ModBlocks;
 import net.luckystudio.spelunkers_charm.block.util.ModBlockStateProperties;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
@@ -8,6 +10,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -16,8 +20,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.TagEntry;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
+import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
@@ -114,14 +121,22 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         this.add(ModBlocks.WILDSTONE_EMERALD_ORE.get(), createOreDrop(ModBlocks.WILDSTONE_EMERALD_ORE.get(), Items.EMERALD));
         this.add(ModBlocks.WILDSTONE_LAPIS_ORE.get(), createLapisOreDrops(ModBlocks.WILDSTONE_LAPIS_ORE.get()));
         this.add(ModBlocks.WILDSTONE_DIAMOND_ORE.get(), createOreDrop(ModBlocks.WILDSTONE_DIAMOND_ORE.get(), Items.DIAMOND));
-        this.add(ModBlocks.BOULDER.get(), createOreDrop(Blocks.STONE, Items.COBBLESTONE));
-        this.add(ModBlocks.IRON_BOULDER.get(), createBoulderDrops(Blocks.RAW_IRON_BLOCK, Items.RAW_IRON));
-        this.add(ModBlocks.COPPER_BOULDER.get(), createBoulderDrops(Blocks.RAW_COPPER_BLOCK, Items.RAW_COPPER));
-        this.add(ModBlocks.GOLD_BOULDER.get(), createBoulderDrops(Blocks.RAW_GOLD_BLOCK, Items.RAW_GOLD));
-        this.add(ModBlocks.LUSH_BOULDER.get(), createOreDrop(Blocks.STONE, Items.COBBLESTONE));
-        this.add(ModBlocks.LUSH_IRON_BOULDER.get(), createBoulderDrops(Blocks.RAW_IRON_BLOCK, Items.RAW_IRON));
-        this.add(ModBlocks.LUSH_COPPER_BOULDER.get(), createBoulderDrops(Blocks.RAW_COPPER_BLOCK, Items.RAW_COPPER));
-        this.add(ModBlocks.LUSH_GOLD_BOULDER.get(), createBoulderDrops(Blocks.RAW_GOLD_BLOCK, Items.RAW_GOLD));
+        for (BoulderType type : BoulderType.values()) {
+            Block boulder = ModBlocks.BOULDERS.get(type).get();
+            BoulderOre ore = type.getOre();
+            if (ore == BoulderOre.NONE) {
+                this.add(boulder, createOreDrop(Blocks.STONE, Items.COBBLESTONE));
+            } else if (ore.isModded()) {
+                this.add(boulder, createTagBoulderDrops(ore.getRawBlockItemTag(), ore.getRawMaterialTag()));
+            } else {
+                Block rawBlock = ore.getCore();
+                this.add(boulder, createBoulderDrops(rawBlock, switch (ore) {
+                    case IRON -> Items.RAW_IRON;
+                    case COPPER -> Items.RAW_COPPER;
+                    default -> Items.RAW_GOLD;
+                }));
+            }
+        }
         this.add(ModBlocks.CAVE_MUSHROOM_BLOCK.get(), createMushroomBlockDrop(
                 ModBlocks.CAVE_MUSHROOM_BLOCK.get(), ModBlocks.CAVE_MUSHROOM
         ));
@@ -156,6 +171,23 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
                                 .apply(ApplyBonusCount.addOreBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE)))
                 )
         );
+    }
+
+    /**
+     * Drops for a modded ore boulder: the raw block with silk touch, otherwise raw materials.
+     * Both come from {@code c:} item tags, so whichever mod adds the ore supplies the items.
+     */
+    protected LootTable.Builder createTagBoulderDrops(TagKey<Item> rawBlockTag, TagKey<Item> rawMaterialTag) {
+        HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+        return LootTable.lootTable().withPool(LootPool.lootPool()
+                .setRolls(ConstantValue.exactly(1.0F))
+                .add(AlternativesEntry.alternatives(
+                        TagEntry.expandTag(rawBlockTag).when(this.hasSilkTouch()),
+                        TagEntry.expandTag(rawMaterialTag)
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(5.0F, 8.0F)))
+                                .apply(ApplyBonusCount.addOreBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE)))
+                                .apply(ApplyExplosionDecay.explosionDecay())
+                )));
     }
 
     private LootTable.Builder createSiltDrops(Block block) {

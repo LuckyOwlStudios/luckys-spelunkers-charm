@@ -9,6 +9,7 @@ import net.luckystudio.spelunkers_charm.init.ModSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -68,22 +69,25 @@ public class Boulder extends VehicleEntity {
 
     @Override
     protected void readAdditionalSaveData(CompoundTag compound) {
-        if (compound.contains("boulderType", 8)) {
+        if (compound.contains("boulderType", Tag.TAG_STRING)) {
             this.setBoulderType(BoulderType.byName(compound.getString("boulderType")));
+        } else if (compound.contains("boulderType", Tag.TAG_INT)) {
+            // Older versions saved the ordinal
+            this.setBoulderType(BoulderType.byId(compound.getInt("boulderType")));
         }
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
-        compound.putInt("boulderType", this.entityData.get(BOULDER_TYPE));
+        compound.putString("boulderType", this.getBoulderType().getSerializedName());
     }
 
     public BoulderType getBoulderType() {
         return BoulderType.byId(this.entityData.get(BOULDER_TYPE));
     }
 
-    public void setBoulderType(BoulderType direction) {
-        this.entityData.set(BOULDER_TYPE, direction.ordinal());
+    public void setBoulderType(BoulderType type) {
+        this.entityData.set(BOULDER_TYPE, type.ordinal());
     }
 
     @Override

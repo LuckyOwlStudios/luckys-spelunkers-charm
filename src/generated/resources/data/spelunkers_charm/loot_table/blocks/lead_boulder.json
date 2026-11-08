@@ -1,0 +1,63 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:tag",
+              "conditions": [
+                {
+                  "condition": "minecraft:match_tool",
+                  "predicate": {
+                    "predicates": {
+                      "minecraft:enchantments": [
+                        {
+                          "enchantments": "minecraft:silk_touch",
+                          "levels": {
+                            "min": 1
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "expand": true,
+              "name": "c:storage_blocks/raw_lead"
+            },
+            {
+              "type": "minecraft:tag",
+              "expand": true,
+              "functions": [
+                {
+                  "add": false,
+                  "count": {
+                    "type": "minecraft:uniform",
+                    "max": 8.0,
+                    "min": 5.0
+                  },
+                  "function": "minecraft:set_count"
+                },
+                {
+                  "enchantment": "minecraft:fortune",
+                  "formula": "minecraft:ore_drops",
+                  "function": "minecraft:apply_bonus"
+                },
+                {
+                  "function": "minecraft:explosion_decay"
+                }
+              ],
+              "name": "c:raw_materials/lead"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "spelunkers_charm:blocks/lead_boulder"
+}

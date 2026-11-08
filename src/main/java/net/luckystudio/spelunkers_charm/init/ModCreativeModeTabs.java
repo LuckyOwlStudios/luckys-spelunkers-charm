@@ -2,9 +2,12 @@ package net.luckystudio.spelunkers_charm.init;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
 import net.luckystudio.spelunkers_charm.SpelunkersCharmConfig;
+import net.luckystudio.spelunkers_charm.block.custom.boulder.BoulderOre;
+import net.luckystudio.spelunkers_charm.block.custom.boulder.BoulderType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
@@ -110,14 +113,16 @@ public class ModCreativeModeTabs {
                 event.insertAfter(ModBlocks.PERMAFROST_DIAMOND_ORE.toStack(), ModBlocks.WILDSTONE_DIAMOND_ORE.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             }
 
-            event.insertAfter(Items.RAW_GOLD_BLOCK.getDefaultInstance(), ModBlocks.BOULDER.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(ModBlocks.BOULDER.toStack(), ModBlocks.IRON_BOULDER.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(ModBlocks.IRON_BOULDER.toStack(), ModBlocks.COPPER_BOULDER.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(ModBlocks.COPPER_BOULDER.toStack(), ModBlocks.GOLD_BOULDER.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(ModBlocks.GOLD_BOULDER.toStack(), ModBlocks.LUSH_BOULDER.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(ModBlocks.LUSH_BOULDER.toStack(), ModBlocks.LUSH_IRON_BOULDER.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(ModBlocks.LUSH_IRON_BOULDER.toStack(), ModBlocks.LUSH_COPPER_BOULDER.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(ModBlocks.LUSH_COPPER_BOULDER.toStack(), ModBlocks.LUSH_GOLD_BOULDER.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            // Boulders: plain ones first, then lush ones. Modded ore boulders only show when a mod adds the ore.
+            ItemStack previousBoulder = Items.RAW_GOLD_BLOCK.getDefaultInstance();
+            for (boolean lush : new boolean[]{false, true}) {
+                for (BoulderOre ore : BoulderOre.values()) {
+                    if (!ore.isAvailable(event.getParameters().holders())) continue;
+                    ItemStack boulder = ModBlocks.BOULDERS.get(BoulderType.of(ore, lush)).toStack();
+                    event.insertAfter(previousBoulder, boulder, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                    previousBoulder = boulder;
+                }
+            }
 
             event.insertAfter(Items.RED_MUSHROOM_BLOCK.getDefaultInstance(), ModBlocks.CAVE_MUSHROOM_BLOCK.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(Items.RED_MUSHROOM.getDefaultInstance(), ModBlocks.CAVE_MUSHROOM.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);

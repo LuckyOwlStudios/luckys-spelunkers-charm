@@ -28,6 +28,9 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.awt.*;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
@@ -103,22 +106,16 @@ public class ModBlocks {
 
     public static final DeferredBlock<Block> BASALT_GEYSER = registerBlock("basalt_geyser", () -> geyserBlock(Blocks.BASALT));
     public static final DeferredBlock<Block> DEEPSLATE_GEYSER = registerBlock("deepslate_geyser", () -> geyserBlock(Blocks.DEEPSLATE));
-    public static final DeferredBlock<Block> BOULDER = registerBlock("boulder",
-            () -> new BoulderBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE), BoulderType.STONE));
-    public static final DeferredBlock<Block> IRON_BOULDER = registerBlock("iron_boulder",
-            () -> new BoulderBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RAW_IRON_BLOCK), BoulderType.IRON));
-    public static final DeferredBlock<Block> COPPER_BOULDER = registerBlock("copper_boulder",
-            () -> new BoulderBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RAW_COPPER_BLOCK), BoulderType.COPPER));
-    public static final DeferredBlock<Block> GOLD_BOULDER = registerBlock("gold_boulder",
-            () -> new BoulderBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RAW_GOLD_BLOCK), BoulderType.GOLD));
-    public static final DeferredBlock<Block> LUSH_BOULDER = registerBlock("lush_boulder",
-            () -> new BoulderBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE), BoulderType.LUSH));
-    public static final DeferredBlock<Block> LUSH_IRON_BOULDER = registerBlock("lush_iron_boulder",
-            () -> new BoulderBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RAW_IRON_BLOCK), BoulderType.LUSH_IRON));
-    public static final DeferredBlock<Block> LUSH_COPPER_BOULDER = registerBlock("lush_copper_boulder",
-            () -> new BoulderBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RAW_COPPER_BLOCK), BoulderType.LUSH_COPPER));
-    public static final DeferredBlock<Block> LUSH_GOLD_BOULDER = registerBlock("lush_gold_boulder",
-            () -> new BoulderBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RAW_GOLD_BLOCK), BoulderType.LUSH_GOLD));
+    // Every boulder, one per BoulderType. To add a boulder, add it to BoulderOre/BoulderType instead of here.
+    public static final Map<BoulderType, DeferredBlock<Block>> BOULDERS = registerBoulders();
+    public static final DeferredBlock<Block> BOULDER = BOULDERS.get(BoulderType.STONE);
+    public static final DeferredBlock<Block> IRON_BOULDER = BOULDERS.get(BoulderType.IRON);
+    public static final DeferredBlock<Block> COPPER_BOULDER = BOULDERS.get(BoulderType.COPPER);
+    public static final DeferredBlock<Block> GOLD_BOULDER = BOULDERS.get(BoulderType.GOLD);
+    public static final DeferredBlock<Block> LUSH_BOULDER = BOULDERS.get(BoulderType.LUSH);
+    public static final DeferredBlock<Block> LUSH_IRON_BOULDER = BOULDERS.get(BoulderType.LUSH_IRON);
+    public static final DeferredBlock<Block> LUSH_COPPER_BOULDER = BOULDERS.get(BoulderType.LUSH_COPPER);
+    public static final DeferredBlock<Block> LUSH_GOLD_BOULDER = BOULDERS.get(BoulderType.LUSH_GOLD);
 
     // ============================
     // 🪨 Rocks
@@ -312,6 +309,15 @@ public class ModBlocks {
 
     private static ToIntFunction<BlockState> litBlockEmissionFromGeyserState(int lightValue) {
         return blockState -> blockState.getValue(ModBlockStateProperties.GEYSER_STATE) == GeyserState.ERUPTING ? lightValue : 0;
+    }
+
+    private static Map<BoulderType, DeferredBlock<Block>> registerBoulders() {
+        Map<BoulderType, DeferredBlock<Block>> boulders = new EnumMap<>(BoulderType.class);
+        for (BoulderType type : BoulderType.values()) {
+            boulders.put(type, registerBlock(type.getBlockName(),
+                    () -> new BoulderBlock(BlockBehaviour.Properties.ofFullCopy(type.getOre().getPropertiesSource()), type)));
+        }
+        return Collections.unmodifiableMap(boulders);
     }
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
