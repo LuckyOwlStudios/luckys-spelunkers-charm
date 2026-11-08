@@ -55,6 +55,7 @@ The deeper you go, the less stable the ground gets.
 - Tremors are **more likely, longer and stronger the deeper you are**.
 - While the ground shakes, **rocks fall** from stone ceilings (deepslate, dripstone, basalt and ice drop their own kinds), sand and gravel collapse, pointed dripstone snaps off, and **geysers erupt**.
 - **Underground explosions** (below Y 32 by default) set off tremors sized to the blast. TNT mining has consequences.
+- With **Camera Overhaul** installed, your camera shakes while a tremor is nearby.
 - Tremors are saved with the world, and peaceful places like lush caves, the deep dark and the spider cave are spared.
 - Operators can trigger them with `/tremor start <seconds> <intensity>` and end them with `/tremor stop`.
 
@@ -142,12 +143,13 @@ These are in the mod but not finished yet:
 |---|---|
 | [Create](https://modrinth.com/mod/create) | New modded ores support: zinc boulders. |
 | [Supplementaries](https://modrinth.com/mod/supplementaries) | Able to tie and suspend boulders in the air with a rope. |
+| [Camera Overhaul](https://modrinth.com/mod/cameraoverhaul) | Camera shake during tremors. |
 
 Install it like any other NeoForge mod: drop the jar (and TerraBlender) into your `mods` folder. It's needed on both the client and the server.
 
 ## Configuration
 
-Settings live in `config/spelunkers_charm-common.toml`.
+Settings live in `config/spelunkers_charm-common.toml`, and client-only settings in `config/spelunkers_charm-client.toml`.
 
 <details>
 <summary><b>worldGeneration</b></summary>
@@ -189,6 +191,16 @@ Settings live in `config/spelunkers_charm-common.toml`.
 
 </details>
 
+<details>
+<summary><b>client</b> (in the client config)</summary>
+
+| Option | Default | What it does |
+|---|---|---|
+| `tremorCameraShake` | `true` | Shake the camera during nearby tremors. Needs Camera Overhaul. |
+| `tremorCameraShakeStrength` | `1.0` | How strong that shake is, from `0.0` (off) to `3.0`. |
+
+</details>
+
 ## Compatibility
 
 - **Modded biomes:** rocks, boulders and geysers are added to every Overworld biome, so they show up in biome mods too. Cold and hot cave features follow the `spelunkers_charm:is_cold_cave` and `spelunkers_charm:is_hot_cave` biome tags, which a datapack can extend.
@@ -196,6 +208,7 @@ Settings live in `config/spelunkers_charm-common.toml`.
 - **Modded ores:** boulders read the common `c:` tags, and the optional stone replacers only replace vanilla ores they have a counterpart for.
 - **Dynamic lights:** both helmets ship with LambDynamicLights data.
 - **Hanging boulders:** a boulder placed under a vertical chain hangs from it instead of falling. With Supplementaries, a rope works too. Other rope blocks can be added to the `spelunkers_charm:boulder_ropes` block tag.
+- **Camera Overhaul:** with [Camera Overhaul](https://modrinth.com/mod/cameraoverhaul) installed, tremors shake your camera. The shake builds and fades with the tremor and gets weaker the farther you are from it. It's optional, and nothing changes without it.
 
 ## Building from source
 
