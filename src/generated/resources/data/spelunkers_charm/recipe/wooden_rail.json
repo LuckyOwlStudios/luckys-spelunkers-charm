@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "S S",
+    "SPS",
+    "S S"
+  ],
+  "result": {
+    "count": 8,
+    "id": "spelunkers_charm:wooden_rail"
+  }
+}

@@ -121,9 +121,31 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(recipeOutput);
     }
 
+    private void rails(RecipeOutput recipeOutput) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.TRANSPORTATION, ModBlocks.WOODEN_RAIL.get(), 8)
+                .pattern("S S")
+                .pattern("SPS")
+                .pattern("S S")
+                .define('S', Items.STICK)
+                .define('P', ItemTags.PLANKS)
+                .unlockedBy("has_minecart", has(Items.MINECART))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.TRANSPORTATION, ModBlocks.EJECTOR_RAIL.get(), 6)
+                .pattern("ISI")
+                .pattern("IBI")
+                .pattern("IRI")
+                .define('I', Items.IRON_INGOT)
+                .define('S', Items.STICK)
+                .define('B', Items.SLIME_BALL)
+                .define('R', Items.REDSTONE)
+                .unlockedBy("has_rail", has(Items.RAIL))
+                .save(recipeOutput);
+    }
+
     @Override
     protected void buildRecipes(@NotNull RecipeOutput recipeOutput) {
         cartCoupler(recipeOutput);
+        rails(recipeOutput);
         stairBuilder(ModBlocks.DUNESTONE_STAIRS.get(), Ingredient.of(ModBlocks.DUNESTONE.asItem()));
         slabBuilder(RecipeCategory.BUILDING_BLOCKS, ModBlocks.DUNESTONE_SLAB.get(), Ingredient.of(ModBlocks.DUNESTONE.asItem()));
         wallBuilder(RecipeCategory.BUILDING_BLOCKS, ModBlocks.DUNESTONE_WALL.get(), Ingredient.of(ModBlocks.DUNESTONE.asItem()));

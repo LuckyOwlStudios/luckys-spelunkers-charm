@@ -185,5 +185,8 @@
   "message.spelunkers_charm.locomotive.stopped": "Locomotive stopped",
   "message.spelunkers_charm.locomotive.no_fuel": "The locomotive needs fuel",
   "gui.spelunkers_charm.locomotive.running": "Running",
-  "gui.spelunkers_charm.locomotive.stopped": "Stopped"
+  "gui.spelunkers_charm.locomotive.stopped": "Stopped",
+  "block.spelunkers_charm.wooden_rail": "Wooden Rail",
+  "block.spelunkers_charm.ejector_rail": "Ejector Rail",
+  "block.spelunkers_charm.crossing_rail": "Rail Crossing"
 }
