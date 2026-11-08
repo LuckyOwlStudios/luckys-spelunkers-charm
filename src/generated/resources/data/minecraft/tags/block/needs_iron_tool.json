@@ -22,6 +22,14 @@
     "spelunkers_charm:lush_boulder",
     "spelunkers_charm:lush_iron_boulder",
     "spelunkers_charm:lush_copper_boulder",
-    "spelunkers_charm:lush_gold_boulder"
+    "spelunkers_charm:lush_gold_boulder",
+    "spelunkers_charm:zinc_boulder",
+    "spelunkers_charm:lush_zinc_boulder",
+    "spelunkers_charm:osmium_boulder",
+    "spelunkers_charm:lush_osmium_boulder",
+    "spelunkers_charm:tin_boulder",
+    "spelunkers_charm:lush_tin_boulder",
+    "spelunkers_charm:lead_boulder",
+    "spelunkers_charm:lush_lead_boulder"
   ]
 }

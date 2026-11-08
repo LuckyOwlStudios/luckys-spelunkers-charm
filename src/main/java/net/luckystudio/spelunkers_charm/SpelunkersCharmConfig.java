@@ -1,6 +1,10 @@
 package net.luckystudio.spelunkers_charm;
 
+import net.luckystudio.spelunkers_charm.block.custom.boulder.BoulderOre;
 import net.neoforged.neoforge.common.ModConfigSpec;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 // This class is responsible for managing the configuration of the Spelunkers Charm mod.
 // I used https://github.com/vectorwing/FarmersDelight/blob/1.21/src/main/java/vectorwing/farmersdelight/common/Configuration.java as a reference for this class.
@@ -17,6 +21,7 @@ public class SpelunkersCharmConfig {
     public static ModConfigSpec.BooleanValue GEYSERS;
     public static ModConfigSpec.BooleanValue ACTIVE_GEYSERS;
     public static ModConfigSpec.BooleanValue BOULDERS;
+    public static final Map<BoulderOre, ModConfigSpec.BooleanValue> MODDED_BOULDERS = new EnumMap<>(BoulderOre.class);
 
     // === CATEGORY TREMORS CONFIGURATION ===
     public static String CATEGORY_TREMORS = "tremors";
@@ -71,6 +76,16 @@ public class SpelunkersCharmConfig {
         BOULDERS = COMMON_BUILDER
                 .comment("Whether boulders generate in caves")
                 .define("boulders", true);
+
+        COMMON_BUILDER.comment("Ore boulders for ores added by other mods. They only generate when a mod adds the ore",
+                "(found through the c:storage_blocks/raw_<ore> tag), so these do nothing without such a mod.").push("moddedBoulders");
+        for (BoulderOre ore : BoulderOre.values()) {
+            if (!ore.isModded()) continue;
+            MODDED_BOULDERS.put(ore, COMMON_BUILDER
+                    .comment("Whether " + ore.getName() + " boulders generate when a mod adds " + ore.getName())
+                    .define(ore.getName(), true));
+        }
+        COMMON_BUILDER.pop();
 
         COMMON_BUILDER.pop();
 

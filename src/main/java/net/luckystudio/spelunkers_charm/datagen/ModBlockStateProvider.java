@@ -104,14 +104,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         modSimpleBlock(ModBlocks.WILDSTONE_EMERALD_ORE.get());
         modSimpleBlock(ModBlocks.WILDSTONE_LAPIS_ORE.get());
         modSimpleBlock(ModBlocks.WILDSTONE_DIAMOND_ORE.get());
-        boulderBlock(ModBlocks.BOULDER.get());
-        boulderBlock(ModBlocks.IRON_BOULDER.get());
-        boulderBlock(ModBlocks.COPPER_BOULDER.get());
-        boulderBlock(ModBlocks.GOLD_BOULDER.get());
-        boulderBlock(ModBlocks.LUSH_BOULDER.get());
-        boulderBlock(ModBlocks.LUSH_IRON_BOULDER.get());
-        boulderBlock(ModBlocks.LUSH_COPPER_BOULDER.get());
-        boulderBlock(ModBlocks.LUSH_GOLD_BOULDER.get());
+        ModBlocks.BOULDERS.values().forEach(boulder -> boulderBlock(boulder.get()));
         createHugeMushroomBlock(ModBlocks.CAVE_MUSHROOM_BLOCK.get());
         simpleBlockWithGeneratedItem(ModBlocks.CAVE_MUSHROOM.get());
         rockBlock(ModBlocks.CLAY_PILE.get(), ResourceLocation.withDefaultNamespace("block/clay"));

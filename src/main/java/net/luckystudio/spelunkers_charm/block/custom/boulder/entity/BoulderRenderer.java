@@ -25,7 +25,7 @@ public class BoulderRenderer<T extends Boulder> extends EntityRenderer<Boulder> 
 
     @Override
     public ResourceLocation getTextureLocation(Boulder entity) {
-        return entity.getBoulderType().ordinal() < 4 ? BOULDER_LOCATION : LUSH_BOULDER_LOCATION;
+        return entity.getBoulderType().isLush() ? LUSH_BOULDER_LOCATION : BOULDER_LOCATION;
     }
 
     @Override

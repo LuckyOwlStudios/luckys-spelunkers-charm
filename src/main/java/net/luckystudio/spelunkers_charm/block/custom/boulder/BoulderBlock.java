@@ -2,8 +2,6 @@ package net.luckystudio.spelunkers_charm.block.custom.boulder;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.luckystudio.spelunkers_charm.SpelunkersCharm;
-import net.luckystudio.spelunkers_charm.init.ModBlocks;
 import net.luckystudio.spelunkers_charm.block.util.ModBlockStateProperties;
 import net.luckystudio.spelunkers_charm.block.util.enums.BlockPart;
 import net.luckystudio.spelunkers_charm.block.custom.boulder.entity.Boulder;
@@ -11,7 +9,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -28,8 +25,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -139,33 +134,12 @@ public class BoulderBlock extends Block {
 
     public static void placeBoulder(Level level, BlockPos pos, BoulderType type, HangingType hangingType) {
         if (level instanceof ServerLevel serverLevel) {
-            serverLevel.setBlock(pos, BoulderUtils.getBoulderFromType(type)
-                    .setValue(BLOCK_PART, BlockPart.BOTTOM_MIDDLE)
-                    .setValue(GENERATE, false)
-                    .setValue(HANGING_TYPE, hangingType), 3);
-            BlockPos boulderPos = pos.offset(-1, 0, -1); // Adjust position to place the structure
-            ResourceLocation structureId = switch (type) {
-                case STONE -> SpelunkersCharm.id("boulder");
-                case IRON -> SpelunkersCharm.id("iron_boulder");
-                case COPPER -> SpelunkersCharm.id("copper_boulder");
-                case GOLD -> SpelunkersCharm.id("gold_boulder");
-                case LUSH -> SpelunkersCharm.id("lush_boulder");
-                case LUSH_IRON -> SpelunkersCharm.id("lush_iron_boulder");
-                case LUSH_COPPER -> SpelunkersCharm.id("lush_copper_boulder");
-                case LUSH_GOLD -> SpelunkersCharm.id("lush_gold_boulder");
-            };
-            StructureTemplate template = serverLevel.getStructureManager().getOrCreate(structureId);
-            template.placeInWorld(serverLevel,
-                    boulderPos,
-                    boulderPos,
-                    new StructurePlaceSettings()
-                            .setRotation(Rotation.NONE)
-                            .setMirror(Mirror.NONE)
-                            .setIgnoreEntities(true)
-                            .addProcessor(new BlockStateProcessor(hangingType)),
-                    serverLevel.random,
-                    3
-            );
+            // Place everything quietly first, then update neighbours once the whole boulder exists,
+            // so the half-built boulder never checks its own support.
+            BoulderUtils.placeBoulder(serverLevel, pos, type, hangingType, Block.UPDATE_CLIENTS);
+            for (BlockPos placedPos : BlockPos.betweenClosed(pos.offset(-1, 0, -1), pos.offset(1, 2, 1))) {
+                serverLevel.blockUpdated(placedPos, serverLevel.getBlockState(placedPos).getBlock());
+            }
         }
     }
 
@@ -226,15 +200,7 @@ public class BoulderBlock extends Block {
     }
 
     public boolean isBoulderBlock(BlockState state) {
-        return state.is(ModBlocks.BOULDER.get()) ||
-                state.is(ModBlocks.IRON_BOULDER.get()) ||
-                state.is(ModBlocks.COPPER_BOULDER.get()) ||
-                state.is(ModBlocks.GOLD_BOULDER.get()) ||
-                state.is(ModBlocks.LUSH_BOULDER.get()) ||
-                state.is(ModBlocks.LUSH_IRON_BOULDER.get()) ||
-                state.is(ModBlocks.LUSH_COPPER_BOULDER.get()) ||
-                state.is(ModBlocks.LUSH_GOLD_BOULDER.get()) ||
-                state.is(BoulderUtils.getRawCore(type));
+        return state.getBlock() instanceof BoulderBlock || state.is(BoulderUtils.getRawCore(type));
     }
 
     private boolean isFullBoulder(BlockState state, Level level, BlockPos pos) {
