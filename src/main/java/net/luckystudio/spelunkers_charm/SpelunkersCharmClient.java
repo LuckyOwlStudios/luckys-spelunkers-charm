@@ -2,6 +2,7 @@ package net.luckystudio.spelunkers_charm;
 
 import net.luckystudio.spelunkers_charm.block.custom.blaster.BlasterScreen;
 import net.luckystudio.spelunkers_charm.block.custom.blaster.ModMenuTypes;
+import net.luckystudio.spelunkers_charm.client.BoulderCoreSpriteSource;
 import net.luckystudio.spelunkers_charm.init.ModEntityType;
 import net.luckystudio.spelunkers_charm.block.custom.boulder.entity.BoulderModel;
 import net.luckystudio.spelunkers_charm.block.custom.boulder.entity.BoulderRenderer;
@@ -33,6 +34,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.event.RegisterSpriteSourceTypesEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 
@@ -50,6 +52,11 @@ public class SpelunkersCharmClient {
     public static void onClientSetup(FMLClientSetupEvent event)
     {
 
+    }
+
+    @SubscribeEvent
+    public static void registerSpriteSourceTypes(RegisterSpriteSourceTypesEvent event) {
+        BoulderCoreSpriteSource.TYPE = event.register(SpelunkersCharm.id("boulder_core"), BoulderCoreSpriteSource.CODEC);
     }
 
     @SubscribeEvent
