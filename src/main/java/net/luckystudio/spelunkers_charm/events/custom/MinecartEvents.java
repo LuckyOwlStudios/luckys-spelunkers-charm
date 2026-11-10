@@ -2,21 +2,38 @@ package net.luckystudio.spelunkers_charm.events.custom;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.BlockMinecart;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.FurnaceMinecartMenu;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.JukeboxMinecart;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartLantern;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartLanterns;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartLinking;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.ClientCartData;
+import net.luckystudio.spelunkers_charm.init.ModItems;
+import net.luckystudio.spelunkers_charm.item.custom.CartCouplerItem;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.*;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 @EventBusSubscriber(modid = SpelunkersCharm.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class MinecartEvents {
@@ -43,7 +60,7 @@ public class MinecartEvents {
         // Handle Minecart Interaction
         if (abstractMinecart instanceof Minecart minecart && heldItem.getItem() instanceof BlockItem blockItem) {
             if (minecartBlocks(blockItem.getBlock())) {
-                Entity newMinecart = getAbstractMinecart(minecart, blockItem.getBlock(), level);
+                AbstractMinecart newMinecart = getAbstractMinecart(minecart, blockItem.getBlock(), level);
                 // Copy motion and rotation from the original minecart
                 newMinecart.setPosRaw(minecart.getX(), minecart.getY(), minecart.getZ());
                 newMinecart.setDeltaMovement(minecart.getDeltaMovement());
@@ -53,10 +70,16 @@ public class MinecartEvents {
                 SoundEvent placeBlockSound = blockItem.getBlock().defaultBlockState().getSoundType(level, BlockPos.containing(minecart.getX(), minecart.getY(), minecart.getZ()), minecart).getPlaceSound();
                 minecart.playSound(placeBlockSound, 1.0F, 1.0F);
 
-                // Remove the old minecart and add the new one
-                minecart.remove(Entity.RemovalReason.DISCARDED);
+                // The block goes into the cart, so it's used up
+                heldItem.consume(1, player);
+
+                // Add the new minecart, keep its couplings, then remove the old one
                 level.addFreshEntity(newMinecart);
+                CartLinking.transferLinks(minecart, newMinecart);
+                minecart.remove(Entity.RemovalReason.DISCARDED);
                 player.swing(hand, true);
+                event.setCanceled(true);
+                event.setCancellationResult(InteractionResult.SUCCESS);
                 return InteractionResult.SUCCESS;
             } else {
                 BlockMinecart newMinecart = new BlockMinecart(level, minecart.getX(), minecart.getY(), minecart.getZ());
@@ -74,10 +97,13 @@ public class MinecartEvents {
                 SoundEvent placeBlockSound = blockItem.getBlock().defaultBlockState().getSoundType(level, BlockPos.containing(minecart.getX(), minecart.getY(), minecart.getZ()), minecart).getPlaceSound();
                 minecart.playSound(placeBlockSound, 1.0F, 1.0F);
 
-                // Remove the old minecart and add the new one
-                minecart.remove(Entity.RemovalReason.DISCARDED);
+                // Add the new minecart, keep its couplings, then remove the old one
                 level.addFreshEntity(newMinecart);
+                CartLinking.transferLinks(minecart, newMinecart);
+                minecart.remove(Entity.RemovalReason.DISCARDED);
                 player.swing(hand, true);
+                event.setCanceled(true);
+                event.setCancellationResult(InteractionResult.SUCCESS);
                 return InteractionResult.SUCCESS;
             }
         }
@@ -85,10 +111,11 @@ public class MinecartEvents {
     }
 
     private static boolean minecartBlocks(Block block) {
-        return block == Blocks.HOPPER || block == Blocks.CHEST || block == Blocks.FURNACE || block == Blocks.TNT;
+        return block == Blocks.HOPPER || block == Blocks.CHEST || block == Blocks.FURNACE || block == Blocks.TNT
+                || block == Blocks.JUKEBOX;
     }
 
-    private static Entity getAbstractMinecart(Minecart oldMinecart, Block block, Level level) {
+    private static AbstractMinecart getAbstractMinecart(Minecart oldMinecart, Block block, Level level) {
         if (block == Blocks.HOPPER) {
             return new MinecartHopper(level, oldMinecart.getX(), oldMinecart.getY(), oldMinecart.getZ());
         } else if (block == Blocks.CHEST) {
@@ -97,7 +124,99 @@ public class MinecartEvents {
             return new MinecartFurnace(level, oldMinecart.getX(), oldMinecart.getY(), oldMinecart.getZ());
         } else if (block == Blocks.TNT) {
             return new MinecartTNT(level, oldMinecart.getX(), oldMinecart.getY(), oldMinecart.getZ());
+        } else if (block == Blocks.JUKEBOX) {
+            return new JukeboxMinecart(level, oldMinecart.getX(), oldMinecart.getY(), oldMinecart.getZ());
         }
         return new Minecart(level, oldMinecart.getX(), oldMinecart.getY(), oldMinecart.getZ());
+    }
+
+    /** The cart coupler: click two carts to link them, shift-click to unlink. Runs before other cart clicks. */
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void onCouplerUse(PlayerInteractEvent.EntityInteract event) {
+        if (!event.getItemStack().is(ModItems.CART_COUPLER.get())) return;
+        if (!(event.getTarget() instanceof AbstractMinecart cart)) return;
+        event.setCanceled(true);
+        event.setCancellationResult(InteractionResult.sidedSuccess(event.getLevel().isClientSide()));
+        if (!event.getLevel().isClientSide()) {
+            CartCouplerItem.useOnCart(event.getEntity(), cart);
+        }
+    }
+
+    /** Hangs a lantern on any minecart, or takes it off with shears. */
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void onLanternUse(PlayerInteractEvent.EntityInteract event) {
+        if (!(event.getTarget() instanceof AbstractMinecart cart)) return;
+        ItemStack stack = event.getItemStack();
+        Player player = event.getEntity();
+        boolean clientSide = event.getLevel().isClientSide();
+
+        if (stack.is(Items.SHEARS)) {
+            if (CartLanterns.getLantern(cart) == CartLantern.NONE) return;
+            if (!clientSide) {
+                CartLanterns.takeOff(cart, player);
+                stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(event.getHand()));
+            }
+        } else if (CartLantern.fromStack(stack) != CartLantern.NONE && !player.isSecondaryUseActive()) {
+            // Sneaking puts the lantern inside the cart as a block instead, and block carts keep adding their own block.
+            if (cart instanceof BlockMinecart) return;
+            if (CartLanterns.getLantern(cart) != CartLantern.NONE) return;
+            if (!clientSide) {
+                CartLanterns.hang(cart, stack, player);
+            }
+        } else {
+            return;
+        }
+        player.swing(event.getHand());
+        event.setCanceled(true);
+        event.setCancellationResult(InteractionResult.sidedSuccess(clientSide));
+    }
+
+    /**
+     * Right-clicking a furnace minecart with anything but its fuel also opens a screen showing its fuel.
+     * The vanilla push still happens.
+     */
+    @SubscribeEvent
+    public static void onFurnaceMinecartUse(PlayerInteractEvent.EntityInteract event) {
+        if (event.getLevel().isClientSide() || event.getHand() != InteractionHand.MAIN_HAND) return;
+        if (!(event.getTarget() instanceof MinecartFurnace cart)) return;
+        ItemStack stack = event.getItemStack();
+        if (stack.is(Items.COAL) || stack.is(Items.CHARCOAL)) return;
+        event.getEntity().openMenu(new SimpleMenuProvider(
+                (containerId, inventory, player) -> new FurnaceMinecartMenu(containerId, inventory, cart, FurnaceMinecartMenu.dataFor(cart)),
+                Component.translatable("container.spelunkers_charm.furnace_minecart")));
+    }
+
+    /** Keeps coupled carts together and moves lantern light along with carts. */
+    @SubscribeEvent
+    public static void onCartTick(EntityTickEvent.Post event) {
+        if (event.getEntity() instanceof AbstractMinecart cart && !cart.level().isClientSide()) {
+            CartLinking.tick(cart);
+            CartLanterns.tick(cart);
+        }
+    }
+
+    /** A broken cart lets go of the carts it was coupled to. */
+    @SubscribeEvent
+    public static void onCartRemoved(EntityLeaveLevelEvent event) {
+        if (!(event.getEntity() instanceof AbstractMinecart cart)) return;
+        if (event.getLevel().isClientSide()) {
+            ClientCartData.remove(cart.getId());
+            return;
+        }
+        Entity.RemovalReason reason = cart.getRemovalReason();
+        if (reason != null && reason.shouldDestroy()) {
+            CartLinking.onCartRemoved(cart);
+            CartLanterns.onCartRemoved(cart, reason == Entity.RemovalReason.KILLED);
+        } else {
+            CartLanterns.forget(cart);
+        }
+    }
+
+    /** Players who start seeing a cart learn what it's coupled to. */
+    @SubscribeEvent
+    public static void onStartTracking(PlayerEvent.StartTracking event) {
+        if (event.getTarget() instanceof AbstractMinecart cart && event.getEntity() instanceof ServerPlayer player) {
+            CartLinking.syncTo(cart, player);
+        }
     }
 }

@@ -89,6 +89,8 @@
     "spelunkers_charm:basalt_geyser",
     "spelunkers_charm:blaster",
     "spelunkers_charm:wooden_lift_track",
-    "spelunkers_charm:powered_lift_track"
+    "spelunkers_charm:powered_lift_track",
+    "spelunkers_charm:ejector_rail",
+    "spelunkers_charm:crossing_rail"
   ]
 }

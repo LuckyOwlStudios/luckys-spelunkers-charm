@@ -3,6 +3,8 @@ package net.luckystudio.spelunkers_charm.init;
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.AbstractLift;
 import net.luckystudio.spelunkers_charm.item.custom.CandleHelmet;
+import net.luckystudio.spelunkers_charm.item.custom.CartCouplerItem;
+import net.luckystudio.spelunkers_charm.item.custom.LocomotiveItem;
 import net.luckystudio.spelunkers_charm.item.custom.MiningHelmet;
 import net.luckystudio.spelunkers_charm.item.custom.LiftItem;
 import net.minecraft.world.item.Item;
@@ -20,6 +22,8 @@ public class ModItems {
     public static final DeferredItem<Item> MINING_HELMET = ITEMS.register("mining_helmet", () -> new MiningHelmet(new Item.Properties().stacksTo(1).durability(250).rarity(Rarity.UNCOMMON).component(ModDataComponents.LIGHT, true)));
     public static final DeferredItem<Item> SMALL_LIFT = ITEMS.register("small_lift", () -> new LiftItem(AbstractLift.Type.SMALL, new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> MEDIUM_LIFT = ITEMS.register("medium_lift", () -> new LiftItem(AbstractLift.Type.MEDIUM, new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> LOCOMOTIVE = ITEMS.register("locomotive", () -> new LocomotiveItem(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> CART_COUPLER = ITEMS.register("cart_coupler", () -> new CartCouplerItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> LARGE_LIFT = ITEMS.register("large_lift", () -> new LiftItem(AbstractLift.Type.LARGE, new Item.Properties().stacksTo(1)));
 
     public static void register(IEventBus eventBus) {

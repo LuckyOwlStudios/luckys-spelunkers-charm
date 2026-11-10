@@ -158,6 +158,12 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.BLASTER.get());
         dropSelf(ModBlocks.WOODEN_LIFT_TRACK.get());
         dropSelf(ModBlocks.POWERED_LIFT_TRACK.get());
+        dropSelf(ModBlocks.WOODEN_RAIL.get());
+        dropSelf(ModBlocks.EJECTOR_RAIL.get());
+        // A crossing is two rails, so it gives both back.
+        add(ModBlocks.CROSSING_RAIL.get(), block -> LootTable.lootTable().withPool(applyExplosionCondition(block,
+                LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(Items.RAIL).apply(SetItemCountFunction.setCount(ConstantValue.exactly(2.0F)))))));
     }
 
     protected LootTable.Builder createBoulderDrops(Block block, ItemLike drop) {

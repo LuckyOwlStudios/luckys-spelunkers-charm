@@ -6,6 +6,8 @@ import net.luckystudio.spelunkers_charm.entity.custom.lift.large.LargeLift;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.medium.MediumLift;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.small.SmallLift;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.BlockMinecart;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.JukeboxMinecart;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.LocomotiveMinecart;
 import net.luckystudio.spelunkers_charm.entity.custom.rock.*;
 import net.luckystudio.spelunkers_charm.events.tremor.Tremor;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -38,6 +40,18 @@ public class ModEntityType {
                     .sized(0.98F, 0.7F)
                     .clientTrackingRange(8)
                     .build("block_minecart"));
+
+    public static final Supplier<EntityType<LocomotiveMinecart>> LOCOMOTIVE =
+            ENTITY_TYPES.register("locomotive", () -> EntityType.Builder.<LocomotiveMinecart>of(LocomotiveMinecart::new, MobCategory.MISC)
+                    .sized(0.98F, 0.7F)
+                    .clientTrackingRange(8)
+                    .build("locomotive"));
+
+    public static final Supplier<EntityType<JukeboxMinecart>> JUKEBOX_MINECART =
+            ENTITY_TYPES.register("jukebox_minecart", () -> EntityType.Builder.<JukeboxMinecart>of(JukeboxMinecart::new, MobCategory.MISC)
+                    .sized(0.98F, 0.7F)
+                    .clientTrackingRange(8)
+                    .build("jukebox_minecart"));
 
     public static final Supplier<EntityType<SmallLift>> SMALL_LIFT =
             ENTITY_TYPES.register("small_lift", () -> EntityType.Builder.<SmallLift>of(SmallLift::new, MobCategory.MISC)
