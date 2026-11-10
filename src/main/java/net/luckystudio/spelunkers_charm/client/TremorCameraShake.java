@@ -29,8 +29,9 @@ public final class TremorCameraShake {
     private static final float MIN_MAGNITUDE_SHARE = 0.3F;
     // Shake reaches this many times the tremor's effect radius, fading out with distance.
     private static final float RADIUS_SCALE = 1.5F;
-    // Low frequency, for a slow rumble rather than a sharp jolt.
-    private static final float FREQUENCY = 0.35F;
+    // High frequency, so it reads as a quick rattle rather than a slow wobble. Camera Overhaul multiplies
+    // this by its own max frequency (6 by default), so 2.0 is about 12 shakes a second.
+    private static final float FREQUENCY = 2.0F;
     // How long a shake lasts after its last refresh.
     private static final float LINGER_SECONDS = 0.75F;
 

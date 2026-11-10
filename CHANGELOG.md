@@ -17,7 +17,8 @@ Work In Progress section is started.
 # Work In Progress
 
 **Added:**
-- Locomotive: shift-right-click a blast furnace onto a minecart. Right-click it to open its fuel slot (anything that burns in a furnace works, and lasts twice as long). Shift-right-click to start it driving away from you, or to stop it. It's faster than a furnace minecart and pulls any carts coupled to it.
+- Locomotive: a new minecart with an engine and a lever on its side, crafted like a minecart with a blast furnace in the middle. Right-click it to open its fuel slot (anything that burns in a furnace works, and lasts twice as long). Shift-right-click to pull the lever and reverse its direction. It drives the way it was facing when placed, is faster than a furnace minecart, and pulls any carts coupled to it.
+- Furnace minecarts now have a screen showing how much fuel they have left. Right-click one with an empty hand to see it.
 - Minecart with Jukebox: shift-right-click a jukebox onto a minecart. Put a music disc in and the music follows the cart. Right-click again to take the disc out. Detector rails give the same comparator signal as a jukebox.
 - Cart Coupler: click one minecart, then another, to couple them with a chain. Coupled carts stay together, so a locomotive can pull a whole train. Each cart can couple to two others, one in front and one behind. Sneak-click a cart to uncouple it. Crafted from two iron ingots and a chain.
 - Lanterns on minecarts: right-click any minecart with a lantern or soul lantern to hang it on the cart. The cart lights up the tunnel as it rides, and glows smoothly with LambDynamicLights installed. Use shears to take the lantern off. Sneak-clicking still puts lanterns inside the cart as blocks.
@@ -29,6 +30,9 @@ Work In Progress section is started.
 
 **Fixed:**
 - Putting a chest, hopper, furnace or TNT into a minecart now uses up the block. It used to be free.
+
+**Development:**
+- Camera Overhaul (with Cloth Config, which it needs) now loads in dev runs (`runClient`), so tremor camera shake can be tested without installing it by hand. It isn't bundled in the mod jar and stays an optional dependency.
 
 # 5.1.1
 
