@@ -28,6 +28,7 @@ public class ModSoundEvents {
 
     // Entity Sounds
     public static final Supplier<SoundEvent> LIFT_START = registerSoundEvent("lift_start");
+    public static final Supplier<SoundEvent> LIFT_LOOP = registerSoundEvent("lift_loop");
     public static final Supplier<SoundEvent> LIFT_STOP = registerSoundEvent("lift_stop");
     public static final Supplier<SoundEvent> BOULDER_LAND = registerSoundEvent("boulder_land");
 

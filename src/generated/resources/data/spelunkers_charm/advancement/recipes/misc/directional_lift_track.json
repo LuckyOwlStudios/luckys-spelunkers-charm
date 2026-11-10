@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_motor_track": {
+      "conditions": {
+        "items": [
+          {
+            "items": "spelunkers_charm:powered_lift_track"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "spelunkers_charm:directional_lift_track"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_motor_track"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "spelunkers_charm:directional_lift_track"
+    ]
+  }
+}

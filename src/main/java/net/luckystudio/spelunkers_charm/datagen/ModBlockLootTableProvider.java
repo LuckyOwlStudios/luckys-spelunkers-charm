@@ -156,7 +156,9 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
 
         // Redstone Blocks
         dropSelf(ModBlocks.BLASTER.get());
-        dropSelf(ModBlocks.WOODEN_LIFT_TRACK.get());
+        dropSelf(ModBlocks.BASIC_LIFT_TRACK.get());
+        dropSelf(ModBlocks.DIRECTIONAL_LIFT_TRACK.get());
+        dropSelf(ModBlocks.DETECTOR_LIFT_TRACK.get());
         dropSelf(ModBlocks.POWERED_LIFT_TRACK.get());
     }
 

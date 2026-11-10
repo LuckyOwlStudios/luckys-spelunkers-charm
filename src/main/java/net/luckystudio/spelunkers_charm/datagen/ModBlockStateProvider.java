@@ -4,7 +4,6 @@ import net.luckystudio.spelunkers_charm.SpelunkersCharm;
 import net.luckystudio.spelunkers_charm.init.ModBlocks;
 import net.luckystudio.spelunkers_charm.block.custom.boulder.BoulderBlock;
 import net.luckystudio.spelunkers_charm.block.custom.HangingBlock;
-import net.luckystudio.spelunkers_charm.block.custom.PoweredLiftTrackBlock;
 import net.luckystudio.spelunkers_charm.block.util.ModBlockStateProperties;
 import net.luckystudio.spelunkers_charm.block.util.enums.BlockPart;
 import net.luckystudio.spelunkers_charm.block.custom.boulder.HangingType;
@@ -131,8 +130,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         // Redstone Blocks
         blaster(ModBlocks.BLASTER.get());
-        woodenLiftTrack(ModBlocks.WOODEN_LIFT_TRACK.get());
-        poweredLiftTrack(ModBlocks.POWERED_LIFT_TRACK.get());
     }
 
     private void modSimpleBlock(Block block) {
@@ -469,48 +466,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
             return ConfiguredModel.builder()
                     .modelFile(selectedModel)
-                    .build();
-        });
-    }
-
-    private void woodenLiftTrack(Block block) {
-        ModelFile blockModel = models().withExistingParent("wooden_lift_track", modLoc("block/template_lift_track"))
-                .texture("front", modLoc("block/wooden_lift_track_front"))
-                .texture("side", modLoc("block/wooden_lift_track_side"))
-                .texture("end", modLoc("block/wooden_lift_track_end"))
-                .texture("particle", modLoc("block/wooden_lift_track_front"))
-                .renderType("cutout");
-
-        horizontalBlock(block, blockModel);
-        itemModels().simpleBlockItem(block);
-    }
-
-    private void poweredLiftTrack(Block block) {
-        ModelFile blockModel = models().withExistingParent("powered_lift_track", modLoc("block/template_lift_track"))
-                .texture("front", modLoc("block/powered_lift_track_front"))
-                .texture("side", modLoc("block/powered_lift_track_side"))
-                .texture("end", modLoc("block/powered_lift_track_end"))
-                .texture("particle", modLoc("block/powered_lift_track_front"))
-                .renderType("cutout");
-        ModelFile poweredBlockModel = models().withExistingParent("powered_lift_track_powered", modLoc("block/template_lift_track"))
-                .texture("front", modLoc("block/powered_lift_track_front_powered"))
-                .texture("side", modLoc("block/powered_lift_track_side"))
-                .texture("end", modLoc("block/powered_lift_track_end_powered"))
-                .texture("particle", modLoc("block/powered_lift_track_front_powered"))
-                .renderType("cutout");
-
-        itemModels().simpleBlockItem(block);
-
-        getVariantBuilder(block).forAllStates(state -> {
-            boolean powered = state.getValue(PoweredLiftTrackBlock.POWERED);
-
-            ModelFile selectedModel = powered
-                    ? poweredBlockModel
-                    : blockModel;
-
-            return ConfiguredModel.builder()
-                    .modelFile(selectedModel)
-                    .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360)
                     .build();
         });
     }

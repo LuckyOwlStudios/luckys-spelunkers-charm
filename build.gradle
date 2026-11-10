@@ -246,3 +246,7 @@ idea {
         downloadJavadoc = true
     }
 }
+
+if (providers.gradleProperty('elevatorTests').getOrElse('false').toBoolean()) {
+    apply from: 'gradle/elevator-tests.gradle'
+}

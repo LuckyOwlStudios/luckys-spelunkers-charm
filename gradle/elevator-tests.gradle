@@ -1,0 +1,53 @@
+sourceSets {
+    elevatorTest {
+        java.srcDir 'src/gametest/java'
+        resources.srcDir 'src/gametest/resources'
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+
+configurations {
+    elevatorTestImplementation.extendsFrom implementation
+    elevatorTestRuntimeOnly.extendsFrom runtimeOnly
+}
+
+neoForge {
+    addModdingDependenciesTo sourceSets.elevatorTest
+    mods {
+        spelunkers_lift_tests {
+            sourceSet sourceSets.elevatorTest
+        }
+    }
+    runs {
+        configureEach {
+            sourceSet = sourceSets.elevatorTest
+            logLevel = org.slf4j.event.Level.INFO
+        }
+        gameTestServer {
+            systemProperty 'neoforge.enabledGameTestNamespaces', 'spelunkers_lift_tests'
+        }
+        elevatorData {
+            data()
+            gameDirectory = project.file('build/elevator-data-run')
+            programArguments.addAll '--mod', project.mod_id, '--all',
+                    '--output', project.file('build/elevator-generated').absolutePath,
+                    '--existing', project.file('src/main/resources').absolutePath
+        }
+        client {
+            if (providers.gradleProperty('elevatorClientSmoke').getOrElse('false').toBoolean()) {
+                systemProperty 'spelunkers_lifts.clientSmoke', 'true'
+            }
+            if (providers.gradleProperty('elevatorCrouchSmoke').getOrElse('false').toBoolean()) {
+                systemProperty 'spelunkers_lifts.clientCrouch', 'true'
+            }
+        }
+    }
+}
+
+tasks.register('elevatorTestJar', Jar) {
+    group = 'verification'
+    description = 'Builds the isolated elevator regression mod, for development use only.'
+    from sourceSets.elevatorTest.output
+    archiveClassifier = 'elevator-tests'
+}

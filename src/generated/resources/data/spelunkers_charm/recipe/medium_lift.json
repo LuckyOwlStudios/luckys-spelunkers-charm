@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "minecraft:chain"
+    },
+    "D": {
+      "tag": "minecraft:planks"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "P": {
+      "item": "spelunkers_charm:small_lift"
+    }
+  },
+  "pattern": [
+    "ICI",
+    "DPD",
+    "ICI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "spelunkers_charm:medium_lift"
+  }
+}

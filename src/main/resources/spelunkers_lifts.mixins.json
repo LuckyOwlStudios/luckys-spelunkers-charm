@@ -1,0 +1,9 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.luckystudio.spelunkers_charm.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": ["LiftPacketCollisionMixin", "LiftPlayerPoseMixin"],
+  "client": ["LiftClientRenderMixin"],
+  "injectors": {"defaultRequire": 1}
+}
