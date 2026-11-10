@@ -44,6 +44,18 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    // Modrinth Maven, used only for dev-only runtime mods like Camera Overhaul and Cloth Config
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
 }
 
 base {
@@ -173,6 +185,13 @@ dependencies {
     // 6.0.6 is used because 6.0.7+ requires NeoForge 21.1.200+, newer than neo_version.
     // Flywheel, Ponder and Registrate are bundled inside the Create jar, so they need no separate entries.
     localRuntime "curse.maven:create-328085:${create_file_id}"
+
+    // Camera Overhaul (Mirsario): dev runs only, for testing tremor camera shake.
+    // localRuntime keeps it off the compile classpath and out of the built jar. It stays an optional
+    // dependency in neoforge.mods.toml, and our compat code reaches it through reflection only.
+    // Camera Overhaul requires Cloth Config, so that's added for dev runs too.
+    localRuntime "maven.modrinth:cameraoverhaul:${cameraoverhaul_version_id}"
+    localRuntime "maven.modrinth:cloth-config:${cloth_config_version_id}"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
