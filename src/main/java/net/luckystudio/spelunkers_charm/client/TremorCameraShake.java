@@ -24,14 +24,14 @@ import java.util.List;
 @EventBusSubscriber(modid = SpelunkersCharm.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class TremorCameraShake {
     // Strongest trauma (0 to 1) a full strength, max magnitude tremor gives at strength 1.0.
-    private static final float MAX_TRAUMA = 1.0F;
+    private static final float MAX_TRAUMA = 0.6F;
     // Share of MAX_TRAUMA that even a magnitude 1 tremor gets, so small tremors are still felt.
-    private static final float MIN_MAGNITUDE_SHARE = 0.5F;
+    private static final float MIN_MAGNITUDE_SHARE = 0.3F;
     // Shake reaches this many times the tremor's effect radius, fading out with distance.
     private static final float RADIUS_SCALE = 1.5F;
-    // Fairly low frequency, for a rumble rather than a sharp jolt. Camera Overhaul multiplies this by
-    // its own max frequency (6 by default), so 0.6 is about 3.6 wobbles a second.
-    private static final float FREQUENCY = 0.6F;
+    // High frequency, so it reads as a quick rattle rather than a slow wobble. Camera Overhaul multiplies
+    // this by its own max frequency (6 by default), so 2.0 is about 12 shakes a second.
+    private static final float FREQUENCY = 2.0F;
     // How long a shake lasts after its last refresh.
     private static final float LINGER_SECONDS = 0.75F;
 
