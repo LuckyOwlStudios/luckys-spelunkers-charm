@@ -42,9 +42,9 @@ public class LocomotiveScreen extends AbstractContainerScreen<LocomotiveMenu> {
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         super.renderLabels(guiGraphics, mouseX, mouseY);
-        Component status = Component.translatable(this.menu.isRunning()
-                ? "gui.spelunkers_charm.locomotive.running"
-                : "gui.spelunkers_charm.locomotive.stopped");
+        Component status = Component.translatable(this.menu.isReversed()
+                ? "gui.spelunkers_charm.locomotive.reversed"
+                : "gui.spelunkers_charm.locomotive.forward");
         guiGraphics.drawString(this.font, status, (this.imageWidth - this.font.width(status)) / 2, 22, 0x404040, false);
     }
 

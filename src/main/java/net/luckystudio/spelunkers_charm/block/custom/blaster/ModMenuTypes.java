@@ -1,6 +1,7 @@
 package net.luckystudio.spelunkers_charm.block.custom.blaster;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.FurnaceMinecartMenu;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.LocomotiveMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -20,6 +21,9 @@ public class ModMenuTypes {
 
     public static final DeferredHolder<MenuType<?>, MenuType<LocomotiveMenu>> LOCOMOTIVE_MENU =
             registerMenuType("locomotive_menu", (containerId, inventory, extraData) -> new LocomotiveMenu(containerId, inventory));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<FurnaceMinecartMenu>> FURNACE_MINECART_MENU =
+            registerMenuType("furnace_minecart_menu", (containerId, inventory, extraData) -> new FurnaceMinecartMenu(containerId, inventory));
 
     private static <T extends AbstractContainerMenu>DeferredHolder<MenuType<?>, MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {
         return MENUS.register(name, () -> IMenuTypeExtension.create(factory));

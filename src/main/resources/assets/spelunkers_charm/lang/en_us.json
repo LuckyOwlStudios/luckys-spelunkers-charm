@@ -181,12 +181,13 @@
   "message.spelunkers_charm.cart_coupler.too_far": "These minecarts are too far apart",
   "message.spelunkers_charm.cart_coupler.full": "A minecart can only be coupled to two others",
   "message.spelunkers_charm.cart_coupler.missing": "The first minecart is gone. Click a minecart to start again.",
-  "message.spelunkers_charm.locomotive.started": "Locomotive started",
-  "message.spelunkers_charm.locomotive.stopped": "Locomotive stopped",
-  "message.spelunkers_charm.locomotive.no_fuel": "The locomotive needs fuel",
-  "gui.spelunkers_charm.locomotive.running": "Running",
-  "gui.spelunkers_charm.locomotive.stopped": "Stopped",
   "block.spelunkers_charm.wooden_rail": "Wooden Rail",
   "block.spelunkers_charm.ejector_rail": "Ejector Rail",
-  "block.spelunkers_charm.crossing_rail": "Rail Crossing"
+  "block.spelunkers_charm.crossing_rail": "Rail Crossing",
+  "item.spelunkers_charm.locomotive": "Locomotive",
+  "gui.spelunkers_charm.locomotive.forward": "Lever: Forward",
+  "gui.spelunkers_charm.locomotive.reversed": "Lever: Reversed",
+  "container.spelunkers_charm.furnace_minecart": "Minecart with Furnace",
+  "gui.spelunkers_charm.furnace_minecart.fuel": "Fuel left: %s",
+  "gui.spelunkers_charm.furnace_minecart.empty": "Out of fuel"
 }

@@ -1,16 +1,15 @@
 package net.luckystudio.spelunkers_charm.entity.custom.minecart;
 
 import net.luckystudio.spelunkers_charm.init.ModEntityType;
+import net.luckystudio.spelunkers_charm.init.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
@@ -21,9 +20,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
 import net.minecraft.world.level.block.Blocks;
@@ -32,13 +29,15 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A minecart that burns fuel to drive itself (and any carts coupled to it).
- * Right-click opens the fuel screen, shift-right-click starts or stops it.
- * Made by shift-right-clicking a blast furnace onto a minecart.
+ * A minecart with an engine that burns fuel to drive itself (and any carts coupled to it).
+ * It runs whenever it has fuel. Right-click opens the fuel screen, shift-right-click pulls the
+ * lever on its side to reverse its direction ({@link #switchDirection()}, which other things
+ * like special rails can call too).
  */
 public class LocomotiveMinecart extends AbstractMinecartContainer {
 
-    private static final EntityDataAccessor<Boolean> DATA_RUNNING = SynchedEntityData.defineId(LocomotiveMinecart.class, EntityDataSerializers.BOOLEAN);
+    /** Which way the lever is pulled. Flips every time the direction is switched. */
+    private static final EntityDataAccessor<Boolean> DATA_REVERSED = SynchedEntityData.defineId(LocomotiveMinecart.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_BURNING = SynchedEntityData.defineId(LocomotiveMinecart.class, EntityDataSerializers.BOOLEAN);
 
     /** Fuel lasts this many times longer than it does in a furnace. Coal runs for 2 minutes 40 seconds. */
@@ -57,7 +56,7 @@ public class LocomotiveMinecart extends AbstractMinecartContainer {
             return switch (index) {
                 // Remaining fuel as a percentage, kept small so it fits the menu's short data sync.
                 case 0 -> burnDuration > 0 ? Math.max(0, burnTime) * 100 / burnDuration : 0;
-                case 1 -> isRunning() ? 1 : 0;
+                case 1 -> isReversed() ? 1 : 0;
                 default -> 0;
             };
         }
@@ -83,18 +82,33 @@ public class LocomotiveMinecart extends AbstractMinecartContainer {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(DATA_RUNNING, false);
+        builder.define(DATA_REVERSED, false);
         builder.define(DATA_BURNING, false);
     }
 
-    public boolean isRunning() {
-        return this.entityData.get(DATA_RUNNING);
+    /** Whether the lever is pulled back. */
+    public boolean isReversed() {
+        return this.entityData.get(DATA_REVERSED);
     }
 
-    private void setRunning(boolean running) {
-        this.entityData.set(DATA_RUNNING, running);
+    /**
+     * Pulls the lever: the engine reverses and drives the other way.
+     * Public so other things (like a special rail) can flip it. Server side.
+     */
+    public void switchDirection() {
+        this.entityData.set(DATA_REVERSED, !isReversed());
+        this.xPush = -this.xPush;
+        this.zPush = -this.zPush;
+        this.playSound(SoundEvents.LEVER_CLICK, 0.6F, isReversed() ? 0.5F : 0.6F);
     }
 
+    /** Points the engine along a direction, used when the locomotive is placed. */
+    public void setDriveDirection(Direction direction) {
+        this.xPush = direction.getStepX();
+        this.zPush = direction.getStepZ();
+    }
+
+    /** Whether the engine is burning fuel right now. */
     public boolean isBurning() {
         return this.entityData.get(DATA_BURNING);
     }
@@ -127,18 +141,14 @@ public class LocomotiveMinecart extends AbstractMinecartContainer {
     public void tick() {
         super.tick();
         if (!this.level().isClientSide()) {
-            if (isRunning()) {
-                if (this.burnTime <= 0) {
-                    consumeFuel();
-                }
-                if (this.burnTime > 0) {
-                    this.burnTime--;
-                } else {
-                    stop();
-                    this.playSound(SoundEvents.FIRE_EXTINGUISH, 0.5F, 1.0F);
-                }
+            // Like the furnace minecart, it runs whenever it has fuel.
+            if (this.burnTime <= 0) {
+                consumeFuel();
             }
-            this.entityData.set(DATA_BURNING, isRunning() && this.burnTime > 0);
+            if (this.burnTime > 0) {
+                this.burnTime--;
+            }
+            this.entityData.set(DATA_BURNING, this.burnTime > 0);
         } else if (isBurning() && this.random.nextInt(3) == 0) {
             this.level().addParticle(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY() + 0.9, this.getZ(), 0.0, 0.0, 0.0);
         }
@@ -162,12 +172,6 @@ public class LocomotiveMinecart extends AbstractMinecartContainer {
         return true;
     }
 
-    private void stop() {
-        setRunning(false);
-        this.xPush = 0.0;
-        this.zPush = 0.0;
-    }
-
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
         if (!player.isSecondaryUseActive()) {
@@ -175,19 +179,13 @@ public class LocomotiveMinecart extends AbstractMinecartContainer {
             return super.interact(player, hand);
         }
         if (!this.level().isClientSide()) {
-            if (isRunning()) {
-                stop();
-                this.playSound(SoundEvents.FIRE_EXTINGUISH, 0.5F, 1.4F);
-                player.displayClientMessage(Component.translatable("message.spelunkers_charm.locomotive.stopped"), true);
-            } else if (this.burnTime > 0 || isFuel(this.getItem(0))) {
-                setRunning(true);
-                // Drive away from the player, like pushing a furnace minecart.
+            if (this.xPush == 0.0 && this.zPush == 0.0) {
+                // No direction yet: drive away from the player.
                 this.xPush = this.getX() - player.getX();
                 this.zPush = this.getZ() - player.getZ();
-                this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.FIRECHARGE_USE, SoundSource.NEUTRAL, 0.6F, 0.8F);
-                player.displayClientMessage(Component.translatable("message.spelunkers_charm.locomotive.started"), true);
+                this.playSound(SoundEvents.LEVER_CLICK, 0.6F, 0.6F);
             } else {
-                player.displayClientMessage(Component.translatable("message.spelunkers_charm.locomotive.no_fuel"), true);
+                switchDirection();
             }
         }
         return InteractionResult.sidedSuccess(this.level().isClientSide());
@@ -223,7 +221,7 @@ public class LocomotiveMinecart extends AbstractMinecartContainer {
     @Override
     protected void applyNaturalSlowdown() {
         double pushSqr = this.xPush * this.xPush + this.zPush * this.zPush;
-        if (isRunning() && pushSqr > 1.0E-7) {
+        if (isBurning() && pushSqr > 1.0E-7) {
             double pushLength = Math.sqrt(pushSqr);
             this.xPush /= pushLength;
             this.zPush /= pushLength;
@@ -247,26 +245,18 @@ public class LocomotiveMinecart extends AbstractMinecartContainer {
 
     @Override
     protected @NotNull Item getDropItem() {
-        return Items.MINECART;
+        return ModItems.LOCOMOTIVE.get();
     }
 
     @Override
     public ItemStack getPickResult() {
-        return new ItemStack(Items.BLAST_FURNACE);
-    }
-
-    @Override
-    public void destroy(Item dropItem) {
-        super.destroy(dropItem);
-        if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-            this.spawnAtLocation(Items.BLAST_FURNACE);
-        }
+        return new ItemStack(ModItems.LOCOMOTIVE.get());
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putBoolean("Running", isRunning());
+        tag.putBoolean("Reversed", isReversed());
         tag.putInt("BurnTime", this.burnTime);
         tag.putInt("BurnDuration", this.burnDuration);
         tag.putDouble("PushX", this.xPush);
@@ -276,7 +266,7 @@ public class LocomotiveMinecart extends AbstractMinecartContainer {
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        setRunning(tag.getBoolean("Running"));
+        this.entityData.set(DATA_REVERSED, tag.getBoolean("Reversed"));
         this.burnTime = tag.getInt("BurnTime");
         this.burnDuration = tag.getInt("BurnDuration");
         this.xPush = tag.getDouble("PushX");

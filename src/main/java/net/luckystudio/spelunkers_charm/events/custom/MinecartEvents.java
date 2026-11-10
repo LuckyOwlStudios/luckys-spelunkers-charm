@@ -2,8 +2,8 @@ package net.luckystudio.spelunkers_charm.events.custom;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.BlockMinecart;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.FurnaceMinecartMenu;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.JukeboxMinecart;
-import net.luckystudio.spelunkers_charm.entity.custom.minecart.LocomotiveMinecart;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartLantern;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartLanterns;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartLinking;
@@ -13,8 +13,10 @@ import net.luckystudio.spelunkers_charm.item.custom.CartCouplerItem;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -110,7 +112,7 @@ public class MinecartEvents {
 
     private static boolean minecartBlocks(Block block) {
         return block == Blocks.HOPPER || block == Blocks.CHEST || block == Blocks.FURNACE || block == Blocks.TNT
-                || block == Blocks.BLAST_FURNACE || block == Blocks.JUKEBOX;
+                || block == Blocks.JUKEBOX;
     }
 
     private static AbstractMinecart getAbstractMinecart(Minecart oldMinecart, Block block, Level level) {
@@ -122,8 +124,6 @@ public class MinecartEvents {
             return new MinecartFurnace(level, oldMinecart.getX(), oldMinecart.getY(), oldMinecart.getZ());
         } else if (block == Blocks.TNT) {
             return new MinecartTNT(level, oldMinecart.getX(), oldMinecart.getY(), oldMinecart.getZ());
-        } else if (block == Blocks.BLAST_FURNACE) {
-            return new LocomotiveMinecart(level, oldMinecart.getX(), oldMinecart.getY(), oldMinecart.getZ());
         } else if (block == Blocks.JUKEBOX) {
             return new JukeboxMinecart(level, oldMinecart.getX(), oldMinecart.getY(), oldMinecart.getZ());
         }
@@ -169,6 +169,21 @@ public class MinecartEvents {
         player.swing(event.getHand());
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.sidedSuccess(clientSide));
+    }
+
+    /**
+     * Right-clicking a furnace minecart with anything but its fuel also opens a screen showing its fuel.
+     * The vanilla push still happens.
+     */
+    @SubscribeEvent
+    public static void onFurnaceMinecartUse(PlayerInteractEvent.EntityInteract event) {
+        if (event.getLevel().isClientSide() || event.getHand() != InteractionHand.MAIN_HAND) return;
+        if (!(event.getTarget() instanceof MinecartFurnace cart)) return;
+        ItemStack stack = event.getItemStack();
+        if (stack.is(Items.COAL) || stack.is(Items.CHARCOAL)) return;
+        event.getEntity().openMenu(new SimpleMenuProvider(
+                (containerId, inventory, player) -> new FurnaceMinecartMenu(containerId, inventory, cart, FurnaceMinecartMenu.dataFor(cart)),
+                Component.translatable("container.spelunkers_charm.furnace_minecart")));
     }
 
     /** Keeps coupled carts together and moves lantern light along with carts. */

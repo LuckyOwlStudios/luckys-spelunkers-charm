@@ -12,6 +12,8 @@ import net.luckystudio.spelunkers_charm.entity.custom.lift.medium.MediumLiftMode
 import net.luckystudio.spelunkers_charm.entity.custom.lift.medium.MediumLiftRenderer;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.small.SmallLiftModel;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.small.SmallLiftRenderer;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.FurnaceMinecartScreen;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.LocomotiveRenderer;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.LocomotiveScreen;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.override.OverrideMinecartRenderer;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.override.NewMinecartModel;
@@ -75,7 +77,7 @@ public class SpelunkersCharmClient {
 
         // New Entity Renderers
         event.registerEntityRenderer(ModEntityType.BLOCK_MINECART.get(), OverrideMinecartRenderer::new);
-        event.registerEntityRenderer(ModEntityType.LOCOMOTIVE.get(), OverrideMinecartRenderer::new);
+        event.registerEntityRenderer(ModEntityType.LOCOMOTIVE.get(), LocomotiveRenderer::new);
         event.registerEntityRenderer(ModEntityType.JUKEBOX_MINECART.get(), OverrideMinecartRenderer::new);
         event.registerEntityRenderer(ModEntityType.SMALL_LIFT.get(), SmallLiftRenderer::new);
         event.registerEntityRenderer(ModEntityType.MEDIUM_LIFT.get(), MediumLiftRenderer::new);
@@ -104,6 +106,7 @@ public class SpelunkersCharmClient {
     public static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenuTypes.BLASTER_MENU.get(), BlasterScreen::new);
         event.register(ModMenuTypes.LOCOMOTIVE_MENU.get(), LocomotiveScreen::new);
+        event.register(ModMenuTypes.FURNACE_MINECART_MENU.get(), FurnaceMinecartScreen::new);
     }
 
     @SubscribeEvent

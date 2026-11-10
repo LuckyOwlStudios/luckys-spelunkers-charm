@@ -58,7 +58,8 @@ public class LocomotiveMenu extends AbstractContainerMenu {
         return this.data.get(0);
     }
 
-    public boolean isRunning() {
+    /** Which way the lever is pulled. */
+    public boolean isReversed() {
         return this.data.get(1) != 0;
     }
 
