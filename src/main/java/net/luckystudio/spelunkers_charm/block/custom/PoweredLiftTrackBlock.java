@@ -4,18 +4,21 @@ import com.mojang.serialization.MapCodec;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
-import java.util.List;
-
-/** Ordinary motor rack: redstone reaches seven connected motor segments vertically. */
+/**
+ * Ordinary motor rack: redstone reaches seven connected motor segments vertically.
+ *
+ * <p>Former tooltip:
+ *
+ * <ul>
+ *   <li>"A powered guide for vertical lift travel."
+ *   <li>"Redstone reaches 7 connected motor segments up/down."
+ * </ul>
+ */
 public class PoweredLiftTrackBlock extends LiftTrackBlock {
     public static final MapCodec<PoweredLiftTrackBlock> CODEC =
             simpleCodec(PoweredLiftTrackBlock::new);
@@ -24,17 +27,6 @@ public class PoweredLiftTrackBlock extends LiftTrackBlock {
 
     public PoweredLiftTrackBlock(BlockBehaviour.Properties properties) {
         super(properties);
-    }
-
-    @Override
-    public void appendHoverText(
-            ItemStack stack,
-            Item.TooltipContext context,
-            List<Component> tooltip,
-            TooltipFlag flag) {
-        super.appendHoverText(stack, context, tooltip, flag);
-        tooltip.add(Component.translatable("tooltip.spelunkers_charm.lift_motor"));
-        tooltip.add(Component.translatable("tooltip.spelunkers_charm.lift_motor_power"));
     }
 
     @Override

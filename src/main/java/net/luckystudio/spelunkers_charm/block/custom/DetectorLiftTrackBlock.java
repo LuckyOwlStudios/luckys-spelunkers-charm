@@ -5,12 +5,8 @@ import com.mojang.serialization.MapCodec;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.AbstractLift;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -18,9 +14,11 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-import java.util.List;
-
-/** A passive rack with a detector-rail output, not another motor or station. */
+/**
+ * A passive rack with a detector-rail output, not another motor or station.
+ *
+ * <p>Former tooltip: "Outputs signal 15 while a lift passes or remains here. Not a motor."
+ */
 public class DetectorLiftTrackBlock extends BasicLiftTrackBlock {
     public static final MapCodec<DetectorLiftTrackBlock> CODEC =
             simpleCodec(DetectorLiftTrackBlock::new);
@@ -106,14 +104,5 @@ public class DetectorLiftTrackBlock extends BasicLiftTrackBlock {
     protected int getDirectSignal(
             BlockState state, BlockGetter level, BlockPos pos, Direction side) {
         return state.getValue(POWERED) && side == Direction.UP ? 15 : 0;
-    }
-
-    @Override
-    public void appendHoverText(
-            ItemStack stack,
-            Item.TooltipContext context,
-            List<Component> tooltip,
-            TooltipFlag flag) {
-        tooltip.add(Component.translatable("tooltip.spelunkers_charm.lift_detector"));
     }
 }

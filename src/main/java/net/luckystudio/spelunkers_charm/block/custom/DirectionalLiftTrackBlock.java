@@ -11,9 +11,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -26,9 +23,18 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.BlockHitResult;
 
-import java.util.List;
-
-/** A station: one command per rising input edge, with independent visual feedback. */
+/**
+ * A station: one command per rising input edge, with independent visual feedback.
+ *
+ * <p>Former tooltip:
+ *
+ * <ul>
+ *   <li>"Directional station: the lift waits here."
+ *   <li>"Redstone: one pulse. Turn power off before triggering again."
+ *   <li>"Look up/down while placing to set the arrow."
+ *   <li>"Empty-hand right-click reverses the arrow."
+ * </ul>
+ */
 public final class DirectionalLiftTrackBlock extends LiftTrackBlock {
     public static final MapCodec<DirectionalLiftTrackBlock> CODEC =
             simpleCodec(DirectionalLiftTrackBlock::new);
@@ -127,22 +133,5 @@ public final class DirectionalLiftTrackBlock extends LiftTrackBlock {
                     true);
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
-    }
-
-    @Override
-    public void appendHoverText(
-            ItemStack stack,
-            Item.TooltipContext context,
-            List<Component> tooltip,
-            TooltipFlag flag) {
-        super.appendHoverText(stack, context, tooltip, flag);
-        for (String key :
-                List.of(
-                        "lift_station",
-                        "lift_station_power",
-                        "lift_station_direction",
-                        "lift_station_toggle")) {
-            tooltip.add(Component.translatable("tooltip.spelunkers_charm." + key));
-        }
     }
 }
