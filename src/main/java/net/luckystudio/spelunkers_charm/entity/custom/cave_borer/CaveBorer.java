@@ -335,11 +335,6 @@ public class CaveBorer extends Monster {
     }
 
     @Override
-    public boolean canBreatheUnderwater() {
-        return true;
-    }
-
-    @Override
     protected @NotNull MovementEmission getMovementEmission() {
         return MovementEmission.NONE;
     }
