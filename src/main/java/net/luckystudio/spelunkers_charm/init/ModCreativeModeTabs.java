@@ -161,6 +161,10 @@ public class ModCreativeModeTabs {
             event.insertAfter(ModItems.CANDLE_HELMET.toStack(), ModItems.MINING_HELMET.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
         }
 
+        if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
+            event.insertAfter(Items.SILVERFISH_SPAWN_EGG.getDefaultInstance(), ModItems.CAVE_BORER_SPAWN_EGG.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+        }
+
         if (event.getTabKey() == CreativeModeTabs.FOOD_AND_DRINKS && event.getTab().contains(Items.SPIDER_EYE.getDefaultInstance())) {
             event.insertAfter(Items.SPIDER_EYE.getDefaultInstance(), ModBlocks.CAVE_MUSHROOM.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
         }

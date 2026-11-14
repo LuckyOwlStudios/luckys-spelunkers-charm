@@ -30,6 +30,12 @@ public class ModSoundEvents {
     public static final Supplier<SoundEvent> LIFT_START = registerSoundEvent("lift_start");
     public static final Supplier<SoundEvent> LIFT_STOP = registerSoundEvent("lift_stop");
     public static final Supplier<SoundEvent> BOULDER_LAND = registerSoundEvent("boulder_land");
+    public static final Supplier<SoundEvent> CAVE_BORER_BURROW = registerSoundEvent("cave_borer.burrow");
+    public static final Supplier<SoundEvent> CAVE_BORER_WARN = registerSoundEvent("cave_borer.warn");
+    public static final Supplier<SoundEvent> CAVE_BORER_EMERGE = registerSoundEvent("cave_borer.emerge");
+    public static final Supplier<SoundEvent> CAVE_BORER_BITE = registerSoundEvent("cave_borer.bite");
+    public static final Supplier<SoundEvent> CAVE_BORER_HURT = registerSoundEvent("cave_borer.hurt");
+    public static final Supplier<SoundEvent> CAVE_BORER_DEATH = registerSoundEvent("cave_borer.death");
 
     private static Supplier<SoundEvent> registerSoundEvent(String name) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(SpelunkersCharm.MOD_ID, name);

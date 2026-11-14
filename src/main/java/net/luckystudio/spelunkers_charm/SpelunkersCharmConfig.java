@@ -43,6 +43,16 @@ public class SpelunkersCharmConfig {
     public static ModConfigSpec.IntValue EXPLOSION_TREMOR_MAX_Y;
     public static ModConfigSpec.DoubleValue EXPLOSION_TREMOR_SECONDS_PER_RADIUS;
 
+    // === CATEGORY CAVE BORER CONFIGURATION ===
+    public static String CATEGORY_CAVE_BORER = "caveBorer";
+    public static ModConfigSpec.BooleanValue CAVE_BORER_SPAWNING;
+    public static ModConfigSpec.IntValue CAVE_BORER_MAX_SPAWN_Y;
+    public static ModConfigSpec.DoubleValue CAVE_BORER_WARNING_SECONDS;
+    public static ModConfigSpec.DoubleValue CAVE_BORER_REST_MIN_SECONDS;
+    public static ModConfigSpec.DoubleValue CAVE_BORER_REST_MAX_SECONDS;
+    public static ModConfigSpec.IntValue CAVE_BORER_AMBUSH_MIN_DISTANCE;
+    public static ModConfigSpec.IntValue CAVE_BORER_AMBUSH_MAX_DISTANCE;
+
     // === CLIENT CONFIGURATION ===
     public static String CATEGORY_CLIENT = "client";
     public static ModConfigSpec.DoubleValue TREMOR_VOLUME;
@@ -160,6 +170,38 @@ public class SpelunkersCharmConfig {
         EXPLOSION_TREMOR_SECONDS_PER_RADIUS = COMMON_BUILDER
                 .comment("Seconds of tremor per block of explosion radius (TNT has a radius of 4)")
                 .defineInRange("explosionSecondsPerRadius", 3.0, 0.0, 30.0);
+
+        COMMON_BUILDER.pop();
+
+        COMMON_BUILDER.comment("Cave Borer Settings (the burrowing worm that ambushes players underground)").push(CATEGORY_CAVE_BORER);
+
+        CAVE_BORER_SPAWNING = COMMON_BUILDER
+                .comment("Whether cave borers spawn naturally underground")
+                .define("spawning", true);
+
+        CAVE_BORER_MAX_SPAWN_Y = COMMON_BUILDER
+                .comment("Highest Y level cave borers can spawn at")
+                .defineInRange("maxSpawnY", 40, -64, 320);
+
+        CAVE_BORER_WARNING_SECONDS = COMMON_BUILDER
+                .comment("Seconds of warning (block particles and digging sounds) before a cave borer lunges out")
+                .defineInRange("warningSeconds", 2.0, 0.25, 10.0);
+
+        CAVE_BORER_REST_MIN_SECONDS = COMMON_BUILDER
+                .comment("Shortest pause, in seconds, between a cave borer's attacks")
+                .defineInRange("restMinSeconds", 1.5, 0.0, 30.0);
+
+        CAVE_BORER_REST_MAX_SECONDS = COMMON_BUILDER
+                .comment("Longest pause, in seconds, between a cave borer's attacks")
+                .defineInRange("restMaxSeconds", 3.0, 0.0, 30.0);
+
+        CAVE_BORER_AMBUSH_MIN_DISTANCE = COMMON_BUILDER
+                .comment("Closest a cave borer will emerge to the player, in blocks")
+                .defineInRange("ambushMinDistance", 3, 1, 16);
+
+        CAVE_BORER_AMBUSH_MAX_DISTANCE = COMMON_BUILDER
+                .comment("Farthest a cave borer will emerge from the player, in blocks")
+                .defineInRange("ambushMaxDistance", 10, 2, 24);
 
         COMMON_BUILDER.pop();
         COMMON_CONFIG = COMMON_BUILDER.build();
