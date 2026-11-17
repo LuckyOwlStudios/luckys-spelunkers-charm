@@ -160,6 +160,7 @@
   "block.spelunkers_charm.lift_controller": "Lift",
   "block.spelunkers_charm.lift_part": "Lift",
   "message.spelunkers_charm.lift_no_sable": "Lifts need Sable physics, which isn't running in this world.",
+  "message.spelunkers_charm.lift_place_tracks": "Place lift tracks in the outlined spots, facing the lift, to run it.",
   "message.spelunkers_charm.lift_tracks": "Missing or incorrectly facing lift tracks.",
   "tooltip.spelunkers_charm.lift_tracks": "Up: at least half the motor racks powered. Down: no power required.",
   "tooltip.spelunkers_charm.lift_redstone": "Directional tracks mark stations and choose the departure direction.",

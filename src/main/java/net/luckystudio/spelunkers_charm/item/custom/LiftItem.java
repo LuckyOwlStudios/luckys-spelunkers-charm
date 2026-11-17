@@ -24,6 +24,10 @@ public class LiftItem extends Item {
         this.type = type;
     }
 
+    public AbstractLift.Type getType() {
+        return type;
+    }
+
     @Override
     public InteractionResult useOn(UseOnContext context) {
         if (context.getLevel().isClientSide) return InteractionResult.SUCCESS;
@@ -55,6 +59,9 @@ public class LiftItem extends Item {
         }
         if (!LiftSubLevels.assemble(level, lift, type)) return InteractionResult.FAIL;
         level.gameEvent(GameEvent.BLOCK_PLACE, lift.position(), GameEvent.Context.of(player));
+        if (player != null && !lift.hasValidTracks())
+            player.displayClientMessage(
+                    Component.translatable("message.spelunkers_charm.lift_place_tracks"), true);
         if (player == null || !player.getAbilities().instabuild) stack.shrink(1);
         return InteractionResult.CONSUME;
     }
