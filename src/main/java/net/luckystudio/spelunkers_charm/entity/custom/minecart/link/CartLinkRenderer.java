@@ -20,7 +20,7 @@ public final class CartLinkRenderer {
     private static final ResourceLocation CHAIN_TEXTURE = ResourceLocation.withDefaultNamespace("block/chain");
     private static final double CHAIN_HEIGHT = 0.35;
     /** How far in from each cart's center the chain starts, so it comes out from the cart's edge. */
-    private static final double END_INSET = 0.4;
+    private static final double END_INSET = 0.45;
     /** Half the width of the chain, 3 pixels wide like the chain block. */
     private static final float HALF_WIDTH = 1.5F / 16.0F;
 

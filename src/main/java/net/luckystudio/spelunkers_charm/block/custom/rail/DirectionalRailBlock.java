@@ -1,5 +1,6 @@
 package net.luckystudio.spelunkers_charm.block.custom.rail;
 
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.LocomotiveMinecart;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -76,6 +77,10 @@ public class DirectionalRailBlock extends PoweredRailBlock {
         Vec3 motion = cart.getDeltaMovement();
 
         if (state.getValue(POWERED)) {
+            // A locomotive heading the wrong way gets its lever flicked.
+            if (cart instanceof LocomotiveMinecart locomotive && locomotive.isDrivingAgainst(direction)) {
+                locomotive.switchDirection();
+            }
             double speed = motion.x * direction.getStepX() + motion.z * direction.getStepZ();
             if (speed < MAX_PUSH_SPEED) {
                 // Moving backwards counts as no speed, so a cart heading the wrong way is turned around.

@@ -124,6 +124,11 @@ public class LocomotiveMinecart extends AbstractMinecartContainer {
         this.zPush = direction.getStepZ();
     }
 
+    /** Whether the engine is pushing against the given direction, so pulling the lever would turn it that way. */
+    public boolean isDrivingAgainst(Direction direction) {
+        return this.xPush * direction.getStepX() + this.zPush * direction.getStepZ() < -1.0E-4;
+    }
+
     /** Whether the engine is burning fuel right now. */
     public boolean isBurning() {
         return this.entityData.get(DATA_BURNING);
