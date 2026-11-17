@@ -26,6 +26,8 @@ Work In Progress section is started.
 
 **Development:**
 - Camera Overhaul (with Cloth Config, which it needs) now loads in dev runs (`runClient`), so tremor camera shake can be tested without installing it by hand. It isn't bundled in the mod jar and stays an optional dependency.
+- Supplementaries (with Moonlight Lib, which it needs) now loads in dev runs (`runClient`), so features like tying boulders to ropes can be tested alongside it. It isn't bundled in the mod jar and stays an optional dependency.
+- NeoForge for development is now 21.1.230 (was 21.1.169), and dev runs use Moonlight Lib 3.3.0, so Supplementaries loads in `runClient` without crashing. Players can still use any NeoForge 21.1.x.
 
 # 5.1.1
 
