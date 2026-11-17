@@ -29,6 +29,17 @@ public final class LiftBlockStateProvider extends BlockStateProvider {
         motorTrack();
         directionalTrack();
         detectorTrack();
+        controller();
+    }
+
+    private void controller() {
+        simpleBlock(
+                ModBlocks.LIFT_CONTROLLER.get(),
+                models().cubeBottomTop(
+                        "lift_controller",
+                        mcLoc("block/lodestone_side"),
+                        mcLoc("block/lodestone_top"),
+                        mcLoc("block/lodestone_top")));
     }
 
     private ModelFile rackModel(String name, String front, String side, String end) {

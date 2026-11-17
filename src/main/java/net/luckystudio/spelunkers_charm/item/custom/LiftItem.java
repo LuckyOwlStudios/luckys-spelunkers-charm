@@ -2,6 +2,7 @@ package net.luckystudio.spelunkers_charm.item.custom;
 
 import net.luckystudio.spelunkers_charm.entity.custom.lift.AbstractLift;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.LiftPlacement;
+import net.luckystudio.spelunkers_charm.entity.custom.lift.LiftSubLevels;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
@@ -44,8 +45,16 @@ public class LiftItem extends Item {
         if (player != null
                 && !player.mayUseItemAt(lift.blockPosition(), context.getClickedFace(), stack))
             return InteractionResult.FAIL;
-        if (!level.addFreshEntity(lift)) return InteractionResult.FAIL;
-        level.gameEvent(GameEvent.ENTITY_PLACE, lift.position(), GameEvent.Context.of(player));
+        // The lift is built from blocks and handed to Sable as a sub-level, so it can be built on.
+        // The entity found above is only used to check the spot; it's never spawned.
+        if (!LiftSubLevels.available(level)) {
+            if (player != null)
+                player.displayClientMessage(
+                        Component.translatable("message.spelunkers_charm.lift_no_sable"), true);
+            return InteractionResult.FAIL;
+        }
+        if (!LiftSubLevels.assemble(level, lift, type)) return InteractionResult.FAIL;
+        level.gameEvent(GameEvent.BLOCK_PLACE, lift.position(), GameEvent.Context.of(player));
         if (player == null || !player.getAbilities().instabuild) stack.shrink(1);
         return InteractionResult.CONSUME;
     }

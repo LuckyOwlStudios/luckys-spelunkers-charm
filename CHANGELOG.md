@@ -21,7 +21,8 @@ Work In Progress section is started.
 - Tremors shake your camera when [Camera Overhaul](https://modrinth.com/mod/cameraoverhaul) is installed. The shake builds and fades with the tremor, is stronger for bigger tremors and weaker the farther away you are. Camera Overhaul is optional. It can be turned off or scaled with `tremorCameraShake` and `tremorCameraShakeStrength` in the client config.
 
 **Changed:**
-- Spelunker's Charm now requires [Sable](https://modrinth.com/mod/sable) 2.0.6 or newer and NeoForge 21.1.228 or newer. This is groundwork for elevators you can build on.
+- Spelunker's Charm now requires [Sable](https://modrinth.com/mod/sable) 2.0.6 or newer and NeoForge 21.1.228 or newer.
+- Lifts are now real blocks you can build on. Placing a lift lays down a wooden deck with a Lift Controller in the middle, and the whole deck (plus anything you build on it) rides the lift tracks as one Sable physics structure. Right-click the Lift Controller to start or stop, sneak-right-click to reverse. Breaking the controller gives the lift item back and leaves the deck loose.
 
 **Development:**
 - Camera Overhaul (with Cloth Config, which it needs) now loads in dev runs (`runClient`), so tremor camera shake can be tested without installing it by hand. It isn't bundled in the mod jar and stays an optional dependency.

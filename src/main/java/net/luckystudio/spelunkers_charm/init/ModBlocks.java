@@ -306,6 +306,9 @@ public class ModBlocks {
             () -> new DetectorLiftTrackBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
     public static final DeferredBlock<Block> POWERED_LIFT_TRACK = registerBlock("powered_lift_track",
             () -> new PoweredLiftTrackBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+    // Center of a Sable lift deck. Placed by the lift items, so it has no item of its own.
+    public static final DeferredBlock<Block> LIFT_CONTROLLER = BLOCKS.register("lift_controller",
+            () -> new LiftControllerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
     private static boolean always(BlockState state, BlockGetter blockGetter, BlockPos pos) {
         return true;
