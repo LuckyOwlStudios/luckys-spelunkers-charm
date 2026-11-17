@@ -44,6 +44,15 @@ public class LocomotiveMinecart extends AbstractMinecartContainer {
     public static final int FUEL_MULTIPLIER = 2;
     /** Top speed in blocks per tick. The furnace minecart is 0.2, normal rails cap carts at 0.4. */
     public static final float MAX_SPEED = 0.3F;
+    /**
+     * How much speed the engine adds each tick while it has fuel. Cart drag takes about 4% of the speed
+     * each tick, so the cart settles at 24 times this, which is {@link #MAX_SPEED}. It takes a few seconds to get there.
+     */
+    public static final double ACCELERATION = MAX_SPEED / 24.0;
+    /** The engine pulls harder when it is working against the way the cart is moving, so reversing isn't too slow. */
+    public static final double BRAKING = ACCELERATION * 1.6;
+    /** Extra slowdown when the engine has no fuel. Without it a cart would coast a long way. */
+    private static final double COASTING_DRAG = 0.985;
 
     private int burnTime;
     private int burnDuration;
@@ -225,17 +234,19 @@ public class LocomotiveMinecart extends AbstractMinecartContainer {
     protected void applyNaturalSlowdown() {
         double pushSqr = this.xPush * this.xPush + this.zPush * this.zPush;
         if (isBurning() && pushSqr > 1.0E-7) {
+            // The engine adds a little speed each tick in its direction, so the cart speeds up, slows down
+            // and turns around gradually instead of jumping to full speed.
             double pushLength = Math.sqrt(pushSqr);
             this.xPush /= pushLength;
             this.zPush /= pushLength;
-            Vec3 motion = this.getDeltaMovement().multiply(0.8, 0.0, 0.8).add(this.xPush, 0.0, this.zPush);
-            if (this.isInWater()) {
-                motion = motion.scale(0.1);
-            }
-            this.setDeltaMovement(motion);
+            Vec3 motion = this.getDeltaMovement();
+            boolean againstMotion = motion.x * this.xPush + motion.z * this.zPush < 0.0;
+            double acceleration = againstMotion ? BRAKING : ACCELERATION;
+            this.setDeltaMovement(motion.add(this.xPush * acceleration, 0.0, this.zPush * acceleration));
         } else {
-            this.setDeltaMovement(this.getDeltaMovement().multiply(0.98, 0.0, 0.98));
+            this.setDeltaMovement(this.getDeltaMovement().multiply(COASTING_DRAG, 0.0, COASTING_DRAG));
         }
+        // The normal minecart drag, which also keeps the speed from going past the maximum.
         super.applyNaturalSlowdown();
     }
 
