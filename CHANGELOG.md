@@ -26,6 +26,7 @@ Work In Progress section is started.
 - Ejector Rail: when powered, throws riders out of passing minecarts. Put a slime block under it to launch them into the air instead. Crafted like an activator rail, with a slime ball in the middle and redstone at the bottom.
 - Directional Rail: place it facing the way you want carts to go. Unpowered, it stops any cart and settles it exactly on the block. Powered, it sends carts in the direction it faces, and flicks the lever of a locomotive heading the other way so it turns around. Crafted like an activator rail, with a piston in the middle.
 - Cargo Rail: a detector-style rail that gives a redstone signal (0 to 15) for how full the cart on it is. It reads chest, hopper and block minecarts, a locomotive's fuel slot and a jukebox minecart's disc, and gives no signal when the cart is empty. Crafted from iron ingots, a chest and a comparator.
+- The Cargo Rail doesn't power the block below it, so a hopper under it isn't locked and can unload the cart on top. Its signal still reaches redstone dust, repeaters and comparators beside and above it.
 - Hoppers can now pull blocks out of a minecart carrying blocks. When the last block is taken, it turns back into a normal minecart.
 - Click a Directional Rail with an empty hand to turn it around.
 - Wooden Rail: a cheap early rail made from sticks and planks. Carts are much slower on it, and a locomotive is too heavy and breaks it.

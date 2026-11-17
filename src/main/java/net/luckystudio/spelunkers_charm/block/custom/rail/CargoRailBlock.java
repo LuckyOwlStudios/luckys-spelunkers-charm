@@ -64,14 +64,18 @@ public class CargoRailBlock extends BaseRailBlock {
         return true;
     }
 
+    /**
+     * Gives its signal to every side except the block below it, unlike a detector rail. That way a hopper
+     * under the rail isn't locked by the signal and can unload the cart on top. It never powers blocks directly.
+     */
     @Override
     protected int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        return state.getValue(CARGO);
+        return direction == Direction.UP ? 0 : state.getValue(CARGO);
     }
 
     @Override
     protected int getDirectSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        return direction == Direction.UP ? state.getValue(CARGO) : 0;
+        return 0;
     }
 
     @Override
