@@ -1,0 +1,172 @@
+{
+  "variants": {
+    "facing=north,powered=false,shape=north_south": {
+      "model": "spelunkers_charm:block/directional_rail"
+    },
+    "facing=north,powered=false,shape=east_west": {
+      "model": "spelunkers_charm:block/directional_rail_flip",
+      "y": 90
+    },
+    "facing=north,powered=false,shape=ascending_north": {
+      "model": "spelunkers_charm:block/directional_rail_raised_ne"
+    },
+    "facing=north,powered=false,shape=ascending_south": {
+      "model": "spelunkers_charm:block/directional_rail_flip_raised_sw"
+    },
+    "facing=north,powered=false,shape=ascending_east": {
+      "model": "spelunkers_charm:block/directional_rail_flip_raised_ne",
+      "y": 90
+    },
+    "facing=north,powered=false,shape=ascending_west": {
+      "model": "spelunkers_charm:block/directional_rail_raised_sw",
+      "y": 90
+    },
+    "facing=north,powered=true,shape=north_south": {
+      "model": "spelunkers_charm:block/directional_rail_on"
+    },
+    "facing=north,powered=true,shape=east_west": {
+      "model": "spelunkers_charm:block/directional_rail_on_flip",
+      "y": 90
+    },
+    "facing=north,powered=true,shape=ascending_north": {
+      "model": "spelunkers_charm:block/directional_rail_on_raised_ne"
+    },
+    "facing=north,powered=true,shape=ascending_south": {
+      "model": "spelunkers_charm:block/directional_rail_on_flip_raised_sw"
+    },
+    "facing=north,powered=true,shape=ascending_east": {
+      "model": "spelunkers_charm:block/directional_rail_on_flip_raised_ne",
+      "y": 90
+    },
+    "facing=north,powered=true,shape=ascending_west": {
+      "model": "spelunkers_charm:block/directional_rail_on_raised_sw",
+      "y": 90
+    },
+    "facing=south,powered=false,shape=north_south": {
+      "model": "spelunkers_charm:block/directional_rail_flip"
+    },
+    "facing=south,powered=false,shape=east_west": {
+      "model": "spelunkers_charm:block/directional_rail",
+      "y": 90
+    },
+    "facing=south,powered=false,shape=ascending_north": {
+      "model": "spelunkers_charm:block/directional_rail_flip_raised_ne"
+    },
+    "facing=south,powered=false,shape=ascending_south": {
+      "model": "spelunkers_charm:block/directional_rail_raised_sw"
+    },
+    "facing=south,powered=false,shape=ascending_east": {
+      "model": "spelunkers_charm:block/directional_rail_raised_ne",
+      "y": 90
+    },
+    "facing=south,powered=false,shape=ascending_west": {
+      "model": "spelunkers_charm:block/directional_rail_flip_raised_sw",
+      "y": 90
+    },
+    "facing=south,powered=true,shape=north_south": {
+      "model": "spelunkers_charm:block/directional_rail_on_flip"
+    },
+    "facing=south,powered=true,shape=east_west": {
+      "model": "spelunkers_charm:block/directional_rail_on",
+      "y": 90
+    },
+    "facing=south,powered=true,shape=ascending_north": {
+      "model": "spelunkers_charm:block/directional_rail_on_flip_raised_ne"
+    },
+    "facing=south,powered=true,shape=ascending_south": {
+      "model": "spelunkers_charm:block/directional_rail_on_raised_sw"
+    },
+    "facing=south,powered=true,shape=ascending_east": {
+      "model": "spelunkers_charm:block/directional_rail_on_raised_ne",
+      "y": 90
+    },
+    "facing=south,powered=true,shape=ascending_west": {
+      "model": "spelunkers_charm:block/directional_rail_on_flip_raised_sw",
+      "y": 90
+    },
+    "facing=east,powered=false,shape=north_south": {
+      "model": "spelunkers_charm:block/directional_rail"
+    },
+    "facing=east,powered=false,shape=east_west": {
+      "model": "spelunkers_charm:block/directional_rail",
+      "y": 90
+    },
+    "facing=east,powered=false,shape=ascending_north": {
+      "model": "spelunkers_charm:block/directional_rail_raised_ne"
+    },
+    "facing=east,powered=false,shape=ascending_south": {
+      "model": "spelunkers_charm:block/directional_rail_flip_raised_sw"
+    },
+    "facing=east,powered=false,shape=ascending_east": {
+      "model": "spelunkers_charm:block/directional_rail_raised_ne",
+      "y": 90
+    },
+    "facing=east,powered=false,shape=ascending_west": {
+      "model": "spelunkers_charm:block/directional_rail_flip_raised_sw",
+      "y": 90
+    },
+    "facing=east,powered=true,shape=north_south": {
+      "model": "spelunkers_charm:block/directional_rail_on"
+    },
+    "facing=east,powered=true,shape=east_west": {
+      "model": "spelunkers_charm:block/directional_rail_on",
+      "y": 90
+    },
+    "facing=east,powered=true,shape=ascending_north": {
+      "model": "spelunkers_charm:block/directional_rail_on_raised_ne"
+    },
+    "facing=east,powered=true,shape=ascending_south": {
+      "model": "spelunkers_charm:block/directional_rail_on_flip_raised_sw"
+    },
+    "facing=east,powered=true,shape=ascending_east": {
+      "model": "spelunkers_charm:block/directional_rail_on_raised_ne",
+      "y": 90
+    },
+    "facing=east,powered=true,shape=ascending_west": {
+      "model": "spelunkers_charm:block/directional_rail_on_flip_raised_sw",
+      "y": 90
+    },
+    "facing=west,powered=false,shape=north_south": {
+      "model": "spelunkers_charm:block/directional_rail_flip"
+    },
+    "facing=west,powered=false,shape=east_west": {
+      "model": "spelunkers_charm:block/directional_rail_flip",
+      "y": 90
+    },
+    "facing=west,powered=false,shape=ascending_north": {
+      "model": "spelunkers_charm:block/directional_rail_flip_raised_ne"
+    },
+    "facing=west,powered=false,shape=ascending_south": {
+      "model": "spelunkers_charm:block/directional_rail_raised_sw"
+    },
+    "facing=west,powered=false,shape=ascending_east": {
+      "model": "spelunkers_charm:block/directional_rail_flip_raised_ne",
+      "y": 90
+    },
+    "facing=west,powered=false,shape=ascending_west": {
+      "model": "spelunkers_charm:block/directional_rail_raised_sw",
+      "y": 90
+    },
+    "facing=west,powered=true,shape=north_south": {
+      "model": "spelunkers_charm:block/directional_rail_on_flip"
+    },
+    "facing=west,powered=true,shape=east_west": {
+      "model": "spelunkers_charm:block/directional_rail_on_flip",
+      "y": 90
+    },
+    "facing=west,powered=true,shape=ascending_north": {
+      "model": "spelunkers_charm:block/directional_rail_on_flip_raised_ne"
+    },
+    "facing=west,powered=true,shape=ascending_south": {
+      "model": "spelunkers_charm:block/directional_rail_on_raised_sw"
+    },
+    "facing=west,powered=true,shape=ascending_east": {
+      "model": "spelunkers_charm:block/directional_rail_on_flip_raised_ne",
+      "y": 90
+    },
+    "facing=west,powered=true,shape=ascending_west": {
+      "model": "spelunkers_charm:block/directional_rail_on_raised_sw",
+      "y": 90
+    }
+  }
+}

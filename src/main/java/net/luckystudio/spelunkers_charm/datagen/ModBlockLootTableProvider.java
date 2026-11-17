@@ -160,6 +160,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.POWERED_LIFT_TRACK.get());
         dropSelf(ModBlocks.WOODEN_RAIL.get());
         dropSelf(ModBlocks.EJECTOR_RAIL.get());
+        dropSelf(ModBlocks.DIRECTIONAL_RAIL.get());
         // A crossing is two rails, so it gives both back.
         add(ModBlocks.CROSSING_RAIL.get(), block -> LootTable.lootTable().withPool(applyExplosionCondition(block,
                 LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))

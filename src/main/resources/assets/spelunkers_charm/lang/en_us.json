@@ -183,6 +183,7 @@
   "message.spelunkers_charm.cart_coupler.missing": "The first minecart is gone. Click a minecart to start again.",
   "block.spelunkers_charm.wooden_rail": "Wooden Rail",
   "block.spelunkers_charm.ejector_rail": "Ejector Rail",
+  "block.spelunkers_charm.directional_rail": "Directional Rail",
   "block.spelunkers_charm.crossing_rail": "Rail Crossing",
   "item.spelunkers_charm.locomotive": "Locomotive",
   "gui.spelunkers_charm.locomotive.forward": "Lever: Forward",
