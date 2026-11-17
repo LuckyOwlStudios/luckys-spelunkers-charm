@@ -61,6 +61,8 @@ public class SpelunkersCharmConfig {
     public static ModConfigSpec.DoubleValue TREMOR_VOLUME;
     public static ModConfigSpec.BooleanValue TREMOR_CAMERA_SHAKE;
     public static ModConfigSpec.DoubleValue TREMOR_CAMERA_SHAKE_STRENGTH;
+    public static ModConfigSpec.BooleanValue CAVE_BORER_CAMERA_SHAKE;
+    public static ModConfigSpec.DoubleValue CAVE_BORER_CAMERA_SHAKE_STRENGTH;
 
     static {
         ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
@@ -234,6 +236,12 @@ public class SpelunkersCharmConfig {
         TREMOR_CAMERA_SHAKE_STRENGTH = CLIENT_BUILDER
                 .comment("How strong tremor camera shake is. 1.0 is the default, 0.0 turns it off")
                 .defineInRange("tremorCameraShakeStrength", 1.0, 0.0, 3.0);
+        CAVE_BORER_CAMERA_SHAKE = CLIENT_BUILDER
+                .comment("Shake the camera when large Cave Borers burst out of and burrow into the ground. Needs the Camera Overhaul mod, does nothing without it")
+                .define("caveBorerCameraShake", true);
+        CAVE_BORER_CAMERA_SHAKE_STRENGTH = CLIENT_BUILDER
+                .comment("How strong Cave Borer camera shake is. 1.0 is the default, 0.0 turns it off")
+                .defineInRange("caveBorerCameraShakeStrength", 1.0, 0.0, 3.0);
         CLIENT_BUILDER.pop();
 
         CLIENT_CONFIG = CLIENT_BUILDER.build();

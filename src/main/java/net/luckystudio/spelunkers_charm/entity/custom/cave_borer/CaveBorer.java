@@ -119,12 +119,12 @@ public class CaveBorer extends Monster {
      * time to reach the player: bigger borers come from farther away and move faster to get there.
      */
     public static double lungeSpeedFor(int size) {
-        return 0.9 * rangeScaleFor(size);
+        return 0.45 * rangeScaleFor(size);
     }
 
     /** Tunnelling speed while hidden, scaled the same way. */
     public static double burrowSpeedFor(int size) {
-        return 0.5 * rangeScaleFor(size);
+        return 0.25 * rangeScaleFor(size);
     }
 
     /** Multiplies the config's ambush distances, so bigger borers charge from farther away. */
@@ -142,7 +142,7 @@ public class CaveBorer extends Monster {
     // Extra ticks the dive keeps going after the tail is in the ground, so clients (which see the
     // borer a couple of ticks behind the server) also see the whole body go under before it hides
     private static final int CLIENT_LAG_TICKS = 5;
-    private static final double LUNGE_GRAVITY = 0.04;
+    private static final double LUNGE_GRAVITY = 0.01; // quarter of the old value at half the speed keeps the same arc
     // Fail-safe only (falling into a ravine or the void). A normal lunge ends when it hits the ground.
     private static final int MAX_LUNGE_TICKS = 200;
     private static final int STUN_TICKS = 60;
@@ -876,7 +876,7 @@ public class CaveBorer extends Monster {
         this.diveDistance = 0.0;
         this.buriedSegments = 1; // the head's entry already played the block break effect
         this.level().levelEvent(2001, pos, Block.getId(state));
-        double speed = Math.max(0.35, velocity.length());
+        double speed = Math.max(0.175, velocity.length());
         this.setDeltaMovement(velocity.lengthSqr() > 1.0E-6 ? velocity.normalize().scale(speed) : new Vec3(0.0, -speed, 0.0));
         this.getNavigation().stop();
         this.setState(State.DIVE);
@@ -884,7 +884,7 @@ public class CaveBorer extends Monster {
 
     private void tickDive() {
         Vec3 velocity = this.getDeltaMovement();
-        double speed = Math.max(0.35, velocity.length());
+        double speed = Math.max(0.175, velocity.length());
         // Curve gently downward so it digs deeper instead of skimming just under the surface.
         // The body follows the head's exact path, so it goes in through the same hole.
         velocity = (velocity.lengthSqr() > 1.0E-6 ? velocity.normalize() : new Vec3(0.0, -1.0, 0.0)).add(0.0, -0.08, 0.0).normalize().scale(speed);
