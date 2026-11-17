@@ -47,7 +47,7 @@ import java.util.Objects;
 
 // Look at Mcreator for help on this file
 
-@EventBusSubscriber(modid = SpelunkersCharm.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid = SpelunkersCharm.MOD_ID)
 public class GameEvents {
 
     // Mobs and armor stands don't tick their equipment like a player's inventory, so worn candle helmets are

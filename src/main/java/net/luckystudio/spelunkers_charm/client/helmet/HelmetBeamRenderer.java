@@ -25,7 +25,7 @@ import org.joml.Vector3f;
 @EventBusSubscriber(modid = SpelunkersCharm.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class HelmetBeamRenderer {
     /** How far the visible beam reaches before it has faded out completely, in blocks. */
-    public static final float VISIBLE_LENGTH = 10.0F;
+    public static final float VISIBLE_LENGTH = 4.0F;
 
     // Warm white, a little yellow like an old carbide or incandescent lamp.
     private static final float RED = 1.0F;
