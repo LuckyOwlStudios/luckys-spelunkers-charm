@@ -3,6 +3,7 @@ package net.luckystudio.spelunkers_charm.entity.custom.minecart.override;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
@@ -11,15 +12,29 @@ import net.minecraft.world.entity.Entity;
 public class NewMinecartModel<T extends Entity> extends HierarchicalModel<T> {
 
 	private final ModelPart root;
+	private final ModelPart light;
+	private final ModelPart body;
+	/** Whether the lamp is drawn. Set by the renderer before each cart is drawn. */
+	private boolean lightVisible;
 
-    public NewMinecartModel(ModelPart root) {
+	public NewMinecartModel(ModelPart root) {
 		this.root = root;
-        ModelPart body = root.getChild("body");
+		this.light = root.getChild("light");
+		this.body = root.getChild("body");
+	}
+
+	/** The lamp is only drawn on carts that have a lantern hung on them. */
+	public void setLightVisible(boolean visible) {
+		this.lightVisible = visible;
 	}
 
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
+
+		PartDefinition light = partdefinition.addOrReplaceChild("light", CubeListBuilder.create().texOffs(50, 0).addBox(-3.0F, -27.0F, -11.0F, 6.0F, 6.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 22.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+		PartDefinition light_r1 = light.addOrReplaceChild("light_r1", CubeListBuilder.create().texOffs(50, 0).addBox(0.0F, -6.0F, 2.0F, 6.0F, 6.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, -21.0F, 13.0F, 0.0F, 3.1416F, 0.0F));
 
 		PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 38).addBox(-8.0F, -27.0F, -10.0F, 16.0F, 8.0F, 2.0F, new CubeDeformation(0.0F))
 				.texOffs(0, 5).addBox(-6.0F, -29.0F, -11.0F, 12.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
@@ -52,7 +67,11 @@ public class NewMinecartModel<T extends Entity> extends HierarchicalModel<T> {
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
-		this.root.render(poseStack, buffer, packedLight, packedOverlay);
+		this.body.render(poseStack, buffer, packedLight, packedOverlay);
+		if (this.lightVisible) {
+			// The lamp glows: it ignores the surrounding light level.
+			this.light.render(poseStack, buffer, LightTexture.FULL_BRIGHT, packedOverlay);
+		}
 	}
 
 	@Override
