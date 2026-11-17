@@ -21,6 +21,8 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionBrewing;
@@ -31,7 +33,9 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.luckystudio.spelunkers_charm.item.custom.CandleHelmet;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
@@ -45,6 +49,18 @@ import java.util.Objects;
 
 @EventBusSubscriber(modid = SpelunkersCharm.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class GameEvents {
+
+    // Mobs and armor stands don't tick their equipment like a player's inventory, so worn candle helmets are
+    // ticked here for them: the flame shows, and it goes out in water and rain. Players are handled by the item.
+    @SubscribeEvent
+    public static void onEntityTick(EntityTickEvent.Post event) {
+        if (!(event.getEntity() instanceof LivingEntity living) || living instanceof Player) return;
+        ItemStack head = living.getItemBySlot(EquipmentSlot.HEAD);
+        if (head.getItem() instanceof CandleHelmet) {
+            CandleHelmet.tickWorn(head, living.level(), living);
+        }
+    }
+
 
     // Look at Commands.java for help on this
     @SubscribeEvent
