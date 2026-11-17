@@ -91,6 +91,8 @@ public class CaveBorer extends Monster {
     private static final int[] XP = {1, 3, 5};
     private static final double[] LUNGE_SPEED = {0.9, 0.8, 0.7};
 
+    // Hitboxes are bigger than the model so the fast, thin worm is easier to hit. Bites still use the model size.
+    private static final float HITBOX_SCALE = 1.5F;
     private static final int MAX_PARTS = 7; // SEGMENTS[MAX_SIZE] - 1 (the head is the entity itself)
     private static final double BURROW_SPEED = 0.5;
     private static final double LUNGE_GRAVITY = 0.04;
@@ -234,10 +236,15 @@ public class CaveBorer extends Monster {
         return 0.4F * this.getSizeScale();
     }
 
-    /** Hitbox width of a segment. The tail is a bit thinner. */
+    /** Model width of a segment. The tail is a bit thinner. */
     public float getSegmentWidth(int segment) {
         float width = 0.5F * this.getSizeScale();
         return segment == this.getSegmentCount() - 1 ? width * 0.75F : width;
+    }
+
+    /** Hitbox width of a segment, bigger than the model to make it easier to hit. */
+    public float getSegmentHitboxWidth(int segment) {
+        return this.getSegmentWidth(segment) * HITBOX_SCALE;
     }
 
     public State getState() {
@@ -265,7 +272,7 @@ public class CaveBorer extends Monster {
 
     @Override
     public @NotNull EntityDimensions getDefaultDimensions(@NotNull Pose pose) {
-        return this.getType().getDimensions().scale(this.getSizeScale());
+        return this.getType().getDimensions().scale(this.getSizeScale() * HITBOX_SCALE);
     }
 
     public Vec3 getCenter() {
@@ -742,7 +749,9 @@ public class CaveBorer extends Monster {
     }
 
     private void biteTouching() {
-        AABB box = this.getBoundingBox().inflate(0.25);
+        // Bite with the model's size, not the enlarged hitbox, so bites don't get harder to dodge
+        double width = this.getSegmentWidth(0);
+        AABB box = AABB.ofSize(this.getCenter(), width, width, width).inflate(0.25);
         LivingEntity target = this.getTarget();
         for (LivingEntity entity : this.level().getEntitiesOfClass(LivingEntity.class, box,
                 e -> e != this && e.isAlive() && !(e instanceof CaveBorer) && (e instanceof Player || e == target))) {

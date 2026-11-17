@@ -60,7 +60,7 @@ public class CaveBorerPart extends PartEntity<CaveBorer> {
 
     @Override
     public @NotNull EntityDimensions getDimensions(@NotNull Pose pose) {
-        float width = this.getParent().getSegmentWidth(this.segment);
+        float width = this.getParent().getSegmentHitboxWidth(this.segment);
         return EntityDimensions.scalable(width, width);
     }
 
