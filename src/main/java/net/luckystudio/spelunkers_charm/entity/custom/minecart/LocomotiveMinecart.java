@@ -25,6 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
+import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -45,7 +46,9 @@ public class LocomotiveMinecart extends AbstractMinecartContainer {
     /** Fuel lasts this many times longer than it does in a furnace. Coal runs for 2 minutes 40 seconds. */
     public static final int FUEL_MULTIPLIER = 2;
     /** Top speed in blocks per tick. The furnace minecart is 0.2, normal rails cap carts at 0.4. */
-    public static final float MAX_SPEED = 0.3F;
+    public static final float MAX_SPEED = 0.25F;
+    /** Speed limit on sloped rails. Carts that go faster than this fly off the rail at the top and bottom of a slope. */
+    public static final double SLOPE_SPEED = 0.2;
     /**
      * How much speed the engine adds each tick while it has fuel. Cart drag takes about 4% of the speed
      * each tick, so the cart settles at 24 times this, which is {@link #MAX_SPEED}. It takes a few seconds to get there.
@@ -237,6 +240,14 @@ public class LocomotiveMinecart extends AbstractMinecartContainer {
 
     @Override
     protected void moveAlongTrack(BlockPos pos, BlockState state) {
+        if (state.getBlock() instanceof BaseRailBlock rail && rail.getRailDirection(state, this.level(), pos, this).isAscending()) {
+            Vec3 speed = this.getDeltaMovement();
+            double horizontal = speed.horizontalDistance();
+            if (horizontal > SLOPE_SPEED) {
+                double scale = SLOPE_SPEED / horizontal;
+                this.setDeltaMovement(speed.x * scale, speed.y, speed.z * scale);
+            }
+        }
         super.moveAlongTrack(pos, state);
         // Keep the push pointing the way the cart is moving, so it follows curves.
         // If the push points against the motion (the lever was just pulled), leave it alone:
