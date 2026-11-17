@@ -207,10 +207,13 @@ public class LocomotiveMinecart extends AbstractMinecartContainer {
     protected void moveAlongTrack(BlockPos pos, BlockState state) {
         super.moveAlongTrack(pos, state);
         // Keep the push pointing the way the cart is moving, so it follows curves.
+        // If the push points against the motion (the lever was just pulled), leave it alone:
+        // it brakes the cart and turns it around. Realigning it here would undo the switch.
         Vec3 motion = this.getDeltaMovement();
         double motionSqr = motion.horizontalDistanceSqr();
         double pushSqr = this.xPush * this.xPush + this.zPush * this.zPush;
-        if (pushSqr > 1.0E-4 && motionSqr > 0.001) {
+        if (pushSqr > 1.0E-4 && motionSqr > 0.001
+                && motion.x * this.xPush + motion.z * this.zPush > 0.0) {
             double motionLength = Math.sqrt(motionSqr);
             double pushLength = Math.sqrt(pushSqr);
             this.xPush = motion.x / motionLength * pushLength;
