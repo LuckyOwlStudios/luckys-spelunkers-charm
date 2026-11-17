@@ -196,12 +196,13 @@ public class SpelunkersCharmConfig {
                 .defineInRange("restMaxSeconds", 3.0, 0.0, 30.0);
 
         CAVE_BORER_AMBUSH_MIN_DISTANCE = COMMON_BUILDER
-                .comment("Closest a cave borer will emerge to the player, in blocks")
+                .comment("Closest a small cave borer will emerge to the player, in blocks. Medium borers use 1.3x this, large ones 1.6x")
                 .defineInRange("ambushMinDistance", 3, 1, 16);
 
         CAVE_BORER_AMBUSH_MAX_DISTANCE = COMMON_BUILDER
-                .comment("Farthest a cave borer will emerge from the player, in blocks")
-                .defineInRange("ambushMaxDistance", 10, 2, 24);
+                .comment("Farthest a small cave borer will emerge from the player, in blocks. Medium borers use 1.3x this, large ones 1.6x.",
+                        "If the player gets more than 2 blocks past this during the warning, the charge is called off and it repositions")
+                .defineInRange("ambushMaxDistance", 8, 2, 24);
 
         COMMON_BUILDER.pop();
         COMMON_CONFIG = COMMON_BUILDER.build();

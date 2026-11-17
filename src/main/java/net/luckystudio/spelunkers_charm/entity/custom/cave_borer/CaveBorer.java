@@ -90,6 +90,10 @@ public class CaveBorer extends Monster {
     private static final double[] DAMAGE = {2.0, 3.0, 5.0};
     private static final int[] XP = {1, 3, 5};
     private static final double[] LUNGE_SPEED = {0.9, 0.8, 0.7};
+    // Bigger borers ambush from farther away. Multiplies the config's ambush distances.
+    private static final double[] RANGE_SCALE = {1.0, 1.3, 1.6};
+    // How far past its max ambush distance the target may move before a charge is called off
+    private static final double CHARGE_RANGE_GRACE = 2.0;
 
     // Hitboxes are bigger than the model so the fast, thin worm is easier to hit. Bites still use the model size.
     private static final float HITBOX_SCALE = 1.5F;
@@ -508,7 +512,7 @@ public class CaveBorer extends Monster {
                 this.setCenter(this.travelTarget);
                 this.travelTarget = null;
                 if (this.emergeBlock != null) {
-                    if (this.level().getBlockState(this.emergeBlock).is(ModBlockTags.CAVE_BORER_DIGGABLE)) {
+                    if (this.level().getBlockState(this.emergeBlock).is(ModBlockTags.CAVE_BORER_DIGGABLE) && this.isInChargeRange(target, this.emergeBlock)) {
                         this.setState(State.WARNING);
                     } else {
                         this.emergeBlock = null;
@@ -550,9 +554,26 @@ public class CaveBorer extends Monster {
      * Casts rays from the target's chest in random directions. The first block each ray hits is a face the
      * player can see, so floors, walls and ceilings all come up, and the lunge never has to go through a wall.
      */
+    private double getAmbushMinDistance() {
+        return SpelunkersCharmConfig.CAVE_BORER_AMBUSH_MIN_DISTANCE.get() * RANGE_SCALE[this.getSize()];
+    }
+
+    private double getAmbushMaxDistance() {
+        double max = SpelunkersCharmConfig.CAVE_BORER_AMBUSH_MAX_DISTANCE.get() * RANGE_SCALE[this.getSize()];
+        return Math.max(this.getAmbushMinDistance() + 1.0, max);
+    }
+
+    /** Whether the target is still close enough to the emerge block for a charge from it. */
+    private boolean isInChargeRange(@Nullable LivingEntity target, BlockPos emerge) {
+        if (target == null) return false;
+        double range = this.getAmbushMaxDistance() + CHARGE_RANGE_GRACE;
+        Vec3 chest = target.position().add(0.0, target.getBbHeight() * 0.5, 0.0);
+        return chest.distanceToSqr(Vec3.atCenterOf(emerge)) <= range * range;
+    }
+
     private boolean findEmergeSpot(LivingEntity target) {
-        int minDistance = SpelunkersCharmConfig.CAVE_BORER_AMBUSH_MIN_DISTANCE.get();
-        int maxDistance = Math.max(minDistance + 1, SpelunkersCharmConfig.CAVE_BORER_AMBUSH_MAX_DISTANCE.get());
+        double minDistance = this.getAmbushMinDistance();
+        double maxDistance = this.getAmbushMaxDistance();
         Vec3 origin = target.position().add(0.0, target.getBbHeight() * 0.5, 0.0);
         for (int attempt = 0; attempt < 24; attempt++) {
             double y = this.random.nextDouble() * 2.0 - 1.0;
@@ -583,6 +604,14 @@ public class CaveBorer extends Monster {
             // Someone mined or replaced the block
             this.clearCrack();
             this.emergeBlock = null;
+            this.setState(State.BURROWED);
+            return;
+        }
+        if (!this.isInChargeRange(target, pos)) {
+            // The player got away (or is gone): call off the charge and pick a new spot
+            this.clearCrack();
+            this.emergeBlock = null;
+            this.restTicks = 10;
             this.setState(State.BURROWED);
             return;
         }
