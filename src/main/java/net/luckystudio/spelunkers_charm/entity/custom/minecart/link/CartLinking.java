@@ -7,7 +7,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseRailBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
@@ -20,6 +25,7 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.WeakHashMap;
@@ -37,9 +43,14 @@ public final class CartLinking {
     public static final double BREAK_DISTANCE = 8.0;
 
     /** The most a pair is pulled back into line in one tick, in blocks. Only matters right after coupling. */
-    private static final double MAX_CORRECTION = 0.35;
+    private static final double MAX_CORRECTION = 0.2;
     /** Distance errors smaller than this are left alone, so the carts don't jitter. */
     private static final double DEADZONE = 0.01;
+
+    /** A coupling snaps when one of its carts has been off the rails this many ticks, instead of dragging it around. */
+    private static final int OFF_RAIL_TICKS = 20;
+    /** How many ticks each coupled cart has been off the rails. Server side only. */
+    private static final Map<AbstractMinecart, Integer> OFF_RAIL = new WeakHashMap<>();
 
     /** Carts that currently have couplings and are loaded. Server side only. */
     private static final Set<AbstractMinecart> ACTIVE = Collections.newSetFromMap(new WeakHashMap<>());
@@ -217,16 +228,26 @@ public final class CartLinking {
             unlink(a, b);
             return;
         }
+        // A cart that has left the rails is never pulled around. If it stays off, the coupling snaps.
+        boolean aOn = trackOffRail(a);
+        boolean bOn = trackOffRail(b);
+        if (!aOn || !bOn) {
+            if (OFF_RAIL.getOrDefault(a, 0) > OFF_RAIL_TICKS || OFF_RAIL.getOrDefault(b, 0) > OFF_RAIL_TICKS) {
+                unlink(a, b);
+            }
+            return;
+        }
         if (distance < 1.0E-4) return;
         double nx = dx / distance;
         double nz = dz / distance;
 
-        // Put the carts back exactly the right distance apart, half the correction each.
+        // Put the carts back exactly the right distance apart, half the correction each. Each cart only moves
+        // along its own rail, so a cart on a slope or a different track is never pulled sideways off it.
         double error = distance - LINK_DISTANCE;
         if (Math.abs(error) > DEADZONE) {
             double move = Math.max(-MAX_CORRECTION, Math.min(MAX_CORRECTION, error)) * 0.5;
-            a.setPos(a.getX() + nx * move, a.getY(), a.getZ() + nz * move);
-            b.setPos(b.getX() - nx * move, b.getY(), b.getZ() - nz * move);
+            pullAlongRail(a, nx, nz, move);
+            pullAlongRail(b, nx, nz, -move);
         }
 
         // Make them move together: remove any speed that would pull them apart or push them together.
@@ -236,6 +257,58 @@ public final class CartLinking {
         double half = relative * 0.5;
         a.setDeltaMovement(va.x + nx * half, va.y, va.z + nz * half);
         b.setDeltaMovement(vb.x - nx * half, vb.y, vb.z - nz * half);
+    }
+
+    /** Counts how long the cart has been off the rails. Returns whether it is on a rail now. */
+    private static boolean trackOffRail(AbstractMinecart cart) {
+        if (railPos(cart) != null) {
+            OFF_RAIL.remove(cart);
+            return true;
+        }
+        OFF_RAIL.merge(cart, 1, Integer::sum);
+        return false;
+    }
+
+    /** The rail the cart is on, found the same way the cart finds it, or null. */
+    private static BlockPos railPos(AbstractMinecart cart) {
+        BlockPos pos = cart.blockPosition();
+        if (BaseRailBlock.isRail(cart.level().getBlockState(pos.below()))) {
+            pos = pos.below();
+        }
+        return BaseRailBlock.isRail(cart.level().getBlockState(pos)) ? pos : null;
+    }
+
+    /**
+     * Moves a cart along its own rail, by the part of the pull that lies along the rail.
+     * Only straight and sloped rails are handled. On curves the cart is left where it is.
+     */
+    private static void pullAlongRail(AbstractMinecart cart, double nx, double nz, double amount) {
+        BlockPos pos = railPos(cart);
+        if (pos == null) return;
+        Level level = cart.level();
+        BlockState state = level.getBlockState(pos);
+        if (!(state.getBlock() instanceof BaseRailBlock rail)) return;
+        RailShape shape = rail.getRailDirection(state, level, pos, cart);
+        double ax;
+        double az;
+        double rise = 0.0;
+        switch (shape) {
+            case NORTH_SOUTH -> { ax = 0.0; az = 1.0; }
+            case EAST_WEST -> { ax = 1.0; az = 0.0; }
+            case ASCENDING_EAST -> { ax = 1.0; az = 0.0; rise = 1.0; }
+            case ASCENDING_WEST -> { ax = -1.0; az = 0.0; rise = 1.0; }
+            case ASCENDING_NORTH -> { ax = 0.0; az = -1.0; rise = 1.0; }
+            case ASCENDING_SOUTH -> { ax = 0.0; az = 1.0; rise = 1.0; }
+            default -> { return; }
+        }
+        double t = (nx * ax + nz * az) * amount;
+        double x = cart.getX() + ax * t;
+        double y = cart.getY() + rise * t;
+        double z = cart.getZ() + az * t;
+        // Only move if the cart stays on a rail.
+        BlockPos target = BlockPos.containing(x, y, z);
+        if (!BaseRailBlock.isRail(level.getBlockState(target)) && !BaseRailBlock.isRail(level.getBlockState(target.below()))) return;
+        cart.setPos(x, y, z);
     }
 
     private static Entity findCart(AbstractMinecart cart, UUID id) {
