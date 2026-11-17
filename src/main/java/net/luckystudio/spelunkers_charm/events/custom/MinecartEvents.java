@@ -6,10 +6,10 @@ import net.luckystudio.spelunkers_charm.entity.custom.minecart.FurnaceMinecartMe
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.JukeboxMinecart;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartLantern;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartLanterns;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartCoupler;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartLinking;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.ClientCartData;
 import net.luckystudio.spelunkers_charm.init.ModItems;
-import net.luckystudio.spelunkers_charm.item.custom.CartCouplerItem;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.core.BlockPos;
@@ -135,15 +135,17 @@ public class MinecartEvents {
         return new Minecart(level, oldMinecart.getX(), oldMinecart.getY(), oldMinecart.getZ());
     }
 
-    /** The cart coupler: click two carts to link them, shift-click to unlink. Runs before other cart clicks. */
+    /** Chains couple carts: click two carts to link them, shift-click a coupled cart to unlink. Runs before other cart clicks. */
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onCouplerUse(PlayerInteractEvent.EntityInteract event) {
-        if (!event.getItemStack().is(ModItems.CART_COUPLER.get())) return;
+        if (!event.getItemStack().is(Items.CHAIN)) return;
         if (!(event.getTarget() instanceof AbstractMinecart cart)) return;
+        // Sneaking on a cart with no couplings falls through, so a chain can still go into a cart as a block.
+        if (event.getEntity().isSecondaryUseActive() && CartLinking.getLinks(cart).isEmpty()) return;
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.sidedSuccess(event.getLevel().isClientSide()));
         if (!event.getLevel().isClientSide()) {
-            CartCouplerItem.useOnCart(event.getEntity(), cart);
+            CartCoupler.useOnCart(event.getEntity(), cart, event.getItemStack());
         }
     }
 

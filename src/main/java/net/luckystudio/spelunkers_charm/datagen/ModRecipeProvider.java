@@ -110,17 +110,6 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(recipeOutput);
     }
 
-    private void cartCoupler(RecipeOutput recipeOutput) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.TRANSPORTATION, ModItems.CART_COUPLER, 1)
-                .pattern("#")
-                .pattern("@")
-                .pattern("#")
-                .define('#', Items.IRON_INGOT)
-                .define('@', Items.CHAIN)
-                .unlockedBy("has_minecart", has(Items.MINECART))
-                .save(recipeOutput);
-    }
-
     private void locomotive(RecipeOutput recipeOutput) {
         // The minecart recipe with a blast furnace in the middle.
         ShapedRecipeBuilder.shaped(RecipeCategory.TRANSPORTATION, ModItems.LOCOMOTIVE, 1)
@@ -174,7 +163,6 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
     @Override
     protected void buildRecipes(@NotNull RecipeOutput recipeOutput) {
-        cartCoupler(recipeOutput);
         rails(recipeOutput);
         locomotive(recipeOutput);
         stairBuilder(ModBlocks.DUNESTONE_STAIRS.get(), Ingredient.of(ModBlocks.DUNESTONE.asItem()));

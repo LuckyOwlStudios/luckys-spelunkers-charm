@@ -1,38 +1,32 @@
-package net.luckystudio.spelunkers_charm.item.custom;
+package net.luckystudio.spelunkers_charm.entity.custom.minecart.link;
 
-import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartLinking;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 /**
- * Couples minecarts together. Click one cart, then another, to link them.
- * Shift-click a cart to remove its couplings. The item isn't used up.
- * The clicks are handled in MinecartEvents, since minecarts aren't living entities.
+ * Couples minecarts together with chains. Right-click one cart with a chain, then another, to link them;
+ * that uses up a chain (not in creative). Shift-click a coupled cart with a chain to remove its couplings,
+ * which gives the chains back. The clicks are handled in MinecartEvents, since minecarts aren't living entities.
  */
-public class CartCouplerItem extends Item {
+public final class CartCoupler {
 
     /** The first cart each player clicked, waiting for the second. Server side only. */
     private static final Map<UUID, UUID> SELECTED = new HashMap<>();
 
-    public CartCouplerItem(Properties properties) {
-        super(properties);
+    private CartCoupler() {
     }
 
     /** Server side. */
-    public static void useOnCart(Player player, AbstractMinecart cart) {
+    public static void useOnCart(Player player, AbstractMinecart cart, ItemStack chain) {
         if (player.isSecondaryUseActive()) {
             SELECTED.remove(player.getUUID());
             int removed = CartLinking.unlinkAll(cart);
@@ -62,7 +56,10 @@ public class CartCouplerItem extends Item {
             return;
         }
         switch (CartLinking.link(other, cart)) {
-            case LINKED -> message(player, "linked");
+            case LINKED -> {
+                if (!player.getAbilities().instabuild) chain.shrink(1);
+                message(player, "linked");
+            }
             case ALREADY_LINKED -> message(player, "already_linked");
             case TOO_FAR -> message(player, "too_far");
             case FULL -> message(player, "full");
@@ -72,11 +69,5 @@ public class CartCouplerItem extends Item {
 
     private static void message(Player player, String key) {
         player.displayClientMessage(Component.translatable("message.spelunkers_charm.cart_coupler." + key), true);
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("tooltip.spelunkers_charm.cart_coupler").withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("tooltip.spelunkers_charm.cart_coupler.unlink").withStyle(ChatFormatting.GRAY));
     }
 }

@@ -8,6 +8,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -130,6 +133,7 @@ public final class CartLinking {
         setLinks(cart, CartLinks.EMPTY);
         cart.playSound(SoundEvents.CHAIN_BREAK, 1.0F, 1.0F);
         sync(cart);
+        dropChains(cart, links.links().size());
         return links.links().size();
     }
 
@@ -139,6 +143,14 @@ public final class CartLinking {
         a.playSound(SoundEvents.CHAIN_BREAK, 1.0F, 1.0F);
         sync(a);
         sync(b);
+        dropChains(a, 1);
+    }
+
+    /** A coupling that comes apart gives its chain back, dropped at the cart. */
+    private static void dropChains(AbstractMinecart cart, int count) {
+        if (count <= 0 || cart.level().isClientSide()) return;
+        if (!cart.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) return;
+        cart.spawnAtLocation(new ItemStack(Items.CHAIN, count));
     }
 
     /**
@@ -147,6 +159,7 @@ public final class CartLinking {
      */
     public static void onCartRemoved(AbstractMinecart cart) {
         CartLinks links = getLinks(cart);
+        dropChains(cart, links.links().size());
         for (UUID id : links.links()) {
             if (findCart(cart, id) instanceof AbstractMinecart other) {
                 setLinks(other, getLinks(other).without(cart.getUUID()));
