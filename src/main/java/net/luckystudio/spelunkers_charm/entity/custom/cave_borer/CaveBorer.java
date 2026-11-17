@@ -94,6 +94,8 @@ public class CaveBorer extends Monster {
     private static final double[] RANGE_SCALE = {1.0, 1.3, 1.6};
     // How far past its max ambush distance the target may move before a charge is called off
     private static final double CHARGE_RANGE_GRACE = 2.0;
+    // Small borers give up and leave after this many charges, so they don't drag on
+    private static final int SMALL_MAX_CHARGES = 3;
 
     // Hitboxes are bigger than the model so the fast, thin worm is easier to hit. Bites still use the model size.
     private static final float HITBOX_SCALE = 1.5F;
@@ -126,7 +128,8 @@ public class CaveBorer extends Monster {
     @Nullable private Vec3 diveEntry;
     @Nullable private BlockState diveBlock;
     private double diveDistance;
-    private int buriedSegments; // bit i set once segment i has gone into the ground this dive
+    private int buriedSegments;
+    private int charges; // bit i set once segment i has gone into the ground this dive
     private final IntSet bitten = new IntOpenHashSet();
 
     // Client-side animation
@@ -187,6 +190,7 @@ public class CaveBorer extends Monster {
     public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Size", this.getSize());
+        compound.putInt("Charges", this.charges);
     }
 
     @Override
@@ -194,6 +198,7 @@ public class CaveBorer extends Monster {
         super.readAdditionalSaveData(compound);
         // No saved health means it came from /summon with NBT, so start at full health
         this.setSize(compound.getInt("Size"), !compound.contains("Health"));
+        this.charges = compound.getInt("Charges");
         this.setState(State.BURROWED);
     }
 
@@ -661,6 +666,7 @@ public class CaveBorer extends Monster {
         this.level().levelEvent(2001, pos, Block.getId(state)); // block break particles and sound
         this.playSound(ModSoundEvents.CAVE_BORER_EMERGE.get(), 1.0F, 1.0F);
         this.emergeBlock = null;
+        this.charges++;
         this.setState(State.LUNGE);
     }
 
@@ -726,6 +732,10 @@ public class CaveBorer extends Monster {
             this.travelTarget = null;
             this.restTicks = this.randomRestTicks();
             this.setState(State.BURROWED);
+            if (this.getSize() == 0 && this.charges >= SMALL_MAX_CHARGES && !this.isPersistenceRequired()) {
+                // Out of steam: it slinks off deeper into the rock (name-tagged ones stay)
+                this.discard();
+            }
         }
     }
 
