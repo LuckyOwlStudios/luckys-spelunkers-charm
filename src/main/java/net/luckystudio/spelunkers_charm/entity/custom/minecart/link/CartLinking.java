@@ -27,7 +27,7 @@ public final class CartLinking {
     /** One cart in front and one behind. */
     public static final int MAX_LINKS = 2;
     /** How far apart (center to center) coupled carts like to be. */
-    public static final double LINK_DISTANCE = 1.0;
+    public static final double LINK_DISTANCE = 2.0;
     /** Carts further apart than this can't be coupled. */
     public static final double MAX_COUPLE_DISTANCE = 4.0;
     /** A coupling snaps if its carts get this far apart. */
