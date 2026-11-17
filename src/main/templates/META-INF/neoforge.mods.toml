@@ -86,6 +86,14 @@ file="META-INF/accesstransformer.cfg"
     side="BOTH"
 
 [[dependencies.${mod_id}]]
+modId="sable"
+type="required"
+reason="Elevators are built as Sable sub-levels"
+versionRange="[2.0.6,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
 modId="terrablender"
 type="required"
 versionRange="4.1.0.8"
