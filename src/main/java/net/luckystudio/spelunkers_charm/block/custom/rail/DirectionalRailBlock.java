@@ -106,7 +106,13 @@ public class DirectionalRailBlock extends PoweredRailBlock {
             return;
         }
 
-        holdCart(state, pos, cart);
+        // Only stop the cart here. Sliding it to the middle is done once per tick, after it has moved (see MinecartEvents).
+        cart.setDeltaMovement(0.0, motion.y, 0.0);
+    }
+
+    /** Whether this cart is being held still by an unpowered directional rail. */
+    public static boolean isHolding(BlockState state) {
+        return state.getBlock() instanceof DirectionalRailBlock && !state.getValue(POWERED);
     }
 
     /**
@@ -120,7 +126,8 @@ public class DirectionalRailBlock extends PoweredRailBlock {
         double centerX = pos.getX() + 0.5;
         double centerZ = pos.getZ() + 0.5;
         double offset = direction.getAxis() == Direction.Axis.X ? centerX - cart.getX() : centerZ - cart.getZ();
-        if (Math.abs(offset) < 1.0E-3) return;
+        // Close enough: leave the cart alone so it sits perfectly still.
+        if (Math.abs(offset) < 0.01) return;
         double step = Math.max(-CENTERING_SPEED, Math.min(CENTERING_SPEED, offset));
         if (direction.getAxis() == Direction.Axis.X) {
             cart.setPos(cart.getX() + step, cart.getY(), centerZ);

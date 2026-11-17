@@ -1,5 +1,6 @@
 package net.luckystudio.spelunkers_charm.entity.custom.minecart.link;
 
+import net.luckystudio.spelunkers_charm.block.custom.rail.DirectionalRailBlock;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.LocomotiveMinecart;
 import net.luckystudio.spelunkers_charm.init.ModAttachmentTypes;
 import net.luckystudio.spelunkers_charm.network.CartSyncPayload;
@@ -241,22 +242,34 @@ public final class CartLinking {
         double nx = dx / distance;
         double nz = dz / distance;
 
+        // A cart held by an unpowered directional rail stays put, so the other cart does all the moving.
+        // Otherwise the coupling and the rail would push the same cart back and forth every tick, and it would shake.
+        boolean aHeld = isHeld(a);
+        boolean bHeld = isHeld(b);
+        if (aHeld && bHeld) return;
+        double wa = aHeld ? 0.0 : (bHeld ? 1.0 : 0.5);
+        double wb = bHeld ? 0.0 : (aHeld ? 1.0 : 0.5);
+
         // Put the carts back exactly the right distance apart, half the correction each. Each cart only moves
         // along its own rail, so a cart on a slope or a different track is never pulled sideways off it.
         double error = distance - LINK_DISTANCE;
         if (Math.abs(error) > DEADZONE) {
-            double move = Math.max(-MAX_CORRECTION, Math.min(MAX_CORRECTION, error)) * 0.5;
-            pullAlongRail(a, nx, nz, move);
-            pullAlongRail(b, nx, nz, -move);
+            double move = Math.max(-MAX_CORRECTION, Math.min(MAX_CORRECTION, error));
+            if (wa > 0.0) pullAlongRail(a, nx, nz, move * wa);
+            if (wb > 0.0) pullAlongRail(b, nx, nz, -move * wb);
         }
 
         // Make them move together: remove any speed that would pull them apart or push them together.
         Vec3 va = a.getDeltaMovement();
         Vec3 vb = b.getDeltaMovement();
         double relative = (vb.x - va.x) * nx + (vb.z - va.z) * nz;
-        double half = relative * 0.5;
-        a.setDeltaMovement(va.x + nx * half, va.y, va.z + nz * half);
-        b.setDeltaMovement(vb.x - nx * half, vb.y, vb.z - nz * half);
+        a.setDeltaMovement(va.x + nx * relative * wa, va.y, va.z + nz * relative * wa);
+        b.setDeltaMovement(vb.x - nx * relative * wb, vb.y, vb.z - nz * relative * wb);
+    }
+
+    private static boolean isHeld(AbstractMinecart cart) {
+        BlockPos pos = railPos(cart);
+        return pos != null && DirectionalRailBlock.isHolding(cart.level().getBlockState(pos));
     }
 
     /** Counts how long the cart has been off the rails. Returns whether it is on a rail now. */
