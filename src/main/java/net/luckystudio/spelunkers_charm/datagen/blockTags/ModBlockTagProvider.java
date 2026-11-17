@@ -78,6 +78,8 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(Blocks.CALCITE)
                 .add(Blocks.DRIPSTONE_BLOCK)
                 .add(Blocks.SMOOTH_BASALT)
+                .add(Blocks.SANDSTONE)
+                .add(Blocks.RED_SANDSTONE)
                 .add(ModBlocks.DUNESTONE.get())
                 .add(ModBlocks.WILDSTONE.get())
                 .add(ModBlocks.PERMAFROST.get())

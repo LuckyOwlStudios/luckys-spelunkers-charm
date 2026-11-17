@@ -22,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
  * and takes the light of the block it is in, so segments still inside the wall look dark.
  */
 public class CaveBorerRenderer extends EntityRenderer<CaveBorer> {
-    private static final ResourceLocation TEXTURE = SpelunkersCharm.id("textures/entity/cave_borer/cave_borer.png");
     private final CaveBorerModel model;
 
     public CaveBorerRenderer(EntityRendererProvider.Context context) {
@@ -33,7 +32,7 @@ public class CaveBorerRenderer extends EntityRenderer<CaveBorer> {
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(@NotNull CaveBorer entity) {
-        return TEXTURE;
+        return entity.getVariant().getTexture();
     }
 
     @Override
@@ -45,7 +44,7 @@ public class CaveBorerRenderer extends EntityRenderer<CaveBorer> {
         double originY = Mth.lerp(partialTick, entity.yOld, entity.getY());
         double originZ = Mth.lerp(partialTick, entity.zOld, entity.getZ());
 
-        VertexConsumer consumer = buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
+        VertexConsumer consumer = buffer.getBuffer(RenderType.entityCutoutNoCull(this.getTextureLocation(entity)));
         int overlay = LivingEntityRenderer.getOverlayCoords(entity, 0.0F);
         float scale = entity.getSizeScale();
         float jaw = entity.getJawOpen(partialTick) * 0.6F;

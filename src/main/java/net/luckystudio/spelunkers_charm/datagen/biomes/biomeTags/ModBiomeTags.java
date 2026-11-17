@@ -11,6 +11,8 @@ public class ModBiomeTags {
     public static final TagKey<Biome> IS_COLD_CAVE = create("is_cold_cave");
     public static final TagKey<Biome> IS_HOT_CAVE = create("is_hot_cave");
     public static final TagKey<Biome> IS_JUNGLE_CAVE = create("is_beach");
+    // Where the sand variant of the cave borer spawns
+    public static final TagKey<Biome> SPAWNS_SAND_CAVE_BORER = create("spawns_sand_cave_borer");
 
     private ModBiomeTags() {
     }

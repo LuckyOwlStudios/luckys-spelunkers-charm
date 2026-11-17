@@ -139,6 +139,7 @@ public class CaveBorer extends Monster {
     private static final EntityDataAccessor<Integer> DATA_SIZE = SynchedEntityData.defineId(CaveBorer.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Byte> DATA_STATE = SynchedEntityData.defineId(CaveBorer.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Direction> DATA_FACE = SynchedEntityData.defineId(CaveBorer.class, EntityDataSerializers.DIRECTION);
+    private static final EntityDataAccessor<Integer> DATA_VARIANT = SynchedEntityData.defineId(CaveBorer.class, EntityDataSerializers.INT);
 
     private final CaveBorerPart[] parts;
 
@@ -203,6 +204,7 @@ public class CaveBorer extends Monster {
         builder.define(DATA_SIZE, 0);
         builder.define(DATA_STATE, (byte) State.BURROWED.ordinal());
         builder.define(DATA_FACE, Direction.UP);
+        builder.define(DATA_VARIANT, CaveBorerVariant.STONE.ordinal());
     }
 
     @Override
@@ -221,6 +223,7 @@ public class CaveBorer extends Monster {
         super.addAdditionalSaveData(compound);
         compound.putInt("Size", this.getSize());
         compound.putInt("Charges", this.charges);
+        compound.putString("Variant", this.getVariant().getSerializedName());
     }
 
     @Override
@@ -229,12 +232,14 @@ public class CaveBorer extends Monster {
         // No saved health means it came from /summon with NBT, so start at full health
         this.setSize(compound.getInt("Size"), !compound.contains("Health"));
         this.charges = compound.getInt("Charges");
+        this.setVariant(CaveBorerVariant.byName(compound.getString("Variant")));
         this.setState(State.BURROWED);
     }
 
     @Override
     public @Nullable SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor level, @NotNull DifficultyInstance difficulty, @NotNull MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
         this.setSize(rollSpawnSize(level.getRandom()), true);
+        this.setVariant(CaveBorerVariant.forBiome(level.getBiome(this.blockPosition())));
         if (spawnType == MobSpawnType.NATURAL || spawnType == MobSpawnType.CHUNK_GENERATION) {
             // Natural spawns start tucked into the floor they spawned on
             this.setCenter(Vec3.atCenterOf(this.blockPosition().below()));
@@ -261,6 +266,14 @@ public class CaveBorer extends Monster {
             if (roll < 0.0) return size;
         }
         return max;
+    }
+
+    public CaveBorerVariant getVariant() {
+        return CaveBorerVariant.byId(this.entityData.get(DATA_VARIANT));
+    }
+
+    public void setVariant(CaveBorerVariant variant) {
+        this.entityData.set(DATA_VARIANT, variant.ordinal());
     }
 
     public int getSize() {
@@ -932,6 +945,7 @@ public class CaveBorer extends Monster {
             child.setNoAi(this.isNoAi());
             child.setInvulnerable(this.isInvulnerable());
             child.setSize(childSize, true);
+            child.setVariant(this.getVariant());
             double spread = 0.25 * this.getSizeScale();
             child.moveTo(center.x + (this.random.nextDouble() - 0.5) * spread, center.y - child.getBbHeight() * 0.5,
                     center.z + (this.random.nextDouble() - 0.5) * spread, this.random.nextFloat() * 360.0F, 0.0F);
@@ -945,7 +959,7 @@ public class CaveBorer extends Monster {
     public @NotNull ResourceKey<LootTable> getDefaultLootTable() {
         // Only the smallest size drops loot, like slimes
         // (or every size when splitting is turned off in the config)
-        return this.getSize() == 0 || !SpelunkersCharmConfig.CAVE_BORER_SPLITTING.get() ? super.getDefaultLootTable() : BuiltInLootTables.EMPTY;
+        return this.getSize() == 0 || !SpelunkersCharmConfig.CAVE_BORER_SPLITTING.get() ? this.getVariant().getLootTable() : BuiltInLootTables.EMPTY;
     }
 
     // ===== Sounds =====
