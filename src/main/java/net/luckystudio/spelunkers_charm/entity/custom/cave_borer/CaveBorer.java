@@ -132,7 +132,8 @@ public class CaveBorer extends Monster {
     private static final int MAX_PARTS = segmentsFor(MAX_SIZE) - 1; // the head is the entity itself
     private static final double BURROW_SPEED = 0.5;
     private static final double LUNGE_GRAVITY = 0.04;
-    private static final int MAX_LUNGE_TICKS = 40;
+    // Fail-safe only (falling into a ravine or the void). A normal lunge ends when it hits the ground.
+    private static final int MAX_LUNGE_TICKS = 200;
     private static final int STUN_TICKS = 60;
     private static final int TARGET_RANGE = 24;
 
