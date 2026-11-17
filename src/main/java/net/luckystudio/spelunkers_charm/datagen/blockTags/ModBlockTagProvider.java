@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -63,6 +64,50 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         tag(ModBlockTags.PERMAFROST_REPLACEABLE)
                 .addTag(ModBlockTags.OVERWORLD_REPLACEABLE)
                 .add(Blocks.GRANITE)
+        ;
+
+        // Natural rock and earth the cave borer can burrow through. Crafted blocks are left out on purpose,
+        // so players can wall themselves in with cobblestone or planks.
+        tag(ModBlockTags.CAVE_BORER_DIGGABLE)
+                .addTag(BlockTags.BASE_STONE_OVERWORLD)
+                .addTag(BlockTags.DIRT)
+                .addTag(BlockTags.SAND)
+                .addTag(Tags.Blocks.ORES)
+                .add(Blocks.GRAVEL)
+                .add(Blocks.CLAY)
+                .add(Blocks.CALCITE)
+                .add(Blocks.DRIPSTONE_BLOCK)
+                .add(Blocks.SMOOTH_BASALT)
+                .add(Blocks.SANDSTONE)
+                .add(Blocks.RED_SANDSTONE)
+                .add(ModBlocks.DUNESTONE.get())
+                .add(ModBlocks.WILDSTONE.get())
+                .add(ModBlocks.PERMAFROST.get())
+                .add(ModBlocks.SILT.get())
+                .add(ModBlocks.DUNESTONE_COAL_ORE.get())
+                .add(ModBlocks.DUNESTONE_IRON_ORE.get())
+                .add(ModBlocks.DUNESTONE_COPPER_ORE.get())
+                .add(ModBlocks.DUNESTONE_GOLD_ORE.get())
+                .add(ModBlocks.DUNESTONE_REDSTONE_ORE.get())
+                .add(ModBlocks.DUNESTONE_EMERALD_ORE.get())
+                .add(ModBlocks.DUNESTONE_LAPIS_ORE.get())
+                .add(ModBlocks.DUNESTONE_DIAMOND_ORE.get())
+                .add(ModBlocks.WILDSTONE_COAL_ORE.get())
+                .add(ModBlocks.WILDSTONE_IRON_ORE.get())
+                .add(ModBlocks.WILDSTONE_COPPER_ORE.get())
+                .add(ModBlocks.WILDSTONE_GOLD_ORE.get())
+                .add(ModBlocks.WILDSTONE_REDSTONE_ORE.get())
+                .add(ModBlocks.WILDSTONE_EMERALD_ORE.get())
+                .add(ModBlocks.WILDSTONE_LAPIS_ORE.get())
+                .add(ModBlocks.WILDSTONE_DIAMOND_ORE.get())
+                .add(ModBlocks.PERMAFROST_COAL_ORE.get())
+                .add(ModBlocks.PERMAFROST_IRON_ORE.get())
+                .add(ModBlocks.PERMAFROST_COPPER_ORE.get())
+                .add(ModBlocks.PERMAFROST_GOLD_ORE.get())
+                .add(ModBlocks.PERMAFROST_REDSTONE_ORE.get())
+                .add(ModBlocks.PERMAFROST_EMERALD_ORE.get())
+                .add(ModBlocks.PERMAFROST_LAPIS_ORE.get())
+                .add(ModBlocks.PERMAFROST_DIAMOND_ORE.get())
         ;
 
         // TOOLS

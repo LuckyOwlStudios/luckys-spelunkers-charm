@@ -43,11 +43,26 @@ public class SpelunkersCharmConfig {
     public static ModConfigSpec.IntValue EXPLOSION_TREMOR_MAX_Y;
     public static ModConfigSpec.DoubleValue EXPLOSION_TREMOR_SECONDS_PER_RADIUS;
 
+    // === CATEGORY CAVE BORER CONFIGURATION ===
+    public static String CATEGORY_CAVE_BORER = "caveBorer";
+    public static ModConfigSpec.BooleanValue CAVE_BORER_SPAWNING;
+    public static ModConfigSpec.IntValue CAVE_BORER_MIN_SPAWN_Y;
+    public static ModConfigSpec.IntValue CAVE_BORER_MAX_SPAWN_Y;
+    public static ModConfigSpec.IntValue CAVE_BORER_MAX_NATURAL_SIZE;
+    public static ModConfigSpec.BooleanValue CAVE_BORER_SPLITTING;
+    public static ModConfigSpec.DoubleValue CAVE_BORER_WARNING_SECONDS;
+    public static ModConfigSpec.DoubleValue CAVE_BORER_REST_MIN_SECONDS;
+    public static ModConfigSpec.DoubleValue CAVE_BORER_REST_MAX_SECONDS;
+    public static ModConfigSpec.IntValue CAVE_BORER_AMBUSH_MIN_DISTANCE;
+    public static ModConfigSpec.IntValue CAVE_BORER_AMBUSH_MAX_DISTANCE;
+
     // === CLIENT CONFIGURATION ===
     public static String CATEGORY_CLIENT = "client";
     public static ModConfigSpec.DoubleValue TREMOR_VOLUME;
     public static ModConfigSpec.BooleanValue TREMOR_CAMERA_SHAKE;
     public static ModConfigSpec.DoubleValue TREMOR_CAMERA_SHAKE_STRENGTH;
+    public static ModConfigSpec.BooleanValue CAVE_BORER_CAMERA_SHAKE;
+    public static ModConfigSpec.DoubleValue CAVE_BORER_CAMERA_SHAKE_STRENGTH;
 
     static {
         ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
@@ -162,6 +177,52 @@ public class SpelunkersCharmConfig {
                 .defineInRange("explosionSecondsPerRadius", 3.0, 0.0, 30.0);
 
         COMMON_BUILDER.pop();
+
+        COMMON_BUILDER.comment("Cave Borer Settings (the burrowing worm that ambushes players underground)").push(CATEGORY_CAVE_BORER);
+
+        CAVE_BORER_SPAWNING = COMMON_BUILDER
+                .comment("Whether cave borers spawn naturally underground")
+                .define("spawning", true);
+
+        CAVE_BORER_MIN_SPAWN_Y = COMMON_BUILDER
+                .comment("Lowest Y level cave borers can spawn at. The default keeps them out of the deepslate layer")
+                .defineInRange("minSpawnY", 0, -64, 320);
+
+        CAVE_BORER_MAX_SPAWN_Y = COMMON_BUILDER
+                .comment("Highest Y level cave borers can spawn at")
+                .defineInRange("maxSpawnY", 40, -64, 320);
+
+        CAVE_BORER_MAX_NATURAL_SIZE = COMMON_BUILDER
+                .comment("Biggest size that spawns naturally. 0 is small, 1 medium, 2 large, up to 8 for giant borers.",
+                        "Each size above large is half as common as the one before it. Spawn eggs and /summon can make any size")
+                .defineInRange("maxNaturalSize", 2, 0, 8);
+
+        CAVE_BORER_SPLITTING = COMMON_BUILDER
+                .comment("Whether killed cave borers split into smaller ones, like slimes. When off they just die, and every size drops loot")
+                .define("splitting", true);
+
+        CAVE_BORER_WARNING_SECONDS = COMMON_BUILDER
+                .comment("Seconds of warning (block particles and digging sounds) before a cave borer lunges out")
+                .defineInRange("warningSeconds", 2.0, 0.25, 10.0);
+
+        CAVE_BORER_REST_MIN_SECONDS = COMMON_BUILDER
+                .comment("Shortest pause, in seconds, between a cave borer's attacks")
+                .defineInRange("restMinSeconds", 1.5, 0.0, 30.0);
+
+        CAVE_BORER_REST_MAX_SECONDS = COMMON_BUILDER
+                .comment("Longest pause, in seconds, between a cave borer's attacks")
+                .defineInRange("restMaxSeconds", 3.0, 0.0, 30.0);
+
+        CAVE_BORER_AMBUSH_MIN_DISTANCE = COMMON_BUILDER
+                .comment("Closest a small cave borer will emerge to the player, in blocks. Medium borers use 1.3x this, large ones 1.6x")
+                .defineInRange("ambushMinDistance", 3, 1, 16);
+
+        CAVE_BORER_AMBUSH_MAX_DISTANCE = COMMON_BUILDER
+                .comment("Farthest a small cave borer will emerge from the player, in blocks. Medium borers use 1.3x this, large ones 1.6x.",
+                        "If the player gets more than 2 blocks past this during the warning, the charge is called off and it repositions")
+                .defineInRange("ambushMaxDistance", 8, 2, 24);
+
+        COMMON_BUILDER.pop();
         COMMON_CONFIG = COMMON_BUILDER.build();
 
         ModConfigSpec.Builder CLIENT_BUILDER = new ModConfigSpec.Builder();
@@ -175,6 +236,12 @@ public class SpelunkersCharmConfig {
         TREMOR_CAMERA_SHAKE_STRENGTH = CLIENT_BUILDER
                 .comment("How strong tremor camera shake is. 1.0 is the default, 0.0 turns it off")
                 .defineInRange("tremorCameraShakeStrength", 1.0, 0.0, 3.0);
+        CAVE_BORER_CAMERA_SHAKE = CLIENT_BUILDER
+                .comment("Shake the camera when large Cave Borers burst out of and burrow into the ground. Needs the Camera Overhaul mod, does nothing without it")
+                .define("caveBorerCameraShake", true);
+        CAVE_BORER_CAMERA_SHAKE_STRENGTH = CLIENT_BUILDER
+                .comment("How strong Cave Borer camera shake is. 1.0 is the default, 0.0 turns it off")
+                .defineInRange("caveBorerCameraShakeStrength", 1.0, 0.0, 3.0);
         CLIENT_BUILDER.pop();
 
         CLIENT_CONFIG = CLIENT_BUILDER.build();

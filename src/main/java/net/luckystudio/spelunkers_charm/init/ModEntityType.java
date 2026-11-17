@@ -2,6 +2,7 @@ package net.luckystudio.spelunkers_charm.init;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
 import net.luckystudio.spelunkers_charm.block.custom.boulder.entity.Boulder;
+import net.luckystudio.spelunkers_charm.entity.custom.cave_borer.CaveBorer;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.large.LargeLift;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.medium.MediumLift;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.small.SmallLift;
@@ -93,6 +94,16 @@ public class ModEntityType {
                     .updateInterval(10)
                     .build("basalt_rock")
     );
+
+    // Base size is the small borer's head; CaveBorer scales it per size
+    public static final Supplier<EntityType<CaveBorer>> CAVE_BORER =
+            ENTITY_TYPES.register("cave_borer", () -> EntityType.Builder.<CaveBorer>of(CaveBorer::new, MobCategory.MONSTER)
+                    .sized(0.5F, 0.5F)
+                    .eyeHeight(0.25F)
+                    .fireImmune()
+                    .clientTrackingRange(8)
+                    .updateInterval(1) // fast lunges need every tick sent for the body to look right
+                    .build("cave_borer"));
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);

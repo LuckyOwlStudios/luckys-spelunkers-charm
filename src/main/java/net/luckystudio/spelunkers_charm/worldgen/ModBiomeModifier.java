@@ -3,12 +3,14 @@ package net.luckystudio.spelunkers_charm.worldgen;
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
 import net.luckystudio.spelunkers_charm.datagen.biomes.biomeTags.ModBiomeTags;
 import net.luckystudio.spelunkers_charm.worldgen.feature.placement.ModCavePlacements;
+import net.luckystudio.spelunkers_charm.init.ModEntityType;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.CavePlacements;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.BiomeModifiers;
@@ -37,6 +39,8 @@ public class ModBiomeModifier {
     public static final ResourceKey<BiomeModifier> JUNGLE_CAVE_UNDERGROUND_DECORATION = registerKey("jungle_cave_vegetal_decoration");
 
     public static final ResourceKey<BiomeModifier> NETHER_UNDERGROUND_DECORATION = registerKey("nether_vegetal_decoration");
+
+    public static final ResourceKey<BiomeModifier> SPAWN_CAVE_BORER = registerKey("spawn_cave_borer");
 
     public static void bootstrap(BootstrapContext<BiomeModifier> context) {
         var placedFeatures = context.lookup(Registries.PLACED_FEATURE);
@@ -73,6 +77,15 @@ public class ModBiomeModifier {
                 HolderSet.direct(List.of(
                         placedFeatures.getOrThrow(ModCavePlacements.BASALT_ROCK_PILE)
                 )), GenerationStep.Decoration.UNDERGROUND_DECORATION));
+
+        registerSpawns(context);
+    }
+
+    private static void registerSpawns(BootstrapContext<BiomeModifier> context) {
+        var biomes = context.lookup(Registries.BIOME);
+        // Added to every overworld biome; CaveBorer.checkCaveBorerSpawnRules keeps it underground
+        context.register(SPAWN_CAVE_BORER, new BiomeModifiers.AddSpawnsBiomeModifier(biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
+                List.of(new MobSpawnSettings.SpawnerData(ModEntityType.CAVE_BORER.get(), 10, 1, 1))));
     }
 
     private static ResourceKey<BiomeModifier> registerKey(String name) {

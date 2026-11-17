@@ -51,6 +51,10 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
                 .add(Biomes.ERODED_BADLANDS)
         ;
 
+        this.tag(ModBiomeTags.SPAWNS_SAND_CAVE_BORER)
+                .add(Biomes.DESERT)
+        ;
+
         this.tag(ModBiomeTags.IS_JUNGLE_CAVE)
                 .add(Biomes.JUNGLE)
                 .add(Biomes.SPARSE_JUNGLE)

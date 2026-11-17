@@ -3,6 +3,8 @@ package net.luckystudio.spelunkers_charm;
 import net.luckystudio.spelunkers_charm.block.custom.blaster.BlasterScreen;
 import net.luckystudio.spelunkers_charm.block.custom.blaster.ModMenuTypes;
 import net.luckystudio.spelunkers_charm.client.BoulderCoreSpriteSource;
+import net.luckystudio.spelunkers_charm.entity.custom.cave_borer.CaveBorerModel;
+import net.luckystudio.spelunkers_charm.entity.custom.cave_borer.CaveBorerRenderer;
 import net.luckystudio.spelunkers_charm.init.ModEntityType;
 import net.luckystudio.spelunkers_charm.block.custom.boulder.entity.BoulderModel;
 import net.luckystudio.spelunkers_charm.block.custom.boulder.entity.BoulderRenderer;
@@ -84,6 +86,7 @@ public class SpelunkersCharmClient {
         event.registerEntityRenderer(ModEntityType.DEEPSLATE_ROCK.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(ModEntityType.DRIPSTONE_ROCK.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(ModEntityType.BASALT_ROCK.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(ModEntityType.CAVE_BORER.get(), CaveBorerRenderer::new);
     }
 
     @SubscribeEvent
@@ -95,6 +98,7 @@ public class SpelunkersCharmClient {
         event.registerLayerDefinition(SMALL_LIFT, SmallLiftModel::createBodyLayer);
         event.registerLayerDefinition(MEDIUM_LIFT, MediumLiftModel::createBodyLayer);
         event.registerLayerDefinition(LARGE_LIFT, LargeLiftModel::createBodyLayer);
+        event.registerLayerDefinition(CaveBorerModel.LAYER_LOCATION, CaveBorerModel::createBodyLayer);
     }
 
     @SubscribeEvent

@@ -16,6 +16,9 @@ public class ModBlockTags {
     // Blocks a boulder can hang from as a rope (e.g. Supplementaries' rope)
     public static final TagKey<Block> BOULDER_ROPES = createTag("boulder_ropes");
 
+    // Natural blocks the cave borer can burrow through
+    public static final TagKey<Block> CAVE_BORER_DIGGABLE = createTag("cave_borer_diggable");
+
     private static TagKey<Block> createTag(String name) {
         return BlockTags.create(SpelunkersCharm.id(name));
     }

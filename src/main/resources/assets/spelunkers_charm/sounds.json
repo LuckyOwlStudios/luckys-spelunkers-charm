@@ -106,5 +106,67 @@
     "sounds": [
       "spelunkers_charm:entity/lift/lift_stop"
     ]
+  },
+  "cave_borer.burrow": {
+    "subtitle": "sounds.spelunkers_charm.cave_borer.burrow",
+    "sounds": [
+      {
+        "name": "minecraft:block.rooted_dirt.step",
+        "type": "event"
+      },
+      {
+        "name": "minecraft:block.gravel.step",
+        "type": "event"
+      }
+    ]
+  },
+  "cave_borer.warn": {
+    "subtitle": "sounds.spelunkers_charm.cave_borer.warn",
+    "sounds": [
+      {
+        "name": "minecraft:block.suspicious_gravel.break",
+        "type": "event"
+      }
+    ]
+  },
+  "cave_borer.emerge": {
+    "subtitle": "sounds.spelunkers_charm.cave_borer.emerge",
+    "sounds": [
+      {
+        "name": "minecraft:block.rooted_dirt.break",
+        "type": "event"
+      },
+      {
+        "name": "minecraft:block.gravel.break",
+        "type": "event"
+      }
+    ]
+  },
+  "cave_borer.bite": {
+    "subtitle": "sounds.spelunkers_charm.cave_borer.bite",
+    "sounds": [
+      {
+        "name": "minecraft:entity.evoker_fangs.attack",
+        "type": "event"
+      }
+    ]
+  },
+  "cave_borer.hurt": {
+    "subtitle": "sounds.spelunkers_charm.cave_borer.hurt",
+    "sounds": [
+      {
+        "name": "minecraft:entity.silverfish.hurt",
+        "type": "event"
+      }
+    ]
+  },
+  "cave_borer.death": {
+    "subtitle": "sounds.spelunkers_charm.cave_borer.death",
+    "sounds": [
+      {
+        "name": "minecraft:entity.silverfish.death",
+        "type": "event"
+      }
+    ]
   }
 }
