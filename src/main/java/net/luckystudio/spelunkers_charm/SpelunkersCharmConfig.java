@@ -46,6 +46,7 @@ public class SpelunkersCharmConfig {
     // === CATEGORY CAVE BORER CONFIGURATION ===
     public static String CATEGORY_CAVE_BORER = "caveBorer";
     public static ModConfigSpec.BooleanValue CAVE_BORER_SPAWNING;
+    public static ModConfigSpec.IntValue CAVE_BORER_MIN_SPAWN_Y;
     public static ModConfigSpec.IntValue CAVE_BORER_MAX_SPAWN_Y;
     public static ModConfigSpec.IntValue CAVE_BORER_MAX_NATURAL_SIZE;
     public static ModConfigSpec.BooleanValue CAVE_BORER_SPLITTING;
@@ -180,6 +181,10 @@ public class SpelunkersCharmConfig {
         CAVE_BORER_SPAWNING = COMMON_BUILDER
                 .comment("Whether cave borers spawn naturally underground")
                 .define("spawning", true);
+
+        CAVE_BORER_MIN_SPAWN_Y = COMMON_BUILDER
+                .comment("Lowest Y level cave borers can spawn at. The default keeps them out of the deepslate layer")
+                .defineInRange("minSpawnY", 0, -64, 320);
 
         CAVE_BORER_MAX_SPAWN_Y = COMMON_BUILDER
                 .comment("Highest Y level cave borers can spawn at")

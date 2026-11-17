@@ -189,6 +189,7 @@ public class CaveBorer extends Monster {
     public static boolean checkCaveBorerSpawnRules(EntityType<CaveBorer> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
         if (!SpelunkersCharmConfig.CAVE_BORER_SPAWNING.get()) return false;
         if (pos.getY() > SpelunkersCharmConfig.CAVE_BORER_MAX_SPAWN_Y.get()) return false;
+        if (pos.getY() < SpelunkersCharmConfig.CAVE_BORER_MIN_SPAWN_Y.get()) return false;
         if (level.getBiome(pos).is(Tags.Biomes.IS_MUSHROOM)) return false;
         if (!level.getBlockState(pos.below()).is(ModBlockTags.CAVE_BORER_DIGGABLE)) return false;
         return Monster.checkMonsterSpawnRules(type, level, spawnType, pos, random);
