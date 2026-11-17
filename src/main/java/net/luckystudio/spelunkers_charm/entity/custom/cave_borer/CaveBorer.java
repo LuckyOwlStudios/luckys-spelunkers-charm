@@ -126,6 +126,7 @@ public class CaveBorer extends Monster {
     @Nullable private Vec3 diveEntry;
     @Nullable private BlockState diveBlock;
     private double diveDistance;
+    private int buriedSegments; // bit i set once segment i has gone into the ground this dive
     private final IntSet bitten = new IntOpenHashSet();
 
     // Client-side animation
@@ -692,6 +693,7 @@ public class CaveBorer extends Monster {
         this.diveEntry = this.getCenter();
         this.diveBlock = state;
         this.diveDistance = 0.0;
+        this.buriedSegments = 1; // the head's entry already played the block break effect
         this.level().levelEvent(2001, pos, Block.getId(state));
         double speed = Math.max(0.35, velocity.length());
         this.setDeltaMovement(velocity.lengthSqr() > 1.0E-6 ? velocity.normalize().scale(speed) : new Vec3(0.0, -speed, 0.0));
@@ -707,6 +709,7 @@ public class CaveBorer extends Monster {
         this.setDeltaMovement(velocity);
         this.faceDirection(velocity);
         this.diveDistance += velocity.length();
+        this.burySegments();
         this.biteTouching();
 
         if (this.diveEntry != null && this.diveBlock != null && this.stateTicks % 3 == 0 && this.level() instanceof ServerLevel serverLevel) {
@@ -723,6 +726,27 @@ public class CaveBorer extends Monster {
             this.travelTarget = null;
             this.restTicks = this.randomRestTicks();
             this.setState(State.BURROWED);
+        }
+    }
+
+    /** Plays a break sound and particles at each body segment as it goes into the ground. */
+    private void burySegments() {
+        if (!(this.level() instanceof ServerLevel serverLevel)) return;
+        int count = this.getSegmentCount();
+        for (int i = 1; i < count; i++) {
+            if ((this.buriedSegments & (1 << i)) != 0) continue;
+            Vec3 pos = this.segmentPos[i];
+            if (pos == null) continue;
+            BlockPos blockPos = BlockPos.containing(pos);
+            BlockState state = this.level().getBlockState(blockPos);
+            if (state.getCollisionShape(this.level(), blockPos).isEmpty()) continue;
+            this.buriedSegments |= 1 << i;
+            float width = this.getSegmentWidth(i);
+            serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), pos.x, pos.y, pos.z,
+                    6 + (int) (width * 8), width * 0.4, width * 0.4, width * 0.4, 0.15);
+            SoundEvent breakSound = state.getSoundType(this.level(), blockPos, this).getBreakSound();
+            // Pitch climbs a little along the body, so the segments sound like a quick run of digs
+            this.level().playSound(null, blockPos, breakSound, SoundSource.HOSTILE, 0.6F, 0.8F + i * 0.06F + this.random.nextFloat() * 0.1F);
         }
     }
 
