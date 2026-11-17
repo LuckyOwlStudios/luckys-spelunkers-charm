@@ -23,7 +23,14 @@ public final class CartLanterns {
 
     /** Whether LambDynamicLights is installed. Lanterns can only be hung on carts when it is. */
     public static boolean isEnabled() {
-        return ModList.get().isLoaded(DYNAMIC_LIGHTS_MOD_ID);
+        if (ModList.get().isLoaded(DYNAMIC_LIGHTS_MOD_ID)) return true;
+        // Also look for the mod's API class, in case it is loaded under another mod id (like in dev runs).
+        try {
+            Class.forName("dev.lambdaurora.lambdynlights.api.DynamicLightsInitializer", false, CartLanterns.class.getClassLoader());
+            return true;
+        } catch (ClassNotFoundException | LinkageError e) {
+            return false;
+        }
     }
 
     public static CartLantern getLantern(AbstractMinecart cart) {
