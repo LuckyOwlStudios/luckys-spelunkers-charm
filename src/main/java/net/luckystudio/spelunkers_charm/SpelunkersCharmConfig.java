@@ -47,6 +47,7 @@ public class SpelunkersCharmConfig {
     public static String CATEGORY_CAVE_BORER = "caveBorer";
     public static ModConfigSpec.BooleanValue CAVE_BORER_SPAWNING;
     public static ModConfigSpec.IntValue CAVE_BORER_MAX_SPAWN_Y;
+    public static ModConfigSpec.IntValue CAVE_BORER_MAX_NATURAL_SIZE;
     public static ModConfigSpec.DoubleValue CAVE_BORER_WARNING_SECONDS;
     public static ModConfigSpec.DoubleValue CAVE_BORER_REST_MIN_SECONDS;
     public static ModConfigSpec.DoubleValue CAVE_BORER_REST_MAX_SECONDS;
@@ -182,6 +183,11 @@ public class SpelunkersCharmConfig {
         CAVE_BORER_MAX_SPAWN_Y = COMMON_BUILDER
                 .comment("Highest Y level cave borers can spawn at")
                 .defineInRange("maxSpawnY", 40, -64, 320);
+
+        CAVE_BORER_MAX_NATURAL_SIZE = COMMON_BUILDER
+                .comment("Biggest size that spawns naturally. 0 is small, 1 medium, 2 large, up to 8 for giant borers.",
+                        "Each size above large is half as common as the one before it. Spawn eggs and /summon can make any size")
+                .defineInRange("maxNaturalSize", 2, 0, 8);
 
         CAVE_BORER_WARNING_SECONDS = COMMON_BUILDER
                 .comment("Seconds of warning (block particles and digging sounds) before a cave borer lunges out")

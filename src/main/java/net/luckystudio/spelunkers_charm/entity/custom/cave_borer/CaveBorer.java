@@ -82,16 +82,46 @@ public class CaveBorer extends Monster {
         }
     }
 
-    // Per size: small, medium, large
-    public static final int MAX_SIZE = 2;
-    private static final float[] SCALE = {1.0F, 1.5F, 2.0F};
-    private static final int[] SEGMENTS = {4, 6, 8};
-    private static final double[] HEALTH = {4.0, 8.0, 12.0};
-    private static final double[] DAMAGE = {2.0, 3.0, 5.0};
-    private static final int[] XP = {1, 3, 5};
-    private static final double[] LUNGE_SPEED = {0.9, 0.8, 0.7};
-    // Bigger borers ambush from farther away. Multiplies the config's ambush distances.
-    private static final double[] RANGE_SCALE = {1.0, 1.3, 1.6};
+    /**
+     * Sizes run from 0 (small) to {@link #MAX_SIZE}. Every per-size stat comes from the formulas below.
+     * Sizes 0 to 2 grow quickly (small, medium, large); from 3 up they grow more slowly so the
+     * biggest borers stay giant rather than absurd. Size 8: 14 segments, 3.5x scale, 36 health, 11 damage.
+     */
+    public static final int MAX_SIZE = 8;
+
+    /** Model scale: 1, 1.5, 2, then +0.25 per size. */
+    public static float scaleFor(int size) {
+        return size <= 2 ? 1.0F + 0.5F * size : 2.0F + 0.25F * (size - 2);
+    }
+
+    /** Segments including head and tail: 4, 6, 8, then +1 per size. */
+    public static int segmentsFor(int size) {
+        return size <= 2 ? 4 + 2 * size : 8 + (size - 2);
+    }
+
+    /** Health: 4 per size step (2 hearts small, 18 hearts at size 8). */
+    public static double healthFor(int size) {
+        return 4.0 + 4.0 * size;
+    }
+
+    /** Bite damage: 2, 3, 5, then +1 per size. */
+    public static double damageFor(int size) {
+        return size <= 2 ? new double[]{2.0, 3.0, 5.0}[size] : 5.0 + (size - 2);
+    }
+
+    public static int xpFor(int size) {
+        return 1 + 2 * size;
+    }
+
+    /** Lunge speed in blocks per tick. Bigger borers are a bit slower. */
+    public static double lungeSpeedFor(int size) {
+        return Math.max(0.45, 0.9 - 0.1 * size);
+    }
+
+    /** Multiplies the config's ambush distances, so bigger borers charge from farther away. */
+    public static double rangeScaleFor(int size) {
+        return size <= 2 ? 1.0 + 0.3 * size : 1.6 + 0.15 * (size - 2);
+    }
     // How far past its max ambush distance the target may move before a charge is called off
     private static final double CHARGE_RANGE_GRACE = 2.0;
     // Small borers give up and leave after this many charges, so they don't drag on
@@ -99,13 +129,12 @@ public class CaveBorer extends Monster {
 
     // Hitboxes are bigger than the model so the fast, thin worm is easier to hit. Bites still use the model size.
     private static final float HITBOX_SCALE = 1.5F;
-    private static final int MAX_PARTS = 7; // SEGMENTS[MAX_SIZE] - 1 (the head is the entity itself)
+    private static final int MAX_PARTS = segmentsFor(MAX_SIZE) - 1; // the head is the entity itself
     private static final double BURROW_SPEED = 0.5;
     private static final double LUNGE_GRAVITY = 0.04;
     private static final int MAX_LUNGE_TICKS = 40;
     private static final int STUN_TICKS = 60;
     private static final int TARGET_RANGE = 24;
-    private static final int LOSE_TARGET_RANGE = 32;
 
     private static final EntityDataAccessor<Integer> DATA_SIZE = SynchedEntityData.defineId(CaveBorer.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Byte> DATA_STATE = SynchedEntityData.defineId(CaveBorer.class, EntityDataSerializers.BYTE);
@@ -146,13 +175,13 @@ public class CaveBorer extends Monster {
         this.setId(ENTITY_COUNTER.getAndAdd(this.parts.length + 1) + 1);
         this.noPhysics = true;
         this.setNoGravity(true);
-        this.xpReward = XP[0];
+        this.xpReward = xpFor(0);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, HEALTH[0])
-                .add(Attributes.ATTACK_DAMAGE, DAMAGE[0])
+                .add(Attributes.MAX_HEALTH, healthFor(0))
+                .add(Attributes.ATTACK_DAMAGE, damageFor(0))
                 .add(Attributes.MOVEMENT_SPEED, 0.25)
                 .add(Attributes.FOLLOW_RANGE, TARGET_RANGE);
     }
@@ -204,8 +233,7 @@ public class CaveBorer extends Monster {
 
     @Override
     public @Nullable SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor level, @NotNull DifficultyInstance difficulty, @NotNull MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
-        float roll = level.getRandom().nextFloat();
-        this.setSize(roll < 0.5F ? 0 : roll < 0.85F ? 1 : 2, true);
+        this.setSize(rollSpawnSize(level.getRandom()), true);
         if (spawnType == MobSpawnType.NATURAL || spawnType == MobSpawnType.CHUNK_GENERATION) {
             // Natural spawns start tucked into the floor they spawned on
             this.setCenter(Vec3.atCenterOf(this.blockPosition().below()));
@@ -217,6 +245,23 @@ public class CaveBorer extends Monster {
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 
+    /** Random natural size up to the config's maxNaturalSize: 50% small, 35% medium, 15% large, each bigger size half as likely again. */
+    private static int rollSpawnSize(RandomSource random) {
+        int max = Mth.clamp(SpelunkersCharmConfig.CAVE_BORER_MAX_NATURAL_SIZE.get(), 0, MAX_SIZE);
+        double[] weights = new double[max + 1];
+        double total = 0.0;
+        for (int size = 0; size <= max; size++) {
+            weights[size] = size == 0 ? 50.0 : size == 1 ? 35.0 : 15.0 * Math.pow(0.5, size - 2);
+            total += weights[size];
+        }
+        double roll = random.nextDouble() * total;
+        for (int size = 0; size <= max; size++) {
+            roll -= weights[size];
+            if (roll < 0.0) return size;
+        }
+        return max;
+    }
+
     public int getSize() {
         return this.entityData.get(DATA_SIZE);
     }
@@ -226,20 +271,20 @@ public class CaveBorer extends Monster {
         this.entityData.set(DATA_SIZE, clamped);
         this.reapplyPosition();
         this.refreshDimensions();
-        Objects.requireNonNull(this.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(HEALTH[clamped]);
-        Objects.requireNonNull(this.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(DAMAGE[clamped]);
+        Objects.requireNonNull(this.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(healthFor(clamped));
+        Objects.requireNonNull(this.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(damageFor(clamped));
         if (resetHealth) {
             this.setHealth(this.getMaxHealth());
         }
-        this.xpReward = XP[clamped];
+        this.xpReward = xpFor(clamped);
     }
 
     public float getSizeScale() {
-        return SCALE[this.getSize()];
+        return scaleFor(this.getSize());
     }
 
     public int getSegmentCount() {
-        return SEGMENTS[this.getSize()];
+        return segmentsFor(this.getSize());
     }
 
     public float getSegmentSpacing() {
@@ -489,14 +534,14 @@ public class CaveBorer extends Monster {
     @Nullable
     private LivingEntity updateTarget() {
         LivingEntity target = this.getTarget();
-        if (target != null && (!target.isAlive() || this.distanceToSqr(target) > LOSE_TARGET_RANGE * LOSE_TARGET_RANGE
+        if (target != null && (!target.isAlive() || this.distanceToSqr(target) > this.getLoseTargetRange() * this.getLoseTargetRange()
                 || (target instanceof Player player && (player.isCreative() || player.isSpectator())))) {
             this.setTarget(null);
             target = null;
         }
         if (target == null && this.tickCount % 10 == 0) {
             // No line of sight needed: it hunts by feeling footsteps through the rock
-            TargetingConditions conditions = TargetingConditions.forCombat().range(this.getAttributeValue(Attributes.FOLLOW_RANGE)).ignoreLineOfSight();
+            TargetingConditions conditions = TargetingConditions.forCombat().range(this.getTargetRange()).ignoreLineOfSight();
             Player player = this.level().getNearestPlayer(conditions, this);
             if (player != null) {
                 this.setTarget(player);
@@ -513,7 +558,7 @@ public class CaveBorer extends Monster {
             Vec3 center = this.getCenter();
             Vec3 toTarget = this.travelTarget.subtract(center);
             double distance = toTarget.length();
-            if (distance > LOSE_TARGET_RANGE || distance <= BURROW_SPEED) {
+            if (distance > this.getLoseTargetRange() || distance <= BURROW_SPEED) {
                 this.setDeltaMovement(Vec3.ZERO);
                 this.setCenter(this.travelTarget);
                 this.travelTarget = null;
@@ -561,12 +606,21 @@ public class CaveBorer extends Monster {
      * player can see, so floors, walls and ceilings all come up, and the lunge never has to go through a wall.
      */
     private double getAmbushMinDistance() {
-        return SpelunkersCharmConfig.CAVE_BORER_AMBUSH_MIN_DISTANCE.get() * RANGE_SCALE[this.getSize()];
+        return SpelunkersCharmConfig.CAVE_BORER_AMBUSH_MIN_DISTANCE.get() * rangeScaleFor(this.getSize());
     }
 
     private double getAmbushMaxDistance() {
-        double max = SpelunkersCharmConfig.CAVE_BORER_AMBUSH_MAX_DISTANCE.get() * RANGE_SCALE[this.getSize()];
+        double max = SpelunkersCharmConfig.CAVE_BORER_AMBUSH_MAX_DISTANCE.get() * rangeScaleFor(this.getSize());
         return Math.max(this.getAmbushMinDistance() + 1.0, max);
+    }
+
+    /** How far away it notices players. At least 24 blocks, more for borers that charge from far away. */
+    private double getTargetRange() {
+        return Math.max(TARGET_RANGE, this.getAmbushMaxDistance() + 10.0);
+    }
+
+    private double getLoseTargetRange() {
+        return this.getTargetRange() + 8.0;
     }
 
     /** Whether the target is still close enough to the emerge block for a charge from it. */
@@ -654,7 +708,7 @@ public class CaveBorer extends Monster {
         // Aim is locked here, so stepping aside dodges it
         Vec3 aim = target != null ? target.position().add(0.0, target.getBbHeight() * 0.5, 0.0) : start.add(normal.scale(6.0));
         Vec3 offset = aim.subtract(start);
-        double ticks = Math.max(4.0, offset.length() / LUNGE_SPEED[this.getSize()]);
+        double ticks = Math.max(4.0, offset.length() / lungeSpeedFor(this.getSize()));
         // Solve for a velocity that passes through the aim point under our own gravity
         Vec3 velocity = offset.scale(1.0 / ticks).add(0.0, 0.5 * LUNGE_GRAVITY * ticks, 0.0);
 
@@ -858,7 +912,8 @@ public class CaveBorer extends Monster {
             this.clearCrack();
             int size = this.getSize();
             if (size > 0 && this.isDeadOrDying() && reason == RemovalReason.KILLED) {
-                this.split(size - 1);
+                // Pending Bryan's pick: everything from size 2 up splits into mediums, so big kills don't snowball
+                this.split(Math.min(size - 1, 1));
             }
         }
         super.remove(reason);
