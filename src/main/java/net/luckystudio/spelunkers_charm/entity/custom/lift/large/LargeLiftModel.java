@@ -2177,7 +2177,8 @@ public class LargeLiftModel<T extends LargeLift> extends HierarchicalModel<T> {
         ((AbstractLift) ((Object) entity))
                 .setLeverAngle((AbstractLift) ((Object) entity), this.lever);
         double height = entity.yo + (entity.getY() - entity.yo) * limbSwing;
-        float angle = (float) ((height / 0.6875) % (Math.PI * 2.0));
+        // Negated to turn the same way as the small lift's gears.
+        float angle = (float) -((height / 0.6875) % (Math.PI * 2.0));
         this.gear1.xRot = angle;
         this.gear2.xRot = angle;
         this.gear3.xRot = -angle;
