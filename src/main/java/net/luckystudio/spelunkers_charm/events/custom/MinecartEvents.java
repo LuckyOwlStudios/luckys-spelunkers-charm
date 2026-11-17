@@ -35,7 +35,10 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import net.luckystudio.spelunkers_charm.block.custom.rail.DirectionalRailBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 @EventBusSubscriber(modid = SpelunkersCharm.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class MinecartEvents {
@@ -191,6 +194,21 @@ public class MinecartEvents {
     }
 
     /** Once every entity has moved, hold coupled carts at their fixed distance. */
+    /** An unpowered directional rail stops a cart even if the cart moved on past it during its own tick. */
+    @SubscribeEvent
+    public static void onCartTick(EntityTickEvent.Post event) {
+        if (!(event.getEntity() instanceof AbstractMinecart cart) || cart.level().isClientSide()) return;
+        BlockPos pos = cart.blockPosition();
+        BlockState state = cart.level().getBlockState(pos);
+        if (!(state.getBlock() instanceof DirectionalRailBlock)) {
+            pos = pos.below();
+            state = cart.level().getBlockState(pos);
+        }
+        if (state.getBlock() instanceof DirectionalRailBlock && !state.getValue(DirectionalRailBlock.POWERED)) {
+            DirectionalRailBlock.holdCart(state, pos, cart);
+        }
+    }
+
     @SubscribeEvent
     public static void onLevelTick(LevelTickEvent.Post event) {
         if (event.getLevel() instanceof ServerLevel serverLevel) {

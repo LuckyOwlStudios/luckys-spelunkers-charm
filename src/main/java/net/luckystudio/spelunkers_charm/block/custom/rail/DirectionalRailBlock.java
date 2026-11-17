@@ -106,7 +106,16 @@ public class DirectionalRailBlock extends PoweredRailBlock {
             return;
         }
 
-        // Stop the cart, then slide it to the middle of the block.
+        holdCart(state, pos, cart);
+    }
+
+    /**
+     * Stops the cart and slides it to the middle of the block. Called while a cart passes, and again after
+     * each cart move (see MinecartEvents), because a fast cart can move on past the rail within one tick.
+     */
+    public static void holdCart(BlockState state, BlockPos pos, AbstractMinecart cart) {
+        Direction direction = travelDirection(state);
+        Vec3 motion = cart.getDeltaMovement();
         cart.setDeltaMovement(0.0, motion.y, 0.0);
         double centerX = pos.getX() + 0.5;
         double centerZ = pos.getZ() + 0.5;
