@@ -48,6 +48,10 @@ public class SpelunkersCharmConfig {
     public static ModConfigSpec.DoubleValue TREMOR_VOLUME;
     public static ModConfigSpec.BooleanValue TREMOR_CAMERA_SHAKE;
     public static ModConfigSpec.DoubleValue TREMOR_CAMERA_SHAKE_STRENGTH;
+    public static ModConfigSpec.BooleanValue MINING_HELMET_BEAM;
+    public static ModConfigSpec.DoubleValue MINING_HELMET_BEAM_OPACITY;
+    public static ModConfigSpec.BooleanValue MINING_HELMET_SPOTLIGHT;
+    public static ModConfigSpec.IntValue MINING_HELMET_SPOTLIGHT_RANGE;
 
     static {
         ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
@@ -175,6 +179,18 @@ public class SpelunkersCharmConfig {
         TREMOR_CAMERA_SHAKE_STRENGTH = CLIENT_BUILDER
                 .comment("How strong tremor camera shake is. 1.0 is the default, 0.0 turns it off")
                 .defineInRange("tremorCameraShakeStrength", 1.0, 0.0, 3.0);
+        MINING_HELMET_BEAM = CLIENT_BUILDER
+                .comment("Show the mining helmet's light beam, a soft cone of light coming out of the lamp")
+                .define("miningHelmetBeam", true);
+        MINING_HELMET_BEAM_OPACITY = CLIENT_BUILDER
+                .comment("How bright the mining helmet's light beam looks. 1.0 is the default")
+                .defineInRange("miningHelmetBeamOpacity", 1.0, 0.0, 2.0);
+        MINING_HELMET_SPOTLIGHT = CLIENT_BUILDER
+                .comment("Light up the spot the mining helmet is pointed at. Needs the LambDynamicLights mod, does nothing without it")
+                .define("miningHelmetSpotlight", true);
+        MINING_HELMET_SPOTLIGHT_RANGE = CLIENT_BUILDER
+                .comment("How far the mining helmet's spotlight reaches, in blocks. Longer reaches re-light more of the world as you look around")
+                .defineInRange("miningHelmetSpotlightRange", 20, 8, 32);
         CLIENT_BUILDER.pop();
 
         CLIENT_CONFIG = CLIENT_BUILDER.build();

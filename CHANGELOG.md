@@ -20,6 +20,9 @@ Work In Progress section is started.
 - Create and Supplementaries are now listed as optional dependencies. Create adds zinc boulders; Supplementaries lets you tie a boulder to a rope and suspend it in the air, just like a chain. Other rope blocks can be added with the `spelunkers_charm:boulder_ropes` block tag.
 - Tremors shake your camera when [Camera Overhaul](https://modrinth.com/mod/cameraoverhaul) is installed. The shake builds and fades with the tremor, is stronger for bigger tremors and weaker the farther away you are. Camera Overhaul is optional. It can be turned off or scaled with `tremorCameraShake` and `tremorCameraShakeStrength` in the client config.
 
+**Changed:**
+- The mining helmet works like a flashlight. A soft, glowing beam of light shines out of its lamp and follows your head, in first and third person, and on other players and mobs wearing one. It stops at the block it hits. With LambDynamicLights, it also lights up a pool where it points and a cone along the way, up to 20 blocks away. The helmet's own glow around you is lower (8, was 15) so the beam stands out. New client options: `miningHelmetBeam`, `miningHelmetBeamOpacity`, `miningHelmetSpotlight` and `miningHelmetSpotlightRange`.
+
 **Development:**
 - Camera Overhaul (with Cloth Config, which it needs) now loads in dev runs (`runClient`), so tremor camera shake can be tested without installing it by hand. It isn't bundled in the mod jar and stays an optional dependency.
 
