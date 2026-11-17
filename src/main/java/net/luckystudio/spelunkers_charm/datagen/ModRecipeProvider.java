@@ -161,6 +161,15 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('R', Items.REDSTONE)
                 .unlockedBy("has_rail", has(Items.RAIL))
                 .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.TRANSPORTATION, ModBlocks.CARGO_RAIL.get(), 6)
+                .pattern("ICI")
+                .pattern("IMI")
+                .pattern("I I")
+                .define('I', Items.IRON_INGOT)
+                .define('C', Items.CHEST)
+                .define('M', Items.COMPARATOR)
+                .unlockedBy("has_rail", has(Items.RAIL))
+                .save(recipeOutput);
     }
 
     @Override

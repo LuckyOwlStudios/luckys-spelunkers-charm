@@ -92,6 +92,7 @@
     "spelunkers_charm:powered_lift_track",
     "spelunkers_charm:ejector_rail",
     "spelunkers_charm:directional_rail",
+    "spelunkers_charm:cargo_rail",
     "spelunkers_charm:crossing_rail"
   ]
 }

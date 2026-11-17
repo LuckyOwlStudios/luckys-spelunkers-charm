@@ -184,6 +184,7 @@
   "block.spelunkers_charm.wooden_rail": "Wooden Rail",
   "block.spelunkers_charm.ejector_rail": "Ejector Rail",
   "block.spelunkers_charm.directional_rail": "Directional Rail",
+  "block.spelunkers_charm.cargo_rail": "Cargo Rail",
   "block.spelunkers_charm.crossing_rail": "Rail Crossing",
   "item.spelunkers_charm.locomotive": "Locomotive",
   "gui.spelunkers_charm.locomotive.forward": "Lever: Forward",

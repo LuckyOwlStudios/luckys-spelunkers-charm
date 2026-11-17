@@ -3,6 +3,11 @@ package net.luckystudio.spelunkers_charm.block.custom.rail;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.LocomotiveMinecart;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.level.Level;
@@ -68,6 +73,17 @@ public class DirectionalRailBlock extends PoweredRailBlock {
             return facing == Direction.NORTH || facing == Direction.EAST ? Direction.NORTH : Direction.SOUTH;
         }
         return facing == Direction.EAST || facing == Direction.SOUTH ? Direction.EAST : Direction.WEST;
+    }
+
+    /** Clicking with an empty hand turns the rail around. */
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        if (player.isSecondaryUseActive() || !player.getMainHandItem().isEmpty()) return InteractionResult.PASS;
+        if (!level.isClientSide()) {
+            level.setBlock(pos, state.setValue(FACING, travelDirection(state).getOpposite()), 3);
+            level.playSound(null, pos, SoundEvents.COMPARATOR_CLICK, SoundSource.BLOCKS, 0.5F, 0.7F);
+        }
+        return InteractionResult.sidedSuccess(level.isClientSide());
     }
 
     @Override

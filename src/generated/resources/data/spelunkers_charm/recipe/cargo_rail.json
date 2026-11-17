@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "minecraft:chest"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "M": {
+      "item": "minecraft:comparator"
+    }
+  },
+  "pattern": [
+    "ICI",
+    "IMI",
+    "I I"
+  ],
+  "result": {
+    "count": 6,
+    "id": "spelunkers_charm:cargo_rail"
+  }
+}
