@@ -22,6 +22,7 @@ Work In Progress section is started.
 
 **Development:**
 - Camera Overhaul (with Cloth Config, which it needs) now loads in dev runs (`runClient`), so tremor camera shake can be tested without installing it by hand. It isn't bundled in the mod jar and stays an optional dependency.
+- Supplementaries (with Moonlight Lib, which it needs) now loads in dev runs (`runClient`), so features like tying boulders to ropes can be tested alongside it. It isn't bundled in the mod jar and stays an optional dependency.
 
 # 5.1.1
 
