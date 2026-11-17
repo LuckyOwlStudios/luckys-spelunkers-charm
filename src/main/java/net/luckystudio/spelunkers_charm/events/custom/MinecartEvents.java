@@ -35,7 +35,6 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
 @EventBusSubscriber(modid = SpelunkersCharm.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
@@ -160,6 +159,8 @@ public class MinecartEvents {
                 stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(event.getHand()));
             }
         } else if (CartLantern.fromStack(stack) != CartLantern.NONE && !player.isSecondaryUseActive()) {
+            // Needs LambDynamicLights, which makes the lantern shine. Without it lanterns can't be hung.
+            if (!CartLanterns.isEnabled()) return;
             // Sneaking puts the lantern inside the cart as a block instead, and block carts keep adding their own block.
             if (cart instanceof BlockMinecart) return;
             if (CartLanterns.getLantern(cart) != CartLantern.NONE) return;
@@ -187,14 +188,6 @@ public class MinecartEvents {
         event.getEntity().openMenu(new SimpleMenuProvider(
                 (containerId, inventory, player) -> new FurnaceMinecartMenu(containerId, inventory, cart, FurnaceMinecartMenu.dataFor(cart)),
                 Component.translatable("container.spelunkers_charm.furnace_minecart")));
-    }
-
-    /** Moves lantern light along with carts. */
-    @SubscribeEvent
-    public static void onCartTick(EntityTickEvent.Post event) {
-        if (event.getEntity() instanceof AbstractMinecart cart && !cart.level().isClientSide()) {
-            CartLanterns.tick(cart);
-        }
     }
 
     /** Once every entity has moved, hold coupled carts at their fixed distance. */
@@ -226,8 +219,6 @@ public class MinecartEvents {
         if (reason != null && reason.shouldDestroy()) {
             CartLinking.onCartRemoved(cart);
             CartLanterns.onCartRemoved(cart, reason == Entity.RemovalReason.KILLED);
-        } else {
-            CartLanterns.forget(cart);
         }
     }
 
