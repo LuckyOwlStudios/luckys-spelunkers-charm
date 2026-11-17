@@ -911,7 +911,7 @@ public class CaveBorer extends Monster {
         if (!this.level().isClientSide) {
             this.clearCrack();
             int size = this.getSize();
-            if (size > 0 && this.isDeadOrDying() && reason == RemovalReason.KILLED) {
+            if (size > 0 && this.isDeadOrDying() && reason == RemovalReason.KILLED && SpelunkersCharmConfig.CAVE_BORER_SPLITTING.get()) {
                 // Pending Bryan's pick: everything from size 2 up splits into mediums, so big kills don't snowball
                 this.split(Math.min(size - 1, 1));
             }
@@ -943,7 +943,8 @@ public class CaveBorer extends Monster {
     @Override
     public @NotNull ResourceKey<LootTable> getDefaultLootTable() {
         // Only the smallest size drops loot, like slimes
-        return this.getSize() == 0 ? super.getDefaultLootTable() : BuiltInLootTables.EMPTY;
+        // (or every size when splitting is turned off in the config)
+        return this.getSize() == 0 || !SpelunkersCharmConfig.CAVE_BORER_SPLITTING.get() ? super.getDefaultLootTable() : BuiltInLootTables.EMPTY;
     }
 
     // ===== Sounds =====

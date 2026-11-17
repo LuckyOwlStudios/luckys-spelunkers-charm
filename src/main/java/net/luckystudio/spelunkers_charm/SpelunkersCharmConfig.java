@@ -48,6 +48,7 @@ public class SpelunkersCharmConfig {
     public static ModConfigSpec.BooleanValue CAVE_BORER_SPAWNING;
     public static ModConfigSpec.IntValue CAVE_BORER_MAX_SPAWN_Y;
     public static ModConfigSpec.IntValue CAVE_BORER_MAX_NATURAL_SIZE;
+    public static ModConfigSpec.BooleanValue CAVE_BORER_SPLITTING;
     public static ModConfigSpec.DoubleValue CAVE_BORER_WARNING_SECONDS;
     public static ModConfigSpec.DoubleValue CAVE_BORER_REST_MIN_SECONDS;
     public static ModConfigSpec.DoubleValue CAVE_BORER_REST_MAX_SECONDS;
@@ -188,6 +189,10 @@ public class SpelunkersCharmConfig {
                 .comment("Biggest size that spawns naturally. 0 is small, 1 medium, 2 large, up to 8 for giant borers.",
                         "Each size above large is half as common as the one before it. Spawn eggs and /summon can make any size")
                 .defineInRange("maxNaturalSize", 2, 0, 8);
+
+        CAVE_BORER_SPLITTING = COMMON_BUILDER
+                .comment("Whether killed cave borers split into smaller ones, like slimes. When off they just die, and every size drops loot")
+                .define("splitting", true);
 
         CAVE_BORER_WARNING_SECONDS = COMMON_BUILDER
                 .comment("Seconds of warning (block particles and digging sounds) before a cave borer lunges out")
