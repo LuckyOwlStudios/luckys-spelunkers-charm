@@ -57,7 +57,7 @@ repositories {
             includeGroup "curse.maven"
         }
     }
-    // Modrinth Maven, used only for dev-only runtime mods like Camera Overhaul and Cloth Config
+    // Modrinth Maven, used only for dev-only runtime mods like Camera Overhaul, Cloth Config and Supplementaries
     exclusiveContent {
         forRepository {
             maven {
@@ -213,6 +213,14 @@ dependencies {
     // Camera Overhaul requires Cloth Config, so that's added for dev runs too.
     localRuntime "maven.modrinth:cameraoverhaul:${cameraoverhaul_version_id}"
     localRuntime "maven.modrinth:cloth-config:${cloth_config_version_id}"
+
+    // Supplementaries (MehVahdJukaar): dev runs only, for testing our features alongside it (e.g. boulders on ropes).
+    // localRuntime keeps it off the compile classpath and out of the built jar. It stays an optional dependency in neoforge.mods.toml.
+    // 1.21.1-3.8.5 is used because it was built against NeoForge 21.1.230 (our neo_version); 3.8.10+ requires 21.1.247+.
+    // It needs Moonlight Lib 3.3.0+ (ConfigScreenExtensions.Showcase), even though its mods.toml only asks for 3.1.3.
+    // Moonlight 3.3.0 is the newest release still built against 21.1.230; 3.3.1 isn't on Modrinth.
+    localRuntime "maven.modrinth:supplementaries:${supplementaries_version_id}"
+    localRuntime "maven.modrinth:moonlight:${moonlight_version_id}"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
