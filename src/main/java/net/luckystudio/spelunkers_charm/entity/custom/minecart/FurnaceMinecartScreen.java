@@ -8,13 +8,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.entity.player.Inventory;
 
-/** Shows a furnace minecart's remaining fuel: a flame, a bar and the time left. */
+/** Shows a furnace minecart's remaining fuel: a bar and the time left. */
 public class FurnaceMinecartScreen extends AbstractContainerScreen<FurnaceMinecartMenu> {
 
     private static final ResourceLocation GUI_TEXTURE = SpelunkersCharm.id("textures/gui/furnace_minecart/furnace_minecart_gui.png");
-    private static final ResourceLocation LIT_PROGRESS_SPRITE = ResourceLocation.withDefaultNamespace("container/furnace/lit_progress");
 
-    private static final int BAR_X = 30;
+    private static final int BAR_X = 20;
     private static final int BAR_Y = 26;
     private static final int BAR_WIDTH = 136;
     private static final int BAR_HEIGHT = 8;
@@ -39,7 +38,6 @@ public class FurnaceMinecartScreen extends AbstractContainerScreen<FurnaceMineca
 
         int fuel = this.menu.getFuel();
         if (fuel > 0) {
-            guiGraphics.blitSprite(LIT_PROGRESS_SPRITE, 14, 14, 0, 0, x + 10, y + BAR_Y - 3, 14, 14);
             int filled = Math.max(1, fuel * BAR_WIDTH / FurnaceMinecartMenu.MAX_FUEL);
             guiGraphics.fill(x + BAR_X, y + BAR_Y, x + BAR_X + filled, y + BAR_Y + BAR_HEIGHT, 0xFFE07A1F);
         }
