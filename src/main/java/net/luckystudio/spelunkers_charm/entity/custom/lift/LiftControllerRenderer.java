@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.phys.AABB;
 
 /**
  * Draws a Sable lift with the lift entity's own model, textures and animations. Sable moves (and
@@ -68,6 +69,13 @@ public class LiftControllerRenderer implements BlockEntityRenderer<LiftControlle
                 packedLight,
                 OverlayTexture.NO_OVERLAY);
         poseStack.popPose();
+    }
+
+    @Override
+    public AABB getRenderBoundingBox(LiftControllerBlockEntity be) {
+        // The model's gears reach out to the tracks, past the deck itself.
+        int r = be.radius() + 2;
+        return new AABB(be.getBlockPos()).inflate(r, 1, r);
     }
 
     @Override

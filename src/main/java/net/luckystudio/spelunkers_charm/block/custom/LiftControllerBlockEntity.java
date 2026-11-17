@@ -26,7 +26,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -337,13 +336,6 @@ public class LiftControllerBlockEntity extends BlockEntity implements BlockEntit
         if (clientLift != null) clientLift.discard();
         clientLift = null;
         super.setRemoved();
-    }
-
-    @Override
-    public AABB getRenderBoundingBox() {
-        // The model's gears reach out to the tracks, past the deck itself.
-        int r = radius() + 2;
-        return new AABB(getBlockPos()).inflate(r, 1, r);
     }
 
     @Override
