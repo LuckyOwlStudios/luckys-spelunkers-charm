@@ -1,5 +1,6 @@
 package net.luckystudio.spelunkers_charm.entity.custom.minecart;
 
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartLinking;
 import net.luckystudio.spelunkers_charm.init.ModEntityType;
 import net.luckystudio.spelunkers_charm.init.ModItems;
 import net.minecraft.core.BlockPos;
@@ -54,6 +55,12 @@ public class LocomotiveMinecart extends AbstractMinecartContainer {
     /** Extra slowdown when the engine has no fuel. Without it a cart would coast a long way. */
     private static final double COASTING_DRAG = 0.985;
 
+    /**
+     * How many carts this engine is hauling (the train's length split between its running engines).
+     * The engine pushes this much harder, so a longer train still reaches the same top speed,
+     * and it burns fuel faster to do it.
+     */
+    private int trainLoad = 1;
     private int burnTime;
     private int burnDuration;
     private double xPush;
@@ -148,6 +155,9 @@ public class LocomotiveMinecart extends AbstractMinecartContainer {
 
     @Override
     public void tick() {
+        if (!this.level().isClientSide()) {
+            this.trainLoad = CartLinking.trainLoad(this);
+        }
         super.tick();
         if (!this.level().isClientSide()) {
             // Like the furnace minecart, it runs whenever it has fuel.
@@ -155,7 +165,8 @@ public class LocomotiveMinecart extends AbstractMinecartContainer {
                 consumeFuel();
             }
             if (this.burnTime > 0) {
-                this.burnTime--;
+                // A longer train burns fuel faster: one more tick for every two extra carts.
+                this.burnTime = Math.max(0, this.burnTime - (1 + (this.trainLoad - 1) / 2));
             }
             this.entityData.set(DATA_BURNING, this.burnTime > 0);
         } else if (isBurning() && this.random.nextInt(3) == 0) {
@@ -241,7 +252,7 @@ public class LocomotiveMinecart extends AbstractMinecartContainer {
             this.zPush /= pushLength;
             Vec3 motion = this.getDeltaMovement();
             boolean againstMotion = motion.x * this.xPush + motion.z * this.zPush < 0.0;
-            double acceleration = againstMotion ? BRAKING : ACCELERATION;
+            double acceleration = (againstMotion ? BRAKING : ACCELERATION) * this.trainLoad;
             this.setDeltaMovement(motion.add(this.xPush * acceleration, 0.0, this.zPush * acceleration));
         } else {
             this.setDeltaMovement(this.getDeltaMovement().multiply(COASTING_DRAG, 0.0, COASTING_DRAG));

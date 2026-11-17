@@ -1,5 +1,6 @@
 package net.luckystudio.spelunkers_charm.entity.custom.minecart.link;
 
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.LocomotiveMinecart;
 import net.luckystudio.spelunkers_charm.init.ModAttachmentTypes;
 import net.luckystudio.spelunkers_charm.network.CartSyncPayload;
 import net.minecraft.server.level.ServerLevel;
@@ -10,8 +11,11 @@ import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Deque;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -54,6 +58,35 @@ public final class CartLinking {
             cart.setData(ModAttachmentTypes.CART_LINKS, links);
             ACTIVE.add(cart);
         }
+    }
+
+    /** The most carts counted in one train. */
+    private static final int MAX_TRAIN = 32;
+
+    /**
+     * How many carts each running locomotive has to haul: the number of carts in the train
+     * (everything coupled together, directly or through other carts) divided by the number of running
+     * locomotives in it. 1 for a locomotive on its own. Server side.
+     */
+    public static int trainLoad(AbstractMinecart start) {
+        if (!(start.level() instanceof ServerLevel level)) return 1;
+        Set<UUID> seen = new HashSet<>();
+        Deque<AbstractMinecart> queue = new ArrayDeque<>();
+        seen.add(start.getUUID());
+        queue.add(start);
+        int carts = 0;
+        int engines = 0;
+        while (!queue.isEmpty() && carts < MAX_TRAIN) {
+            AbstractMinecart cart = queue.poll();
+            carts++;
+            if (cart instanceof LocomotiveMinecart locomotive && locomotive.isBurning()) engines++;
+            for (UUID id : getLinks(cart).links()) {
+                if (seen.add(id) && level.getEntity(id) instanceof AbstractMinecart other && !other.isRemoved()) {
+                    queue.add(other);
+                }
+            }
+        }
+        return Math.max(1, carts / Math.max(1, engines));
     }
 
     /** Called when a cart joins the world, so carts loaded with couplings are held together again. */
