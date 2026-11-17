@@ -308,7 +308,10 @@ public class ModBlocks {
             () -> new PoweredLiftTrackBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
     // Center of a Sable lift deck. Placed by the lift items, so it has no item of its own.
     public static final DeferredBlock<Block> LIFT_CONTROLLER = BLOCKS.register("lift_controller",
-            () -> new LiftControllerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+            () -> new LiftControllerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_PLANKS).noOcclusion()));
+    // The rest of a Sable lift deck: invisible and solid, the controller draws the model over it.
+    public static final DeferredBlock<Block> LIFT_PART = BLOCKS.register("lift_part",
+            () -> new LiftPartBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_PLANKS).noOcclusion()));
 
     private static boolean always(BlockState state, BlockGetter blockGetter, BlockPos pos) {
         return true;

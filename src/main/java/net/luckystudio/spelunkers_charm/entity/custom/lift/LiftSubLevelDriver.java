@@ -30,7 +30,7 @@ public final class LiftSubLevelDriver {
 
     private final AbstractLift probe;
     private final LiftGuideSystem guides;
-    private final double x, z;
+    private double x, z;
 
     private MovementType movement = MovementType.STATIONARY;
     private MovementType preferred = MovementType.UP;
@@ -79,15 +79,26 @@ public final class LiftSubLevelDriver {
 
     // ---------------------------------------------------------------- server tick
 
-    /** Runs once a game tick with the deck's current world Y (its bottom face). */
-    public void tick(double deckY) {
+    /** Whether the deck should be held on its rail: it's on tracks. Off them it's loose. */
+    public boolean onTracks() {
+        return movement != MovementType.FALLING;
+    }
+
+    /**
+     * Runs once a game tick with the world position of the deck's bottom center. The deck may have
+     * fallen off its tracks and come to rest somewhere else, so the probe follows it everywhere.
+     */
+    public void tick(double x, double deckY, double z) {
+        this.x = x;
+        this.z = z;
         AABB before = probe.getBoundingBox();
         placeProbe(deckY);
         if (!probe.hasValidTracks()) {
-            // Off the tracks: let Sable drop it like any other loose structure.
+            // Off the tracks: let Sable drop and tumble it like any other loose structure.
             movement = MovementType.FALLING;
             pausedForPower = MovementType.STATIONARY;
             probe.setMovementType(movement);
+            guides.updateStoppedGuideState(); // releases the tracks it was resting on
             return;
         }
         if (movement == MovementType.FALLING || holdRow == Integer.MIN_VALUE) {

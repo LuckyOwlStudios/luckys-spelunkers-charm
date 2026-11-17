@@ -33,13 +33,13 @@ public final class LiftBlockStateProvider extends BlockStateProvider {
     }
 
     private void controller() {
+        // Both are drawn by LiftControllerRenderer; the models only supply break particles.
         simpleBlock(
                 ModBlocks.LIFT_CONTROLLER.get(),
-                models().cubeBottomTop(
-                        "lift_controller",
-                        mcLoc("block/lodestone_side"),
-                        mcLoc("block/lodestone_top"),
-                        mcLoc("block/lodestone_top")));
+                models().getBuilder("lift_controller").texture("particle", mcLoc("block/spruce_planks")));
+        simpleBlock(
+                ModBlocks.LIFT_PART.get(),
+                models().getBuilder("lift_part").texture("particle", mcLoc("block/spruce_planks")));
     }
 
     private ModelFile rackModel(String name, String front, String side, String end) {

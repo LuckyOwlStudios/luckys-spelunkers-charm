@@ -57,7 +57,6 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         ;
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
-                .add(ModBlocks.LIFT_CONTROLLER.get())
                 .add(ModBlocks.DUNESTONE.get())
                 .add(ModBlocks.DUNESTONE_STAIRS.get())
                 .add(ModBlocks.DUNESTONE_SLAB.get())
@@ -144,6 +143,8 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.POWERED_LIFT_TRACK.get())
         ;
         tag(BlockTags.MINEABLE_WITH_AXE)
+                .add(ModBlocks.LIFT_CONTROLLER.get())
+                .add(ModBlocks.LIFT_PART.get())
 
                 .add(ModBlocks.BASIC_LIFT_TRACK.get())
                 .add(ModBlocks.DETECTOR_LIFT_TRACK.get())

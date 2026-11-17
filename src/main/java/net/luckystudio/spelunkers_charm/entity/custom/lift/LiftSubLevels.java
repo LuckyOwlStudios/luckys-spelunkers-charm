@@ -35,8 +35,8 @@ public final class LiftSubLevels {
         if (!available(level)) return false;
 
         BlockPos center = probe.blockPosition();
-        int radius = radius(type);
-        BlockState deck = Blocks.SPRUCE_PLANKS.defaultBlockState();
+        int radius = LiftControllerBlockEntity.radius(type);
+        BlockState deck = ModBlocks.LIFT_PART.get().defaultBlockState();
         Set<BlockPos> blocks = new HashSet<>();
         for (int dx = -radius; dx <= radius; ++dx)
             for (int dz = -radius; dz <= radius; ++dz) {
@@ -60,13 +60,5 @@ public final class LiftSubLevels {
             return false;
         }
         return true;
-    }
-
-    private static int radius(AbstractLift.Type type) {
-        return switch (type) {
-            case SMALL -> 1; // 3x3, like the 3 wide entity
-            case MEDIUM -> 2; // 5x5
-            case LARGE -> 3; // 7x7
-        };
     }
 }

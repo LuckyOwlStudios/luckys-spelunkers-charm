@@ -15,7 +15,18 @@ import com.mojang.logging.LogUtils;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.AbstractLift;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.LiftSubLevelDriver;
 import net.luckystudio.spelunkers_charm.entity.util.MovementType;
+import net.luckystudio.spelunkers_charm.datagen.itemTags.ModItemTags;
+import net.luckystudio.spelunkers_charm.entity.util.MineralType;
+import net.luckystudio.spelunkers_charm.entity.util.WoodType;
 import net.luckystudio.spelunkers_charm.init.ModBlockEntityType;
+import net.luckystudio.spelunkers_charm.init.ModItems;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -60,6 +71,14 @@ public class LiftControllerBlockEntity extends BlockEntity implements BlockEntit
     private MovementType savedMovement = MovementType.STATIONARY;
     private MovementType savedPreferred = MovementType.UP;
     private int savedHoldRow = Integer.MIN_VALUE;
+    private WoodType wood = WoodType.SPRUCE;
+    private MineralType mineral = MineralType.IRON;
+    /** Last movement sent to clients, so they only hear about changes. */
+    private MovementType syncedMovement = MovementType.STATIONARY;
+    private boolean dismantling;
+
+    /** Client only: a never-spawned lift entity the renderer, sounds and sparks read from. */
+    @Nullable private AbstractLift clientLift;
 
     public LiftControllerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityType.LIFT_CONTROLLER.get(), pos, state);
@@ -80,6 +99,68 @@ public class LiftControllerBlockEntity extends BlockEntity implements BlockEntit
         return type;
     }
 
+    public Direction getFacing() {
+        return facing;
+    }
+
+    public double getShaftX() {
+        return shaftX;
+    }
+
+    public double getShaftZ() {
+        return shaftZ;
+    }
+
+    public WoodType getWood() {
+        return wood;
+    }
+
+    public MineralType getMineral() {
+        return mineral;
+    }
+
+    /** What clients should show: the server's movement as last synced. */
+    public MovementType getShownMovement() {
+        return savedMovement;
+    }
+
+    @Nullable
+    public AbstractLift getClientLift() {
+        return clientLift;
+    }
+
+    public void setClientLift(@Nullable AbstractLift lift) {
+        this.clientLift = lift;
+    }
+
+    /** Half the deck's width: 1, 2 or 3 blocks out from the controller. */
+    public int radius() {
+        return radius(type);
+    }
+
+    public static int radius(@Nullable AbstractLift.Type type) {
+        if (type == null) return 0;
+        return switch (type) {
+            case SMALL -> 1;
+            case MEDIUM -> 2;
+            case LARGE -> 3;
+        };
+    }
+
+    /** The controller whose deck includes {@code pos}, looking around a lift part. */
+    @Nullable
+    public static LiftControllerBlockEntity find(Level level, BlockPos pos) {
+        if (level.getBlockEntity(pos) instanceof LiftControllerBlockEntity self) return self;
+        for (int dx = -3; dx <= 3; ++dx)
+            for (int dz = -3; dz <= 3; ++dz) {
+                if (level.getBlockEntity(pos.offset(dx, 0, dz))
+                                instanceof LiftControllerBlockEntity controller
+                        && Math.abs(dx) <= controller.radius()
+                        && Math.abs(dz) <= controller.radius()) return controller;
+            }
+        return null;
+    }
+
     @Nullable
     private LiftSubLevelDriver driver() {
         if (driver == null && type != null && level != null && !level.isClientSide) {
@@ -95,14 +176,22 @@ public class LiftControllerBlockEntity extends BlockEntity implements BlockEntit
     public void sable$tick(ServerSubLevel subLevel) {
         LiftSubLevelDriver driver = driver();
         if (driver == null) return;
-        attachRail(subLevel);
-        driver.tick(deckY(subLevel));
+        Vector3d deck = deckCenter(subLevel);
+        driver.tick(deck.x, deck.y, deck.z);
+        // On tracks it rides a rail; off them it's a loose physics object that falls and tumbles.
+        if (driver.onTracks() && isUpright(subLevel)) attachRail(subLevel);
+        else dropRail();
+        if (driver.movement() != syncedMovement) {
+            syncedMovement = driver.movement();
+            savedMovement = syncedMovement;
+            sync();
+        }
     }
 
     @Override
     public void sable$physicsTick(ServerSubLevel subLevel, RigidBodyHandle handle, double timeStep) {
         LiftSubLevelDriver driver = this.driver;
-        if (driver == null || handle == null || !handle.isValid()) return;
+        if (driver == null || rail == null || handle == null || !handle.isValid()) return;
         double vy = driver.targetVelocity(deckY(subLevel), timeStep);
         if (Double.isNaN(vy)) return;
         Vector3d linear = handle.getLinearVelocity(new Vector3d());
@@ -114,15 +203,30 @@ public class LiftControllerBlockEntity extends BlockEntity implements BlockEntit
 
     /** World Y of the bottom of the deck: this block's bottom face, moved out of the plot. */
     private double deckY(ServerSubLevel subLevel) {
+        return deckCenter(subLevel).y;
+    }
+
+    /** World position of the deck's bottom center. */
+    private Vector3d deckCenter(ServerSubLevel subLevel) {
         BlockPos pos = getBlockPos();
         Vector3d local = new Vector3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-        return subLevel.logicalPose().transformPosition(local, new Vector3d()).y;
+        return subLevel.logicalPose().transformPosition(local, new Vector3d());
+    }
+
+    /**
+     * A deck that fell off and landed tipped over or turned can't go back on a rail, even if it
+     * happens to land between tracks: it would lock in crooked. Within about 3 degrees counts.
+     */
+    private static boolean isUpright(ServerSubLevel subLevel) {
+        Quaterniond q = new Quaterniond(subLevel.logicalPose().orientation()).normalize();
+        return Math.abs(q.w) > Math.cos(Math.toRadians(3.0) / 2.0);
     }
 
     /** Pin the deck to a vertical rail. The pin isn't saved, so it's added again after loading. */
     private void attachRail(ServerSubLevel subLevel) {
         if (rail != null && rail.isValid()) return;
         rail = null;
+        if (warnedRail) return;
         if (!(SubLevelContainer.getContainer(subLevel.getLevel())
                 instanceof ServerSubLevelContainer container)) return;
         MassData mass = subLevel.getMassTracker();
@@ -164,6 +268,58 @@ public class LiftControllerBlockEntity extends BlockEntity implements BlockEntit
         return Sable.HELPER.getContaining(this) instanceof ServerSubLevel server ? server : null;
     }
 
+    /** Planks change the wood, minerals change the metal. Returns whether the item was used. */
+    public boolean restyle(ItemStack stack) {
+        WoodType newWood = WoodType.getWoodType(stack);
+        if (newWood != null && newWood != wood) {
+            wood = newWood;
+            sync();
+            return true;
+        }
+        MineralType newMineral = stack.is(ModItemTags.MINERALS) ? MineralType.getMineralType(stack) : null;
+        if (newMineral != null && newMineral != mineral) {
+            mineral = newMineral;
+            sync();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Breaks the whole lift: every deck block and this controller. Gives the lift item back unless
+     * the player breaking it is in creative.
+     */
+    public void dismantle(@Nullable Player breaker) {
+        if (dismantling || level == null || level.isClientSide) return;
+        dismantling = true;
+        onBroken();
+        BlockPos center = getBlockPos();
+        int r = radius();
+        for (int dx = -r; dx <= r; ++dx)
+            for (int dz = -r; dz <= r; ++dz) {
+                BlockPos pos = center.offset(dx, 0, dz);
+                if (!pos.equals(center) && level.getBlockState(pos).getBlock() instanceof LiftPartBlock)
+                    level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+            }
+        if (type != null && (breaker == null || !breaker.getAbilities().instabuild))
+            Block.popResource(level, center, new ItemStack(liftItem(type)));
+        level.setBlock(center, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+    }
+
+    private static Item liftItem(AbstractLift.Type type) {
+        return switch (type) {
+            case SMALL -> ModItems.SMALL_LIFT.get();
+            case MEDIUM -> ModItems.MEDIUM_LIFT.get();
+            case LARGE -> ModItems.LARGE_LIFT.get();
+        };
+    }
+
+    private void sync() {
+        setChanged();
+        if (level != null && !level.isClientSide)
+            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+    }
+
     /** The controller was broken: free the tracks and let the deck go. */
     public void onBroken() {
         if (driver != null) driver.clearGuides();
@@ -178,7 +334,26 @@ public class LiftControllerBlockEntity extends BlockEntity implements BlockEntit
     @Override
     public void setRemoved() {
         dropRail();
+        if (clientLift != null) clientLift.discard();
+        clientLift = null;
         super.setRemoved();
+    }
+
+    @Override
+    public AABB getRenderBoundingBox() {
+        // The model's gears reach out to the tracks, past the deck itself.
+        int r = radius() + 2;
+        return new AABB(getBlockPos()).inflate(r, 1, r);
+    }
+
+    @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        return saveWithoutMetadata(registries);
+    }
+
+    @Override
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     // ---------------------------------------------------------------- saving
@@ -195,6 +370,8 @@ public class LiftControllerBlockEntity extends BlockEntity implements BlockEntit
         tag.putString("movement", (d != null ? d.movement() : savedMovement).getSerializedName());
         tag.putString("preferred", (d != null ? d.preferred() : savedPreferred).getSerializedName());
         tag.putInt("holdRow", d != null ? d.holdRow() : savedHoldRow);
+        tag.putString("woodType", wood.getSerializedName());
+        tag.putString("mineralType", mineral.getSerializedName());
     }
 
     @Override
@@ -214,6 +391,9 @@ public class LiftControllerBlockEntity extends BlockEntity implements BlockEntit
         savedMovement = MovementType.byName(tag.getString("movement"));
         savedPreferred = MovementType.byName(tag.getString("preferred"));
         savedHoldRow = tag.contains("holdRow", 3) ? tag.getInt("holdRow") : Integer.MIN_VALUE;
-        driver = null;
+        if (tag.contains("woodType", 8)) wood = WoodType.byName(tag.getString("woodType"));
+        if (tag.contains("mineralType", 8)) mineral = MineralType.byName(tag.getString("mineralType"));
+        // Clients get this tag as updates come in; only the server owns a driver.
+        if (level == null || !level.isClientSide) driver = null;
     }
 }

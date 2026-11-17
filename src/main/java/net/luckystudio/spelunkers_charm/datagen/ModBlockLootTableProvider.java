@@ -162,6 +162,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.POWERED_LIFT_TRACK.get());
         // The lift controller hands back the right lift item itself (LiftControllerBlock#getDrops).
         this.add(ModBlocks.LIFT_CONTROLLER.get(), noDrop());
+        this.add(ModBlocks.LIFT_PART.get(), noDrop());
     }
 
     protected LootTable.Builder createBoulderDrops(Block block, ItemLike drop) {

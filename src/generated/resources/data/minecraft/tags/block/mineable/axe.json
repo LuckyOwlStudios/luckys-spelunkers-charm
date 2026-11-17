@@ -1,5 +1,7 @@
 {
   "values": [
+    "spelunkers_charm:lift_controller",
+    "spelunkers_charm:lift_part",
     "spelunkers_charm:basic_lift_track",
     "spelunkers_charm:detector_lift_track",
     "spelunkers_charm:directional_lift_track",

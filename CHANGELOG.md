@@ -22,7 +22,8 @@ Work In Progress section is started.
 
 **Changed:**
 - Spelunker's Charm now requires [Sable](https://modrinth.com/mod/sable) 2.0.6 or newer and NeoForge 21.1.228 or newer.
-- Lifts are now real blocks you can build on. Placing a lift lays down a wooden deck with a Lift Controller in the middle, and the whole deck (plus anything you build on it) rides the lift tracks as one Sable physics structure. Right-click the Lift Controller to start or stop, sneak-right-click to reverse. Breaking the controller gives the lift item back and leaves the deck loose.
+- Lifts are now a single solid block you can stand and build on (3×3, 5×5 or 7×7), drawn with the lift model. The lift and anything built on it ride the lift tracks as one Sable physics structure. Right-click with an empty hand to start or stop it, and sneak-right-click to reverse. Use planks or a mineral on it to change its wood or metal. The gears still turn and spark while it moves. Breaking any part breaks the whole lift and gives the lift item back.
+- A lift that runs off the end of its tracks, or loses them, falls and tumbles like any other loose structure.
 
 **Development:**
 - Camera Overhaul (with Cloth Config, which it needs) now loads in dev runs (`runClient`), so tremor camera shake can be tested without installing it by hand. It isn't bundled in the mod jar and stays an optional dependency.
