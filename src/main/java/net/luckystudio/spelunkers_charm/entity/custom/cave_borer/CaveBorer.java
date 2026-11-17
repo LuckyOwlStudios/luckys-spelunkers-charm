@@ -158,6 +158,7 @@ public class CaveBorer extends Monster {
     @Nullable private Vec3 diveEntry;
     @Nullable private BlockState diveBlock;
     private double diveDistance;
+    private double lungeGravity = LUNGE_GRAVITY;
     private int buriedSegments;
     private int charges; // bit i set once segment i has gone into the ground this dive
     private final IntSet bitten = new IntOpenHashSet();
@@ -722,9 +723,19 @@ public class CaveBorer extends Monster {
         // Aim is locked here, so stepping aside dodges it
         Vec3 aim = target != null ? target.position().add(0.0, target.getBbHeight() * 0.5, 0.0) : start.add(normal.scale(6.0));
         Vec3 offset = aim.subtract(start);
-        double ticks = Math.max(4.0, offset.length() / lungeSpeedFor(this.getSize()));
+        double speed = lungeSpeedFor(this.getSize());
+        double ticks = Math.max(4.0, offset.length() / speed);
+        // Gravity scales with speed squared, so slow (big) borers fly the same arc shape as fast ones
+        // instead of a tall lob that starts out going up
+        this.lungeGravity = LUNGE_GRAVITY * (speed / lungeSpeedFor(0)) * (speed / lungeSpeedFor(0));
         // Solve for a velocity that passes through the aim point under our own gravity
-        Vec3 velocity = offset.scale(1.0 / ticks).add(0.0, 0.5 * LUNGE_GRAVITY * ticks, 0.0);
+        Vec3 velocity = offset.scale(1.0 / ticks).add(0.0, 0.5 * this.lungeGravity * ticks, 0.0);
+        // Always leave the surface: never start off heading back into the wall or ceiling we came out of
+        double away = velocity.dot(normal);
+        double minAway = 0.4 * speed;
+        if (away < minAway) {
+            velocity = velocity.add(normal.scale(minAway - away));
+        }
 
         this.setCenter(start);
         this.setDeltaMovement(velocity);
@@ -739,7 +750,7 @@ public class CaveBorer extends Monster {
     }
 
     private void tickLunge() {
-        Vec3 velocity = this.getDeltaMovement().add(0.0, -LUNGE_GRAVITY, 0.0);
+        Vec3 velocity = this.getDeltaMovement().add(0.0, -this.lungeGravity, 0.0);
         this.setDeltaMovement(velocity);
         this.faceDirection(velocity);
         this.biteTouching();
@@ -777,9 +788,10 @@ public class CaveBorer extends Monster {
 
     private void tickDive() {
         Vec3 velocity = this.getDeltaMovement().scale(0.92);
-        if (velocity.length() < 0.3) {
-            velocity = velocity.lengthSqr() > 1.0E-6 ? velocity.normalize().scale(0.3) : new Vec3(0.0, -0.3, 0.0);
-        }
+        double speed = Math.max(0.3, velocity.length());
+        // Curve downward so it digs deeper instead of skimming just under the surface,
+        // which left long bodies hanging out of the ground
+        velocity = (velocity.lengthSqr() > 1.0E-6 ? velocity.normalize() : new Vec3(0.0, -1.0, 0.0)).add(0.0, -0.15, 0.0).normalize().scale(speed);
         this.setDeltaMovement(velocity);
         this.faceDirection(velocity);
         this.diveDistance += velocity.length();
@@ -791,9 +803,11 @@ public class CaveBorer extends Monster {
                     4, 0.25 * this.getSizeScale(), 0.1, 0.25 * this.getSizeScale(), 0.1);
         }
 
-        // Done once the whole body has followed the head past the entry point
-        double bodyLength = this.getSegmentCount() * this.getSegmentSpacing() + 0.5;
-        if (this.diveDistance >= bodyLength || this.stateTicks > 120) {
+        // Done once every segment has gone into the ground (or after 10 seconds as a fail-safe),
+        // so a long body never vanishes while part of it is still sticking out
+        int allSegments = (1 << this.getSegmentCount()) - 1;
+        boolean allBuried = (this.buriedSegments & allSegments) == allSegments;
+        if ((allBuried && this.diveDistance >= 1.0) || this.stateTicks > 200) {
             this.setDeltaMovement(Vec3.ZERO);
             this.diveEntry = null;
             this.diveBlock = null;
