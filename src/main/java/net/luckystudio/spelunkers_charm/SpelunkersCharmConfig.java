@@ -170,7 +170,7 @@ public class SpelunkersCharmConfig {
 //        TREMOR_VOLUME = CLIENT_BUILDER.comment("The volume of tremors")
 //                .defineInRange("tremorVolume", 0.75, 0.0,1.0);
         TREMOR_CAMERA_SHAKE = CLIENT_BUILDER
-                .comment("Shake the camera during nearby tremors. Needs the Camera Overhaul mod, does nothing without it")
+                .comment("Shake the camera during nearby tremors, and faintly when tremor sounds play. Needs the Camera Overhaul mod, does nothing without it")
                 .define("tremorCameraShake", true);
         TREMOR_CAMERA_SHAKE_STRENGTH = CLIENT_BUILDER
                 .comment("How strong tremor camera shake is. 1.0 is the default, 0.0 turns it off")
