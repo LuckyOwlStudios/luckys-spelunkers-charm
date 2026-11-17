@@ -22,7 +22,7 @@ Work In Progress section is started.
 
 **Changed:**
 - Spelunker's Charm now requires [Sable](https://modrinth.com/mod/sable) 2.0.6 or newer and NeoForge 21.1.228 or newer.
-- Lifts are now a single solid block you can stand and build on (3×3, 5×5 or 7×7), drawn with the lift model. The lift and anything built on it ride the lift tracks as one Sable physics structure. Right-click with an empty hand to start or stop it, and sneak-right-click to reverse. Use planks or a mineral on it to change its wood or metal. The gears still turn and spark while it moves. Breaking any part breaks the whole lift and gives the lift item back.
+- Lifts are now a single solid block you can stand and build on (3×3, 5×5 or 7×7), drawn with the lift model. The lift and anything built on it ride the lift tracks as one Sable physics structure. Right-click with an empty hand to start or stop it, and sneak-right-click to reverse. Use planks or a mineral on it to change its wood or metal. The gears still turn and spark while it moves. Breaking any part breaks the whole lift and gives the lift item back. It stops when a block is in the way of the lift or anything built on it.
 - A lift that runs off the end of its tracks, or loses them, falls and tumbles like any other loose structure.
 
 **Development:**

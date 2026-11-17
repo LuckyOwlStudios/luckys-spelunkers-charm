@@ -12,7 +12,10 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.luckystudio.spelunkers_charm.block.custom.LiftTrackBlock;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Decides where a Sable lift deck should go, using the same lift track rules as the entity lift.
@@ -31,6 +34,9 @@ public final class LiftSubLevelDriver {
     private final AbstractLift probe;
     private final LiftGuideSystem guides;
     private double x, z;
+    /** World bounds of the deck and everything built on it, as of the last tick. */
+    @Nullable private AABB bounds;
+    private double deckYNow;
 
     private MovementType movement = MovementType.STATIONARY;
     private MovementType preferred = MovementType.UP;
@@ -88,9 +94,11 @@ public final class LiftSubLevelDriver {
      * Runs once a game tick with the world position of the deck's bottom center. The deck may have
      * fallen off its tracks and come to rest somewhere else, so the probe follows it everywhere.
      */
-    public void tick(double x, double deckY, double z) {
+    public void tick(double x, double deckY, double z, @Nullable AABB bounds) {
         this.x = x;
         this.z = z;
+        this.bounds = bounds;
+        this.deckYNow = deckY;
         AABB before = probe.getBoundingBox();
         placeProbe(deckY);
         if (!probe.hasValidTracks()) {
@@ -122,7 +130,8 @@ public final class LiftSubLevelDriver {
                 manualOverrideRow == holdRow ? MovementType.STATIONARY : guides.stationCommand();
         if (command == MovementType.UP || command == MovementType.DOWN) {
             if (canMove(command, holdRow)) start(command);
-            else if (guides.hasTracksAtY(holdRow + step(command))) pausedForPower = command;
+            else if (!blocked(command, holdRow) && guides.hasTracksAtY(holdRow + step(command)))
+                pausedForPower = command;
         } else if (command == MovementType.FALLING) {
             // Two opposite powered arrows are deliberately a stop.
             pausedForPower = MovementType.STATIONARY;
@@ -154,6 +163,11 @@ public final class LiftSubLevelDriver {
                 stop(true);
                 return;
             }
+            if (blocked(movement, targetRow)) {
+                // Something's in the way of the deck or what's built on it: stop here.
+                stop(true);
+                return;
+            }
             if (canMove(movement, targetRow)) {
                 targetRow += dir;
             } else {
@@ -170,8 +184,38 @@ public final class LiftSubLevelDriver {
     private boolean canMove(MovementType direction, int fromRow) {
         int next = fromRow + step(direction);
         if (!guides.hasTracksAtY(fromRow) || !guides.hasTracksAtY(next)) return false;
-        return direction == MovementType.DOWN
-                || (guides.rowCanDrive(fromRow) && guides.rowCanDrive(next));
+        if (direction == MovementType.UP
+                && !(guides.rowCanDrive(fromRow) && guides.rowCanDrive(next))) return false;
+        return !blocked(direction, fromRow);
+    }
+
+    /**
+     * Whether a solid world block sits in the layer the deck (and anything built on it) would move
+     * into, leaving {@code fromRow} in {@code direction}. Lift tracks don't count: the gears run in
+     * them.
+     */
+    private boolean blocked(MovementType direction, int fromRow) {
+        if (bounds == null) return false;
+        AABB box = bounds.move(0, fromRow - deckYNow, 0);
+        int y =
+                direction == MovementType.UP
+                        ? (int) Math.ceil(box.maxY - FLOOR_EPSILON)
+                        : (int) Math.floor(box.minY + FLOOR_EPSILON) - 1;
+        int minX = (int) Math.floor(box.minX + FLOOR_EPSILON);
+        int maxX = (int) Math.ceil(box.maxX - FLOOR_EPSILON) - 1;
+        int minZ = (int) Math.floor(box.minZ + FLOOR_EPSILON);
+        int maxZ = (int) Math.ceil(box.maxZ - FLOOR_EPSILON) - 1;
+        Level level = probe.level();
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int bx = minX; bx <= maxX; ++bx)
+            for (int bz = minZ; bz <= maxZ; ++bz) {
+                pos.set(bx, y, bz);
+                if (!level.isLoaded(pos)) return true;
+                BlockState state = level.getBlockState(pos);
+                if (state.getBlock() instanceof LiftTrackBlock) continue;
+                if (!state.getCollisionShape(level, pos).isEmpty()) return true;
+            }
+        return false;
     }
 
     private void start(MovementType direction) {

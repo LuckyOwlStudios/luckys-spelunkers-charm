@@ -34,6 +34,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+import dev.ryanhcode.sable.companion.math.BoundingBox3ic;
+import net.minecraft.world.phys.AABB;
 import org.joml.Quaterniond;
 import org.joml.Vector3d;
 
@@ -176,7 +178,7 @@ public class LiftControllerBlockEntity extends BlockEntity implements BlockEntit
         LiftSubLevelDriver driver = driver();
         if (driver == null) return;
         Vector3d deck = deckCenter(subLevel);
-        driver.tick(deck.x, deck.y, deck.z);
+        driver.tick(deck.x, deck.y, deck.z, worldBounds(subLevel));
         // On tracks it rides a rail; off them it's a loose physics object that falls and tumbles.
         if (driver.onTracks() && isUpright(subLevel)) attachRail(subLevel);
         else dropRail();
@@ -210,6 +212,24 @@ public class LiftControllerBlockEntity extends BlockEntity implements BlockEntit
         BlockPos pos = getBlockPos();
         Vector3d local = new Vector3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
         return subLevel.logicalPose().transformPosition(local, new Vector3d());
+    }
+
+    /**
+     * World box around every block in the sub-level (the deck and anything built on it). Only
+     * meaningful while upright, which is the only time the driver moves it.
+     */
+    @Nullable
+    private static AABB worldBounds(ServerSubLevel subLevel) {
+        BoundingBox3ic plot = subLevel.getPlot().getBoundingBox();
+        if (plot == null || plot.volume() <= 0) return null;
+        Vector3d a =
+                subLevel.logicalPose()
+                        .transformPosition(new Vector3d(plot.minX(), plot.minY(), plot.minZ()), new Vector3d());
+        Vector3d b =
+                subLevel.logicalPose()
+                        .transformPosition(
+                                new Vector3d(plot.maxX() + 1, plot.maxY() + 1, plot.maxZ() + 1), new Vector3d());
+        return new AABB(a.x, a.y, a.z, b.x, b.y, b.z); // AABB sorts the corners itself
     }
 
     /**
