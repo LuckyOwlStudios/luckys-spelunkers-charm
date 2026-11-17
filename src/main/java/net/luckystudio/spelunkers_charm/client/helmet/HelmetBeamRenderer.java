@@ -35,8 +35,8 @@ public final class HelmetBeamRenderer {
     // Two nested square shells: {half-width at the lens, half-width growth per block, brightness}.
     // The core starts the size of the lens (2.5px across).
     private static final float[][] SHELLS = {
-            {0.075F, 0.075F, 0.24F}, // core
-            {0.11F, 0.17F, 0.13F},   // halo
+            {0.075F, 0.075F, 0.14F}, // core
+            {0.11F, 0.17F, 0.08F},   // halo
     };
     // Vertices across each face of a shell, so the fade toward its edges can vary across the face.
     private static final int FACE_STEPS = 4;
@@ -47,9 +47,9 @@ public final class HelmetBeamRenderer {
     private static final float MAX_ALONG_VIEW_BOOST = 3.0F;
 
     // Glow where the beam lands, and the small flare on the lens itself.
-    private static final float SPOT_BRIGHTNESS = 0.22F;
+    private static final float SPOT_BRIGHTNESS = 0.13F;
     private static final float LENS_FLARE_SIZE = 0.14F;
-    private static final float LENS_FLARE_BRIGHTNESS = 0.55F;
+    private static final float LENS_FLARE_BRIGHTNESS = 0.4F;
 
     // The four faces of a shell, as the direction they face: {along side, along up}.
     private static final int[][] FACES = {
