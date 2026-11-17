@@ -102,7 +102,7 @@ public class ModEntityType {
                     .eyeHeight(0.25F)
                     .fireImmune()
                     .clientTrackingRange(8)
-                    .updateInterval(2)
+                    .updateInterval(1) // fast lunges need every tick sent for the body to look right
                     .build("cave_borer"));
 
     public static void register(IEventBus eventBus) {

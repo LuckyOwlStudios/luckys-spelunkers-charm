@@ -27,6 +27,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.Pose;
@@ -113,9 +114,17 @@ public class CaveBorer extends Monster {
         return 1 + 2 * size;
     }
 
-    /** Lunge speed in blocks per tick. Bigger borers are a bit slower. */
+    /**
+     * Lunge speed in blocks per tick. Scales with the ambush range, so every size takes about the same
+     * time to reach the player: bigger borers come from farther away and move faster to get there.
+     */
     public static double lungeSpeedFor(int size) {
-        return Math.max(0.45, 0.9 - 0.1 * size);
+        return 0.9 * rangeScaleFor(size);
+    }
+
+    /** Tunnelling speed while hidden, scaled the same way. */
+    public static double burrowSpeedFor(int size) {
+        return 0.5 * rangeScaleFor(size);
     }
 
     /** Multiplies the config's ambush distances, so bigger borers charge from farther away. */
@@ -130,7 +139,9 @@ public class CaveBorer extends Monster {
     // Hitboxes are bigger than the model so the fast, thin worm is easier to hit. Bites still use the model size.
     private static final float HITBOX_SCALE = 1.5F;
     private static final int MAX_PARTS = segmentsFor(MAX_SIZE) - 1; // the head is the entity itself
-    private static final double BURROW_SPEED = 0.5;
+    // Extra ticks the dive keeps going after the tail is in the ground, so clients (which see the
+    // borer a couple of ticks behind the server) also see the whole body go under before it hides
+    private static final int CLIENT_LAG_TICKS = 5;
     private static final double LUNGE_GRAVITY = 0.04;
     // Fail-safe only (falling into a ravine or the void). A normal lunge ends when it hits the ground.
     private static final int MAX_LUNGE_TICKS = 200;
@@ -147,6 +158,10 @@ public class CaveBorer extends Monster {
     // Body chain, index 0 is the head. Centers, not feet positions.
     private final Vec3[] segmentPos = new Vec3[MAX_PARTS + 1];
     private final Vec3[] segmentPosO = new Vec3[MAX_PARTS + 1];
+
+    // Head path for the body to follow while lunging and diving, newest point first
+    private final java.util.ArrayDeque<Vec3> path = new java.util.ArrayDeque<>();
+    private boolean followingPath;
 
     // Server-side AI state
     private int stateTicks;
@@ -484,40 +499,108 @@ public class CaveBorer extends Monster {
             for (int i = 0; i <= MAX_PARTS; i++) {
                 this.segmentPos[i] = head.add(back.scale(spacing * Math.min(i, count - 1)));
             }
+            this.stopFollowingPath();
+        } else if (state == State.STUNNED || this.isDeadOrDying()) {
+            this.stopFollowingPath();
+            this.updateSlumpedChain(head, count, spacing);
         } else {
-            this.segmentPos[0] = head;
-            boolean slump = state == State.STUNNED || this.isDeadOrDying();
-            for (int i = 1; i < count; i++) {
-                Vec3 ahead = this.segmentPos[i - 1];
-                Vec3 current = this.segmentPos[i];
-                if (slump) {
-                    // Let the body sag onto the floor instead of hanging in the air
-                    Vec3 lowered = current.add(0.0, -0.15, 0.0);
-                    BlockPos below = BlockPos.containing(lowered.x, lowered.y - this.getSegmentWidth(i) * 0.5, lowered.z);
-                    if (this.level().getBlockState(below).getCollisionShape(this.level(), below).isEmpty()) {
-                        current = lowered;
-                    }
-                }
-                Vec3 offset = current.subtract(ahead);
-                double length = offset.length();
-                if (length < 1.0E-4) {
-                    offset = Vec3.directionFromRotation(this.getXRot(), this.getYRot()).scale(-1.0);
-                    length = 1.0;
-                }
-                this.segmentPos[i] = ahead.add(offset.scale(spacing / length));
-            }
-            for (int i = count; i <= MAX_PARTS; i++) {
-                this.segmentPos[i] = this.segmentPos[count - 1];
-            }
+            this.updatePathFollowing(head, count, spacing);
         }
 
+        for (int i = count; i <= MAX_PARTS; i++) {
+            this.segmentPos[i] = this.segmentPos[count - 1];
+        }
         if (!seeded) {
             System.arraycopy(this.segmentPos, 0, this.segmentPosO, 0, this.segmentPos.length);
         }
 
         for (CaveBorerPart part : this.parts) {
             Vec3 pos = this.segmentPos[part.segment];
-            part.setPos(pos.x, pos.y - part.getBbHeight() * 0.5, pos.z);
+            Vec3 previous = this.segmentPosO[part.segment] != null ? this.segmentPosO[part.segment] : pos;
+            double half = part.getBbHeight() * 0.5;
+            // Parts never tick themselves, so their old position must be set here or the
+            // hitbox (F3+B) and anything interpolating them is drawn from a stale spot
+            part.xo = part.xOld = previous.x;
+            part.yo = part.yOld = previous.y - half;
+            part.zo = part.zOld = previous.z;
+            part.setPos(pos.x, pos.y - half, pos.z);
+        }
+    }
+
+    private void stopFollowingPath() {
+        this.followingPath = false;
+        this.path.clear();
+    }
+
+    /**
+     * Lunging and diving: every segment sits a fixed distance back along the exact path the head took,
+     * so the whole body goes through the same hole the head went into.
+     */
+    private void updatePathFollowing(Vec3 head, int count, float spacing) {
+        if (!this.followingPath) {
+            // Start from wherever the body is now (a straight line into the wall, or lying on the floor)
+            this.path.clear();
+            for (int i = 0; i < count; i++) {
+                this.path.addLast(this.segmentPos[i]);
+            }
+            this.followingPath = true;
+        }
+        if (this.path.isEmpty() || this.path.peekFirst().distanceToSqr(head) > 1.0E-8) {
+            this.path.addFirst(head);
+        }
+
+        this.segmentPos[0] = head;
+        java.util.Iterator<Vec3> points = this.path.iterator();
+        Vec3 previous = points.next();
+        Vec3 direction = Vec3.directionFromRotation(this.getXRot(), this.getYRot()).scale(-1.0);
+        double walked = 0.0;
+        int segment = 1;
+        int kept = 1;
+        while (segment < count) {
+            if (!points.hasNext()) {
+                // Ran out of path: carry on in a straight line
+                this.segmentPos[segment] = previous.add(direction.scale(segment * spacing - walked));
+                segment++;
+                continue;
+            }
+            Vec3 next = points.next();
+            kept++;
+            double length = previous.distanceTo(next);
+            if (length > 1.0E-6) {
+                while (segment < count && walked + length >= segment * spacing) {
+                    this.segmentPos[segment] = previous.lerp(next, (segment * spacing - walked) / length);
+                    segment++;
+                }
+                direction = next.subtract(previous).scale(1.0 / length);
+                walked += length;
+            }
+            previous = next;
+        }
+        // Forget path the tail has already passed (keep one extra point for the direction)
+        while (this.path.size() > kept + 1) {
+            this.path.removeLast();
+        }
+    }
+
+    /** Stunned or dead: a loose chain that sags onto the floor. */
+    private void updateSlumpedChain(Vec3 head, int count, float spacing) {
+        this.segmentPos[0] = head;
+        for (int i = 1; i < count; i++) {
+            Vec3 ahead = this.segmentPos[i - 1];
+            Vec3 current = this.segmentPos[i];
+            // Let the body sag onto the floor instead of hanging in the air
+            Vec3 lowered = current.add(0.0, -0.15, 0.0);
+            BlockPos below = BlockPos.containing(lowered.x, lowered.y - this.getSegmentWidth(i) * 0.5, lowered.z);
+            if (this.level().getBlockState(below).getCollisionShape(this.level(), below).isEmpty()) {
+                current = lowered;
+            }
+            Vec3 offset = current.subtract(ahead);
+            double length = offset.length();
+            if (length < 1.0E-4) {
+                offset = Vec3.directionFromRotation(this.getXRot(), this.getYRot()).scale(-1.0);
+                length = 1.0;
+            }
+            this.segmentPos[i] = ahead.add(offset.scale(spacing / length));
         }
     }
 
@@ -555,13 +638,19 @@ public class CaveBorer extends Monster {
             this.setTarget(null);
             target = null;
         }
-        if (target == null && this.tickCount % 10 == 0) {
-            // No line of sight needed: it hunts by feeling footsteps through the rock
-            TargetingConditions conditions = TargetingConditions.forCombat().range(this.getTargetRange()).ignoreLineOfSight();
-            Player player = this.level().getNearestPlayer(conditions, this);
-            if (player != null) {
-                this.setTarget(player);
-                target = player;
+        if (!(target instanceof Player) && this.tickCount % 10 == 0) {
+            // No line of sight needed: it hunts by feeling footsteps through the rock.
+            // Players come first; otherwise it goes after any other mob nearby.
+            double range = this.getTargetRange();
+            TargetingConditions conditions = TargetingConditions.forCombat().range(range).ignoreLineOfSight();
+            LivingEntity prey = this.level().getNearestPlayer(conditions, this);
+            if (prey == null && target == null) {
+                prey = this.level().getNearestEntity(Mob.class, conditions.copy().selector(CaveBorer::isPrey), this,
+                        this.getX(), this.getY(), this.getZ(), this.getBoundingBox().inflate(range));
+            }
+            if (prey != null) {
+                this.setTarget(prey);
+                target = prey;
             }
         }
         return target;
@@ -574,7 +663,8 @@ public class CaveBorer extends Monster {
             Vec3 center = this.getCenter();
             Vec3 toTarget = this.travelTarget.subtract(center);
             double distance = toTarget.length();
-            if (distance > this.getLoseTargetRange() || distance <= BURROW_SPEED) {
+            double burrowSpeed = burrowSpeedFor(this.getSize());
+            if (distance > this.getLoseTargetRange() || distance <= burrowSpeed) {
                 this.setDeltaMovement(Vec3.ZERO);
                 this.setCenter(this.travelTarget);
                 this.travelTarget = null;
@@ -586,7 +676,7 @@ public class CaveBorer extends Monster {
                     }
                 }
             } else {
-                Vec3 velocity = toTarget.scale(BURROW_SPEED / distance);
+                Vec3 velocity = toTarget.scale(burrowSpeed / distance);
                 this.setDeltaMovement(velocity);
                 this.faceDirection(velocity);
                 if (this.tickCount % 10 == 0) {
@@ -775,6 +865,11 @@ public class CaveBorer extends Monster {
         }
     }
 
+    /** Mobs it will hunt and bite: anything alive except other cave borers. */
+    private static boolean isPrey(LivingEntity entity) {
+        return entity.isAlive() && !(entity instanceof CaveBorer) && (entity instanceof Mob || entity instanceof Player);
+    }
+
     private void startDive(BlockPos pos, BlockState state, Vec3 velocity) {
         this.diveEntry = this.getCenter();
         this.diveBlock = state;
@@ -788,11 +883,11 @@ public class CaveBorer extends Monster {
     }
 
     private void tickDive() {
-        Vec3 velocity = this.getDeltaMovement().scale(0.92);
-        double speed = Math.max(0.3, velocity.length());
-        // Curve downward so it digs deeper instead of skimming just under the surface,
-        // which left long bodies hanging out of the ground
-        velocity = (velocity.lengthSqr() > 1.0E-6 ? velocity.normalize() : new Vec3(0.0, -1.0, 0.0)).add(0.0, -0.15, 0.0).normalize().scale(speed);
+        Vec3 velocity = this.getDeltaMovement();
+        double speed = Math.max(0.35, velocity.length());
+        // Curve gently downward so it digs deeper instead of skimming just under the surface.
+        // The body follows the head's exact path, so it goes in through the same hole.
+        velocity = (velocity.lengthSqr() > 1.0E-6 ? velocity.normalize() : new Vec3(0.0, -1.0, 0.0)).add(0.0, -0.08, 0.0).normalize().scale(speed);
         this.setDeltaMovement(velocity);
         this.faceDirection(velocity);
         this.diveDistance += velocity.length();
@@ -804,11 +899,15 @@ public class CaveBorer extends Monster {
                     4, 0.25 * this.getSizeScale(), 0.1, 0.25 * this.getSizeScale(), 0.1);
         }
 
-        // Done once every segment has gone into the ground (or after 10 seconds as a fail-safe),
-        // so a long body never vanishes while part of it is still sticking out
-        int allSegments = (1 << this.getSegmentCount()) - 1;
-        boolean allBuried = (this.buriedSegments & allSegments) == allSegments;
-        if ((allBuried && this.diveDistance >= 1.0) || this.stateTicks > 200) {
+        // Hide only once the tail has gone all the way past the hole and sits inside solid rock, plus a few
+        // ticks of travel for clients (which see the borer slightly behind the server) to catch up.
+        // The 10 second limit is a fail-safe.
+        int tail = this.getSegmentCount() - 1;
+        double tailIn = tail * this.getSegmentSpacing() + this.getSegmentWidth(tail) * 0.5 + 0.25 + speed * CLIENT_LAG_TICKS;
+        Vec3 tailPos = this.segmentPos[tail];
+        BlockPos tailBlock = tailPos != null ? BlockPos.containing(tailPos) : this.blockPosition();
+        boolean tailInRock = !this.level().getBlockState(tailBlock).getCollisionShape(this.level(), tailBlock).isEmpty();
+        if ((this.diveDistance >= tailIn && tailInRock) || this.stateTicks > 200) {
             this.setDeltaMovement(Vec3.ZERO);
             this.diveEntry = null;
             this.diveBlock = null;
@@ -822,24 +921,24 @@ public class CaveBorer extends Monster {
         }
     }
 
-    /** Plays a break sound and particles at each body segment as it goes into the ground. */
+    /**
+     * Plays a break sound and particles at the hole as each body segment goes in. The body follows the
+     * head's path, so segment i passes the hole once the head is i segments past it.
+     */
     private void burySegments() {
-        if (!(this.level() instanceof ServerLevel serverLevel)) return;
+        if (!(this.level() instanceof ServerLevel serverLevel) || this.diveEntry == null || this.diveBlock == null) return;
         int count = this.getSegmentCount();
         for (int i = 1; i < count; i++) {
             if ((this.buriedSegments & (1 << i)) != 0) continue;
-            Vec3 pos = this.segmentPos[i];
-            if (pos == null) continue;
-            BlockPos blockPos = BlockPos.containing(pos);
-            BlockState state = this.level().getBlockState(blockPos);
-            if (state.getCollisionShape(this.level(), blockPos).isEmpty()) continue;
-            this.buriedSegments |= 1 << i;
             float width = this.getSegmentWidth(i);
-            serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), pos.x, pos.y, pos.z,
+            if (this.diveDistance < i * this.getSegmentSpacing() + width * 0.5) break;
+            this.buriedSegments |= 1 << i;
+            Vec3 hole = this.diveEntry;
+            serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.diveBlock), hole.x, hole.y, hole.z,
                     6 + (int) (width * 8), width * 0.4, width * 0.4, width * 0.4, 0.15);
-            SoundEvent breakSound = state.getSoundType(this.level(), blockPos, this).getBreakSound();
+            SoundEvent breakSound = this.diveBlock.getSoundType(this.level(), BlockPos.containing(hole), this).getBreakSound();
             // Pitch climbs a little along the body, so the segments sound like a quick run of digs
-            this.level().playSound(null, blockPos, breakSound, SoundSource.HOSTILE, 0.6F, 0.8F + i * 0.06F + this.random.nextFloat() * 0.1F);
+            this.level().playSound(null, hole.x, hole.y, hole.z, breakSound, SoundSource.HOSTILE, 0.6F, 0.8F + i * 0.06F + this.random.nextFloat() * 0.1F);
         }
     }
 
@@ -894,19 +993,31 @@ public class CaveBorer extends Monster {
         return best;
     }
 
+    /** The whole body hurts on contact, not just the head. Each entity is hit at most once per lunge. */
     private void biteTouching() {
-        // Bite with the model's size, not the enlarged hitbox, so bites don't get harder to dodge
-        double width = this.getSegmentWidth(0);
-        AABB box = AABB.ofSize(this.getCenter(), width, width, width).inflate(0.25);
-        LivingEntity target = this.getTarget();
-        for (LivingEntity entity : this.level().getEntitiesOfClass(LivingEntity.class, box,
-                e -> e != this && e.isAlive() && !(e instanceof CaveBorer) && (e instanceof Player || e == target))) {
+        int count = this.getSegmentCount();
+        AABB[] boxes = new AABB[count];
+        AABB all = null;
+        for (int i = 0; i < count; i++) {
+            Vec3 pos = i == 0 || this.segmentPos[i] == null ? this.getCenter() : this.segmentPos[i];
+            // Model size, not the enlarged hitbox, so the body doesn't get harder to dodge
+            double width = this.getSegmentWidth(i);
+            boxes[i] = AABB.ofSize(pos, width, width, width).inflate(0.2);
+            all = all == null ? boxes[i] : all.minmax(boxes[i]);
+        }
+        for (LivingEntity entity : this.level().getEntitiesOfClass(LivingEntity.class, all, e -> e != this && isPrey(e))) {
             if (entity instanceof Player player && (player.isCreative() || player.isSpectator())) continue;
-            if (!this.bitten.add(entity.getId())) continue;
-            if (this.doHurtTarget(entity)) {
-                this.playSound(ModSoundEvents.CAVE_BORER_BITE.get(), 1.0F, 0.9F + this.random.nextFloat() * 0.2F);
-                Vec3 velocity = this.getDeltaMovement();
-                entity.knockback(0.4, -velocity.x, -velocity.z);
+            if (this.bitten.contains(entity.getId())) continue;
+            AABB entityBox = entity.getBoundingBox();
+            for (int i = 0; i < count; i++) {
+                if (!boxes[i].intersects(entityBox)) continue;
+                this.bitten.add(entity.getId());
+                if (this.doHurtTarget(entity)) {
+                    this.playSound(ModSoundEvents.CAVE_BORER_BITE.get(), 1.0F, 0.9F + this.random.nextFloat() * 0.2F);
+                    Vec3 velocity = this.getDeltaMovement();
+                    entity.knockback(0.4, -velocity.x, -velocity.z);
+                }
+                break;
             }
         }
     }
