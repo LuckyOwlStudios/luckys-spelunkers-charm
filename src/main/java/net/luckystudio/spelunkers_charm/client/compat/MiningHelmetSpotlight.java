@@ -15,8 +15,8 @@ import org.jetbrains.annotations.NotNull;
  * helmet points, and a widening square beam of dimmer light along the way there. Only loaded when LambDynamicLights is installed.
  * <p>
  * LambDynamicLights reads {@link #lightAtPos} from its chunk-building threads, so the beam is kept as one immutable
- * {@link Beam} swapped in whole. The light only moves when the beam moved enough to be noticed, so looking around
- * doesn't re-light chunks every single tick.
+ * {@link Beam} swapped in whole. The light only moves when the beam moved a noticeable amount, so standing still
+ * doesn't re-light chunks every tick.
  */
 final class MiningHelmetSpotlight implements DynamicLightBehavior {
     // Widening of the lit beam per block of distance, matching the visible beam's halo.
@@ -35,11 +35,12 @@ final class MiningHelmetSpotlight implements DynamicLightBehavior {
     // The beam doesn't light the first block or so in front of the wearer: the helmet's own glow covers that.
     private static final double SHAFT_START = 1.0;
 
-    // How far the beam must move before the world is re-lit.
-    private static final double MOVE_THRESHOLD_SQR = 0.5 * 0.5;
-    private static final double ORIGIN_THRESHOLD_SQR = 0.3 * 0.3;
-    // If it moved a little but less than that, it catches up after this many ticks of standing still.
-    private static final int SETTLE_TICKS = 10;
+    // How far the beam must move before the world is re-lit. The wearer's position uses the same 0.1 block step
+    // LambDynamicLights uses for held and worn lights, so the beam moves as smoothly as the candle helmet's glow.
+    private static final double MOVE_THRESHOLD_SQR = 0.15 * 0.15;
+    private static final double ORIGIN_THRESHOLD_SQR = 0.1 * 0.1;
+    // If it moved a little but less than that, it catches up after this many ticks.
+    private static final int SETTLE_TICKS = 2;
 
     /** One snapshot of the beam. {@code poolLight} is 0 when the beam hit nothing. */
     record Beam(double ox, double oy, double oz, double dx, double dy, double dz,
