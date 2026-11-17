@@ -85,7 +85,7 @@ public class CaveBorer extends Monster {
     /**
      * Sizes run from 0 (small) to {@link #MAX_SIZE}. Every per-size stat comes from the formulas below.
      * Sizes 0 to 2 grow quickly (small, medium, large); from 3 up they grow more slowly so the
-     * biggest borers stay giant rather than absurd. Size 8: 14 segments, 3.5x scale, 36 health, 11 damage.
+     * biggest borers stay giant rather than absurd. Size 8: 18 segments, 3.5x scale, 36 health, 11 damage.
      */
     public static final int MAX_SIZE = 8;
 
@@ -94,9 +94,9 @@ public class CaveBorer extends Monster {
         return size <= 2 ? 1.0F + 0.5F * size : 2.0F + 0.25F * (size - 2);
     }
 
-    /** Segments including head and tail: 4, 6, 8, then +1 per size. */
+    /** Segments including head and tail: 6, 9, 12, then +1 per size. Long bodies are easier to hit. */
     public static int segmentsFor(int size) {
-        return size <= 2 ? 4 + 2 * size : 8 + (size - 2);
+        return size <= 2 ? 6 + 3 * size : 12 + (size - 2);
     }
 
     /** Health: 4 per size step (2 hearts small, 18 hearts at size 8). */
@@ -779,7 +779,7 @@ public class CaveBorer extends Monster {
 
         // Done once the whole body has followed the head past the entry point
         double bodyLength = this.getSegmentCount() * this.getSegmentSpacing() + 0.5;
-        if (this.diveDistance >= bodyLength || this.stateTicks > 60) {
+        if (this.diveDistance >= bodyLength || this.stateTicks > 120) {
             this.setDeltaMovement(Vec3.ZERO);
             this.diveEntry = null;
             this.diveBlock = null;
