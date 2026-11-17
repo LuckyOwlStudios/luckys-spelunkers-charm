@@ -55,7 +55,7 @@ public final class CartCoupler {
             message(player, "missing");
             return;
         }
-        switch (CartLinking.link(other, cart)) {
+        switch (CartLinking.link(other, cart, chain.getItem())) {
             case LINKED -> {
                 if (!player.getAbilities().instabuild) chain.shrink(1);
                 message(player, "linked");

@@ -9,6 +9,7 @@ import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartLanterns
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartCoupler;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartLinking;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.ClientCartData;
+import net.luckystudio.spelunkers_charm.datagen.itemTags.ModItemTags;
 import net.luckystudio.spelunkers_charm.init.ModItems;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -139,7 +140,7 @@ public class MinecartEvents {
     /** Chains couple carts: click two carts to link them, shift-click a coupled cart to unlink. Runs before other cart clicks. */
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onCouplerUse(PlayerInteractEvent.EntityInteract event) {
-        if (!event.getItemStack().is(Items.CHAIN)) return;
+        if (!event.getItemStack().is(ModItemTags.CART_COUPLERS)) return;
         if (!(event.getTarget() instanceof AbstractMinecart cart)) return;
         // Sneaking on a cart with no couplings falls through, so a chain can still go into a cart as a block.
         if (event.getEntity().isSecondaryUseActive() && CartLinking.getLinks(cart).isEmpty()) return;

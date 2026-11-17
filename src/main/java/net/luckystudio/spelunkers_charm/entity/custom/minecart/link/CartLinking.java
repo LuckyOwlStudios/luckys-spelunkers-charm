@@ -14,6 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
@@ -116,7 +117,7 @@ public final class CartLinking {
         ACTIVE.remove(cart);
     }
 
-    public static Result link(AbstractMinecart a, AbstractMinecart b) {
+    public static Result link(AbstractMinecart a, AbstractMinecart b, Item item) {
         if (a == b || a.getUUID().equals(b.getUUID())) return Result.SAME_CART;
         CartLinks aLinks = getLinks(a);
         CartLinks bLinks = getLinks(b);
@@ -124,8 +125,8 @@ public final class CartLinking {
         if (a.distanceTo(b) > MAX_COUPLE_DISTANCE) return Result.TOO_FAR;
         if (aLinks.links().size() >= MAX_LINKS || bLinks.links().size() >= MAX_LINKS) return Result.FULL;
 
-        setLinks(a, aLinks.with(b.getUUID()));
-        setLinks(b, bLinks.with(a.getUUID()));
+        setLinks(a, aLinks.with(b.getUUID(), item));
+        setLinks(b, bLinks.with(a.getUUID(), item));
         a.playSound(SoundEvents.CHAIN_PLACE, 1.0F, 1.0F);
         sync(a);
         sync(b);
@@ -145,24 +146,27 @@ public final class CartLinking {
         setLinks(cart, CartLinks.EMPTY);
         cart.playSound(SoundEvents.CHAIN_BREAK, 1.0F, 1.0F);
         sync(cart);
-        dropChains(cart, links.links().size());
+        for (UUID id : links.links()) {
+            dropCouplers(cart, links.itemFor(id), 1);
+        }
         return links.links().size();
     }
 
     public static void unlink(AbstractMinecart a, AbstractMinecart b) {
+        Item item = getLinks(a).itemFor(b.getUUID());
         setLinks(a, getLinks(a).without(b.getUUID()));
         setLinks(b, getLinks(b).without(a.getUUID()));
         a.playSound(SoundEvents.CHAIN_BREAK, 1.0F, 1.0F);
         sync(a);
         sync(b);
-        dropChains(a, 1);
+        dropCouplers(a, item, 1);
     }
 
-    /** A coupling that comes apart gives its chain back, dropped at the cart. */
-    private static void dropChains(AbstractMinecart cart, int count) {
+    /** A coupling that comes apart gives back what it was made with, dropped at the cart. */
+    private static void dropCouplers(AbstractMinecart cart, Item item, int count) {
         if (count <= 0 || cart.level().isClientSide()) return;
         if (!cart.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) return;
-        cart.spawnAtLocation(new ItemStack(Items.CHAIN, count));
+        cart.spawnAtLocation(new ItemStack(item, count));
     }
 
     /**
@@ -171,8 +175,8 @@ public final class CartLinking {
      */
     public static void onCartRemoved(AbstractMinecart cart) {
         CartLinks links = getLinks(cart);
-        dropChains(cart, links.links().size());
         for (UUID id : links.links()) {
+            dropCouplers(cart, links.itemFor(id), 1);
             if (findCart(cart, id) instanceof AbstractMinecart other) {
                 setLinks(other, getLinks(other).without(cart.getUUID()));
                 sync(other);
@@ -193,7 +197,7 @@ public final class CartLinking {
         }
         for (UUID id : links.links()) {
             if (findCart(from, id) instanceof AbstractMinecart other) {
-                setLinks(other, getLinks(other).without(from.getUUID()).with(to.getUUID()));
+                setLinks(other, getLinks(other).without(from.getUUID()).with(to.getUUID(), getLinks(other).itemFor(from.getUUID())));
                 sync(other);
             }
         }

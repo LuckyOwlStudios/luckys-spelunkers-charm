@@ -33,6 +33,13 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .addOptional(ResourceLocation.fromNamespaceAndPath("create", "brass_ingot"))
         ;
 
+        // Anything that counts as a chain, plus Supplementaries' rope when it is installed
+        tag(ModItemTags.CART_COUPLERS)
+                .add(Items.CHAIN)
+                .addOptionalTag(ResourceLocation.fromNamespaceAndPath("c", "chains"))
+                .addOptional(ResourceLocation.fromNamespaceAndPath("supplementaries", "rope"))
+        ;
+
         tag(ModItemTags.GEYSERS)
                 .add(ModBlocks.DEEPSLATE_GEYSER.get().asItem())
                 .add(ModBlocks.BASALT_GEYSER.get().asItem())
