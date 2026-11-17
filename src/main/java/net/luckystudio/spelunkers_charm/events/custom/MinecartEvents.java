@@ -10,6 +10,7 @@ import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartLinking;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.ClientCartData;
 import net.luckystudio.spelunkers_charm.init.ModItems;
 import net.luckystudio.spelunkers_charm.item.custom.CartCouplerItem;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
@@ -30,10 +31,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
 @EventBusSubscriber(modid = SpelunkersCharm.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class MinecartEvents {
@@ -186,12 +189,27 @@ public class MinecartEvents {
                 Component.translatable("container.spelunkers_charm.furnace_minecart")));
     }
 
-    /** Keeps coupled carts together and moves lantern light along with carts. */
+    /** Moves lantern light along with carts. */
     @SubscribeEvent
     public static void onCartTick(EntityTickEvent.Post event) {
         if (event.getEntity() instanceof AbstractMinecart cart && !cart.level().isClientSide()) {
-            CartLinking.tick(cart);
             CartLanterns.tick(cart);
+        }
+    }
+
+    /** Once every entity has moved, hold coupled carts at their fixed distance. */
+    @SubscribeEvent
+    public static void onLevelTick(LevelTickEvent.Post event) {
+        if (event.getLevel() instanceof ServerLevel serverLevel) {
+            CartLinking.solve(serverLevel);
+        }
+    }
+
+    /** Carts that load in with couplings are held together again. */
+    @SubscribeEvent
+    public static void onCartJoin(EntityJoinLevelEvent event) {
+        if (event.getEntity() instanceof AbstractMinecart cart) {
+            CartLinking.onCartJoined(cart);
         }
     }
 
@@ -199,6 +217,7 @@ public class MinecartEvents {
     @SubscribeEvent
     public static void onCartRemoved(EntityLeaveLevelEvent event) {
         if (!(event.getEntity() instanceof AbstractMinecart cart)) return;
+        CartLinking.onCartLeft(cart);
         if (event.getLevel().isClientSide()) {
             ClientCartData.remove(cart.getId());
             return;
