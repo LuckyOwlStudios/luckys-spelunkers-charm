@@ -13,6 +13,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -147,6 +148,12 @@ public class LocomotiveMinecart extends AbstractMinecartContainer {
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
         return isFuel(stack);
+    }
+
+    /** Hoppers can fill the locomotive but never pull its fuel out, so unloading a train doesn't empty the engine. */
+    @Override
+    public boolean canTakeItem(Container target, int slot, ItemStack stack) {
+        return false;
     }
 
     public static boolean isFuel(ItemStack stack) {
