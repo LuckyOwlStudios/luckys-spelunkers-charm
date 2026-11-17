@@ -35,6 +35,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.entity.EntityMountEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.luckystudio.spelunkers_charm.block.custom.rail.DirectionalRailBlock;
@@ -201,6 +202,25 @@ public class MinecartEvents {
     }
 
     /** Once every entity has moved, hold coupled carts at their fixed distance. */
+    /**
+     * A directional rail never throws a player out of their cart. Players can still get out themselves by sneaking
+     * (or if the cart breaks), and the ejector rail still ejects them through its own code.
+     */
+    @SubscribeEvent
+    public static void onDismount(EntityMountEvent event) {
+        if (!event.isDismounting() || event.getLevel().isClientSide()) return;
+        if (!(event.getEntityMounting() instanceof Player player) || !(event.getEntityBeingMounted() instanceof AbstractMinecart cart)) return;
+        if (player.isShiftKeyDown() || !player.isAlive() || cart.isRemoved()) return;
+        BlockPos pos = cart.blockPosition();
+        BlockState state = cart.level().getBlockState(pos);
+        if (!(state.getBlock() instanceof DirectionalRailBlock)) {
+            state = cart.level().getBlockState(pos.below());
+        }
+        if (state.getBlock() instanceof DirectionalRailBlock) {
+            event.setCanceled(true);
+        }
+    }
+
     /** An unpowered directional rail stops a cart even if the cart moved on past it during its own tick. */
     @SubscribeEvent
     public static void onCartTick(EntityTickEvent.Post event) {
