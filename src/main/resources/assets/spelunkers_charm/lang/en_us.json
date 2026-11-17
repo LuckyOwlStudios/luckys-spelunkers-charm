@@ -181,6 +181,7 @@
   "message.spelunkers_charm.cart_coupler.too_far": "These minecarts are too far apart",
   "message.spelunkers_charm.cart_coupler.full": "A minecart can only be coupled to two others",
   "message.spelunkers_charm.cart_coupler.missing": "The first minecart is gone. Click a minecart to start again.",
+  "message.spelunkers_charm.cart_lantern.needs_dynamic_lights": "Hanging a lantern on a minecart needs the LambDynamicLights mod",
   "block.spelunkers_charm.wooden_rail": "Wooden Rail",
   "block.spelunkers_charm.ejector_rail": "Ejector Rail",
   "block.spelunkers_charm.directional_rail": "Directional Rail",

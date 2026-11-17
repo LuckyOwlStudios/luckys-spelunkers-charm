@@ -163,7 +163,12 @@ public class MinecartEvents {
             }
         } else if (CartLantern.fromStack(stack) != CartLantern.NONE && !player.isSecondaryUseActive()) {
             // Needs LambDynamicLights, which makes the lantern shine. Without it lanterns can't be hung.
-            if (!CartLanterns.isEnabled()) return;
+            if (!CartLanterns.isEnabled()) {
+                if (!clientSide && event.getHand() == InteractionHand.MAIN_HAND) {
+                    player.displayClientMessage(Component.translatable("message.spelunkers_charm.cart_lantern.needs_dynamic_lights"), true);
+                }
+                return;
+            }
             // Sneaking puts the lantern inside the cart as a block instead, and block carts keep adding their own block.
             if (cart instanceof BlockMinecart) return;
             if (CartLanterns.getLantern(cart) != CartLantern.NONE) return;
