@@ -86,7 +86,7 @@ Smaller touches that make each cave feel like it belongs to the world above it.
 | | |
 |---|---|
 | <img src="website/icons/candle_helmet.png" alt="Candle Helmet" width="140"> | **Candle Helmet.** A craftable helmet with a candle on top. The flame follows your head and goes out in water or rain, then relights when you're dry again. |
-| <img src="website/icons/mining_helmet.png" alt="Mining Helmet" width="140"> | **Mining Helmet.** A sturdier helmet with a lamp that works like a flashlight: a soft beam of light shines from it wherever you look, and with LambDynamicLights it lights up the spot it points at. It works underwater. It adds explosion knockback resistance. You can't craft it: buy it from the **Wandering Trader** as a rare trade. |
+| <img src="website/icons/mining_helmet.png" alt="Mining Helmet" width="140"> | **Mining Helmet.** A sturdier helmet with a lamp that works like a flashlight: a soft, square beam of light shines from it wherever you look, and with LambDynamicLights it lights up the spot it points at. It works underwater. It adds explosion knockback resistance. You can't craft it: buy it from the **Wandering Trader** as a rare trade. |
 
 Both helmets light up the area around you when paired with a dynamic lights mod such as **LambDynamicLights**.
 

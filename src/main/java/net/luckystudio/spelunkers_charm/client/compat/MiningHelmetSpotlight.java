@@ -11,15 +11,15 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A LambDynamicLights light shaped like a flashlight beam: a bright pool of light where the mining helmet points,
- * and a widening cone of dimmer light along the way there. Only loaded when LambDynamicLights is installed.
+ * A LambDynamicLights light shaped like the helmet's square beam: a bright square pool of light where the mining
+ * helmet points, and a widening square beam of dimmer light along the way there. Only loaded when LambDynamicLights is installed.
  * <p>
  * LambDynamicLights reads {@link #lightAtPos} from its chunk-building threads, so the beam is kept as one immutable
  * {@link Beam} swapped in whole. The light only moves when the beam moved enough to be noticed, so looking around
  * doesn't re-light chunks every single tick.
  */
 final class MiningHelmetSpotlight implements DynamicLightBehavior {
-    // Widening of the lit cone per block of distance, matching the visible beam's halo.
+    // Widening of the lit beam per block of distance, matching the visible beam's halo.
     private static final double SPREAD = 0.2;
     private static final double START_RADIUS = 0.6;
     // Light along the beam starts at this level and drops this much per block.
@@ -42,7 +42,8 @@ final class MiningHelmetSpotlight implements DynamicLightBehavior {
     private static final int SETTLE_TICKS = 10;
 
     /** One snapshot of the beam. {@code poolLight} is 0 when the beam hit nothing. */
-    record Beam(double ox, double oy, double oz, double dx, double dy, double dz, double length,
+    record Beam(double ox, double oy, double oz, double dx, double dy, double dz,
+                double sx, double sy, double sz, double ux, double uy, double uz, double length,
                 double px, double py, double pz, double poolLight) {
         double endRadius() {
             return START_RADIUS + SPREAD * this.length;
@@ -64,7 +65,10 @@ final class MiningHelmetSpotlight implements DynamicLightBehavior {
 
     static Beam trace(LivingEntity living, double range) {
         Vec3 eye = living.getEyePosition();
-        Vec3 look = living.getViewVector(1.0F);
+        // The square beam turns with the head: side and up are the head's own axes.
+        Vec3 look = Vec3.directionFromRotation(living.getXRot(), living.getYHeadRot());
+        Vec3 up = Vec3.directionFromRotation(living.getXRot() - 90.0F, living.getYHeadRot());
+        Vec3 side = look.cross(up).normalize();
         BlockHitResult hit = MiningHelmetBeam.trace(living.level(), eye, look, range, living);
         double length = range;
         double poolLight = 0.0;
@@ -74,7 +78,8 @@ final class MiningHelmetSpotlight implements DynamicLightBehavior {
         }
         double pull = Math.min(POOL_PULL_BACK, length);
         Vec3 pool = eye.add(look.scale(length - pull));
-        return new Beam(eye.x, eye.y, eye.z, look.x, look.y, look.z, length, pool.x, pool.y, pool.z, poolLight);
+        return new Beam(eye.x, eye.y, eye.z, look.x, look.y, look.z, side.x, side.y, side.z, up.x, up.y, up.z,
+                length, pool.x, pool.y, pool.z, poolLight);
     }
 
     @Override
@@ -86,7 +91,7 @@ final class MiningHelmetSpotlight implements DynamicLightBehavior {
 
         double light = 0.0;
 
-        // Cone of light along the beam.
+        // Square beam of light, widening with distance like the visible beam.
         double vx = x - beam.ox;
         double vy = y - beam.oy;
         double vz = z - beam.oz;
@@ -95,9 +100,11 @@ final class MiningHelmetSpotlight implements DynamicLightBehavior {
             double rx = vx - beam.dx * along;
             double ry = vy - beam.dy * along;
             double rz = vz - beam.dz * along;
-            double radial = Math.sqrt(rx * rx + ry * ry + rz * rz);
+            // Distance from the axis measured square, so the lit area is a square too.
+            double radial = Math.max(Math.abs(rx * beam.sx + ry * beam.sy + rz * beam.sz),
+                    Math.abs(rx * beam.ux + ry * beam.uy + rz * beam.uz));
             double radius = START_RADIUS + SPREAD * along;
-            // Full light through the middle of the cone, fading out softly past its edge.
+            // Full light through the middle of the beam, fading out softly past its edge.
             double edge = 1.0 - smoothstep(radius * 0.6, radius + 0.75, radial);
             // Fade in over the first blocks, so it blends into the helmet's own glow.
             double start = smoothstep(SHAFT_START, SHAFT_START + 2.0, along);
@@ -106,12 +113,14 @@ final class MiningHelmetSpotlight implements DynamicLightBehavior {
             light = Math.max(0.0, SHAFT_LIGHT - SHAFT_LIGHT_DROP * along) * edge * start * past;
         }
 
-        // Pool of light where it lands.
+        // Square pool of light where it lands.
         if (beam.poolLight > 0.0) {
             double px = x - beam.px;
             double py = y - beam.py;
             double pz = z - beam.pz;
-            double distance = Math.sqrt(px * px + py * py + pz * pz);
+            double distance = Math.max(Math.abs(px * beam.dx + py * beam.dy + pz * beam.dz), Math.max(
+                    Math.abs(px * beam.sx + py * beam.sy + pz * beam.sz),
+                    Math.abs(px * beam.ux + py * beam.uy + pz * beam.uz)));
             light = Math.max(light, beam.poolLight - distance * falloffRatio * POOL_FALLOFF);
         }
 
@@ -121,7 +130,8 @@ final class MiningHelmetSpotlight implements DynamicLightBehavior {
     @Override
     public @NotNull BoundingBox getBoundingBox() {
         Beam beam = this.active;
-        double pad = beam.endRadius() + 0.75;
+        // The square's corners reach farther from the axis than its sides.
+        double pad = beam.endRadius() * Math.sqrt(2.0) + 0.75;
         double ex = beam.ox + beam.dx * beam.length;
         double ey = beam.oy + beam.dy * beam.length;
         double ez = beam.oz + beam.dz * beam.length;

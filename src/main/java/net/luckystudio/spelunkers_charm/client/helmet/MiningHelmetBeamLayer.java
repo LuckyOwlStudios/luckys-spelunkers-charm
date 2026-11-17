@@ -31,7 +31,7 @@ public class MiningHelmetBeamLayer<T extends LivingEntity, M extends HumanoidMod
         if (!MiningHelmetBeam.hasLitLamp(entity) || entity.isSleeping()) return;
 
         Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
-        // The first-person beam is drawn separately. This only matters with mods that draw your own body in first person.
+        // Your own beam isn't drawn in first person, even with mods that draw your body there.
         if (entity == camera.getEntity() && !camera.isDetached()) return;
 
         poseStack.pushPose();
@@ -56,6 +56,6 @@ public class MiningHelmetBeamLayer<T extends LivingEntity, M extends HumanoidMod
                 HelmetBeamRenderer.VISIBLE_LENGTH, entity);
 
         HelmetBeamRenderer.drawBeam(buffer.getBuffer(HelmetBeamRenderType.BEAM), origin, forward, up,
-                (float) length, scale, 0.0F, HelmetBeamRenderer.opacity(), false, true);
+                (float) length, scale, HelmetBeamRenderer.opacity());
     }
 }
