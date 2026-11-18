@@ -153,11 +153,23 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.BLASTER.get())
                 .add(ModBlocks.WOODEN_LIFT_TRACK.get())
                 .add(ModBlocks.POWERED_LIFT_TRACK.get())
+                .add(ModBlocks.EJECTOR_RAIL.get())
+                .add(ModBlocks.DIRECTIONAL_RAIL.get())
+                .add(ModBlocks.CARGO_RAIL.get())
+                .add(ModBlocks.CROSSING_RAIL.get())
         ;
         tag(BlockTags.MINEABLE_WITH_AXE)
                 // Redstone
                 .add(ModBlocks.WOODEN_LIFT_TRACK.get())
                 .add(ModBlocks.POWERED_LIFT_TRACK.get())
+                .add(ModBlocks.WOODEN_RAIL.get())
+        ;
+        tag(BlockTags.RAILS)
+                .add(ModBlocks.WOODEN_RAIL.get())
+                .add(ModBlocks.EJECTOR_RAIL.get())
+                .add(ModBlocks.DIRECTIONAL_RAIL.get())
+                .add(ModBlocks.CARGO_RAIL.get())
+                .add(ModBlocks.CROSSING_RAIL.get())
         ;
         tag(BlockTags.MINEABLE_WITH_SHOVEL)
                 .add(ModBlocks.SILT.get())

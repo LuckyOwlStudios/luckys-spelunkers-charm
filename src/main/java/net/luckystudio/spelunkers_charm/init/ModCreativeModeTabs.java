@@ -143,6 +143,10 @@ public class ModCreativeModeTabs {
         }
 
         if (event.getTabKey() == CreativeModeTabs.REDSTONE_BLOCKS) {
+            event.insertBefore(Items.RAIL.getDefaultInstance(), ModBlocks.WOODEN_RAIL.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(Items.ACTIVATOR_RAIL.getDefaultInstance(), ModBlocks.EJECTOR_RAIL.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModBlocks.EJECTOR_RAIL.toStack(), ModBlocks.DIRECTIONAL_RAIL.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModBlocks.DIRECTIONAL_RAIL.toStack(), ModBlocks.CARGO_RAIL.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(Items.TNT_MINECART.getDefaultInstance(), ModBlocks.WOODEN_LIFT_TRACK.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(ModBlocks.WOODEN_LIFT_TRACK.toStack(), ModBlocks.POWERED_LIFT_TRACK.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(ModBlocks.POWERED_LIFT_TRACK.toStack(), ModItems.SMALL_LIFT.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
@@ -152,11 +156,16 @@ public class ModCreativeModeTabs {
         }
 
         if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+            event.insertAfter(Items.RAIL.getDefaultInstance(), ModBlocks.WOODEN_RAIL.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(Items.ACTIVATOR_RAIL.getDefaultInstance(), ModBlocks.EJECTOR_RAIL.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModBlocks.EJECTOR_RAIL.toStack(), ModBlocks.DIRECTIONAL_RAIL.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModBlocks.DIRECTIONAL_RAIL.toStack(), ModBlocks.CARGO_RAIL.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(Items.TNT_MINECART.getDefaultInstance(), ModBlocks.WOODEN_LIFT_TRACK.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(ModBlocks.WOODEN_LIFT_TRACK.toStack(), ModBlocks.POWERED_LIFT_TRACK.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(ModBlocks.POWERED_LIFT_TRACK.toStack(), ModItems.SMALL_LIFT.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(ModItems.SMALL_LIFT.toStack(), ModItems.MEDIUM_LIFT.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(ModItems.MEDIUM_LIFT.toStack(), ModItems.LARGE_LIFT.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(Items.TNT_MINECART.getDefaultInstance(), ModItems.LOCOMOTIVE.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(ModItems.LARGE_LIFT.toStack(), ModItems.CANDLE_HELMET.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(ModItems.CANDLE_HELMET.toStack(), ModItems.MINING_HELMET.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
         }

@@ -1,5 +1,11 @@
 package net.luckystudio.spelunkers_charm.init;
 
+import net.luckystudio.spelunkers_charm.block.custom.rail.CrossingRailBlock;
+import net.luckystudio.spelunkers_charm.block.custom.rail.EjectorRailBlock;
+import net.luckystudio.spelunkers_charm.block.custom.rail.DirectionalRailBlock;
+import net.luckystudio.spelunkers_charm.block.custom.rail.CargoRailBlock;
+import net.luckystudio.spelunkers_charm.block.custom.rail.WoodenRailBlock;
+
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
 import net.luckystudio.spelunkers_charm.block.custom.*;
 import net.luckystudio.spelunkers_charm.block.custom.blaster.BlasterBlock;
@@ -302,6 +308,19 @@ public class ModBlocks {
             () -> new WoodenLiftTrackBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)));
     public static final DeferredBlock<Block> POWERED_LIFT_TRACK = registerBlock("powered_lift_track",
             () -> new PoweredLiftTrackBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+
+    // Rails
+    public static final DeferredBlock<Block> WOODEN_RAIL = registerBlock("wooden_rail",
+            () -> new WoodenRailBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RAIL).sound(SoundType.WOOD)));
+    public static final DeferredBlock<Block> EJECTOR_RAIL = registerBlock("ejector_rail",
+            () -> new EjectorRailBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.ACTIVATOR_RAIL)));
+    public static final DeferredBlock<Block> DIRECTIONAL_RAIL = registerBlock("directional_rail",
+            () -> new DirectionalRailBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.ACTIVATOR_RAIL)));
+    public static final DeferredBlock<Block> CARGO_RAIL = registerBlock("cargo_rail",
+            () -> new CargoRailBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DETECTOR_RAIL)));
+    // No item: made by right-clicking a rail with another rail.
+    public static final DeferredBlock<Block> CROSSING_RAIL = BLOCKS.register("crossing_rail",
+            () -> new CrossingRailBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RAIL)));
 
     private static boolean always(BlockState state, BlockGetter blockGetter, BlockPos pos) {
         return true;

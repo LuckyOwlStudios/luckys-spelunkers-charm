@@ -56,6 +56,7 @@ public class SpelunkersCharm
         ModSurfaceRules.register(modEventBus);
         ModMenuTypes.register(modEventBus);
         ModDataComponents.register(modEventBus);
+        ModAttachmentTypes.register(modEventBus);
 
         // Needed for advanced structures
         ModStructureProcessorType.register(modEventBus);

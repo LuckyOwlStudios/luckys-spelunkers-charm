@@ -1,5 +1,6 @@
 package net.luckystudio.spelunkers_charm.entity.custom.minecart;
 
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.CartLinking;
 import net.luckystudio.spelunkers_charm.init.ModEntityType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -11,6 +12,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +27,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.NotNull;
 
-public class BlockMinecart extends AbstractMinecart {
+public class BlockMinecart extends AbstractMinecart implements Container {
+
+    /** How many blocks the cart counts as full, for comparators and the cargo rail (27 stacks, like a chest). */
+    public static final int FULL_AMOUNT = 27 * 64;
 
     private static final EntityDataAccessor<Integer> BLOCK_AMOUNT = SynchedEntityData.defineId(BlockMinecart.class, EntityDataSerializers.INT);
 
@@ -105,14 +110,7 @@ public class BlockMinecart extends AbstractMinecart {
             if (getBlockAmount() <= 0) {
                 this.setCustomDisplay(false);
                 this.setDisplayBlockState(Blocks.AIR.defaultBlockState());
-                Entity newMinecart = new Minecart(level(), this.getX(), this.getY(), this.getZ());
-                // Copy motion and rotation from the original minecart
-                newMinecart.setPosRaw(this.getX(), this.getY(), this.getZ());
-                newMinecart.setDeltaMovement(this.getDeltaMovement());
-                newMinecart.setYRot(this.getYRot());
-                newMinecart.setXRot(this.getXRot());
-                this.remove(RemovalReason.DISCARDED);
-                level().addFreshEntity(newMinecart);
+                convertIfEmpty();
             }
             player.playNotifySound(SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1.0F, 1.0F);
             updateName();
@@ -129,6 +127,88 @@ public class BlockMinecart extends AbstractMinecart {
             this.setCustomName(null);
             this.setCustomNameVisible(false);
         }
+    }
+
+    /** 0 when empty, up to 15 when full. */
+    public int getComparatorLevel() {
+        int amount = getBlockAmount();
+        if (amount <= 0) return 0;
+        return 1 + (int) Math.floor(14.0 * Math.min(amount, FULL_AMOUNT) / FULL_AMOUNT);
+    }
+
+    /** Turns the cart back into a plain minecart once its last block is gone. Server side. */
+    private void convertIfEmpty() {
+        if (getBlockAmount() > 0 || level().isClientSide() || isRemoved()) return;
+        Minecart newMinecart = new Minecart(level(), this.getX(), this.getY(), this.getZ());
+        newMinecart.setDeltaMovement(this.getDeltaMovement());
+        newMinecart.setYRot(this.getYRot());
+        newMinecart.setXRot(this.getXRot());
+        level().addFreshEntity(newMinecart);
+        CartLinking.transferLinks(this, newMinecart);
+        this.remove(RemovalReason.DISCARDED);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        convertIfEmpty();
+    }
+
+    // Container: this is what lets hoppers pull blocks out of the cart. It shows up as one slot
+    // holding up to a stack of the blocks, and taking from it lowers the cart's block count.
+
+    @Override
+    public int getContainerSize() {
+        return 1;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return getBlockAmount() <= 0 || getDisplayBlockState().isAir();
+    }
+
+    @Override
+    public ItemStack getItem(int slot) {
+        if (slot != 0 || isEmpty()) return ItemStack.EMPTY;
+        return new ItemStack(getDisplayBlockState().getBlock(), Math.min(64, getBlockAmount()));
+    }
+
+    @Override
+    public ItemStack removeItem(int slot, int amount) {
+        if (slot != 0 || isEmpty()) return ItemStack.EMPTY;
+        int taken = Math.min(Math.min(amount, 64), getBlockAmount());
+        ItemStack result = new ItemStack(getDisplayBlockState().getBlock(), taken);
+        setBlockAmount(getBlockAmount() - taken);
+        updateName();
+        return result;
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int slot) {
+        return removeItem(slot, 64);
+    }
+
+    @Override
+    public void setItem(int slot, ItemStack stack) {
+        // Hoppers can't put blocks in.
+    }
+
+    @Override
+    public boolean canPlaceItem(int slot, ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public void setChanged() {
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        return false;
+    }
+
+    @Override
+    public void clearContent() {
     }
 
     @Override

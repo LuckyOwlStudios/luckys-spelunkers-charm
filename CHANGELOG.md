@@ -17,6 +17,21 @@ Work In Progress section is started.
 # Work In Progress
 
 **Added:**
+- Locomotive: a new minecart with an engine and a lever on its side, crafted like a minecart with a blast furnace in the middle. Right-click it to open its fuel slot (anything that burns in a furnace works, and lasts twice as long). Shift-right-click to pull the lever and reverse its direction. It drives the way it was facing when placed and pulls any carts coupled to it. It speeds up gradually until it is faster than a furnace minecart (a little slower than before, and it slows down on slopes so it stays on the rail), and slows down and turns around gradually too. A longer train keeps the same top speed, but the engine burns fuel faster the more carts it hauls.
+- Hoppers can put fuel into a locomotive but can't take it back out, so unloading a train doesn't empty the engine.
+- Furnace minecarts now have a screen showing how much fuel they have left. Right-click one with an empty hand to see it.
+- Minecart with Jukebox: shift-right-click a jukebox onto a minecart. Put a music disc in and the music follows the cart. Right-click again to take the disc out. Detector rails give the same comparator signal as a jukebox.
+- Coupling minecarts: right-click one minecart with a chain, then another, to couple them. Any chain works, including mod chains and Supplementaries' rope (the `spelunkers_charm:cart_couplers` item tag). It uses up one. Coupled carts stay together exactly two blocks apart (one empty block between them), so a locomotive can pull a whole train and each cart can sit on its own rail. Each cart can couple to two others, one in front and one behind. Sneak-click a coupled cart with a coupler item to uncouple it. You get the items back when you uncouple, when a cart breaks, or when a coupling snaps.
+- Lanterns on minecarts: right-click any minecart with a lantern or soul lantern to hang it on the cart. The cart's lamp only appears while it has a lantern, and it glows. The lantern shines with [LambDynamicLights](https://modrinth.com/mod/lambdynamiclights), so it only works while that mod is installed. Use shears to take the lantern off. Sneak-clicking still puts lanterns inside the cart as blocks.
+- Coupled carts are now only pulled along their own rail, so they no longer get dragged off the track on slopes and turns. A coupling snaps (and gives its chain back) if one of its carts stays off the rails.
+- Rail crossings: right-click a straight rail with another rail while facing across it to make a crossing. Carts go straight through in either direction. Breaking it gives both rails back. The crossing has its own texture and sits flat on the ground like a normal rail.
+- Ejector Rail: when powered, throws riders out of passing minecarts. It plays a piston sound and gives a short redstone pulse to its sides (not to the block below) whenever it throws someone out. Put a slime block under it to launch them into the air instead. Crafted like an activator rail, with a slime ball in the middle and redstone at the bottom. It looks the same whether or not it is powered.
+- Directional Rail: place it facing the way you want carts to go. Unpowered, it stops any cart and settles it exactly on the block. Powered, it sends carts in the direction it faces, and flicks the lever of a locomotive heading the other way so it turns around. Crafted like an activator rail, with a piston in the middle. It never throws a player out of their cart; sneak to get out. Carts held by it no longer shake, even when they are coupled to other carts.
+- Cargo Rail: a detector-style rail that gives a redstone signal (0 to 15) for how full the cart on it is. It reads chest, hopper and block minecarts, a locomotive's fuel slot and a jukebox minecart's disc, and gives no signal when the cart is empty. Crafted from iron ingots, a chest and a comparator.
+- The Cargo Rail doesn't power the block below it, so a hopper under it isn't locked and can unload the cart on top. Its signal still reaches redstone dust, repeaters and comparators beside and above it.
+- Hoppers can now pull blocks out of a minecart carrying blocks. When the last block is taken, it turns back into a normal minecart.
+- Click a Directional Rail with an empty hand to turn it around.
+- Wooden Rail: a cheap early rail made from sticks and planks. Carts are much slower on it, and a locomotive is too heavy and breaks it.
 - Create and Supplementaries are now listed as optional dependencies. Create adds zinc boulders; Supplementaries lets you tie a boulder to a rope and suspend it in the air, just like a chain. Other rope blocks can be added with the `spelunkers_charm:boulder_ropes` block tag.
 - LambDynamicLights is now listed as an optional dependency. With it installed, the mining helmet and candle helmet light up the area around you while worn.
 - Tremors shake your camera when [Camera Overhaul](https://modrinth.com/mod/cameraoverhaul) is installed. The shake builds and fades with the tremor, is stronger for bigger tremors and weaker the farther away you are. Camera Overhaul is optional. It can be turned off or scaled with `tremorCameraShake` and `tremorCameraShakeStrength` in the client config.
@@ -24,6 +39,9 @@ Work In Progress section is started.
 
 **Fixed:**
 - With LambDynamicLights, the candle helmet no longer keeps glowing after rain or water puts its candle out. It lights up again when the candle relights.
+
+**Fixed:**
+- Putting a chest, hopper, furnace or TNT into a minecart now uses up the block. It used to be free.
 
 **Development:**
 - Camera Overhaul (with Cloth Config, which it needs) now loads in dev runs (`runClient`), so tremor camera shake can be tested without installing it by hand. It isn't bundled in the mod jar and stays an optional dependency.
