@@ -165,6 +165,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     protected void buildRecipes(@NotNull RecipeOutput recipeOutput) {
         rails(recipeOutput);
         locomotive(recipeOutput);
+        LiftRecipes.generate(recipeOutput);
         stairBuilder(ModBlocks.DUNESTONE_STAIRS.get(), Ingredient.of(ModBlocks.DUNESTONE.asItem()));
         slabBuilder(RecipeCategory.BUILDING_BLOCKS, ModBlocks.DUNESTONE_SLAB.get(), Ingredient.of(ModBlocks.DUNESTONE.asItem()));
         wallBuilder(RecipeCategory.BUILDING_BLOCKS, ModBlocks.DUNESTONE_WALL.get(), Ingredient.of(ModBlocks.DUNESTONE.asItem()));

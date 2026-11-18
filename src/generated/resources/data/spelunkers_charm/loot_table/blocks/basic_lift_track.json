@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "spelunkers_charm:wooden_lift_track"
+          "name": "spelunkers_charm:basic_lift_track"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "spelunkers_charm:blocks/wooden_lift_track"
+  "random_sequence": "spelunkers_charm:blocks/basic_lift_track"
 }

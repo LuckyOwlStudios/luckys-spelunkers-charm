@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "tag": "minecraft:planks"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "IRI",
+    "DDD",
+    "IRI"
+  ],
+  "result": {
+    "count": 8,
+    "id": "spelunkers_charm:powered_lift_track"
+  }
+}

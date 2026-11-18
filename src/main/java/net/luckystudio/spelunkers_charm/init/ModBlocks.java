@@ -45,7 +45,7 @@ public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(SpelunkersCharm.MOD_ID);
 
     // ============================
-    // 🔧 Utility / Helpers
+    // đź”§ Utility / Helpers
     // ============================
 
     public static Block geyserBlock(Block copyFrom) {
@@ -55,7 +55,7 @@ public class ModBlocks {
     }
 
     // ============================
-    // 🧱 Building Blocks
+    // đź§± Building Blocks
     // ============================
 
     // --- Amethyst Variants ---
@@ -107,7 +107,7 @@ public class ModBlocks {
             UniformInt.of(3, 7),BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_ORE)));
 
     // ============================
-    // 🌋 Cave Blocks
+    // đźŚ‹ Cave Blocks
     // ============================
 
     public static final DeferredBlock<Block> BASALT_GEYSER = registerBlock("basalt_geyser", () -> geyserBlock(Blocks.BASALT));
@@ -124,7 +124,7 @@ public class ModBlocks {
     public static final DeferredBlock<Block> LUSH_GOLD_BOULDER = BOULDERS.get(BoulderType.LUSH_GOLD);
 
     // ============================
-    // 🪨 Rocks
+    // đźŞ¨ Rocks
     // ============================
 
     public static final DeferredBlock<Block> ROCK = registerBlockAndBlockItem("rock",
@@ -159,7 +159,7 @@ public class ModBlocks {
             () -> new RockBlock(BlockBehaviour.Properties.of().instabreak().noCollission().replaceable()));
 
     // ============================
-    // 🍄 Cave Flora
+    // đźŤ„ Cave Flora
     // ============================
 
     public static final DeferredBlock<Block> CAVE_MUSHROOM = registerBlockAndBlockItem("cave_mushroom",
@@ -181,7 +181,7 @@ public class ModBlocks {
                     .strength(0.2F).sound(SoundType.WOOD).ignitedByLava()));
 
     // ============================
-    // ❄️ Ice Cave Features
+    // âť„ď¸Ź Ice Cave Features
     // ============================
 
     public static final DeferredBlock<Block> SILT = registerBlock("silt",
@@ -191,7 +191,7 @@ public class ModBlocks {
             () -> new ModPointedBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.PACKED_ICE)));
 
     // ============================
-    // 🏜️ Desert Cave Blocks
+    // đźŹśď¸Ź Desert Cave Blocks
     // ============================
 
     public static final DeferredBlock<Block> DUNESTONE = registerBlock("dunestone",
@@ -234,7 +234,7 @@ public class ModBlocks {
             UniformInt.of(3, 7),BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_ORE)));
 
     // ============================
-    // 🌴 Jungle Cave Blocks
+    // đźŚ´ Jungle Cave Blocks
     // ============================
 
     public static final DeferredBlock<Block> WILDSTONE = registerBlock("wildstone", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)));
@@ -270,7 +270,7 @@ public class ModBlocks {
             UniformInt.of(3, 7),BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_ORE)));
 
     // ============================
-    // 🕸️ Spider Cave Blocks
+    // đź•¸ď¸Ź Spider Cave Blocks
     // ============================
 
     public static final DeferredBlock<Block> PACKED_WEB = registerBlock("packed_web",
@@ -300,14 +300,24 @@ public class ModBlocks {
                     .noOcclusion().isRedstoneConductor((state, world, pos) -> false)));
 
     // ============================
-    // 🔴 Redstone Blocks
+    // đź”´ Redstone Blocks
     // ============================
     public static final DeferredBlock<Block> BLASTER = registerBlock("blaster",
             () -> new BlasterBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)));
-    public static final DeferredBlock<Block> WOODEN_LIFT_TRACK = registerBlock("wooden_lift_track",
-            () -> new WoodenLiftTrackBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)));
+    public static final DeferredBlock<Block> BASIC_LIFT_TRACK = registerBlock("basic_lift_track",
+            () -> new BasicLiftTrackBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)));
+    public static final DeferredBlock<Block> DIRECTIONAL_LIFT_TRACK = registerBlock("directional_lift_track",
+            () -> new DirectionalLiftTrackBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)));
+    public static final DeferredBlock<Block> DETECTOR_LIFT_TRACK = registerBlock("detector_lift_track",
+            () -> new DetectorLiftTrackBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
     public static final DeferredBlock<Block> POWERED_LIFT_TRACK = registerBlock("powered_lift_track",
             () -> new PoweredLiftTrackBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+    // Center of a Sable lift deck. Placed by the lift items, so it has no item of its own.
+    public static final DeferredBlock<Block> LIFT_CONTROLLER = BLOCKS.register("lift_controller",
+            () -> new LiftControllerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_PLANKS).noOcclusion()));
+    // The rest of a Sable lift deck: invisible and solid, the controller draws the model over it.
+    public static final DeferredBlock<Block> LIFT_PART = BLOCKS.register("lift_part",
+            () -> new LiftPartBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_PLANKS).noOcclusion()));
 
     // Rails
     public static final DeferredBlock<Block> WOODEN_RAIL = registerBlock("wooden_rail",

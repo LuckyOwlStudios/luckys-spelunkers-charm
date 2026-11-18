@@ -53,7 +53,6 @@
       "spelunkers_charm:ambient/cave/spider_cave_additions_3"
     ]
   },
-
   "geyser_charge": {
     "subtitle": "sounds.spelunkers_charm.geyser_charge",
     "sounds": [
@@ -88,7 +87,6 @@
       "spelunkers_charm:block/spider_egg/spider_egg_crack_5"
     ]
   },
-
   "lift_start": {
     "subtitle": "sounds.spelunkers_charm.lift_start",
     "sounds": [
@@ -98,7 +96,10 @@
   "lift_loop": {
     "subtitle": "sounds.spelunkers_charm.lift_loop",
     "sounds": [
-      "spelunkers_charm:entity/lift/lift_loop"
+      {
+        "name": "spelunkers_charm:entity/lift/lift_loop",
+        "attenuation_distance": 32
+      }
     ]
   },
   "lift_stop": {

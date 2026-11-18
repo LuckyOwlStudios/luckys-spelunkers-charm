@@ -23,6 +23,8 @@ import net.luckystudio.spelunkers_charm.item.custom.MiningHelmetModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.luckystudio.spelunkers_charm.entity.custom.lift.LiftControllerRenderer;
+import net.luckystudio.spelunkers_charm.init.ModBlockEntityType;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -82,6 +84,7 @@ public class SpelunkersCharmClient {
         event.registerEntityRenderer(ModEntityType.SMALL_LIFT.get(), SmallLiftRenderer::new);
         event.registerEntityRenderer(ModEntityType.MEDIUM_LIFT.get(), MediumLiftRenderer::new);
         event.registerEntityRenderer(ModEntityType.LARGE_LIFT.get(), LargeLiftRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntityType.LIFT_CONTROLLER.get(), LiftControllerRenderer::new);
         event.registerEntityRenderer(ModEntityType.BOULDER.get(), BoulderRenderer::new);
         event.registerEntityRenderer(ModEntityType.TREMOR.get(), NoopRenderer::new);
         event.registerEntityRenderer(ModEntityType.ROCK.get(), ThrownItemRenderer::new);

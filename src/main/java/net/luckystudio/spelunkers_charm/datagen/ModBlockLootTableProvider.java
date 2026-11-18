@@ -156,7 +156,9 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
 
         // Redstone Blocks
         dropSelf(ModBlocks.BLASTER.get());
-        dropSelf(ModBlocks.WOODEN_LIFT_TRACK.get());
+        dropSelf(ModBlocks.BASIC_LIFT_TRACK.get());
+        dropSelf(ModBlocks.DIRECTIONAL_LIFT_TRACK.get());
+        dropSelf(ModBlocks.DETECTOR_LIFT_TRACK.get());
         dropSelf(ModBlocks.POWERED_LIFT_TRACK.get());
         dropSelf(ModBlocks.WOODEN_RAIL.get());
         dropSelf(ModBlocks.EJECTOR_RAIL.get());
@@ -166,6 +168,9 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         add(ModBlocks.CROSSING_RAIL.get(), block -> LootTable.lootTable().withPool(applyExplosionCondition(block,
                 LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
                         .add(LootItem.lootTableItem(Items.RAIL).apply(SetItemCountFunction.setCount(ConstantValue.exactly(2.0F)))))));
+        // The lift controller hands back the right lift item itself (LiftControllerBlock#getDrops).
+        this.add(ModBlocks.LIFT_CONTROLLER.get(), noDrop());
+        this.add(ModBlocks.LIFT_PART.get(), noDrop());
     }
 
     protected LootTable.Builder createBoulderDrops(Block block, ItemLike drop) {

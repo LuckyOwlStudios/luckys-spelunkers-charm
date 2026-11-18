@@ -43,6 +43,12 @@ Work In Progress section is started.
 **Fixed:**
 - Putting a chest, hopper, furnace or TNT into a minecart now uses up the block. It used to be free.
 
+**Changed:**
+- Spelunker's Charm now requires [Sable](https://modrinth.com/mod/sable) 2.0.6 or newer and NeoForge 21.1.228 or newer.
+- Lifts are now a single solid block you can stand and build on (3×3, 5×5 or 7×7), drawn with the lift model. The lift and anything built on it ride the lift tracks as one Sable physics structure. Right-click with an empty hand to start or stop it, and sneak-right-click to reverse. Use planks or a mineral on it to change its wood or metal. The gears still turn and spark while it moves. Breaking any part breaks the whole lift and gives the lift item back. It stops when a block is in the way of the lift or anything built on it.
+- Lifts can be placed without tracks: on the floor, or against a single lift track (the lift goes on the side the track faces). While holding a lift, its spot and track spots are outlined. While holding a lift or a lift track, placed lifts outline their missing track spots (green: track in place, yellow: track missing or facing the wrong way). A lift starts running as soon as all its tracks are in.
+- A lift that runs off the end of its tracks, or loses them, falls and tumbles like any other loose structure.
+
 **Development:**
 - Camera Overhaul (with Cloth Config, which it needs) now loads in dev runs (`runClient`), so tremor camera shake can be tested without installing it by hand. It isn't bundled in the mod jar and stays an optional dependency.
 - Supplementaries (with Moonlight Lib, which it needs) now loads in dev runs (`runClient`), so features like tying boulders to ropes can be tested alongside it. It isn't bundled in the mod jar and stays an optional dependency.

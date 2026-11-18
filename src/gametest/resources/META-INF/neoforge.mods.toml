@@ -1,0 +1,13 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="All Rights Reserved"
+[[mods]]
+modId="spelunkers_lift_tests"
+version="1.0.0"
+displayName="Spelunker lift regression tests"
+[[dependencies.spelunkers_lift_tests]]
+modId="spelunkers_charm"
+type="required"
+versionRange="[5.0.6,)"
+ordering="AFTER"
+side="BOTH"

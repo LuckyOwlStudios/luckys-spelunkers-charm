@@ -32,6 +32,19 @@ repositories {
         name = "Gegy"
         url = uri("https://maven.gegy.dev")
     }
+    // Sable, for elevator sub-levels
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "RyanHCode Maven"
+                url = "https://maven.ryanhcode.dev/releases"
+            }
+        }
+        filter {
+            includeGroup "dev.ryanhcode.sable"
+            includeGroup "dev.ryanhcode.sable-companion"
+        }
+    }
     // Curse Maven, used only for dev-only runtime mods like Configured and Create
     exclusiveContent {
         forRepository {
@@ -154,6 +167,14 @@ def mappingsAttribute = Attribute.of("net.minecraft.mappings", String)
 dependencies {
     implementation 'com.github.glitchfiend:TerraBlender-neoforge:' + minecraft_version + '-' + terrablender_version
 
+    // Sable: compile against the common API, run the NeoForge build in dev.
+    // Players install Sable themselves; it's a required dependency in neoforge.mods.toml.
+    // Non-transitive: Sable's POM lists the mods it was built against (Create, Flywheel, Veil...),
+    // which aren't on any of our repositories and aren't needed to run it.
+    compileOnly("dev.ryanhcode.sable:sable-common-${minecraft_version}:${sable_version}") { transitive = false }
+    compileOnly("dev.ryanhcode.sable-companion:sable-companion-common-${minecraft_version}:${sable_companion_version}") { transitive = false }
+    localRuntime("dev.ryanhcode.sable:sable-neoforge-${minecraft_version}:${sable_version}") { transitive = false }
+
     attributesSchema {
         attribute(mappingsAttribute)
     }
@@ -182,7 +203,7 @@ dependencies {
 
     // Create (Creators of Create): dev runs only, for testing our ores alongside Create's.
     // localRuntime keeps it off the compile classpath, out of the built jar and out of neoforge.mods.toml.
-    // 6.0.6 is used because 6.0.7+ requires NeoForge 21.1.200+, newer than neo_version.
+    // 6.0.10 (needs NeoForge 21.1.219+), the version Sable 2.0.6 was built against.
     // Flywheel, Ponder and Registrate are bundled inside the Create jar, so they need no separate entries.
     localRuntime "curse.maven:create-328085:${create_file_id}"
 
@@ -253,4 +274,8 @@ idea {
         downloadSources = true
         downloadJavadoc = true
     }
+}
+
+if (providers.gradleProperty('elevatorTests').getOrElse('false').toBoolean()) {
+    apply from: 'gradle/elevator-tests.gradle'
 }
