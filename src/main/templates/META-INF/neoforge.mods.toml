@@ -115,6 +115,14 @@ side="BOTH"
     ordering="NONE"
     side="BOTH"
 
+[[dependencies.${mod_id}]]
+    modId="lambdynlights"
+    type="optional"
+    reason="The mining helmet and candle helmet light up the area around you while worn."
+    versionRange="*"
+    ordering="NONE"
+    side="CLIENT"
+
 #[modproperties.${mod_id}."yumi:entrypoints"]
 #"lambdynlights:initializer" = "net.luckystudio.spelunkers_charm.SpelunkersCharmDynamicLightsInitializer"
 
