@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="website/logo.png" alt="LuckyOwl's Spelunker's Charm" width="720">
+  <img src="media/banner.png" alt="LuckyOwl's Spelunker's Charm" width="720">
 </p>
 
 <p align="center">
@@ -25,7 +25,7 @@ Everything is built to sit alongside vanilla and other mods. Features place them
 
 ### 🪨 Boulders
 
-<img src="website/slides/Boulders%20Slide.png" alt="A cracked boulder full of raw gold in a deepslate cave" width="480" align="right">
+<img src="media/slides/Boulders%20Slide.png" alt="A cracked boulder full of raw gold in a deepslate cave" width="480" align="right">
 
 Huge 3×3×3 boulders sit on cave floors. Crack one open and you might find a jackpot of **raw iron**, **raw copper** or **raw gold** at its core, or nothing but stone.
 
@@ -61,7 +61,7 @@ The deeper you go, the less stable the ground gets.
 
 ### 🕷️ Spider Cave
 
-<img src="website/slides/Lucky's%20Spelunkers%20Charm%20Spider%20Cave.png" alt="Spider Cave biome slide" width="320" align="right">
+<img src="media/slides/Lucky's%20Spelunkers%20Charm%20Spider%20Cave.png" alt="Spider Cave biome slide" width="320" align="right">
 
 A new underground biome (via TerraBlender) that's dark, quiet and crawling.
 
@@ -105,7 +105,7 @@ Brew an **Awkward Potion** with a **Cave Mushroom** to get a Potion of Haste. Ad
 
 <br>
 
-<img src="website/slides/Lucky's%20Spelunker's%20Charm%20Cave%20Biomes.png" alt="Cave biomes slide" width="360" align="right">
+<img src="media/slides/Lucky's%20Spelunker's%20Charm%20Cave%20Biomes.png" alt="Cave biomes slide" width="360" align="right">
 
 With `stoneReplacers` turned on, the stone underground changes to match the biome above it:
 
