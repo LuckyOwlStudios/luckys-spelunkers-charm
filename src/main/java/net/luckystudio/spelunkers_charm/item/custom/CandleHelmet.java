@@ -39,9 +39,17 @@ public class CandleHelmet extends ArmorItem {
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         super.inventoryTick(stack, level, entity, slotId, isSelected);
 
-        if (!(entity instanceof LivingEntity living)) return;
-        if (living.getItemBySlot(EquipmentSlot.HEAD) != stack) return;
+        if (!(entity instanceof Player player)) return;
+        if (player.getItemBySlot(EquipmentSlot.HEAD) != stack) return;
+        tickWorn(stack, level, player);
+    }
 
+    /**
+     * Runs every tick for a candle helmet worn on the head. Players get this from {@link #inventoryTick};
+     * mobs and armor stands don't tick their equipment as inventory, so they get it from an entity tick event
+     * (see {@code GameEvents#onEntityTick}).
+     */
+    public static void tickWorn(ItemStack stack, Level level, LivingEntity living) {
         // Check environmental conditions and handle candle state
         handleCandleEnvironment(stack, level, living);
 
@@ -51,7 +59,7 @@ public class CandleHelmet extends ArmorItem {
         }
     }
 
-    private void handleCandleEnvironment(ItemStack stack, Level level, LivingEntity entity) {
+    private static void handleCandleEnvironment(ItemStack stack, Level level, LivingEntity entity) {
         boolean isInWater = entity.isUnderWater();
         boolean isInRain = isEntityInRain(entity, level);
         boolean currentlyLit = isCandleLit(stack);
@@ -72,13 +80,13 @@ public class CandleHelmet extends ArmorItem {
     // The candle part sits at (0, -12.5, -5): 12.5px above the pivot and 5px in front of the face.
     private static final double WICK_UP_PX = 12.5;
     private static final double WICK_FORWARD_PX = 5.0;
-    // PlayerRenderer scales the player model by 15/16.
+    // PlayerRenderer scales the player model by 15/16. Other humanoids are drawn at full size.
     private static final double PLAYER_MODEL_SCALE = 0.9375;
     // Head pivot height above the feet in model pixels (24px), and how far HumanoidModel lowers it when crouching.
     private static final double HEAD_PIVOT_PX = 24.0;
     private static final double CROUCH_HEAD_DROP_PX = 4.2;
 
-    private void spawnCandleParticles(Level level, LivingEntity living) {
+    private static void spawnCandleParticles(Level level, LivingEntity living) {
         Random random = new Random();
         if (random.nextFloat() >= 0.1f) return; // 10% chance to spawn particles
 
@@ -97,13 +105,14 @@ public class CandleHelmet extends ArmorItem {
      * World position of the candle wick, following the head's yaw and pitch.
      */
     private static Vec3 getWickPosition(LivingEntity living) {
-        double pxToBlocks = living.getScale() * PLAYER_MODEL_SCALE / 16.0;
+        double modelScale = living instanceof Player ? PLAYER_MODEL_SCALE : 1.0;
+        double pxToBlocks = living.getScale() * modelScale / 16.0;
         double pivotPx = HEAD_PIVOT_PX;
         double crouchOffset = 0.0;
         if (living.isCrouching()) {
             pivotPx -= CROUCH_HEAD_DROP_PX;
             // PlayerRenderer#getRenderOffset shifts a crouching player down by 2px (unscaled by the model scale)
-            crouchOffset = -2.0 / 16.0 * living.getScale();
+            if (living instanceof Player) crouchOffset = -2.0 / 16.0 * living.getScale();
         }
         Vec3 headPivot = living.position().add(0.0, pivotPx * pxToBlocks + crouchOffset, 0.0);
 
@@ -118,9 +127,7 @@ public class CandleHelmet extends ArmorItem {
                 .add(up.scale(WICK_UP_PX * pxToBlocks));
     }
 
-    private boolean isEntityInRain(LivingEntity entity, Level level) {
-        if (!(entity instanceof Player)) return false;
-
+    private static boolean isEntityInRain(LivingEntity entity, Level level) {
         BlockPos entityPos = entity.blockPosition();
         Biome biome = level.getBiome(entityPos).value();
 
@@ -131,20 +138,20 @@ public class CandleHelmet extends ArmorItem {
                 && level.isRainingAt(entityPos);
     }
 
-    private boolean isCandleLit(ItemStack stack) {
+    private static boolean isCandleLit(ItemStack stack) {
         // If no LIGHT component exists, default to lit (true)
         return stack.getOrDefault(ModDataComponents.LIGHT.get(), true);
     }
 
-    private void extinguishCandle(ItemStack stack) {
+    private static void extinguishCandle(ItemStack stack) {
         stack.set(ModDataComponents.LIGHT.get(), false);
     }
 
-    private void relightCandle(ItemStack stack) {
+    private static void relightCandle(ItemStack stack) {
         stack.set(ModDataComponents.LIGHT.get(), true);
     }
 
-    private void playExtinguishSound(Level level, LivingEntity entity) {
+    private static void playExtinguishSound(Level level, LivingEntity entity) {
         if (level.isClientSide) return; // Only play on server side
 
         // Play fire extinguish sound
@@ -174,7 +181,7 @@ public class CandleHelmet extends ArmorItem {
         }
     }
 
-    private void playRelightSound(Level level, LivingEntity entity) {
+    private static void playRelightSound(Level level, LivingEntity entity) {
         if (level.isClientSide) return; // Only play on server side
 
         // Play flint and steel sound for relighting

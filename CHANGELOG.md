@@ -49,6 +49,12 @@ Work In Progress section is started.
 - Lifts can be placed without tracks: on the floor, or against a single lift track (the lift goes on the side the track faces). While holding a lift, its spot and track spots are outlined. While holding a lift or a lift track, placed lifts outline their missing track spots (green: track in place, yellow: track missing or facing the wrong way). A lift starts running as soon as all its tracks are in.
 - A lift that runs off the end of its tracks, or loses them, falls and tumbles like any other loose structure.
 
+**Changed:**
+- The mining helmet works like a flashlight. A soft, faint square beam of light shines out of its lamp and follows your head. You see it in third person and on other players and mobs wearing one, but not your own in first person. It stops at the block it hits. With LambDynamicLights, it also lights up a square pool where it points and a beam of light along the way, up to 20 blocks away. All of its light comes from LambDynamicLights; it never places light blocks. The helmet's own glow around you is lower (8, was 15) so the beam stands out. New client options: `miningHelmetBeam`, `miningHelmetBeamOpacity`, `miningHelmetSpotlight` and `miningHelmetSpotlightRange`.
+
+**Fixed:**
+- Mobs and armor stands wearing a candle helmet showed no flame. Now the flame shows on them too, and goes out in water and rain like it does for players.
+
 **Development:**
 - Camera Overhaul (with Cloth Config, which it needs) now loads in dev runs (`runClient`), so tremor camera shake can be tested without installing it by hand. It isn't bundled in the mod jar and stays an optional dependency.
 - Supplementaries (with Moonlight Lib, which it needs) now loads in dev runs (`runClient`), so features like tying boulders to ropes can be tested alongside it. It isn't bundled in the mod jar and stays an optional dependency.

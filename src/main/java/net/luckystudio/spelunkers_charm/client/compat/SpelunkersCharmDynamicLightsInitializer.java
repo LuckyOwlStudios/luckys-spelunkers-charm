@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * LambDynamicLights support, loaded by LambDynamicLights itself through the entrypoint in neoforge.mods.toml.
- * Minecarts with a lantern hung on them glow as a smooth dynamic light.
+ * Minecarts with a lantern hung on them glow as a smooth dynamic light, and the mining helmet casts a spotlight.
  */
 public class SpelunkersCharmDynamicLightsInitializer implements DynamicLightsInitializer {
 
@@ -27,6 +27,8 @@ public class SpelunkersCharmDynamicLightsInitializer implements DynamicLightsIni
                 registerContext.register(type, CartLanternLuminance.INSTANCE);
             }
         });
+        // The mining helmet casts a spotlight where it points.
+        MiningHelmetSpotlights.enable(context.dynamicLightBehaviorManager());
     }
 
     @Override
