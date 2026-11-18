@@ -18,6 +18,7 @@ Work In Progress section is started.
 
 **Added:**
 - Create and Supplementaries are now listed as optional dependencies. Create adds zinc boulders; Supplementaries lets you tie a boulder to a rope and suspend it in the air, just like a chain. Other rope blocks can be added with the `spelunkers_charm:boulder_ropes` block tag.
+- Miners: some zombies and skeletons that spawn deep underground (below Y 40, out of the sky) now wear a Mining Helmet or Candle Helmet and carry a stone or iron pickaxe. Skeletons holding a pickaxe fight up close instead of shooting. They can drop their helmet or pickaxe, usually worn. Which mobs can become miners is set by the `spelunkers_charm:can_spawn_as_miner` entity type tag.
 - Tremors shake your camera when [Camera Overhaul](https://modrinth.com/mod/cameraoverhaul) is installed. The shake builds and fades with the tremor, is stronger for bigger tremors and weaker the farther away you are. Camera Overhaul is optional. It can be turned off or scaled with `tremorCameraShake` and `tremorCameraShakeStrength` in the client config.
 
 **Development:**
