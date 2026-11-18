@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:arrow"
+    },
+    "N": {
+      "item": "spelunkers_charm:powered_lift_track"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "T": {
+      "item": "minecraft:repeater"
+    }
+  },
+  "pattern": [
+    " R ",
+    "ANT",
+    " R "
+  ],
+  "result": {
+    "count": 1,
+    "id": "spelunkers_charm:directional_lift_track"
+  }
+}

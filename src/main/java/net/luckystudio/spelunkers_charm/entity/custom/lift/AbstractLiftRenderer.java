@@ -99,6 +99,24 @@ public abstract class AbstractLiftRenderer<T extends AbstractLift> extends Entit
         return SpelunkersCharm.id(PATH + getTypeName(liftType) + woodTexture);
     }
 
+    /** Wood texture for a lift size, shared with the Sable lift's block entity renderer. */
+    public static ResourceLocation woodTexture(AbstractLift.Type type, WoodType wood) {
+        return SpelunkersCharm.id(PATH + typeFolder(type) + WOOD_TYPE.get(wood));
+    }
+
+    /** Metal texture for a lift size, shared with the Sable lift's block entity renderer. */
+    public static ResourceLocation mineralTexture(AbstractLift.Type type, MineralType mineral) {
+        return SpelunkersCharm.id(PATH + typeFolder(type) + MINERAL_TYPE.get(mineral));
+    }
+
+    private static String typeFolder(AbstractLift.Type type) {
+        return switch (type) {
+            case SMALL -> "small/";
+            case MEDIUM -> "medium/";
+            case LARGE -> "large/";
+        };
+    }
+
     public ResourceLocation getMineralLocation(AbstractLift entity) {
         MineralType mineralType = entity.getMineralType();
         String mineralTexture = MINERAL_TYPE.get(mineralType);

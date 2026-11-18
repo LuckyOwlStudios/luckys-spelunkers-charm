@@ -29,18 +29,9 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.WEB_VEIN.get())
         ;
 
-        // Mod Tags
-        // Used for the worldgen stone overrides
         tag(ModBlockTags.OVERWORLD_REPLACEABLE)
                 .add(Blocks.STONE)
-//                .add(Blocks.COAL_ORE)
-//                .add(Blocks.IRON_ORE)
-//                .add(Blocks.COPPER_ORE)
-//                .add(Blocks.GOLD_ORE)
-//                .add(Blocks.REDSTONE_ORE)
-//                .add(Blocks.EMERALD_ORE)
-//                .add(Blocks.LAPIS_ORE)
-//                .add(Blocks.DIAMOND_ORE)
+
         ;
 
         tag(ModBlockTags.DUNESTONE_REPLACEABLE)
@@ -65,7 +56,6 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(Blocks.GRANITE)
         ;
 
-        // TOOLS
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(ModBlocks.DUNESTONE.get())
                 .add(ModBlocks.DUNESTONE_STAIRS.get())
@@ -109,7 +99,6 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.COBBLED_WILDSTONE_SLAB.get())
                 .add(ModBlocks.COBBLED_WILDSTONE_WALL.get())
 
-                // Amethyst
                 .add(ModBlocks.AMETHYST_BRICKS.get())
                 .add(ModBlocks.AMETHYST_BRICK_STAIRS.get())
                 .add(ModBlocks.AMETHYST_BRICK_SLAB.get())
@@ -142,16 +131,15 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.WILDSTONE_LAPIS_ORE.get())
                 .add(ModBlocks.WILDSTONE_DIAMOND_ORE.get())
 
-                // Boulders
                 .add(boulders())
 
-                // Geysers
                 .add(ModBlocks.DEEPSLATE_GEYSER.get())
                 .add(ModBlocks.BASALT_GEYSER.get())
 
-                // Redstone
                 .add(ModBlocks.BLASTER.get())
-                .add(ModBlocks.WOODEN_LIFT_TRACK.get())
+                .add(ModBlocks.BASIC_LIFT_TRACK.get())
+                .add(ModBlocks.DETECTOR_LIFT_TRACK.get())
+                .add(ModBlocks.DIRECTIONAL_LIFT_TRACK.get())
                 .add(ModBlocks.POWERED_LIFT_TRACK.get())
                 .add(ModBlocks.EJECTOR_RAIL.get())
                 .add(ModBlocks.DIRECTIONAL_RAIL.get())
@@ -159,8 +147,12 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.CROSSING_RAIL.get())
         ;
         tag(BlockTags.MINEABLE_WITH_AXE)
-                // Redstone
-                .add(ModBlocks.WOODEN_LIFT_TRACK.get())
+                .add(ModBlocks.LIFT_CONTROLLER.get())
+                .add(ModBlocks.LIFT_PART.get())
+
+                .add(ModBlocks.BASIC_LIFT_TRACK.get())
+                .add(ModBlocks.DETECTOR_LIFT_TRACK.get())
+                .add(ModBlocks.DIRECTIONAL_LIFT_TRACK.get())
                 .add(ModBlocks.POWERED_LIFT_TRACK.get())
                 .add(ModBlocks.WOODEN_RAIL.get())
         ;
@@ -186,6 +178,10 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         ;
 
         tag(BlockTags.NEEDS_IRON_TOOL)
+                .add(ModBlocks.BASIC_LIFT_TRACK.get())
+                .add(ModBlocks.POWERED_LIFT_TRACK.get())
+                .add(ModBlocks.DIRECTIONAL_LIFT_TRACK.get())
+                .add(ModBlocks.DETECTOR_LIFT_TRACK.get())
                 .add(ModBlocks.DUNESTONE_GOLD_ORE.get())
                 .add(ModBlocks.WILDSTONE_GOLD_ORE.get())
                 .add(ModBlocks.PERMAFROST_GOLD_ORE.get())
@@ -211,14 +207,12 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.SPIDER_EGG.get())
         ;
 
-        // WORLDGEN
         tag(BlockTags.BASE_STONE_OVERWORLD)
                 .add(ModBlocks.PERMAFROST.get())
                 .add(ModBlocks.DUNESTONE.get())
                 .add(ModBlocks.WILDSTONE.get())
         ;
 
-        // This is so all ores still generate over the new stones.
         tag(BlockTags.STONE_ORE_REPLACEABLES)
                 .add(ModBlocks.PERMAFROST.get())
                 .add(ModBlocks.DUNESTONE.get())
@@ -280,13 +274,10 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.WILDSTONE_DIAMOND_ORE.get())
         ;
 
-// ENTITIES
-
         tag(BlockTags.GOATS_SPAWNABLE_ON)
                 .add(ModBlocks.PERMAFROST.get())
         ;
 
-// BLOCKS
         tag(BlockTags.WALLS)
                 .add(ModBlocks.DUNESTONE_WALL.get())
                 .add(ModBlocks.PERMAFROST_WALL.get())

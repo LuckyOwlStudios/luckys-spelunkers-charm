@@ -1,6 +1,5 @@
 package net.luckystudio.spelunkers_charm.entity.custom.lift;
 
-import net.luckystudio.spelunkers_charm.init.ModBlocks;
 import net.luckystudio.spelunkers_charm.datagen.itemTags.ModItemTags;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.large.LargeLift;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.medium.MediumLift;
@@ -10,13 +9,11 @@ import net.luckystudio.spelunkers_charm.entity.util.MineralType;
 import net.luckystudio.spelunkers_charm.entity.util.MovementType;
 import net.luckystudio.spelunkers_charm.entity.util.WoodType;
 import net.luckystudio.spelunkers_charm.init.ModItems;
-import net.luckystudio.spelunkers_charm.init.ModParticleTypes;
 import net.luckystudio.spelunkers_charm.init.ModSoundEvents;
 import net.minecraft.BlockUtil;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -30,66 +27,82 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.vehicle.*;
+import net.minecraft.world.entity.vehicle.VehicleEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeverBlock;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
-import javax.annotation.Nullable;
+
 import java.util.List;
 
-// Heavily copied from the Boat class in Minecraft, with modifications for a small lift entity.
-public abstract class AbstractLift extends VehicleEntity {
+import javax.annotation.Nullable;
 
-    private static final EntityDataAccessor<Integer> CONTROL_TYPE = SynchedEntityData.defineId(AbstractLift.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> MOVEMENT_DIRECTION = SynchedEntityData.defineId(AbstractLift.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> WOOD_TYPE = SynchedEntityData.defineId(AbstractLift.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> MINERAL_TYPE = SynchedEntityData.defineId(AbstractLift.class, EntityDataSerializers.INT);
+/** Server-controlled rack lift with a solid, freely walkable deck. */
+public abstract class AbstractLift extends VehicleEntity {
+    private static final EntityDataAccessor<Integer> CONTROL_TYPE =
+            SynchedEntityData.defineId(AbstractLift.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> MOVEMENT_DIRECTION =
+            SynchedEntityData.defineId(AbstractLift.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> WOOD_TYPE =
+            SynchedEntityData.defineId(AbstractLift.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> MINERAL_TYPE =
+            SynchedEntityData.defineId(AbstractLift.class, EntityDataSerializers.INT);
+    private static final double SPEED = 0.15;
+    private static final double EPSILON = 1.0E-6;
     public AnimationState upAnimationState = new AnimationState();
     public AnimationState downAnimationState = new AnimationState();
-    private boolean wasOnGround = false;
-    private boolean wasOnCeiling = false;
-    private float currentLeverAngle = 0.0F;
-    private final float movementSpeed = 0.15F; // Default movement speed
-    private final AbstractLift.Type type;
+    private final Type type;
+    private float currentLeverAngle;
+    private MovementType preferredDirection = MovementType.UP;
+    private MovementType pausedForPower = MovementType.STATIONARY;
+    private int manualOverrideStationY = Integer.MIN_VALUE;
+    private boolean plateWasOccupied;
+    private int interpolationSteps;
+    private double targetX, targetY, targetZ;
+    private float targetYaw, targetPitch;
+    private final LiftGuideSystem guides = new LiftGuideSystem(this);
 
-    public AbstractLift(EntityType<?> entityType, Level level, AbstractLift.Type type) {
+    public AbstractLift(EntityType<?> entityType, Level level, Type type) {
         super(entityType, level);
         this.type = type;
+        this.blocksBuilding = true;
     }
 
-    protected AbstractLift(EntityType<?> entityType, Level level, AbstractLift.Type type, double x, double y, double z) {
+    protected AbstractLift(
+            EntityType<?> entityType, Level level, Type type, double x, double y, double z) {
         this(entityType, level, type);
-        this.setPos(x, y, z);
-        this.xo = x;
-        this.yo = y;
-        this.zo = z;
+        setPos(x, y, z);
+        xo = x;
+        yo = y;
+        zo = z;
     }
 
-    public static AbstractLift createLift (
+    public static AbstractLift createLift(
             ServerLevel level,
             double x,
             double y,
             double z,
             Type type,
             ItemStack stack,
-            @Nullable Player player
-    ) {
-        AbstractLift abstractLift = (switch (type) {
-            case SMALL -> new SmallLift(level, x, y, z);
-            case MEDIUM -> new MediumLift(level, x, y, z);
-            case LARGE -> new LargeLift(level, x, y, z);
-        });
-        EntityType.<AbstractLift>createDefaultStackConfig(level, stack, player).accept(abstractLift);
-        return abstractLift;
+            @Nullable Player player) {
+        AbstractLift lift =
+                switch (type) {
+                    case SMALL -> new SmallLift(level, x, y, z);
+                    case MEDIUM -> new MediumLift(level, x, y, z);
+                    case LARGE -> new LargeLift(level, x, y, z);
+                };
+        EntityType.createDefaultStackConfig(level, stack, player).accept(lift);
+        return lift;
     }
 
     @Override
@@ -98,236 +111,380 @@ public abstract class AbstractLift extends VehicleEntity {
         builder.define(CONTROL_TYPE, ControlType.AUTOMATIC.ordinal());
         builder.define(MOVEMENT_DIRECTION, MovementType.STATIONARY.ordinal());
         builder.define(WOOD_TYPE, WoodType.SPRUCE.ordinal());
-        builder.define(MINERAL_TYPE, MineralType.IRON.ordinal()); // Default to no mineral type
+        builder.define(MINERAL_TYPE, MineralType.IRON.ordinal());
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag compound) {
-        compound.putInt("controlType", this.entityData.get(CONTROL_TYPE));
-        compound.putString("movementDirection", this.getMovementType().getSerializedName());
-        compound.putString("woodType", this.getWoodType().getSerializedName());
-        compound.putString("mineralType", this.getMineralType().getSerializedName());
+    protected void addAdditionalSaveData(CompoundTag tag) {
+        tag.putString("controlType", getControlType().getSerializedName());
+        tag.putString("movementDirection", getMovementType().getSerializedName());
+        tag.putString("woodType", getWoodType().getSerializedName());
+        tag.putString("mineralType", getMineralType().getSerializedName());
+        tag.putString("liftPreferredDirection", preferredDirection.getSerializedName());
+        tag.putString("liftPausedForPower", pausedForPower.getSerializedName());
+        guides.save(tag);
     }
 
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
     @Override
-    protected void readAdditionalSaveData(CompoundTag compound) {
-        if (compound.contains("controlType", 8)) {
-            this.setControlType(ControlType.byName(compound.getString("controlType")));
+    protected void readAdditionalSaveData(CompoundTag tag) {
+        // 5.0.6 wrote an integer but attempted to read a string. Accept both.
+        if (tag.contains("controlType", 8))
+            setControlType(ControlType.byName(tag.getString("controlType")));
+        else if (tag.contains("controlType", 3))
+            setControlType(ControlType.byId(tag.getInt("controlType")));
+        if (tag.contains("movementDirection", 8))
+            setMovementType(MovementType.byName(tag.getString("movementDirection")));
+        if (tag.contains("woodType", 8)) setWoodType(WoodType.byName(tag.getString("woodType")));
+        if (tag.contains("mineralType", 8))
+            setMineralType(MineralType.byName(tag.getString("mineralType")));
+        if (tag.contains("liftPreferredDirection", 8)) {
+            MovementType saved = MovementType.byName(tag.getString("liftPreferredDirection"));
+            if (saved == MovementType.UP || saved == MovementType.DOWN) preferredDirection = saved;
         }
-        if (compound.contains("movementDirection", 8)) {
-            this.setMovementType(MovementType.byName(compound.getString("movementDirection")));
-        }
-        if (compound.contains("woodType", 8)) {
-            this.setWoodType(WoodType.byName(compound.getString("woodType")));
-        }
-        if (compound.contains("mineralType", 8)) {
-            this.setMineralType(MineralType.byName(compound.getString("mineralType")));
-        }
+        if (tag.contains("liftPausedForPower", 8))
+            pausedForPower = MovementType.byName(tag.getString("liftPausedForPower"));
+        guides.load(tag);
     }
 
     public ControlType getControlType() {
-        return ControlType.byId(this.entityData.get(MOVEMENT_DIRECTION));
+        return ControlType.byId(entityData.get(CONTROL_TYPE));
     }
 
-    public void setControlType(ControlType direction) {
-        this.entityData.set(CONTROL_TYPE, direction.ordinal());
+    public void setControlType(ControlType control) {
+        entityData.set(CONTROL_TYPE, control.ordinal());
     }
 
     public MovementType getMovementType() {
-        return MovementType.byId(this.entityData.get(MOVEMENT_DIRECTION));
+        return MovementType.byId(entityData.get(MOVEMENT_DIRECTION));
     }
 
-    public void setMovementType(MovementType direction) {
-        this.entityData.set(MOVEMENT_DIRECTION, direction.ordinal());
+    public void setMovementType(MovementType movement) {
+        entityData.set(MOVEMENT_DIRECTION, movement.ordinal());
     }
 
     public WoodType getWoodType() {
-        return WoodType.byId(this.entityData.get(WOOD_TYPE));
+        return WoodType.byId(entityData.get(WOOD_TYPE));
     }
 
-    public void setWoodType(WoodType variant) {
-        this.entityData.set(WOOD_TYPE, variant.ordinal());
+    public void setWoodType(WoodType wood) {
+        entityData.set(WOOD_TYPE, wood.ordinal());
     }
 
     public MineralType getMineralType() {
-        return MineralType.byId(this.entityData.get(MINERAL_TYPE));
+        return MineralType.byId(entityData.get(MINERAL_TYPE));
     }
 
-    public void setMineralType(MineralType variant) {
-        this.entityData.set(MINERAL_TYPE, variant.ordinal());
+    public void setMineralType(MineralType mineral) {
+        entityData.set(MINERAL_TYPE, mineral.ordinal());
     }
 
     @Override
     public void tick() {
         super.tick();
+        AABB oldBounds = getBoundingBox();
+        if (level().isClientSide) {
+            // Only the server simulates rails and commands. Interpolate its
+            // snapshots; carry local feet through precisely the same deck delta.
+            if (interpolationSteps > 0) {
+                double fraction = 1.0 / interpolationSteps;
+                setPos(
+                        Mth.lerp(fraction, getX(), targetX),
+                        Mth.lerp(fraction, getY(), targetY),
+                        Mth.lerp(fraction, getZ(), targetZ));
+                setYRot((float) (getYRot() + Mth.wrapDegrees(targetYaw - getYRot()) * fraction));
+                setXRot((float) Mth.lerp(fraction, getXRot(), targetPitch));
+                --interpolationSteps;
+            }
+            LiftCollision.carry(this, oldBounds, getBoundingBox());
+            setupAnimationStates();
+            double dy = getBoundingBox().minY - oldBounds.minY;
+            LiftClientSounds.update(this, dy);
+            if (Math.abs(dy) > EPSILON
+                    && (getMovementType() == MovementType.UP
+                            || getMovementType() == MovementType.DOWN))
+                LiftClientEffects.spawnGearSparks(this, dy);
+        } else {
+            tickServer(oldBounds);
+            updateStoppedGuideState();
+            updateDetectors(oldBounds, getBoundingBox());
+        }
+        if (getHurtTime() > 0) setHurtTime(getHurtTime() - 1);
+        if (getDamage() > 0) setDamage(Math.max(0, getDamage() - 1));
+    }
 
-        Direction direction = this.getDirection();
-        Vec3 frontPos = new Vec3(this.getX(), this.getY(), this.getZ()).add(0,0.5,0).relative(direction, 3);
-        this.level().addAlwaysVisibleParticle(ParticleTypes.FLAME,
-                frontPos.x,
-                frontPos.y,
-                frontPos.z,
-                0, 0, 0);
-
-        snapHorizontallyToGrid();
-
-        if (this.hasTracks(0)) {
-            MovementType movement = this.getMovementType();
-
-            // If falling while on track, become stationary
+    private void tickServer(AABB oldBounds) {
+        boolean guided = hasValidTracks();
+        MovementType movement = getMovementType();
+        if (guided) {
             if (movement == MovementType.FALLING) {
-                this.setMovementType(MovementType.STATIONARY);
+                stop(false);
                 movement = MovementType.STATIONARY;
             }
-
-            // Snap to vertical grid if stationary
-            if (movement == MovementType.STATIONARY) {
-                snapVerticallyToGrid();
+            if (isAtFloor()) {
+                if (manualOverrideStationY == (int) Math.rint(getY())
+                        && !stationHasInput((int) Math.rint(getY())))
+                    manualOverrideStationY = Integer.MIN_VALUE;
+                MovementType command =
+                        manualOverrideStationY == (int) Math.rint(getY())
+                                ? MovementType.STATIONARY
+                                : stationCommand();
+                if (command == MovementType.UP || command == MovementType.DOWN) {
+                    if (movement != command) {
+                        if (canStart(command)) start(command);
+                        else if (hasTracksAtY(nextRow(command))) pausedForPower = command;
+                    }
+                } else if (command == MovementType.FALLING) {
+                    // Two opposite powered arrows are deliberately a stop.
+                    pausedForPower = MovementType.STATIONARY;
+                    stop(true);
+                }
+                boolean occupied = hasDeckOccupants();
+                if (getControlType() == ControlType.PRESSURE_PLATE
+                        && occupied
+                        && !plateWasOccupied
+                        && getMovementType() == MovementType.STATIONARY)
+                    startAvailableDirection(preferredDirection);
+                plateWasOccupied = occupied;
             }
-
-            // Handle upward movement
-            if (movement == MovementType.UP) {
-                if (this.hasTracks(1) && !this.onCeiling()) {
-                    this.setDeltaMovement(this.getDeltaMovement().x, movementSpeed, this.getDeltaMovement().z);
-                } else {
-                    playStopSound();
-                    this.setMovementType(MovementType.STATIONARY);
+            if (getMovementType() == MovementType.STATIONARY
+                    && (pausedForPower == MovementType.UP || pausedForPower == MovementType.DOWN)
+                    && canStart(pausedForPower)) start(pausedForPower);
+            movement = getMovementType();
+            double requested =
+                    movement == MovementType.UP || movement == MovementType.DOWN
+                            ? plannedMotion(movement)
+                            : 0.0;
+            double limited = LiftCollision.limitMovementForRiders(this, oldBounds, requested);
+            setDeltaMovement(0, limited, 0);
+            move(MoverType.SELF, getDeltaMovement());
+            double actual = getY() - oldBounds.minY;
+            if (manualOverrideStationY != Integer.MIN_VALUE
+                    && Math.abs(getY() - manualOverrideStationY) > EPSILON)
+                manualOverrideStationY = Integer.MIN_VALUE;
+            LiftCollision.carry(this, oldBounds, getBoundingBox());
+            if (movement == MovementType.UP || movement == MovementType.DOWN) {
+                if (Math.abs(actual - requested) > EPSILON || Math.abs(requested) < EPSILON) {
+                    if (Math.abs(requested) < EPSILON
+                            && hasTracksAtY(nextRow(movement))
+                            && !motionRowsPowered(movement)) pausedForPower = movement;
+                    else if (!hasTracksAtY(nextRow(movement)))
+                        preferredDirection = opposite(movement);
+                    stop(true);
+                } else if (isAtFloor() && isStationAtY((int) Math.rint(getY()))) {
+                    preferredDirection = movement;
+                    stop(true);
                 }
             }
-
-            // Handle downward movement
-            if (movement == MovementType.DOWN) {
-                if (this.hasTracks(-1) && !this.onGround()) {
-                    this.setDeltaMovement(this.getDeltaMovement().x, -movementSpeed, this.getDeltaMovement().z);
-                } else {
-                    playStopSound();
-                    this.setMovementType(MovementType.STATIONARY);
-                }
+        } else {
+            pausedForPower = MovementType.STATIONARY;
+            setMovementType(onGround() ? MovementType.STATIONARY : MovementType.FALLING);
+            setDeltaMovement(0, Math.max(-1.5, getDeltaMovement().y - getGravity()), 0);
+            double limited =
+                    LiftCollision.limitMovementForRiders(this, oldBounds, getDeltaMovement().y);
+            setDeltaMovement(0, limited, 0);
+            move(MoverType.SELF, getDeltaMovement());
+            LiftCollision.carry(this, oldBounds, getBoundingBox());
+            if (onGround() || Math.abs(limited) < EPSILON) {
+                setDeltaMovement(Vec3.ZERO);
+                setMovementType(MovementType.STATIONARY);
             }
-
-        } else {
-            if (this.onGround()) {
-                this.setMovementType(MovementType.FALLING);
-            } else {
-                this.setMovementType(MovementType.STATIONARY);
-            }
-            // No track, fall
-            this.applyGravity();
-        }
-
-        // Force entity to move based on current delta
-        this.move(MoverType.SELF, this.getDeltaMovement());
-
-        // Landing arising detection
-        boolean currentlyOnCeiling = this.onCeiling();
-        if (!wasOnCeiling && currentlyOnCeiling) {
-            this.onArise();
-        }
-        wasOnCeiling = currentlyOnCeiling;
-
-        // Landing detection
-        boolean currentlyOnGround = this.onGround();
-        if (!wasOnGround && currentlyOnGround) {
-            this.onLanding();
-        }
-        wasOnGround = currentlyOnGround;
-
-        // Damage handling
-        if (this.getHurtTime() > 0) {
-            this.setHurtTime(this.getHurtTime() - 1);
-        }
-        if (this.getDamage() > 0.0F) {
-            this.setDamage(this.getDamage() - 1.0F);
-        }
-
-        // Update animation states
-        if (this.level().isClientSide()) {
-            this.setupAnimationStates();
-        }
-        this.upAnimationState.start(this.tickCount);
-    }
-
-    private void setupAnimationStates() {
-        // Up Animation State
-        if (this.getMovementType() == MovementType.UP) {
-            this.upAnimationState.start(this.tickCount);
-        } else {
-            this.upAnimationState.stop();
-        }
-        // Down Animation State
-        if (this.getMovementType() == MovementType.DOWN) {
-            this.downAnimationState.startIfStopped(this.tickCount);
-        } else {
-            this.downAnimationState.stop();
-        }
-    }
-    
-    private void playStartSound() {
-        this.level().playSound(
-                this,
-                this.blockPosition(),
-                ModSoundEvents.LIFT_START.get(),
-                SoundSource.BLOCKS,
-                getLevelBasedOnType(),
-                getPitchBasedOnType()
-        );
-    }
-
-    private void playStopSound() {
-        this.level().playSound(
-                this,
-                this.blockPosition(),
-                ModSoundEvents.LIFT_STOP.get(),
-                SoundSource.BLOCKS,
-                getLevelBasedOnType(),
-                getPitchBasedOnType()
-        );
-    }
-
-    public boolean onCeiling() {
-        AABB aabb = this.getBoundingBox();
-        AABB ceilingCheckBox = new AABB(aabb.minX, aabb.maxY, aabb.minZ, aabb.maxX, aabb.maxY + 1.0E-6, aabb.maxZ);
-        return this.level().findSupportingBlock(this, ceilingCheckBox).isPresent();
-    }
-
-    // Snap vertically when MovementType is STATIONARY and has tracks
-    private void snapVerticallyToGrid() {
-        double y = this.getBlockY();
-        this.setPos(this.getX(), y, this.getZ());
-        this.setDeltaMovement(this.getDeltaMovement().x, 0, this.getDeltaMovement().z);
-    }
-
-    // Always snap horizontally to the nearest grid point
-    private void snapHorizontallyToGrid() {
-        double x = this.getX();
-        double z = this.getZ();
-
-        double targetX = Math.floor(x) + 0.5;
-        double targetZ = Math.floor(z) + 0.5;
-
-        double dx = targetX - x;
-        double dz = targetZ - z;
-
-        if (Math.abs(dx) > 0.01 || Math.abs(dz) > 0.01) {
-            this.setPos(targetX, this.getY(), targetZ);
-            this.setDeltaMovement(0, this.getDeltaMovement().y, 0);
         }
     }
 
-    protected void onArise() {
-        ModParticleTypes.spawnSquareBorderParticles(this.level(), ParticleTypes.DUST_PLUME, this.blockPosition().above(), this.getBbWidth() / 2, (int) (10 * this.getBbWidth()), 0.1F);
+    private double plannedMotion(MovementType movement) {
+        double y = getY();
+        int lower = Mth.floor(y + EPSILON);
+        int upper = (int) Math.ceil(y - EPSILON);
+        if (!hasTracksAtY(lower) || !hasTracksAtY(upper)) return 0;
+        int next = nextRow(movement);
+        if (!hasTracksAtY(next)) return 0;
+        if (!motionRowsPowered(movement)) return 0;
+        double distance = next - y;
+        return Math.copySign(Math.min(SPEED, Math.abs(distance)), distance);
     }
 
-    protected void onLanding() {
-        ModParticleTypes.spawnSquareBorderParticles(this.level(), ParticleTypes.DUST_PLUME, this.blockPosition(), this.getBbWidth() / 2, (int) (10 * this.getBbWidth()), 0.1F);
+    private int nextRow(MovementType movement) {
+        return movement == MovementType.UP
+                ? Mth.floor(getY() + EPSILON) + 1
+                : (int) Math.ceil(getY() - EPSILON) - 1;
+    }
+
+    private boolean motionRowsPowered(MovementType movement) {
+        if (movement == MovementType.DOWN) return true;
+        return rowCanDrive(Mth.floor(getY() + EPSILON))
+                && rowCanDrive((int) Math.ceil(getY() - EPSILON))
+                && rowCanDrive(nextRow(movement));
+    }
+
+    private boolean rowCanDrive(int y) {
+        return guides.rowCanDrive(y);
+    }
+
+    private boolean canStart(MovementType movement) {
+        if (!hasValidTracks()) return false;
+        double requested = plannedMotion(movement);
+        if (Math.abs(requested) < EPSILON) return false;
+        double allowed =
+                Entity.collideBoundingBox(
+                                this,
+                                new Vec3(0, requested, 0),
+                                getBoundingBox(),
+                                level(),
+                                List.of())
+                        .y;
+        return Math.abs(allowed) > EPSILON
+                && Math.abs(LiftCollision.limitMovementForRiders(this, getBoundingBox(), allowed))
+                        > EPSILON;
+    }
+
+    private void start(MovementType direction) {
+        pausedForPower = MovementType.STATIONARY;
+        preferredDirection = direction;
+        setMovementType(direction);
+        playStartSound();
+    }
+
+    private boolean startAvailableDirection(MovementType first) {
+        if (canStart(first)) {
+            start(first);
+            return true;
+        }
+        MovementType other = opposite(first);
+        if (canStart(other)) {
+            start(other);
+            return true;
+        }
+        return false;
+    }
+
+    private void stop(boolean sound) {
+        MovementType old = getMovementType();
+        if (old == MovementType.UP || old == MovementType.DOWN) {
+            if (sound) playStopSound();
+        }
+        setMovementType(MovementType.STATIONARY);
+        setDeltaMovement(Vec3.ZERO);
+    }
+
+    private static MovementType opposite(MovementType movement) {
+        return movement == MovementType.DOWN ? MovementType.UP : MovementType.DOWN;
+    }
+
+    private boolean isAtFloor() {
+        return Math.abs(getY() - Math.rint(getY())) < EPSILON;
+    }
+
+    public final List<BlockPos> getGuidePositions() {
+        return trackPositions();
+    }
+
+    protected abstract List<BlockPos> trackPositions();
+
+    public final boolean hasValidTracks() {
+        return hasTracksAtY(Mth.floor(getY() + EPSILON))
+                || hasTracksAtY((int) Math.ceil(getY() - EPSILON));
+    }
+
+    protected boolean hasTracks(int yOffset) {
+        return hasTracksAtY(getBlockY() + yOffset);
+    }
+
+    private boolean hasTracksAtY(int y) {
+        return guides.hasTracksAtY(y);
+    }
+
+    public final boolean isStationAtY(int y) {
+        return guides.isStationAtY(y);
+    }
+
+    /** One directional rack marks the station; only powered arrows dispatch it. */
+    private boolean stationHasInput(int y) {
+        return guides.stationHasInput(y);
+    }
+
+    private MovementType stationCommand() {
+        return guides.stationCommand();
+    }
+
+    private boolean hasDeckOccupants() {
+        AABB box = getBoundingBox();
+        AABB top =
+                new AABB(box.minX, box.maxY - 0.05, box.minZ, box.maxX, box.maxY + 0.15, box.maxZ);
+        return !level().getEntities(
+                        this,
+                        top,
+                        e ->
+                                !(e instanceof AbstractLift)
+                                        && !e.isSpectator()
+                                        && !e.noPhysics
+                                        && !e.isPassenger())
+                .isEmpty();
+    }
+
+    private void updateStoppedGuideState() {
+        guides.updateStoppedGuideState();
+    }
+
+    private void updateDetectors(AABB before, AABB after) {
+        guides.updateDetectors(before, after);
     }
 
     @Override
-    protected @NotNull Item getDropItem() {
-        return switch (this.type) {
+    public void remove(RemovalReason reason) {
+        if (!level().isClientSide
+                && reason != RemovalReason.UNLOADED_TO_CHUNK
+                && reason != RemovalReason.UNLOADED_WITH_PLAYER) {
+            guides.clearStoppedGuideState();
+        }
+        super.remove(reason);
+    }
+
+    private void setupAnimationStates() {
+        upAnimationState.animateWhen(getMovementType() == MovementType.UP, tickCount);
+        downAnimationState.animateWhen(getMovementType() == MovementType.DOWN, tickCount);
+    }
+
+    @Override
+    public void lerpTo(double x, double y, double z, float yaw, float pitch, int steps) {
+        targetX = x;
+        targetY = y;
+        targetZ = z;
+        targetYaw = yaw;
+        targetPitch = pitch;
+        interpolationSteps = Math.max(1, steps);
+    }
+
+    private void playStartSound() {
+        level().playSound(
+                        null,
+                        blockPosition(),
+                        ModSoundEvents.LIFT_START.get(),
+                        SoundSource.BLOCKS,
+                        getLevelBasedOnType(),
+                        getPitchBasedOnType());
+    }
+
+    private void playStopSound() {
+        level().playSound(
+                        null,
+                        blockPosition(),
+                        ModSoundEvents.LIFT_STOP.get(),
+                        SoundSource.BLOCKS,
+                        getLevelBasedOnType(),
+                        getPitchBasedOnType());
+    }
+
+    public boolean onCeiling() {
+        return !level().noCollision(this, getBoundingBox().move(0, EPSILON * 2, 0));
+    }
+
+    protected void onArise() {}
+
+    protected void onLanding() {}
+
+    @Override
+    protected Item getDropItem() {
+        return switch (type) {
             case SMALL -> ModItems.SMALL_LIFT.get();
             case MEDIUM -> ModItems.MEDIUM_LIFT.get();
             case LARGE -> ModItems.LARGE_LIFT.get();
@@ -335,16 +492,16 @@ public abstract class AbstractLift extends VehicleEntity {
     }
 
     protected float getLevelBasedOnType() {
-        return switch (this.type) {
-            case SMALL -> 1.0F;
+        return switch (type) {
+            case SMALL -> 1;
             case MEDIUM -> 1.25F;
             case LARGE -> 1.5F;
         };
     }
 
     protected float getPitchBasedOnType() {
-        return switch (this.type) {
-            case SMALL -> 1.0F;
+        return switch (type) {
+            case SMALL -> 1;
             case MEDIUM -> 0.75F;
             case LARGE -> 0.25F;
         };
@@ -352,82 +509,70 @@ public abstract class AbstractLift extends VehicleEntity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (!source.isDirect()) return false;
-        return super.hurt(source, amount);
+        return source.isDirect() && super.hurt(source, amount);
     }
 
     @Override
-    public @NotNull InteractionResult interact(Player player, @NotNull InteractionHand hand) {
-        ItemStack itemStack = player.getItemInHand(hand);
-
-        // Change the wood type if the player is holding a plank
-        if (itemStack.is(ItemTags.PLANKS)) {
-            WoodType woodType = WoodType.getWoodType(itemStack);
-            if (woodType == null) return super.interact(player, hand);
-            setWoodType(woodType);
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+    public InteractionResult interact(Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (level().isClientSide) return InteractionResult.SUCCESS;
+        if (stack.is(ItemTags.PLANKS)) {
+            WoodType wood = WoodType.getWoodType(stack);
+            if (wood != null) {
+                setWoodType(wood);
+                return InteractionResult.CONSUME;
+            }
         }
-
-        // Change the mineral type if the player is holding a mineral item
-        if (itemStack.is(ModItemTags.MINERALS)) {
-            MineralType mineralType = MineralType.getMineralType(itemStack);
-            if (mineralType == null) return super.interact(player, hand);
-            setMineralType(mineralType);
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        if (stack.is(ModItemTags.MINERALS)) {
+            MineralType mineral = MineralType.getMineralType(stack);
+            if (mineral != null) {
+                setMineralType(mineral);
+                return InteractionResult.CONSUME;
+            }
         }
-
-        // Change the control type if the player is holding a lever or pressure plate
-        if (itemStack.getItem() instanceof BlockItem blockItem) {
-            Block block = blockItem.getBlock();
-            if (block instanceof LeverBlock) {
+        if (stack.getItem() instanceof BlockItem blockItem) {
+            if (blockItem.getBlock() instanceof LeverBlock) {
                 setControlType(ControlType.LEVER);
-                return InteractionResult.sidedSuccess(this.level().isClientSide);
+                return InteractionResult.CONSUME;
             }
-            if (block instanceof PressurePlateBlock) {
+            if (blockItem.getBlock() instanceof PressurePlateBlock) {
                 setControlType(ControlType.PRESSURE_PLATE);
-                return InteractionResult.sidedSuccess(this.level().isClientSide);
+                return InteractionResult.CONSUME;
             }
         }
-
-        // If the control type is LEVER, toggle the movement direction, as its the only control type that allows interaction
-        if (getControlType() == ControlType.AUTOMATIC) {
-            return toggleMovementDirection();
+        // A player's command takes precedence over the arrow on this floor.
+        // Once the deck leaves, the next station can control it normally.
+        manualOverrideStationY = isAtFloor() ? (int) Math.rint(getY()) : Integer.MIN_VALUE;
+        pausedForPower = MovementType.STATIONARY;
+        if (player.isSecondaryUseActive()) {
+            pausedForPower = MovementType.STATIONARY;
+            MovementType requested =
+                    opposite(
+                            getMovementType() == MovementType.UP
+                                            || getMovementType() == MovementType.DOWN
+                                    ? getMovementType()
+                                    : preferredDirection);
+            stop(true);
+            if (canStart(requested)) start(requested);
+        } else if (getMovementType() == MovementType.UP || getMovementType() == MovementType.DOWN) {
+            pausedForPower = MovementType.STATIONARY;
+            stop(true);
+        } else if (!startAvailableDirection(preferredDirection)) {
+            player.displayClientMessage(
+                    Component.translatable(
+                            hasValidTracks()
+                                    ? "message.spelunkers_charm.lift_cannot_move"
+                                    : "message.spelunkers_charm.lift_tracks"),
+                    true);
         }
-        return super.interact(player, hand);
-    }
-
-    private InteractionResult toggleMovementDirection() {
-        if (this.getMovementType() == MovementType.STATIONARY && hasTracks(0)) {
-            if (this.hasTracks(1) && !this.onCeiling()) {
-                playStartSound();
-                this.level().playSound(this, this.blockPosition(), SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, getLevelBasedOnType(), getPitchBasedOnType());
-                this.setMovementType(MovementType.UP);
-                return InteractionResult.sidedSuccess(this.level().isClientSide);
-            }
-            else if (this.hasTracks(-1) && !this.onGround()) {
-                playStartSound();
-                this.level().playSound(this, this.blockPosition(), SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, getLevelBasedOnType(), getPitchBasedOnType());
-                this.setMovementType(MovementType.DOWN);
-                return InteractionResult.sidedSuccess(this.level().isClientSide);
-            }
-            else return InteractionResult.sidedSuccess(this.level().isClientSide); // No valid tracks to move on
-        } else {
-            playStopSound();
-            this.level().playSound(this, this.blockPosition(), SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, getLevelBasedOnType(), getPitchBasedOnType());
-            this.setMovementType(MovementType.STATIONARY);
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
-        }
-    }
-
-    protected abstract List<BlockPos> trackPositions();
-
-    protected boolean hasTracks(int yOffset) {
-        for (BlockPos pos : this.trackPositions()) {
-            if (this.level().getBlockState(pos.offset(0, yOffset, 0)).getBlock() != ModBlocks.POWERED_LIFT_TRACK.get()) {
-                return false; // If any track position is air, we don't have tracks
-            }
-        }
-        return true;
+        level().playSound(
+                        null,
+                        blockPosition(),
+                        SoundEvents.LEVER_CLICK,
+                        SoundSource.BLOCKS,
+                        0.5F,
+                        1);
+        return InteractionResult.CONSUME;
     }
 
     public float getCurrentLeverAngle() {
@@ -435,14 +580,14 @@ public abstract class AbstractLift extends VehicleEntity {
     }
 
     public void setCurrentLeverAngle(float angle) {
-        this.currentLeverAngle = angle;
+        currentLeverAngle = angle;
     }
 
     @Override
     public void animateHurt(float yaw) {
-        this.setHurtDir(-this.getHurtDir());
-        this.setHurtTime(10);
-        this.setDamage(this.getDamage() * 11.0F);
+        setHurtDir(-getHurtDir());
+        setHurtTime(10);
+        setDamage(getDamage() * 11);
     }
 
     @Override
@@ -451,22 +596,23 @@ public abstract class AbstractLift extends VehicleEntity {
     }
 
     @Override
-    protected @NotNull Component getTypeName() {
-        return Component.translatable(this.getDropItem().getDescriptionId());
+    protected Component getTypeName() {
+        return Component.translatable(getDropItem().getDescriptionId());
     }
 
     @Override
     public boolean canCollideWith(Entity entity) {
-        return canVehicleCollide(this, entity);
+        return entity instanceof AbstractLift && canVehicleCollide(this, entity);
     }
 
     public static boolean canVehicleCollide(Entity vehicle, Entity entity) {
-        return (entity.canBeCollidedWith() || entity.isPushable()) && !vehicle.isPassengerOfSameVehicle(entity);
+        return !vehicle.isPassengerOfSameVehicle(entity)
+                && (entity.canBeCollidedWith() || entity.isPushable());
     }
 
     @Override
     public boolean canBeCollidedWith() {
-        return true;
+        return !isRemoved();
     }
 
     @Override
@@ -475,13 +621,14 @@ public abstract class AbstractLift extends VehicleEntity {
     }
 
     @Override
-    public Vec3 getRelativePortalPosition(Direction.Axis axis, BlockUtil.FoundRectangle portal) {
-        return LivingEntity.resetForwardDirectionOfRelativePortalPosition(super.getRelativePortalPosition(axis, portal));
+    public boolean isPickable() {
+        return !isRemoved();
     }
 
     @Override
-    public boolean isPickable() {
-        return !this.isRemoved();
+    public Vec3 getRelativePortalPosition(Direction.Axis axis, BlockUtil.FoundRectangle portal) {
+        return LivingEntity.resetForwardDirectionOfRelativePortalPosition(
+                super.getRelativePortalPosition(axis, portal));
     }
 
     @Override
@@ -489,23 +636,13 @@ public abstract class AbstractLift extends VehicleEntity {
         return 0.04;
     }
 
-    public void setLeverAngle(AbstractLift entity, ModelPart lever) {
-        MovementType movementDirection = entity.getMovementType();
-        float targetAngle = switch (movementDirection) {
-            case UP -> 30.0F;
-            case DOWN -> -30.0F;
-            default -> 0.0F;
-        };
-
-        // Smoothly interpolate toward the target angle
-        float currentAngle = entity.getCurrentLeverAngle();
-        float lerpedAngle = Mth.lerp(0.2F, currentAngle, targetAngle); // 0.2F is the smoothing speed
-
-        // Store the new interpolated angle back to the entity
-        entity.setCurrentLeverAngle(lerpedAngle);
-
-        // Apply the angle to the model part
-        lever.zRot = (float) Math.toRadians(lerpedAngle);
+    public void setLeverAngle(AbstractLift lift, ModelPart lever) {
+        float target =
+                lift.getMovementType() == MovementType.UP
+                        ? 30
+                        : lift.getMovementType() == MovementType.DOWN ? -30 : 0;
+        lift.setCurrentLeverAngle(Mth.lerp(0.2F, lift.getCurrentLeverAngle(), target));
+        lever.zRot = (float) Math.toRadians(lift.getCurrentLeverAngle());
     }
 
     public enum Type {

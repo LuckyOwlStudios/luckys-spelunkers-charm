@@ -47,8 +47,8 @@ authors="${mod_authors}" #optional
 description='''${mod_description}'''
 
 # The [[mixins]] block allows you to declare your mixin config to FML so that it gets loaded.
-#[[mixins]]
-#config="${mod_id}.mixins.json"
+[[mixins]]
+config="spelunkers_lifts.mixins.json"
 
 # The [[accessTransformers]] block allows you to declare where your AT file is.
 # If this block is omitted, a fallback attempt will be made to load an AT from META-INF/accesstransformer.cfg
@@ -86,6 +86,14 @@ file="META-INF/accesstransformer.cfg"
     side="BOTH"
 
 [[dependencies.${mod_id}]]
+modId="sable"
+type="required"
+reason="Elevators are built as Sable sub-levels"
+versionRange="[2.0.6,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
 modId="terrablender"
 type="required"
 versionRange="4.1.0.8"
@@ -115,7 +123,7 @@ side="BOTH"
     ordering="NONE"
     side="BOTH"
 
-# LambDynamicLights support: minecarts with a lantern glow as dynamic lights.
+# LambDynamicLights support: minecarts with a lantern glow, and the mining helmet casts a spotlight.
 [modproperties.${mod_id}."yumi:entrypoints"]
 "lambdynlights:initializer" = "net.luckystudio.spelunkers_charm.client.compat.SpelunkersCharmDynamicLightsInitializer"
 

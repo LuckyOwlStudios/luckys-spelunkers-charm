@@ -3,6 +3,7 @@ package net.luckystudio.spelunkers_charm;
 import net.luckystudio.spelunkers_charm.block.custom.blaster.BlasterScreen;
 import net.luckystudio.spelunkers_charm.block.custom.blaster.ModMenuTypes;
 import net.luckystudio.spelunkers_charm.client.BoulderCoreSpriteSource;
+import net.luckystudio.spelunkers_charm.client.helmet.MiningHelmetBeamLayer;
 import net.luckystudio.spelunkers_charm.init.ModEntityType;
 import net.luckystudio.spelunkers_charm.block.custom.boulder.entity.BoulderModel;
 import net.luckystudio.spelunkers_charm.block.custom.boulder.entity.BoulderRenderer;
@@ -23,12 +24,18 @@ import net.luckystudio.spelunkers_charm.item.custom.MiningHelmetModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.luckystudio.spelunkers_charm.entity.custom.lift.LiftControllerRenderer;
+import net.luckystudio.spelunkers_charm.init.ModBlockEntityType;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
@@ -82,6 +89,7 @@ public class SpelunkersCharmClient {
         event.registerEntityRenderer(ModEntityType.SMALL_LIFT.get(), SmallLiftRenderer::new);
         event.registerEntityRenderer(ModEntityType.MEDIUM_LIFT.get(), MediumLiftRenderer::new);
         event.registerEntityRenderer(ModEntityType.LARGE_LIFT.get(), LargeLiftRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntityType.LIFT_CONTROLLER.get(), LiftControllerRenderer::new);
         event.registerEntityRenderer(ModEntityType.BOULDER.get(), BoulderRenderer::new);
         event.registerEntityRenderer(ModEntityType.TREMOR.get(), NoopRenderer::new);
         event.registerEntityRenderer(ModEntityType.ROCK.get(), ThrownItemRenderer::new);
@@ -100,6 +108,24 @@ public class SpelunkersCharmClient {
         event.registerLayerDefinition(SMALL_LIFT, SmallLiftModel::createBodyLayer);
         event.registerLayerDefinition(MEDIUM_LIFT, MediumLiftModel::createBodyLayer);
         event.registerLayerDefinition(LARGE_LIFT, LargeLiftModel::createBodyLayer);
+    }
+
+    @SubscribeEvent
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static void addLayers(EntityRenderersEvent.AddLayers event) {
+        // Mining helmet light beam, on players and on every humanoid that can wear a helmet (zombies, skeletons, armor stands...).
+        for (PlayerSkin.Model skin : event.getSkins()) {
+            EntityRenderer<? extends Player> renderer = event.getSkin(skin);
+            if (renderer instanceof LivingEntityRenderer livingRenderer && livingRenderer.getModel() instanceof HumanoidModel) {
+                livingRenderer.addLayer(new MiningHelmetBeamLayer(livingRenderer));
+            }
+        }
+        for (EntityType<?> type : event.getEntityTypes()) {
+            EntityRenderer<?> renderer = event.getRenderer(type);
+            if (renderer instanceof LivingEntityRenderer livingRenderer && livingRenderer.getModel() instanceof HumanoidModel) {
+                livingRenderer.addLayer(new MiningHelmetBeamLayer(livingRenderer));
+            }
+        }
     }
 
     @SubscribeEvent

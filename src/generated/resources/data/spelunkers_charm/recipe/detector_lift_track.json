@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "D": {
+      "tag": "minecraft:planks"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "T": {
+      "item": "minecraft:detector_rail"
+    }
+  },
+  "pattern": [
+    "IRI",
+    "DTD",
+    "IRI"
+  ],
+  "result": {
+    "count": 8,
+    "id": "spelunkers_charm:detector_lift_track"
+  }
+}

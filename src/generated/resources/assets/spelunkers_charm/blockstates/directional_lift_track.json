@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=east,lit=false,vertical_direction=down": {
+      "model": "spelunkers_charm:block/directional_lift_track_down",
+      "y": 90
+    },
+    "facing=east,lit=false,vertical_direction=up": {
+      "model": "spelunkers_charm:block/directional_lift_track_up",
+      "y": 90
+    },
+    "facing=east,lit=true,vertical_direction=down": {
+      "model": "spelunkers_charm:block/directional_lift_track_down_powered",
+      "y": 90
+    },
+    "facing=east,lit=true,vertical_direction=up": {
+      "model": "spelunkers_charm:block/directional_lift_track_up_powered",
+      "y": 90
+    },
+    "facing=north,lit=false,vertical_direction=down": {
+      "model": "spelunkers_charm:block/directional_lift_track_down"
+    },
+    "facing=north,lit=false,vertical_direction=up": {
+      "model": "spelunkers_charm:block/directional_lift_track_up"
+    },
+    "facing=north,lit=true,vertical_direction=down": {
+      "model": "spelunkers_charm:block/directional_lift_track_down_powered"
+    },
+    "facing=north,lit=true,vertical_direction=up": {
+      "model": "spelunkers_charm:block/directional_lift_track_up_powered"
+    },
+    "facing=south,lit=false,vertical_direction=down": {
+      "model": "spelunkers_charm:block/directional_lift_track_down",
+      "y": 180
+    },
+    "facing=south,lit=false,vertical_direction=up": {
+      "model": "spelunkers_charm:block/directional_lift_track_up",
+      "y": 180
+    },
+    "facing=south,lit=true,vertical_direction=down": {
+      "model": "spelunkers_charm:block/directional_lift_track_down_powered",
+      "y": 180
+    },
+    "facing=south,lit=true,vertical_direction=up": {
+      "model": "spelunkers_charm:block/directional_lift_track_up_powered",
+      "y": 180
+    },
+    "facing=west,lit=false,vertical_direction=down": {
+      "model": "spelunkers_charm:block/directional_lift_track_down",
+      "y": 270
+    },
+    "facing=west,lit=false,vertical_direction=up": {
+      "model": "spelunkers_charm:block/directional_lift_track_up",
+      "y": 270
+    },
+    "facing=west,lit=true,vertical_direction=down": {
+      "model": "spelunkers_charm:block/directional_lift_track_down_powered",
+      "y": 270
+    },
+    "facing=west,lit=true,vertical_direction=up": {
+      "model": "spelunkers_charm:block/directional_lift_track_up_powered",
+      "y": 270
+    }
+  }
+}
