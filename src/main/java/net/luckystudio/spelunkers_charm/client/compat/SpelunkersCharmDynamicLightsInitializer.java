@@ -5,6 +5,7 @@ import dev.lambdaurora.lambdynlights.api.DynamicLightsInitializer;
 import dev.lambdaurora.lambdynlights.api.entity.luminance.EntityLuminance;
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.LocomotiveMinecart;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.link.ClientCartData;
 import net.luckystudio.spelunkers_charm.init.ModEntityType;
 import net.minecraft.world.entity.Entity;
@@ -55,6 +56,8 @@ public class SpelunkersCharmDynamicLightsInitializer implements DynamicLightsIni
     /** Light from the lantern hung on a minecart. */
     public static final class CartLanternLuminance implements EntityLuminance {
         public static final CartLanternLuminance INSTANCE = new CartLanternLuminance();
+        /** How bright the locomotive's headlight is. */
+        private static final int LOCOMOTIVE_LIGHT = 15;
         public static final Type TYPE = Type.registerSimple(SpelunkersCharm.id("minecart_lantern"), INSTANCE);
 
         private CartLanternLuminance() {
@@ -68,7 +71,9 @@ public class SpelunkersCharmDynamicLightsInitializer implements DynamicLightsIni
         @Override
         public int getLuminance(@NotNull ItemLightSourceManager itemLightSourceManager, @NotNull Entity entity) {
             if (entity instanceof AbstractMinecart cart) {
-                return ClientCartData.getLantern(cart.getId()).lightLevel();
+                int lantern = ClientCartData.getLantern(cart.getId()).lightLevel();
+                // The locomotive's headlight is always lit, so it always shines.
+                return cart instanceof LocomotiveMinecart ? Math.max(lantern, LOCOMOTIVE_LIGHT) : lantern;
             }
             return 0;
         }
