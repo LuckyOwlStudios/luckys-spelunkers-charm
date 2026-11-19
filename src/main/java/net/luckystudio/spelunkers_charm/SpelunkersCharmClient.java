@@ -17,6 +17,7 @@ import net.luckystudio.spelunkers_charm.entity.custom.minecart.FurnaceMinecartSc
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.LocomotiveRenderer;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.LocomotiveScreen;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.override.OverrideMinecartRenderer;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.LocomotiveModel;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.override.NewMinecartModel;
 import net.luckystudio.spelunkers_charm.init.ModItems;
 import net.luckystudio.spelunkers_charm.item.custom.CandleHelmetModel;
@@ -53,6 +54,7 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 @EventBusSubscriber(modid = SpelunkersCharm.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class SpelunkersCharmClient {
 
+    public static final ModelLayerLocation LOCOMOTIVE_MODEL = new ModelLayerLocation(SpelunkersCharm.id("locomotive"), "main");
     public static final ModelLayerLocation NEW_MINECART_MODEL = new ModelLayerLocation(SpelunkersCharm.id("new_minecart_model"), "main");
     public static final ModelLayerLocation SMALL_LIFT = new ModelLayerLocation(SpelunkersCharm.id("small_lift"), "main");
     public static final ModelLayerLocation MEDIUM_LIFT = new ModelLayerLocation(SpelunkersCharm.id("medium_lift"), "main");
@@ -105,6 +107,7 @@ public class SpelunkersCharmClient {
         event.registerLayerDefinition(MiningHelmetModel.LAYER_LOCATION, MiningHelmetModel::createBodyLayer);
         event.registerLayerDefinition(BOULDER, BoulderModel::createBodyLayer);
         event.registerLayerDefinition(NEW_MINECART_MODEL, NewMinecartModel::createBodyLayer);
+        event.registerLayerDefinition(LOCOMOTIVE_MODEL, LocomotiveModel::createBodyLayer);
         event.registerLayerDefinition(SMALL_LIFT, SmallLiftModel::createBodyLayer);
         event.registerLayerDefinition(MEDIUM_LIFT, MediumLiftModel::createBodyLayer);
         event.registerLayerDefinition(LARGE_LIFT, LargeLiftModel::createBodyLayer);
