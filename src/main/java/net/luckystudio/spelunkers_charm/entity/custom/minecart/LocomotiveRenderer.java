@@ -1,40 +1,32 @@
 package net.luckystudio.spelunkers_charm.entity.custom.minecart;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.luckystudio.spelunkers_charm.SpelunkersCharm;
+import net.luckystudio.spelunkers_charm.SpelunkersCharmClient;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.override.OverrideMinecartRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock;
-import net.minecraft.world.level.block.LeverBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.AttachFace;
 
-/**
- * Placeholder look for the locomotive: the engine (a blast furnace for now) with a lever on its side
- * that flips when the direction is switched. Meant to be replaced by a proper model.
- */
+/** Draws the locomotive with its own model and texture. The lever on its side moves with the direction. */
 public class LocomotiveRenderer extends OverrideMinecartRenderer {
+
+    private static final ResourceLocation LOCOMOTIVE_LOCATION = SpelunkersCharm.id("textures/entity/minecart/locomotive.png");
 
     public LocomotiveRenderer(EntityRendererProvider.Context context) {
         super(context);
+        this.model = new LocomotiveModel(context.bakeLayer(SpelunkersCharmClient.LOCOMOTIVE_MODEL));
     }
 
     @Override
-    protected void renderMinecartContents(AbstractMinecart entity, float partialTicks, BlockState state, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
-        super.renderMinecartContents(entity, partialTicks, state, poseStack, buffer, packedLight);
-        if (!(entity instanceof LocomotiveMinecart locomotive)) return;
+    public ResourceLocation getTextureLocation(AbstractMinecart entity) {
+        return LOCOMOTIVE_LOCATION;
+    }
 
-        // The lever sits in the block next to the engine, attached to the engine's side.
-        BlockState lever = Blocks.LEVER.defaultBlockState()
-                .setValue(FaceAttachedHorizontalDirectionalBlock.FACE, AttachFace.WALL)
-                .setValue(FaceAttachedHorizontalDirectionalBlock.FACING, Direction.NORTH)
-                .setValue(LeverBlock.POWERED, locomotive.isReversed());
-        poseStack.pushPose();
-        poseStack.translate(0.0, 0.0, -1.0);
-        super.renderMinecartContents(entity, partialTicks, lever, poseStack, buffer, packedLight);
-        poseStack.popPose();
+    /** The model is the whole locomotive, so no block is drawn inside it. */
+    @Override
+    protected void renderMinecartContents(AbstractMinecart entity, float partialTicks, BlockState state, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
     }
 }
