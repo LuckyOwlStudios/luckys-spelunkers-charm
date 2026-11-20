@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -125,12 +124,6 @@ public final class DirectionalLiftTrackBlock extends LiftTrackBlock {
                     SoundSource.BLOCKS,
                     0.3F,
                     direction == Direction.UP ? 0.6F : 0.5F);
-            player.displayClientMessage(
-                    Component.translatable(
-                            direction == Direction.UP
-                                    ? "message.spelunkers_charm.lift_station_up"
-                                    : "message.spelunkers_charm.lift_station_down"),
-                    true);
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
