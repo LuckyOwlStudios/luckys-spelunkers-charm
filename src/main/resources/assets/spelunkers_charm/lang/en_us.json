@@ -187,8 +187,6 @@
   "message.spelunkers_charm.lift_tracks": "Missing or incorrectly facing lift tracks.",
   "tooltip.spelunkers_charm.lift_tracks": "Up: at least half the motor racks powered. Down: no power required.",
   "tooltip.spelunkers_charm.lift_redstone": "Directional tracks mark stations and choose the departure direction.",
-  "message.spelunkers_charm.lift_station_up": "Directional lift track: up",
-  "message.spelunkers_charm.lift_station_down": "Directional lift track: down",
   "message.spelunkers_charm.lift_powered_stop": "Power the directional station to depart in its arrow direction.",
   "message.spelunkers_charm.lift_cannot_move": "Cannot move. Check route power and clearance.",
   "tooltip.spelunkers_charm.lift_controls": "Right-click: start/stop. Sneak + right-click: reverse.",
