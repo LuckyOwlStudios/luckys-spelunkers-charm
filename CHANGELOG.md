@@ -17,6 +17,7 @@ Work In Progress section is started.
 # Work In Progress
 
 **Added:**
+- Elevator mines: a new structure that generates in the Overworld. A wooden elevator house sits on the surface, and a lift shaft keeps extending down from it, one segment after another, until it reaches the bottom of the world.
 - With [LambDynamicLights](https://modrinth.com/mod/lambdynamiclights) installed, the locomotive always glows, matching its headlight.
 - Locomotive: a new minecart with an engine and a lever on its side, crafted like a minecart with a blast furnace in the middle. Right-click it to open its fuel slot (anything that burns in a furnace works, and lasts twice as long). Shift-right-click to pull the lever and reverse its direction. It drives the way it was facing when placed and pulls any carts coupled to it. It speeds up gradually until it is faster than a furnace minecart (a little slower than before, and it slows down on slopes so it stays on the rail), and slows down and turns around gradually too. A longer train keeps the same top speed, but the engine burns fuel faster the more carts it hauls.
 - Hoppers can put fuel into a locomotive but can't take it back out, so unloading a train doesn't empty the engine.
