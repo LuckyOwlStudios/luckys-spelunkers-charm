@@ -1,3 +1,4 @@
+// Rock block.
 package net.luckystudio.spelunkers_charm.block.custom;
 
 import net.luckystudio.spelunkers_charm.block.util.ModBlockStateProperties;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
 import org.jetbrains.annotations.NotNull;
 
 public class RockBlock extends Block {
@@ -51,7 +53,10 @@ public class RockBlock extends Block {
 
     @Override
     protected boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
-        return !useContext.isSecondaryUseActive() && useContext.getItemInHand().getItem() == this.asItem() && state.getValue(ROCKS) < 3 || super.canBeReplaced(state, useContext);
+        return !useContext.isSecondaryUseActive()
+                        && useContext.getItemInHand().getItem() == this.asItem()
+                        && state.getValue(ROCKS) < 3
+                || super.canBeReplaced(state, useContext);
     }
 
     @Override
@@ -89,8 +94,12 @@ public class RockBlock extends Block {
      */
     @Override
     protected BlockState updateShape(
-            BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos
-    ) {
+            BlockState state,
+            Direction direction,
+            BlockState neighborState,
+            LevelAccessor level,
+            BlockPos pos,
+            BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
@@ -100,11 +109,14 @@ public class RockBlock extends Block {
 
     @Override
     protected FluidState getFluidState(BlockState state) {
-        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED)
+                ? Fluids.WATER.getSource(false)
+                : super.getFluidState(state);
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    protected VoxelShape getShape(
+            BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return switch (state.getValue(ROCKS)) {
             case 2 -> MEDIUM_AABB;
             case 3 -> LARGE_AABB;
@@ -113,7 +125,8 @@ public class RockBlock extends Block {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(
+            StateDefinition.@NotNull Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FACING, ROCKS, DISPLAY, WATERLOGGED);
     }

@@ -1,3 +1,4 @@
+// Lift physics and controls.
 package net.luckystudio.spelunkers_charm.entity.custom.lift;
 
 import net.luckystudio.spelunkers_charm.datagen.itemTags.ModItemTags;
@@ -47,7 +48,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-/** Server-controlled rack lift with a solid, freely walkable deck. */
 public abstract class AbstractLift extends VehicleEntity {
     private static final EntityDataAccessor<Integer> CONTROL_TYPE =
             SynchedEntityData.defineId(AbstractLift.class, EntityDataSerializers.INT);
@@ -71,6 +71,9 @@ public abstract class AbstractLift extends VehicleEntity {
     private double targetX, targetY, targetZ;
     private float targetYaw, targetPitch;
     private final LiftGuideSystem guides = new LiftGuideSystem(this);
+    private BlockPos guideOrigin;
+    private Direction guideFacing;
+    private List<BlockPos> guidePositions = List.of();
 
     public AbstractLift(EntityType<?> entityType, Level level, Type type) {
         super(entityType, level);
@@ -127,7 +130,7 @@ public abstract class AbstractLift extends VehicleEntity {
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
-        // 5.0.6 wrote an integer but attempted to read a string. Accept both.
+
         if (tag.contains("controlType", 8))
             setControlType(ControlType.byName(tag.getString("controlType")));
         else if (tag.contains("controlType", 3))
@@ -183,8 +186,7 @@ public abstract class AbstractLift extends VehicleEntity {
         super.tick();
         AABB oldBounds = getBoundingBox();
         if (level().isClientSide) {
-            // Only the server simulates rails and commands. Interpolate its
-            // snapshots; carry local feet through precisely the same deck delta.
+
             if (interpolationSteps > 0) {
                 double fraction = 1.0 / interpolationSteps;
                 setPos(
@@ -234,7 +236,7 @@ public abstract class AbstractLift extends VehicleEntity {
                         else if (hasTracksAtY(nextRow(command))) pausedForPower = command;
                     }
                 } else if (command == MovementType.FALLING) {
-                    // Two opposite powered arrows are deliberately a stop.
+
                     pausedForPower = MovementType.STATIONARY;
                     stop(true);
                 }
@@ -375,7 +377,14 @@ public abstract class AbstractLift extends VehicleEntity {
     }
 
     public final List<BlockPos> getGuidePositions() {
-        return trackPositions();
+        BlockPos origin = blockPosition();
+        Direction facing = getDirection();
+        if (!origin.equals(guideOrigin) || facing != guideFacing) {
+            guidePositions = trackPositions();
+            guideOrigin = origin;
+            guideFacing = facing;
+        }
+        return guidePositions;
     }
 
     protected abstract List<BlockPos> trackPositions();
@@ -397,7 +406,6 @@ public abstract class AbstractLift extends VehicleEntity {
         return guides.isStationAtY(y);
     }
 
-    /** One directional rack marks the station; only powered arrows dispatch it. */
     private boolean stationHasInput(int y) {
         return guides.stationHasInput(y);
     }
@@ -540,8 +548,7 @@ public abstract class AbstractLift extends VehicleEntity {
                 return InteractionResult.CONSUME;
             }
         }
-        // A player's command takes precedence over the arrow on this floor.
-        // Once the deck leaves, the next station can control it normally.
+
         manualOverrideStationY = isAtFloor() ? (int) Math.rint(getY()) : Integer.MIN_VALUE;
         pausedForPower = MovementType.STATIONARY;
         if (player.isSecondaryUseActive()) {
@@ -645,6 +652,7 @@ public abstract class AbstractLift extends VehicleEntity {
         lever.zRot = (float) Math.toRadians(lift.getCurrentLeverAngle());
     }
 
+    /** Lists the supported lift sizes. */
     public enum Type {
         SMALL,
         MEDIUM,

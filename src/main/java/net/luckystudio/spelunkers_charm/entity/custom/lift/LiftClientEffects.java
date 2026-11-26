@@ -1,3 +1,4 @@
+// Lift client effects.
 package net.luckystudio.spelunkers_charm.entity.custom.lift;
 
 import net.minecraft.client.Minecraft;
@@ -8,7 +9,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-/** Client effects at the exposed rims, rather than inside the opaque deck. */
 @OnlyIn(Dist.CLIENT)
 public final class LiftClientEffects {
     private LiftClientEffects() {}
@@ -40,16 +40,14 @@ public final class LiftClientEffects {
                                 + 0.5
                                 + inward.getStepZ() * 0.57
                                 + tangent.getStepZ() * scatter;
-                // Both exposed rims are used so a player above the deck can
-                // also see sparks. Every spark travels opposite to the lift.
+
                 double rim = n == 0 ? verticalSign : -verticalSign;
                 double y = lift.getY() + 0.5 + rim * 0.70;
                 Particle spark =
                         minecraft.particleEngine.createParticle(
                                 ParticleTypes.ELECTRIC_SPARK, x, y, z, 0, 0, 0);
                 if (spark != null) {
-                    // Vanilla's provider quarters velocity and lives 2-3 ticks.
-                    // Keep its sprite, with enough travel and lifetime to see it.
+
                     spark.setLifetime(8 + lift.getRandom().nextInt(4));
                     spark.setColor(1.0F, 0.65F + lift.getRandom().nextFloat() * 0.15F, 0.15F);
                     double sideways = (lift.getRandom().nextDouble() - 0.5) * 0.07;

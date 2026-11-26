@@ -25,7 +25,7 @@ neoForge {
             logLevel = org.slf4j.event.Level.INFO
         }
         gameTestServer {
-            systemProperty 'neoforge.enabledGameTestNamespaces', 'spelunkers_lift_tests'
+            systemProperty 'neoforge.enabledGameTestNamespaces', providers.gradleProperty('elevatorTestNamespaces').getOrElse('spelunkers_lift_tests,spelunkers_cleanup_tests,spelunkers_cleanup_lift_tests')
         }
         elevatorData {
             data()

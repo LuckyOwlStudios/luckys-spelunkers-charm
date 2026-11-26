@@ -1,3 +1,4 @@
+// Lift packet tests.
 package net.luckystudio.spelunkers_charm.gametest;
 
 import net.luckystudio.spelunkers_charm.entity.custom.lift.AbstractLift;
@@ -21,7 +22,7 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 import java.lang.reflect.Field;
 
-@GameTestHolder("spelunkers_lift_tests")
+@GameTestHolder("spelunkers_cleanup_lift_tests")
 @PrefixGameTestTemplate(false)
 public final class LiftPacketTests {
     private static AbstractLift lift(GameTestHelper h) {

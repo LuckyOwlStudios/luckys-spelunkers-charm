@@ -1,3 +1,4 @@
+// Lift tests.
 package net.luckystudio.spelunkers_charm.gametest;
 
 import net.luckystudio.spelunkers_charm.block.custom.DirectionalLiftTrackBlock;
@@ -5,6 +6,7 @@ import net.luckystudio.spelunkers_charm.block.custom.LiftTrackBlock;
 import net.luckystudio.spelunkers_charm.block.custom.PoweredLiftTrackBlock;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.AbstractLift;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.LiftCollision;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.MinecartCouplings;
 import net.luckystudio.spelunkers_charm.entity.util.ControlType;
 import net.luckystudio.spelunkers_charm.entity.util.MovementType;
 import net.luckystudio.spelunkers_charm.init.ModBlocks;
@@ -282,6 +284,53 @@ public final class LiftTests {
         near(h, s.getY(), e.getBoundingBox().maxY, 0.003, "Falling rider passed through deck");
         near(h, s.fallDistance, 0, 0, "Fall distance not reset");
         h.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void coupledCartsRideLiftTogether(GameTestHelper h) {
+        AbstractLift lift = lift(h, AbstractLift.Type.LARGE, Direction.NORTH, 4);
+        rails(h, lift, 2, 14);
+        Minecart first =
+                new Minecart(
+                        h.getLevel(), lift.getX() - 0.775, lift.getBoundingBox().maxY, lift.getZ());
+        Minecart second =
+                new Minecart(
+                        h.getLevel(), lift.getX() + 0.775, lift.getBoundingBox().maxY, lift.getZ());
+        first.setOnGround(true);
+        second.setOnGround(true);
+        h.getLevel().addFreshEntity(first);
+        h.getLevel().addFreshEntity(second);
+        MinecartCouplings links = MinecartCouplings.get(h.getLevel());
+        links.link(first.getUUID(), second.getUUID());
+        double start = lift.getY();
+        lift.setMovementType(MovementType.UP);
+        h.runAfterDelay(
+                18,
+                () -> {
+                    h.assertTrue(lift.getY() - start > 2, "Lift did not move");
+                    near(
+                            h,
+                            first.getY(),
+                            lift.getBoundingBox().maxY,
+                            0.035,
+                            "First cart left deck");
+                    near(
+                            h,
+                            second.getY(),
+                            lift.getBoundingBox().maxY,
+                            0.035,
+                            "Second cart left deck");
+                    near(
+                            h,
+                            first.distanceTo(second),
+                            1.55,
+                            0.035,
+                            "Coupled carts shifted off rail");
+                    h.assertTrue(
+                            links.linked(first.getUUID(), second.getUUID()),
+                            "Lift severed the coupling");
+                    h.succeed();
+                });
     }
 
     private static void moving(

@@ -1,3 +1,4 @@
+// Lift item.
 package net.luckystudio.spelunkers_charm.item.custom;
 
 import net.luckystudio.spelunkers_charm.entity.custom.lift.AbstractLift;
@@ -14,7 +15,6 @@ import net.minecraft.world.level.gameevent.GameEvent;
 
 import java.util.List;
 
-/** Placement at a floor center or directly onto a complete ring of racks. */
 public class LiftItem extends Item {
     final AbstractLift.Type type;
 
@@ -54,13 +54,11 @@ public class LiftItem extends Item {
     public void appendHoverText(
             ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, context, tooltip, flag);
-        tooltip.add(Component.translatable("tooltip.spelunkers_charm.lift_item"));
         tooltip.add(
                 Component.translatable(
                         "tooltip.spelunkers_charm.lift_"
                                 + type.name().toLowerCase(java.util.Locale.ROOT)));
         tooltip.add(Component.translatable("tooltip.spelunkers_charm.lift_tracks"));
-        tooltip.add(Component.translatable("tooltip.spelunkers_charm.lift_redstone"));
         tooltip.add(Component.translatable("tooltip.spelunkers_charm.lift_controls"));
     }
 }

@@ -1,6 +1,8 @@
+// Ore feature.
 package net.luckystudio.spelunkers_charm.worldgen.feature.custom.ore;
 
 import com.mojang.serialization.Codec;
+
 import net.luckystudio.spelunkers_charm.SpelunkersCharmConfig;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.OreFeature;

@@ -1,3 +1,4 @@
+// Boulder ore.
 package net.luckystudio.spelunkers_charm.block.custom.boulder;
 
 import net.minecraft.core.Holder;
@@ -11,9 +12,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
-import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
 
 /**
  * The ore a boulder carries in its core.
@@ -41,18 +43,19 @@ public enum BoulderOre {
 
     private final String name;
     private final Supplier<Block> propertiesSource;
-    @Nullable
-    private final Supplier<Block> fixedCore;
-    @Nullable
-    private final TagKey<Block> coreTag;
-    @Nullable
-    private final TagKey<Item> rawBlockItemTag;
-    @Nullable
-    private final TagKey<Item> rawMaterialTag;
+    @Nullable private final Supplier<Block> fixedCore;
+    @Nullable private final TagKey<Block> coreTag;
+    @Nullable private final TagKey<Item> rawBlockItemTag;
+    @Nullable private final TagKey<Item> rawMaterialTag;
     private final float weightAboveZero;
     private final float weightBelowZero;
 
-    BoulderOre(String name, Supplier<Block> propertiesSource, Supplier<Block> fixedCore, float weightAboveZero, float weightBelowZero) {
+    BoulderOre(
+            String name,
+            Supplier<Block> propertiesSource,
+            Supplier<Block> fixedCore,
+            float weightAboveZero,
+            float weightBelowZero) {
         this.name = name;
         this.propertiesSource = propertiesSource;
         this.fixedCore = fixedCore;
@@ -68,9 +71,18 @@ public enum BoulderOre {
         this.name = name;
         this.propertiesSource = () -> Blocks.RAW_IRON_BLOCK;
         this.fixedCore = null;
-        this.coreTag = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "storage_blocks/raw_" + name));
-        this.rawBlockItemTag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "storage_blocks/raw_" + name));
-        this.rawMaterialTag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "raw_materials/" + name));
+        this.coreTag =
+                TagKey.create(
+                        Registries.BLOCK,
+                        ResourceLocation.fromNamespaceAndPath("c", "storage_blocks/raw_" + name));
+        this.rawBlockItemTag =
+                TagKey.create(
+                        Registries.ITEM,
+                        ResourceLocation.fromNamespaceAndPath("c", "storage_blocks/raw_" + name));
+        this.rawMaterialTag =
+                TagKey.create(
+                        Registries.ITEM,
+                        ResourceLocation.fromNamespaceAndPath("c", "raw_materials/" + name));
         this.weightAboveZero = weightAboveZero;
         this.weightBelowZero = weightBelowZero;
     }
@@ -126,7 +138,8 @@ public enum BoulderOre {
     /** Same as {@link #isAvailable()}, but looks the tag up in the given registries (e.g. the creative tab's). */
     public boolean isAvailable(HolderLookup.Provider registries) {
         if (fixedCore != null) return true;
-        return registries.lookup(Registries.BLOCK)
+        return registries
+                .lookup(Registries.BLOCK)
                 .flatMap(lookup -> lookup.get(coreTag))
                 .map(set -> set.size() > 0)
                 .orElse(false);

@@ -1,6 +1,8 @@
+// Geyser feature.
 package net.luckystudio.spelunkers_charm.worldgen.feature.custom.geyser;
 
 import com.mojang.serialization.Codec;
+
 import net.luckystudio.spelunkers_charm.SpelunkersCharmConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -41,7 +43,8 @@ public class GeyserFeature extends Feature<GeyserConfiguration> {
         return true;
     }
 
-    private void place(WorldGenLevel level, RandomSource random, BlockPos pos, BlockStateProvider provider) {
+    private void place(
+            WorldGenLevel level, RandomSource random, BlockPos pos, BlockStateProvider provider) {
         this.setBlock(level, pos, provider.getState(random, pos));
     }
 }

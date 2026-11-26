@@ -1,3 +1,4 @@
+// Lift test mod.
 package net.luckystudio.spelunkers_charm.gametest;
 
 import net.neoforged.fml.common.Mod;

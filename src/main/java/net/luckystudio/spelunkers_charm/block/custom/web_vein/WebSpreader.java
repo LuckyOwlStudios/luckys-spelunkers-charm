@@ -1,3 +1,4 @@
+// Web spreader.
 package net.luckystudio.spelunkers_charm.block.custom.web_vein;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -7,9 +8,11 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,10 +28,12 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+
 import org.slf4j.Logger;
 
-import javax.annotation.Nullable;
 import java.util.*;
+
+import javax.annotation.Nullable;
 
 public class WebSpreader {
     public static final int MAX_GROWTH_RATE_RADIUS = 24;
@@ -45,7 +50,13 @@ public class WebSpreader {
     private List<WebSpreader.ChargeCursor> cursors = new ArrayList<>();
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public WebSpreader(boolean isWorldGeneration, TagKey<Block> replaceableBlocks, int growthSpawnCoat, int noGrowthRadius, int chargeDecayRate, int additionalDecayRate) {
+    public WebSpreader(
+            boolean isWorldGeneration,
+            TagKey<Block> replaceableBlocks,
+            int growthSpawnCoat,
+            int noGrowthRadius,
+            int chargeDecayRate,
+            int additionalDecayRate) {
         this.isWorldGeneration = isWorldGeneration;
         this.replaceableBlocks = replaceableBlocks;
         this.growthSpawnCost = growthSpawnCoat;
@@ -98,11 +109,12 @@ public class WebSpreader {
     public void load(CompoundTag tag) {
         if (tag.contains("cursors", 9)) {
             this.cursors.clear();
-            List<WebSpreader.ChargeCursor> list = WebSpreader.ChargeCursor.CODEC
-                    .listOf()
-                    .parse(new Dynamic<>(NbtOps.INSTANCE, tag.getList("cursors", 10)))
-                    .resultOrPartial(LOGGER::error)
-                    .orElseGet(ArrayList::new);
+            List<WebSpreader.ChargeCursor> list =
+                    WebSpreader.ChargeCursor.CODEC
+                            .listOf()
+                            .parse(new Dynamic<>(NbtOps.INSTANCE, tag.getList("cursors", 10)))
+                            .resultOrPartial(LOGGER::error)
+                            .orElseGet(ArrayList::new);
             int i = Math.min(list.size(), 32);
 
             for (int j = 0; j < i; j++) {
@@ -133,7 +145,8 @@ public class WebSpreader {
         }
     }
 
-    public void updateCursors(LevelAccessor level, BlockPos pos, RandomSource random, boolean shouldConvertBlocks) {
+    public void updateCursors(
+            LevelAccessor level, BlockPos pos, RandomSource random, boolean shouldConvertBlocks) {
         if (!this.cursors.isEmpty()) {
             List<WebSpreader.ChargeCursor> list = new ArrayList<>();
             Map<BlockPos, WebSpreader.ChargeCursor> map = new HashMap<>();
@@ -145,16 +158,24 @@ public class WebSpreader {
                     level.levelEvent(3006, sculkspreader$chargecursor.getPos(), 0);
                 } else {
                     BlockPos blockpos = sculkspreader$chargecursor.getPos();
-                    object2intmap.computeInt(blockpos, (p_222264_, p_222265_) -> (p_222265_ == null ? 0 : p_222265_) + sculkspreader$chargecursor.charge);
+                    object2intmap.computeInt(
+                            blockpos,
+                            (p_222264_, p_222265_) ->
+                                    (p_222265_ == null ? 0 : p_222265_)
+                                            + sculkspreader$chargecursor.charge);
                     WebSpreader.ChargeCursor sculkspreader$chargecursor1 = map.get(blockpos);
                     if (sculkspreader$chargecursor1 == null) {
                         map.put(blockpos, sculkspreader$chargecursor);
                         list.add(sculkspreader$chargecursor);
-                    } else if (!this.isWorldGeneration() && sculkspreader$chargecursor.charge + sculkspreader$chargecursor1.charge <= 1000) {
+                    } else if (!this.isWorldGeneration()
+                            && sculkspreader$chargecursor.charge
+                                            + sculkspreader$chargecursor1.charge
+                                    <= 1000) {
                         sculkspreader$chargecursor1.mergeWith(sculkspreader$chargecursor);
                     } else {
                         list.add(sculkspreader$chargecursor);
-                        if (sculkspreader$chargecursor.charge < sculkspreader$chargecursor1.charge) {
+                        if (sculkspreader$chargecursor.charge
+                                < sculkspreader$chargecursor1.charge) {
                             map.put(blockpos, sculkspreader$chargecursor);
                         }
                     }
@@ -165,9 +186,12 @@ public class WebSpreader {
                 BlockPos blockpos1 = entry.getKey();
                 int k = entry.getIntValue();
                 WebSpreader.ChargeCursor sculkspreader$chargecursor2 = map.get(blockpos1);
-                Collection<Direction> collection = sculkspreader$chargecursor2 == null ? null : sculkspreader$chargecursor2.getFacingData();
+                Collection<Direction> collection =
+                        sculkspreader$chargecursor2 == null
+                                ? null
+                                : sculkspreader$chargecursor2.getFacingData();
                 if (k > 0 && collection != null) {
-                    int i = (int)(Math.log1p((double)k) / 2.3F) + 1;
+                    int i = (int) (Math.log1p((double) k) / 2.3F) + 1;
                     int j = (i << 6) + MultifaceBlock.pack(collection);
                     level.levelEvent(3006, blockpos1, j);
                 }
@@ -177,36 +201,75 @@ public class WebSpreader {
         }
     }
 
+    /** Tracks one spreading web charge. */
     public static class ChargeCursor {
-        private static final ObjectArrayList<Vec3i> NON_CORNER_NEIGHBOURS = Util.make(
-                new ObjectArrayList<>(18),
-                p_222338_ -> BlockPos.betweenClosedStream(new BlockPos(-1, -1, -1), new BlockPos(1, 1, 1))
-                        .filter(p_222336_ -> (p_222336_.getX() == 0 || p_222336_.getY() == 0 || p_222336_.getZ() == 0) && !p_222336_.equals(BlockPos.ZERO))
-                        .map(BlockPos::immutable)
-                        .forEach(p_222338_::add)
-        );
+        private static final ObjectArrayList<Vec3i> NON_CORNER_NEIGHBOURS =
+                Util.make(
+                        new ObjectArrayList<>(18),
+                        p_222338_ ->
+                                BlockPos.betweenClosedStream(
+                                                new BlockPos(-1, -1, -1), new BlockPos(1, 1, 1))
+                                        .filter(
+                                                p_222336_ ->
+                                                        (p_222336_.getX() == 0
+                                                                        || p_222336_.getY() == 0
+                                                                        || p_222336_.getZ() == 0)
+                                                                && !p_222336_.equals(BlockPos.ZERO))
+                                        .map(BlockPos::immutable)
+                                        .forEach(p_222338_::add));
         public static final int MAX_CURSOR_DECAY_DELAY = 1;
         private BlockPos pos;
         int charge;
         private int updateDelay;
         private int decayDelay;
-        @Nullable
-        private Set<Direction> facings;
-        private static final Codec<Set<Direction>> DIRECTION_SET = Direction.CODEC
-                .listOf()
-                .xmap(p_222340_ -> Sets.newEnumSet(p_222340_, Direction.class), Lists::newArrayList);
-        public static final Codec<WebSpreader.ChargeCursor> CODEC = RecordCodecBuilder.create(
-                p_222330_ -> p_222330_.group(
-                                BlockPos.CODEC.fieldOf("pos").forGetter(WebSpreader.ChargeCursor::getPos),
-                                Codec.intRange(0, 1000).fieldOf("charge").orElse(0).forGetter(WebSpreader.ChargeCursor::getCharge),
-                                Codec.intRange(0, 1).fieldOf("decay_delay").orElse(1).forGetter(WebSpreader.ChargeCursor::getDecayDelay),
-                                Codec.intRange(0, Integer.MAX_VALUE).fieldOf("update_delay").orElse(0).forGetter(p_222346_ -> p_222346_.updateDelay),
-                                DIRECTION_SET.lenientOptionalFieldOf("facings").forGetter(p_222343_ -> Optional.ofNullable(p_222343_.getFacingData()))
-                        )
-                        .apply(p_222330_, WebSpreader.ChargeCursor::new)
-        );
+        @Nullable private Set<Direction> facings;
+        private static final Codec<Set<Direction>> DIRECTION_SET =
+                Direction.CODEC
+                        .listOf()
+                        .xmap(
+                                p_222340_ -> Sets.newEnumSet(p_222340_, Direction.class),
+                                Lists::newArrayList);
+        public static final Codec<WebSpreader.ChargeCursor> CODEC =
+                RecordCodecBuilder.create(
+                        p_222330_ ->
+                                p_222330_
+                                        .group(
+                                                BlockPos.CODEC
+                                                        .fieldOf("pos")
+                                                        .forGetter(
+                                                                WebSpreader.ChargeCursor::getPos),
+                                                Codec.intRange(0, 1000)
+                                                        .fieldOf("charge")
+                                                        .orElse(0)
+                                                        .forGetter(
+                                                                WebSpreader.ChargeCursor
+                                                                        ::getCharge),
+                                                Codec.intRange(0, 1)
+                                                        .fieldOf("decay_delay")
+                                                        .orElse(1)
+                                                        .forGetter(
+                                                                WebSpreader.ChargeCursor
+                                                                        ::getDecayDelay),
+                                                Codec.intRange(0, Integer.MAX_VALUE)
+                                                        .fieldOf("update_delay")
+                                                        .orElse(0)
+                                                        .forGetter(
+                                                                p_222346_ -> p_222346_.updateDelay),
+                                                DIRECTION_SET
+                                                        .lenientOptionalFieldOf("facings")
+                                                        .forGetter(
+                                                                p_222343_ ->
+                                                                        Optional.ofNullable(
+                                                                                p_222343_
+                                                                                        .getFacingData())))
+                                        .apply(p_222330_, WebSpreader.ChargeCursor::new));
 
-        private ChargeCursor(BlockPos pos, int charge, int decayDelay, int updateDelay, Optional<Set<Direction>> facings) {
+        private ChargeCursor(
+                BlockPos pos,
+                int charge,
+                int decayDelay,
+                int updateDelay,
+                Optional<Set<Direction>> facings) {
             this.pos = pos;
             this.charge = charge;
             this.decayDelay = decayDelay;
@@ -241,27 +304,48 @@ public class WebSpreader {
             } else if (isWorldGeneration) {
                 return true;
             } else {
-                return level instanceof ServerLevel serverlevel ? serverlevel.shouldTickBlocksAt(pos) : false;
+                return level instanceof ServerLevel serverlevel
+                        ? serverlevel.shouldTickBlocksAt(pos)
+                        : false;
             }
         }
 
-        public void update(LevelAccessor level, BlockPos pos, RandomSource random, WebSpreader spreader, boolean shouldConvertBlocks) {
+        public void update(
+                LevelAccessor level,
+                BlockPos pos,
+                RandomSource random,
+                WebSpreader spreader,
+                boolean shouldConvertBlocks) {
             if (this.shouldUpdate(level, pos, spreader.isWorldGeneration)) {
                 if (this.updateDelay > 0) {
                     this.updateDelay--;
                 } else {
                     BlockState blockstate = level.getBlockState(this.pos);
                     WebVeinBehavior sculkbehaviour = getBlockBehaviour(blockstate);
-                    if (shouldConvertBlocks && sculkbehaviour.attemptSpreadVein(level, this.pos, blockstate, this.facings, spreader.isWorldGeneration())) {
+                    if (shouldConvertBlocks
+                            && sculkbehaviour.attemptSpreadVein(
+                                    level,
+                                    this.pos,
+                                    blockstate,
+                                    this.facings,
+                                    spreader.isWorldGeneration())) {
                         if (sculkbehaviour.canChangeBlockStateOnSpread()) {
                             blockstate = level.getBlockState(this.pos);
                             sculkbehaviour = getBlockBehaviour(blockstate);
                         }
 
-                        level.playSound(null, this.pos, SoundEvents.SCULK_BLOCK_SPREAD, SoundSource.BLOCKS, 1.0F, 1.0F);
+                        level.playSound(
+                                null,
+                                this.pos,
+                                SoundEvents.SCULK_BLOCK_SPREAD,
+                                SoundSource.BLOCKS,
+                                1.0F,
+                                1.0F);
                     }
 
-                    this.charge = sculkbehaviour.attemptUseCharge(this, level, pos, random, spreader, shouldConvertBlocks);
+                    this.charge =
+                            sculkbehaviour.attemptUseCharge(
+                                    this, level, pos, random, spreader, shouldConvertBlocks);
                     if (this.charge <= 0) {
                         sculkbehaviour.onDischarged(level, blockstate, this.pos, random);
                     } else {
@@ -269,7 +353,10 @@ public class WebSpreader {
                         if (blockpos != null) {
                             sculkbehaviour.onDischarged(level, blockstate, this.pos, random);
                             this.pos = blockpos.immutable();
-                            if (spreader.isWorldGeneration() && !this.pos.closerThan(new Vec3i(pos.getX(), this.pos.getY(), pos.getZ()), 15.0)) {
+                            if (spreader.isWorldGeneration()
+                                    && !this.pos.closerThan(
+                                            new Vec3i(pos.getX(), this.pos.getY(), pos.getZ()),
+                                            15.0)) {
                                 this.charge = 0;
                                 return;
                             }
@@ -295,7 +382,9 @@ public class WebSpreader {
         }
 
         private static WebVeinBehavior getBlockBehaviour(BlockState state) {
-            return state.getBlock() instanceof WebVeinBehavior sculkbehaviour ? sculkbehaviour : WebVeinBehavior.DEFAULT;
+            return state.getBlock() instanceof WebVeinBehavior sculkbehaviour
+                    ? sculkbehaviour
+                    : WebVeinBehavior.DEFAULT;
         }
 
         private static List<Vec3i> getRandomizedNonCornerNeighbourOffsets(RandomSource random) {
@@ -303,16 +392,19 @@ public class WebSpreader {
         }
 
         @Nullable
-        private static BlockPos getValidMovementPos(LevelAccessor level, BlockPos pos, RandomSource random) {
+        private static BlockPos getValidMovementPos(
+                LevelAccessor level, BlockPos pos, RandomSource random) {
             BlockPos.MutableBlockPos blockpos$mutableblockpos = pos.mutable();
             BlockPos.MutableBlockPos blockpos$mutableblockpos1 = pos.mutable();
 
             for (Vec3i vec3i : getRandomizedNonCornerNeighbourOffsets(random)) {
                 blockpos$mutableblockpos1.setWithOffset(pos, vec3i);
                 BlockState blockstate = level.getBlockState(blockpos$mutableblockpos1);
-                if (blockstate.getBlock() instanceof WebVeinBehavior && isMovementUnobstructed(level, pos, blockpos$mutableblockpos1)) {
+                if (blockstate.getBlock() instanceof WebVeinBehavior
+                        && isMovementUnobstructed(level, pos, blockpos$mutableblockpos1)) {
                     blockpos$mutableblockpos.set(blockpos$mutableblockpos1);
-                    if (SculkVeinBlock.hasSubstrateAccess(level, blockstate, blockpos$mutableblockpos1)) {
+                    if (SculkVeinBlock.hasSubstrateAccess(
+                            level, blockstate, blockpos$mutableblockpos1)) {
                         break;
                     }
                 }
@@ -321,33 +413,48 @@ public class WebSpreader {
             return blockpos$mutableblockpos.equals(pos) ? null : blockpos$mutableblockpos;
         }
 
-        private static boolean isMovementUnobstructed(LevelAccessor level, BlockPos fromPos, BlockPos toPos) {
+        private static boolean isMovementUnobstructed(
+                LevelAccessor level, BlockPos fromPos, BlockPos toPos) {
             if (fromPos.distManhattan(toPos) == 1) {
                 return true;
             } else {
                 BlockPos blockpos = toPos.subtract(fromPos);
-                Direction direction = Direction.fromAxisAndDirection(
-                        Direction.Axis.X, blockpos.getX() < 0 ? Direction.AxisDirection.NEGATIVE : Direction.AxisDirection.POSITIVE
-                );
-                Direction direction1 = Direction.fromAxisAndDirection(
-                        Direction.Axis.Y, blockpos.getY() < 0 ? Direction.AxisDirection.NEGATIVE : Direction.AxisDirection.POSITIVE
-                );
-                Direction direction2 = Direction.fromAxisAndDirection(
-                        Direction.Axis.Z, blockpos.getZ() < 0 ? Direction.AxisDirection.NEGATIVE : Direction.AxisDirection.POSITIVE
-                );
+                Direction direction =
+                        Direction.fromAxisAndDirection(
+                                Direction.Axis.X,
+                                blockpos.getX() < 0
+                                        ? Direction.AxisDirection.NEGATIVE
+                                        : Direction.AxisDirection.POSITIVE);
+                Direction direction1 =
+                        Direction.fromAxisAndDirection(
+                                Direction.Axis.Y,
+                                blockpos.getY() < 0
+                                        ? Direction.AxisDirection.NEGATIVE
+                                        : Direction.AxisDirection.POSITIVE);
+                Direction direction2 =
+                        Direction.fromAxisAndDirection(
+                                Direction.Axis.Z,
+                                blockpos.getZ() < 0
+                                        ? Direction.AxisDirection.NEGATIVE
+                                        : Direction.AxisDirection.POSITIVE);
                 if (blockpos.getX() == 0) {
-                    return isUnobstructed(level, fromPos, direction1) || isUnobstructed(level, fromPos, direction2);
+                    return isUnobstructed(level, fromPos, direction1)
+                            || isUnobstructed(level, fromPos, direction2);
                 } else {
                     return blockpos.getY() == 0
-                            ? isUnobstructed(level, fromPos, direction) || isUnobstructed(level, fromPos, direction2)
-                            : isUnobstructed(level, fromPos, direction) || isUnobstructed(level, fromPos, direction1);
+                            ? isUnobstructed(level, fromPos, direction)
+                                    || isUnobstructed(level, fromPos, direction2)
+                            : isUnobstructed(level, fromPos, direction)
+                                    || isUnobstructed(level, fromPos, direction1);
                 }
             }
         }
 
-        private static boolean isUnobstructed(LevelAccessor level, BlockPos pos, Direction direction) {
+        private static boolean isUnobstructed(
+                LevelAccessor level, BlockPos pos, Direction direction) {
             BlockPos blockpos = pos.relative(direction);
-            return !level.getBlockState(blockpos).isFaceSturdy(level, blockpos, direction.getOpposite());
+            return !level.getBlockState(blockpos)
+                    .isFaceSturdy(level, blockpos, direction.getOpposite());
         }
     }
 }

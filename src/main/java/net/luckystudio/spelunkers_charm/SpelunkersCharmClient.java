@@ -1,20 +1,31 @@
+// Spelunkers charm client.
 package net.luckystudio.spelunkers_charm;
 
 import net.luckystudio.spelunkers_charm.block.custom.blaster.BlasterScreen;
 import net.luckystudio.spelunkers_charm.block.custom.blaster.ModMenuTypes;
-import net.luckystudio.spelunkers_charm.client.BoulderCoreSpriteSource;
-import net.luckystudio.spelunkers_charm.init.ModEntityType;
 import net.luckystudio.spelunkers_charm.block.custom.boulder.entity.BoulderModel;
 import net.luckystudio.spelunkers_charm.block.custom.boulder.entity.BoulderRenderer;
+import net.luckystudio.spelunkers_charm.block.custom.cartloader.CartLoaderScreen;
+import net.luckystudio.spelunkers_charm.block.custom.minecrate.MineCrateRenderer;
+import net.luckystudio.spelunkers_charm.block.custom.tank.TankRenderer;
+import net.luckystudio.spelunkers_charm.client.BoulderCoreSpriteSource;
+import net.luckystudio.spelunkers_charm.client.CartLoadTrailParticle;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.large.LargeLiftModel;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.large.LargeLiftRenderer;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.medium.MediumLiftModel;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.medium.MediumLiftRenderer;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.small.SmallLiftModel;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.small.SmallLiftRenderer;
-import net.luckystudio.spelunkers_charm.entity.custom.minecart.override.OverrideMinecartRenderer;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.LocomotiveRenderer;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.LocomotiveScreen;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.override.MineCrateMinecartRenderer;
 import net.luckystudio.spelunkers_charm.entity.custom.minecart.override.NewMinecartModel;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.override.OverrideMinecartRenderer;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.override.TankMinecartRenderer;
+import net.luckystudio.spelunkers_charm.init.ModBlockEntityType;
+import net.luckystudio.spelunkers_charm.init.ModEntityType;
 import net.luckystudio.spelunkers_charm.init.ModItems;
+import net.luckystudio.spelunkers_charm.init.ModParticleTypes;
 import net.luckystudio.spelunkers_charm.item.custom.CandleHelmetModel;
 import net.luckystudio.spelunkers_charm.item.custom.MiningHelmetModel;
 import net.minecraft.client.Minecraft;
@@ -35,29 +46,40 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.event.RegisterSpriteSourceTypesEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
-@EventBusSubscriber(modid = SpelunkersCharm.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(
+        modid = SpelunkersCharm.MOD_ID,
+        bus = EventBusSubscriber.Bus.MOD,
+        value = Dist.CLIENT)
 public class SpelunkersCharmClient {
 
-    public static final ModelLayerLocation NEW_MINECART_MODEL = new ModelLayerLocation(SpelunkersCharm.id("new_minecart_model"), "main");
-    public static final ModelLayerLocation SMALL_LIFT = new ModelLayerLocation(SpelunkersCharm.id("small_lift"), "main");
-    public static final ModelLayerLocation MEDIUM_LIFT = new ModelLayerLocation(SpelunkersCharm.id("medium_lift"), "main");
-    public static final ModelLayerLocation LARGE_LIFT = new ModelLayerLocation(SpelunkersCharm.id("large_lift"), "main");
-    public static final ModelLayerLocation BOULDER = new ModelLayerLocation(SpelunkersCharm.id("boulder"), "main");
+    public static final ModelLayerLocation NEW_MINECART_MODEL =
+            new ModelLayerLocation(SpelunkersCharm.id("new_minecart_model"), "main");
+    public static final ModelLayerLocation LOCOMOTIVE_MODEL =
+            new ModelLayerLocation(SpelunkersCharm.id("locomotive_model"), "main");
+    public static final ModelLayerLocation MINECART_LAMP_MODEL =
+            new ModelLayerLocation(SpelunkersCharm.id("minecart_lamp_model"), "main");
+    public static final ModelLayerLocation SMALL_LIFT =
+            new ModelLayerLocation(SpelunkersCharm.id("small_lift"), "main");
+    public static final ModelLayerLocation MEDIUM_LIFT =
+            new ModelLayerLocation(SpelunkersCharm.id("medium_lift"), "main");
+    public static final ModelLayerLocation LARGE_LIFT =
+            new ModelLayerLocation(SpelunkersCharm.id("large_lift"), "main");
+    public static final ModelLayerLocation BOULDER =
+            new ModelLayerLocation(SpelunkersCharm.id("boulder"), "main");
 
     @SubscribeEvent
-    public static void onClientSetup(FMLClientSetupEvent event)
-    {
-
-    }
+    public static void onClientSetup(FMLClientSetupEvent event) {}
 
     @SubscribeEvent
     public static void registerSpriteSourceTypes(RegisterSpriteSourceTypesEvent event) {
-        BoulderCoreSpriteSource.TYPE = event.register(SpelunkersCharm.id("boulder_core"), BoulderCoreSpriteSource.CODEC);
+        BoulderCoreSpriteSource.TYPE =
+                event.register(SpelunkersCharm.id("boulder_core"), BoulderCoreSpriteSource.CODEC);
     }
 
     @SubscribeEvent
@@ -69,11 +91,22 @@ public class SpelunkersCharmClient {
         event.registerEntityRenderer(EntityType.FURNACE_MINECART, OverrideMinecartRenderer::new);
         event.registerEntityRenderer(EntityType.TNT_MINECART, OverrideMinecartRenderer::new);
         event.registerEntityRenderer(EntityType.HOPPER_MINECART, OverrideMinecartRenderer::new);
-        event.registerEntityRenderer(EntityType.COMMAND_BLOCK_MINECART, OverrideMinecartRenderer::new);
+        event.registerEntityRenderer(
+                EntityType.COMMAND_BLOCK_MINECART, OverrideMinecartRenderer::new);
         event.registerEntityRenderer(EntityType.SPAWNER_MINECART, OverrideMinecartRenderer::new);
 
         // New Entity Renderers
-        event.registerEntityRenderer(ModEntityType.BLOCK_MINECART.get(), OverrideMinecartRenderer::new);
+        event.registerEntityRenderer(
+                ModEntityType.BLOCK_MINECART.get(), OverrideMinecartRenderer::new);
+        event.registerEntityRenderer(
+                ModEntityType.MINE_CRATE_MINECART.get(), MineCrateMinecartRenderer::new);
+        event.registerBlockEntityRenderer(
+                ModBlockEntityType.MINE_CRATE.get(), MineCrateRenderer::new);
+        event.registerEntityRenderer(ModEntityType.TANK_MINECART.get(), TankMinecartRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntityType.TANK.get(), TankRenderer::new);
+        event.registerEntityRenderer(ModEntityType.LOCOMOTIVE.get(), LocomotiveRenderer::new);
+        event.registerEntityRenderer(
+                ModEntityType.JUKEBOX_MINECART.get(), OverrideMinecartRenderer::new);
         event.registerEntityRenderer(ModEntityType.SMALL_LIFT.get(), SmallLiftRenderer::new);
         event.registerEntityRenderer(ModEntityType.MEDIUM_LIFT.get(), MediumLiftRenderer::new);
         event.registerEntityRenderer(ModEntityType.LARGE_LIFT.get(), LargeLiftRenderer::new);
@@ -87,19 +120,38 @@ public class SpelunkersCharmClient {
     }
 
     @SubscribeEvent
-    public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(CandleHelmetModel.LAYER_LOCATION, CandleHelmetModel::createBodyLayer);
-        event.registerLayerDefinition(MiningHelmetModel.LAYER_LOCATION, MiningHelmetModel::createBodyLayer);
+    public static void registerLayerDefinitions(
+            EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(
+                CandleHelmetModel.LAYER_LOCATION, CandleHelmetModel::createBodyLayer);
+        event.registerLayerDefinition(
+                MiningHelmetModel.LAYER_LOCATION, MiningHelmetModel::createBodyLayer);
         event.registerLayerDefinition(BOULDER, BoulderModel::createBodyLayer);
         event.registerLayerDefinition(NEW_MINECART_MODEL, NewMinecartModel::createBodyLayer);
+        event.registerLayerDefinition(
+                LOCOMOTIVE_MODEL,
+                net.luckystudio.spelunkers_charm.entity.custom.minecart.override.NewLocomotiveModel
+                        ::createBodyLayer);
+        event.registerLayerDefinition(
+                MINECART_LAMP_MODEL,
+                net.luckystudio.spelunkers_charm.entity.custom.minecart.override.MinecartLampModel
+                        ::createBodyLayer);
         event.registerLayerDefinition(SMALL_LIFT, SmallLiftModel::createBodyLayer);
         event.registerLayerDefinition(MEDIUM_LIFT, MediumLiftModel::createBodyLayer);
         event.registerLayerDefinition(LARGE_LIFT, LargeLiftModel::createBodyLayer);
     }
 
     @SubscribeEvent
+    public static void registerParticleProviders(RegisterParticleProvidersEvent event) {
+        event.registerSpriteSet(
+                ModParticleTypes.CART_LOAD_TRAIL.get(), CartLoadTrailParticle.Provider::new);
+    }
+
+    @SubscribeEvent
     public static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenuTypes.BLASTER_MENU.get(), BlasterScreen::new);
+        event.register(ModMenuTypes.LOCOMOTIVE_MENU.get(), LocomotiveScreen::new);
+        event.register(ModMenuTypes.CART_LOADER_MENU.get(), CartLoaderScreen::new);
     }
 
     @SubscribeEvent
@@ -108,15 +160,22 @@ public class SpelunkersCharmClient {
         registerArmorModel(event, ModItems.MINING_HELMET.get(), MiningHelmetModel.LAYER_LOCATION);
     }
 
-    private static void registerArmorModel(RegisterClientExtensionsEvent event, Item item, ModelLayerLocation layer) {
-        event.registerItem(new IClientItemExtensions() {
+    private static void registerArmorModel(
+            RegisterClientExtensionsEvent event, Item item, ModelLayerLocation layer) {
+        event.registerItem(
+                new IClientItemExtensions() {
 
-            @Override
-            @OnlyIn(Dist.CLIENT)
-            public HumanoidModel<?> getHumanoidArmorModel(LivingEntity living, ItemStack stack, EquipmentSlot slot, HumanoidModel<?> defaultModel) {
-                ModelPart part = Minecraft.getInstance().getEntityModels().bakeLayer(layer);
-                return new HumanoidModel<>(part);
-            }
-        }, item);
+                    @Override
+                    @OnlyIn(Dist.CLIENT)
+                    public HumanoidModel<?> getHumanoidArmorModel(
+                            LivingEntity living,
+                            ItemStack stack,
+                            EquipmentSlot slot,
+                            HumanoidModel<?> defaultModel) {
+                        ModelPart part = Minecraft.getInstance().getEntityModels().bakeLayer(layer);
+                        return new HumanoidModel<>(part);
+                    }
+                },
+                item);
     }
 }

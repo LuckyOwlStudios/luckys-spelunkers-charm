@@ -16,9 +16,37 @@ Work In Progress section is started.
 
 # Work In Progress
 
+**Fixed:**
+- Ramp jumps retain their forward momentum and use gravity-driven descent, with gradual speed gain while falling. Airborne followers keep their shared path and coupling safeguards.
+- Cart position updates blend across client ticks instead of jumping between packets. Prediction follows the rails through bends and respects braking.
+- Jumping trains share a continuous leading path and solve their couplings in three dimensions, keeping airborne followers together through descent and landing.
+
 **Added:**
+- Full Steam Ahead!: an advancement for crafting a locomotive for the first time.
+- Locomotive: three lockable fireboxes provide 5, 6 or 7 blocks/s. Normal rails add 1, active powered rails add 2, and downhill travel adds 0.5 (maximum 9.5). Fuel lasts half as long as in the previous test build. Shift-right-click cycles travel, stop and reverse.
+- Hoppers can put fuel into a locomotive but can't take it back out, so unloading a train doesn't empty the engine.
+- Furnace carts have a 5 blocks/s base speed and use vanilla coal interaction; the temporary furnace-cart GUI is removed.
+- Minecart with Jukebox: shift-right-click a jukebox onto a minecart. Put a music disc in and the music follows the cart. Right-click again to take the disc out. Detector rails give the same comparator signal as a jukebox.
+- The Cart Coupling Hook supports the new carts and rail crossings.
+- Lanterns on minecarts: right-click any minecart with a lantern or soul lantern to hang it on the cart. The cart lights up the tunnel as it rides, and glows smoothly with LambDynamicLights installed. Use shears to take the lantern off. Sneak-clicking still puts lanterns inside the cart as blocks.
+- Rail crossings: right-click a straight rail with another rail while facing across it to make a crossing. Carts go straight through in either direction. Breaking it gives both rails back.
+- Ejector Rail: when powered, throws riders out of passing minecarts. Put a slime block under it to launch them into the air instead. Crafted like an activator rail, with a slime ball in the middle and redstone at the bottom.
+- Coupling items join carts into a train with at most one locomotive or furnace cart. Sneak-click to detach. Carts keep their rail path, follow one another through jumps and share supported engine braking.
+- Airborne couplings preserve wagon order and use smooth body tilt. Large off-rail landings break carts, drop their contents at impact and apply normal fall damage to riders. Catching rails protects the cart and its passengers.
+- Directional Rail controls locomotive and furnace-cart direction and braking. It never ejects riders. Power comes from the top or sides; powered rails cannot feed it, and it does not relay rail power.
+- Cargo Rail: a detector-style rail that gives a redstone signal (0 to 15) for how full the cart on it is. It reads chest, hopper and block minecarts, a locomotive's fuel slot and a jukebox minecart's disc, and gives no signal when the cart is empty. Crafted from iron ingots, a chest and a comparator.
+- The Cargo Rail doesn't power the block below it, so a hopper under it isn't locked and can unload the cart on top. Its signal still reaches redstone dust, repeaters and comparators beside and above it.
+- Hoppers can now pull blocks out of a minecart carrying blocks. When the last block is taken, it turns back into a normal minecart.
+- Click a Directional Rail with an empty hand to turn it around.
+- Wooden rails add no speed bonus. Locomotives can break them, with a one-third chance to return the rail and other outcomes returning nothing or wood scraps.
 - Create and Supplementaries are now listed as optional dependencies. Create adds zinc boulders; Supplementaries lets you tie a boulder to a rope and suspend it in the air, just like a chain. Other rope blocks can be added with the `spelunkers_charm:boulder_ropes` block tag.
 - Tremors shake your camera when [Camera Overhaul](https://modrinth.com/mod/cameraoverhaul) is installed. The shake builds and fades with the tremor, is stronger for bigger tremors and weaker the farther away you are. Camera Overhaul is optional. It can be turned off or scaled with `tremorCameraShake` and `tremorCameraShakeStrength` in the client config.
+
+**Fixed:**
+- Softer train descent angles, new brake sounds and a lower locomotive piston pitch.
+- Small hostile mobs can ride again; large mobs cannot. Angry Endermen leave their cart.
+- Shared train calculations and fewer temporary allocations reduce repeated work. Java classes have short English purpose descriptions.
+- Putting a chest, hopper, furnace or TNT into a minecart now uses up the block. It used to be free.
 
 **Development:**
 - Camera Overhaul (with Cloth Config, which it needs) now loads in dev runs (`runClient`), so tremor camera shake can be tested without installing it by hand. It isn't bundled in the mod jar and stays an optional dependency.

@@ -1,3 +1,4 @@
+// Wood type.
 package net.luckystudio.spelunkers_charm.entity.util;
 
 import net.minecraft.util.ByIdMap;
@@ -14,7 +15,8 @@ import java.util.function.Supplier;
 
 // Copied from the Boat Class in Minecraft, with modifications for a wood type enum.
 // I just made my own for the sake of consistency with the rest of the mod.
-// This class doesn't ask for if it's a raft or whatever, nor the stick item, and a couple of other things.
+// This class doesn't ask for if it's a raft or whatever, nor the stick item, and a couple of other
+// things.
 // We also added crimson and warped cause they weren't in the original enum
 @NamedEnum(1)
 @NetworkedEnum(NetworkedEnum.NetworkCheck.CLIENTBOUND)
@@ -35,7 +37,8 @@ public enum WoodType implements StringRepresentable {
     private final Supplier<Block> planksSupplier;
     final Supplier<Item> boatItem;
     public static final EnumCodec<WoodType> CODEC = StringRepresentable.fromEnum(WoodType::values);
-    private static final IntFunction<WoodType> BY_ID = ByIdMap.continuous(Enum::ordinal, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
+    private static final IntFunction<WoodType> BY_ID =
+            ByIdMap.continuous(Enum::ordinal, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
 
     @ReservedConstructor
     WoodType(Block planks, String name) {

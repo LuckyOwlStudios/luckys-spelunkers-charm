@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "spelunkers_charm:block/cart_loader"
+    },
+    "powered=true": {
+      "model": "spelunkers_charm:block/cart_loader_powered"
+    }
+  }
+}

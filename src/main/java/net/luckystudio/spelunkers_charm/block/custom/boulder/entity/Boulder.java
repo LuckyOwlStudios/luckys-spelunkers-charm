@@ -1,3 +1,4 @@
+// Boulder.
 package net.luckystudio.spelunkers_charm.block.custom.boulder.entity;
 
 import net.luckystudio.spelunkers_charm.block.custom.boulder.BoulderBlock;
@@ -27,15 +28,18 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-// Mainly copied from the armor stand entity, but without the armor slots and other humanoid features.
+// Mainly copied from the armor stand entity, but without the armor slots and other humanoid
+// features.
 public class Boulder extends VehicleEntity {
 
-    private static final EntityDataAccessor<Integer> BOULDER_TYPE = SynchedEntityData.defineId(Boulder.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> BOULDER_TYPE =
+            SynchedEntityData.defineId(Boulder.class, EntityDataSerializers.INT);
     private int onGroundTicks = 0;
 
     public Boulder(EntityType<Boulder> boulderEntityType, Level level) {
@@ -117,7 +121,13 @@ public class Boulder extends VehicleEntity {
     @Override
     public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
         float particleSpread = Mth.clamp(fallDistance * 0.1F / 2, 0.1F, 5.0F);
-        ModParticleTypes.spawnSquareBorderParticles(this.level(), ParticleTypes.DUST_PLUME, this.blockPosition(), this.getBbWidth() / 2, (int) (20 * this.getBbWidth()), particleSpread);
+        ModParticleTypes.spawnSquareBorderParticles(
+                this.level(),
+                ParticleTypes.DUST_PLUME,
+                this.blockPosition(),
+                this.getBbWidth() / 2,
+                (int) (20 * this.getBbWidth()),
+                particleSpread);
         this.playSound(ModSoundEvents.BOULDER_LAND.get(), 1.0F, 1.0F);
 
         AtomicBoolean foundBlock = new AtomicBoolean(false);
@@ -130,9 +140,15 @@ public class Boulder extends VehicleEntity {
 
             // Damage mobs in a 5x5 area at the boulder's level
             AABB damageArea = new AABB(firstPos, secondPos);
-            List<Entity> entities = level().getEntitiesOfClass(Entity.class, damageArea, livingEntity -> livingEntity != Boulder.this);
+            List<Entity> entities =
+                    level().getEntitiesOfClass(
+                                    Entity.class,
+                                    damageArea,
+                                    livingEntity -> livingEntity != Boulder.this);
             for (Entity entity : entities) {
-                entity.hurt(this.damageSources().source(DamageTypes.FALLING_BLOCK), fallDistance * 1.5F);
+                entity.hurt(
+                        this.damageSources().source(DamageTypes.FALLING_BLOCK),
+                        fallDistance * 1.5F);
             }
 
             for (int dx = -2; dx <= 2; dx++) {
@@ -144,7 +160,8 @@ public class Boulder extends VehicleEntity {
                     if (hardness >= 0 && hardness <= (fallDistance / 2.0f)) {
                         level().destroyBlock(target, true);
 
-                        // If the block is not destroyed and is in 3x3 underground area, set foundBlock to true
+                        // If the block is not destroyed and is in 3x3 underground area, set
+                        // foundBlock to true
                     } else if (dx >= -1 && dx <= 1 && dz >= -1 && dz <= 1) {
                         foundBlock.set(true);
                     }
@@ -158,7 +175,8 @@ public class Boulder extends VehicleEntity {
     }
 
     private void placeBoulder() {
-        BoulderBlock.placeBoulder(level(), this.blockPosition(), getBoulderType(), HangingType.NONE);
+        BoulderBlock.placeBoulder(
+                level(), this.blockPosition(), getBoulderType(), HangingType.NONE);
         this.discard();
     }
 

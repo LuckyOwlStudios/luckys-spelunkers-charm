@@ -1,3 +1,4 @@
+// Lift pose collisions.
 package net.luckystudio.spelunkers_charm.entity.custom.lift;
 
 import net.minecraft.world.entity.Entity;
@@ -9,7 +10,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 
-/** Pose clearance must not mistake the supporting deck's next step for a ceiling. */
 public final class LiftPoseCollisions {
     private static final double DECK_STEP_TOLERANCE = 0.20;
 

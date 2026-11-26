@@ -1,6 +1,8 @@
+// Hanging block.
 package net.luckystudio.spelunkers_charm.block.custom;
 
 import com.mojang.serialization.MapCodec;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -14,6 +16,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
 import org.jetbrains.annotations.Nullable;
 
 public class HangingBlock extends Block {
@@ -23,8 +26,7 @@ public class HangingBlock extends Block {
 
     public HangingBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.getStateDefinition().any()
-                .setValue(END, true));
+        this.registerDefaultState(this.getStateDefinition().any().setValue(END, true));
     }
 
     @Override
@@ -33,7 +35,8 @@ public class HangingBlock extends Block {
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    protected VoxelShape getShape(
+            BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 
@@ -43,7 +46,13 @@ public class HangingBlock extends Block {
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public BlockState updateShape(
+            BlockState state,
+            Direction direction,
+            BlockState neighborState,
+            LevelAccessor level,
+            BlockPos pos,
+            BlockPos neighborPos) {
         if (direction == Direction.DOWN) {
             boolean isNowBottom = !neighborState.is(this);
             return state.setValue(END, isNowBottom);
@@ -58,8 +67,10 @@ public class HangingBlock extends Block {
 
     // Check if the block above us is sold or the same block
     @Override
-    protected boolean canSurvive(BlockState blockState, LevelReader levelReader, BlockPos blockPos) {
-        return levelReader.getBlockState(blockPos.above()).is(this) || canSupportCenter(levelReader, blockPos.above(), Direction.DOWN);
+    protected boolean canSurvive(
+            BlockState blockState, LevelReader levelReader, BlockPos blockPos) {
+        return levelReader.getBlockState(blockPos.above()).is(this)
+                || canSupportCenter(levelReader, blockPos.above(), Direction.DOWN);
     }
 
     @Override

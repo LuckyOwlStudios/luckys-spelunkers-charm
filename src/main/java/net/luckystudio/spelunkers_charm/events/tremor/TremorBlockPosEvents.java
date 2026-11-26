@@ -1,10 +1,11 @@
+// Tremor block pos events.
 package net.luckystudio.spelunkers_charm.events.tremor;
 
 import com.google.common.collect.Maps;
-import net.luckystudio.spelunkers_charm.SpelunkersCharmConfig;
+
 import net.luckystudio.spelunkers_charm.block.custom.GeyserBlock;
-import net.luckystudio.spelunkers_charm.init.ModBlocks;
 import net.luckystudio.spelunkers_charm.entity.custom.rock.AbstractThrowableRock;
+import net.luckystudio.spelunkers_charm.init.ModBlocks;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -16,24 +17,29 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.PointedDripstoneBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.fml.ModLoadingContext;
 
 import java.util.Map;
 
 public class TremorBlockPosEvents {
 
-    private static final Map<Block, AbstractThrowableRock.Type> ROCK_TO_DROP = Util.make(Maps.newHashMap(), map -> {
-        map.put(Blocks.STONE, AbstractThrowableRock.Type.ROCK);
-        map.put(Blocks.DEEPSLATE, AbstractThrowableRock.Type.DEEPSLATE_ROCK);
-        map.put(Blocks.DRIPSTONE_BLOCK, AbstractThrowableRock.Type.DRIPSTONE_ROCK);
-        map.put(ModBlocks.WILDSTONE.get(), AbstractThrowableRock.Type.DRIPSTONE_ROCK);
-        map.put(Blocks.BASALT, AbstractThrowableRock.Type.BASALT_ROCK);
-        map.put(ModBlocks.PERMAFROST.get(), AbstractThrowableRock.Type.ICE_BALL);
-        map.put(Blocks.PACKED_ICE, AbstractThrowableRock.Type.ICE_BALL);
-        map.put(Blocks.ICE, AbstractThrowableRock.Type.ICE_BALL);
-    });
+    private static final Map<Block, AbstractThrowableRock.Type> ROCK_TO_DROP =
+            Util.make(
+                    Maps.newHashMap(),
+                    map -> {
+                        map.put(Blocks.STONE, AbstractThrowableRock.Type.ROCK);
+                        map.put(Blocks.DEEPSLATE, AbstractThrowableRock.Type.DEEPSLATE_ROCK);
+                        map.put(Blocks.DRIPSTONE_BLOCK, AbstractThrowableRock.Type.DRIPSTONE_ROCK);
+                        map.put(
+                                ModBlocks.WILDSTONE.get(),
+                                AbstractThrowableRock.Type.DRIPSTONE_ROCK);
+                        map.put(Blocks.BASALT, AbstractThrowableRock.Type.BASALT_ROCK);
+                        map.put(ModBlocks.PERMAFROST.get(), AbstractThrowableRock.Type.ICE_BALL);
+                        map.put(Blocks.PACKED_ICE, AbstractThrowableRock.Type.ICE_BALL);
+                        map.put(Blocks.ICE, AbstractThrowableRock.Type.ICE_BALL);
+                    });
 
-    public static void topEffectPos(Level level, BlockPos pos, TremorManager.RockBudget rockBudget) {
+    public static void topEffectPos(
+            Level level, BlockPos pos, TremorManager.RockBudget rockBudget) {
         breakBlockEffectAt(level, pos);
         BlockState state = level.getBlockState(pos);
 
@@ -74,10 +80,13 @@ public class TremorBlockPosEvents {
     }
 
     private static void dropRock(LevelAccessor levelAccessor, BlockState state, BlockPos pos) {
-        AbstractThrowableRock.Type rockType = ROCK_TO_DROP.getOrDefault(state.getBlock(), AbstractThrowableRock.Type.ROCK);
+        AbstractThrowableRock.Type rockType =
+                ROCK_TO_DROP.getOrDefault(state.getBlock(), AbstractThrowableRock.Type.ROCK);
         if (rockType != null) {
             ServerLevel serverLevel = (ServerLevel) levelAccessor;
-            AbstractThrowableRock rock = AbstractThrowableRock.createRock(serverLevel, pos.getX(), pos.getY(), pos.getZ(), rockType, null);
+            AbstractThrowableRock rock =
+                    AbstractThrowableRock.createRock(
+                            serverLevel, pos.getX(), pos.getY(), pos.getZ(), rockType, null);
             rock.setPos(pos.getX() + 0.5, pos.getY() - 0.1F, pos.getZ() + 0.5);
             levelAccessor.addFreshEntity(rock);
         }

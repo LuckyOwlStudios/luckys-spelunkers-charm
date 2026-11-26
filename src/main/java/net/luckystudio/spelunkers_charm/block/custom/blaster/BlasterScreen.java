@@ -1,6 +1,8 @@
+// Blaster screen.
 package net.luckystudio.spelunkers_charm.block.custom.blaster;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -13,8 +15,8 @@ import net.minecraft.world.entity.player.Inventory;
 public class BlasterScreen extends AbstractContainerScreen<BlasterMenu> {
 
     private static final ResourceLocation GUI_TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(SpelunkersCharm.MOD_ID, "textures/gui/blaster/blaster_gui.png");
-
+            ResourceLocation.fromNamespaceAndPath(
+                    SpelunkersCharm.MOD_ID, "textures/gui/blaster/blaster_gui.png");
 
     public BlasterScreen(BlasterMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);

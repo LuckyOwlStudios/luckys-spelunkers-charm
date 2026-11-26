@@ -1,3 +1,4 @@
+// Lift packet collisions.
 package net.luckystudio.spelunkers_charm.entity.custom.lift;
 
 import net.minecraft.server.level.ServerLevel;
@@ -14,7 +15,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.ArrayList;
 import java.util.List;
 
-/** The ordinary collision rules with one validated, supporting deck omitted. */
 public final class LiftPacketCollisions {
     private LiftPacketCollisions() {}
 

@@ -1,18 +1,20 @@
+// Lift client render mixin.
 package net.luckystudio.spelunkers_charm.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.luckystudio.spelunkers_charm.entity.custom.lift.LiftClientSupport;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.override.MinecartCouplingRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/** Keeps remote passengers on the same rendered deck without fighting their lerp. */
 @Mixin(value = EntityRenderDispatcher.class, remap = false)
 public abstract class LiftClientRenderMixin {
     @Inject(method = "render", at = @At("HEAD"), remap = false)
@@ -43,6 +45,12 @@ public abstract class LiftClientRenderMixin {
             MultiBufferSource buffers,
             int light,
             CallbackInfo info) {
+        if (entity instanceof AbstractMinecart cart) {
+            poses.pushPose();
+            poses.translate(x, y, z);
+            MinecartCouplingRenderer.render(cart, partialTick, poses.last(), buffers, light);
+            poses.popPose();
+        }
         poses.popPose();
     }
 }

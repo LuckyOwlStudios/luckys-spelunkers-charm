@@ -1,3 +1,4 @@
+// Mineral type.
 package net.luckystudio.spelunkers_charm.entity.util;
 
 import net.minecraft.util.ByIdMap;
@@ -22,8 +23,10 @@ public enum MineralType implements StringRepresentable, IExtensibleEnum {
     private final String name;
     private final Supplier<Item> mineralSupplier;
     final Supplier<Item> entityItem;
-    public static final EnumCodec<MineralType> CODEC = StringRepresentable.fromEnum(MineralType::values);
-    private static final IntFunction<MineralType> BY_ID = ByIdMap.continuous(Enum::ordinal, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
+    public static final EnumCodec<MineralType> CODEC =
+            StringRepresentable.fromEnum(MineralType::values);
+    private static final IntFunction<MineralType> BY_ID =
+            ByIdMap.continuous(Enum::ordinal, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
 
     @ReservedConstructor
     MineralType(Item mineral, String name) {
@@ -37,11 +40,7 @@ public enum MineralType implements StringRepresentable, IExtensibleEnum {
      * @param name The name of this boat type
      * @param boatItem A supplier of the item to be dropped when a normal boat or raft of this type is picked up
      */
-    private MineralType(
-            Supplier<Item> planks,
-            String name,
-            Supplier<Item> boatItem
-    ) {
+    private MineralType(Supplier<Item> planks, String name, Supplier<Item> boatItem) {
         this.name = name;
         this.mineralSupplier = planks;
         this.entityItem = boatItem;

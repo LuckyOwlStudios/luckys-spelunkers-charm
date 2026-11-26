@@ -1,3 +1,4 @@
+// Lift client sounds.
 package net.luckystudio.spelunkers_charm.entity.custom.lift;
 
 import net.luckystudio.spelunkers_charm.entity.util.MovementType;
@@ -15,7 +16,6 @@ import net.neoforged.neoforge.event.level.LevelEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-/** One positional OpenAL loop per moving lift, with short attack/release ramps. */
 @EventBusSubscriber(modid = "spelunkers_charm", value = Dist.CLIENT)
 public final class LiftClientSounds {
     private static final Map<Integer, Loop> SOUNDS = new HashMap<>();
@@ -54,6 +54,7 @@ public final class LiftClientSounds {
         SOUNDS.clear();
     }
 
+    /** Plays a moving lift's looping sound. */
     private static final class Loop extends AbstractTickableSoundInstance {
         final AbstractLift lift;
         int lastMovement;

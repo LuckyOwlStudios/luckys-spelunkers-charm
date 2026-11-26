@@ -1,0 +1,60 @@
+// Defines the exported minecart model geometry.
+// Made with Blockbench 5.2.2
+// Exported for Minecraft version 1.17 or later with Mojang mappings
+// Paste this class into your mod and generate all required imports
+
+
+public class ImprovedMinecartModel<T extends Entity> extends EntityModel<T> {
+	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
+	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "improvedminecartmodel"), "main");
+	private final ModelPart light;
+	private final ModelPart body;
+
+	public ImprovedMinecartModel(ModelPart root) {
+		this.light = root.getChild("light");
+		this.body = root.getChild("body");
+	}
+
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+
+		PartDefinition light = partdefinition.addOrReplaceChild("light", CubeListBuilder.create().texOffs(50, 0).addBox(-3.0F, -27.0F, -11.0F, 6.0F, 6.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 22.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+		PartDefinition light_r1 = light.addOrReplaceChild("light_r1", CubeListBuilder.create().texOffs(50, 0).addBox(0.0F, -6.0F, 2.0F, 6.0F, 6.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, -21.0F, 13.0F, 0.0F, 3.1416F, 0.0F));
+
+		PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 38).addBox(-8.0F, -27.0F, -10.0F, 16.0F, 8.0F, 2.0F, new CubeDeformation(0.0F))
+		.texOffs(0, 5).addBox(-6.0F, -29.0F, -11.0F, 12.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
+		.texOffs(50, 7).mirror().addBox(-6.0F, -17.0F, -8.0F, 2.0F, 1.0F, 5.0F, new CubeDeformation(0.0F)).mirror(false)
+		.texOffs(50, 7).addBox(4.0F, -17.0F, -8.0F, 2.0F, 1.0F, 5.0F, new CubeDeformation(0.0F))
+		.texOffs(50, 7).addBox(4.0F, -17.0F, 3.0F, 2.0F, 1.0F, 5.0F, new CubeDeformation(0.0F))
+		.texOffs(50, 7).mirror().addBox(-6.0F, -17.0F, 3.0F, 2.0F, 1.0F, 5.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 22.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+		PartDefinition front_r1 = body.addOrReplaceChild("front_r1", CubeListBuilder.create().texOffs(0, 5).addBox(-6.0F, -1.0F, -1.5F, 12.0F, 2.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -28.0F, 9.5F, 0.0F, 3.1416F, 0.0F));
+
+		PartDefinition left_r1 = body.addOrReplaceChild("left_r1", CubeListBuilder.create().texOffs(0, 0).mirror().addBox(-11.0F, -1.0F, -1.0F, 22.0F, 2.0F, 3.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(8.0F, -28.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
+
+		PartDefinition left_r2 = body.addOrReplaceChild("left_r2", CubeListBuilder.create().texOffs(0, 0).addBox(-11.0F, -1.0F, -1.0F, 22.0F, 2.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-8.0F, -28.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+		PartDefinition left_r3 = body.addOrReplaceChild("left_r3", CubeListBuilder.create().texOffs(0, 28).addBox(-8.0F, -4.0F, -1.0F, 16.0F, 8.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-7.0F, -23.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+		PartDefinition right_r1 = body.addOrReplaceChild("right_r1", CubeListBuilder.create().texOffs(0, 28).addBox(-8.0F, -4.0F, -1.0F, 16.0F, 8.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(7.0F, -23.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
+
+		PartDefinition back_r1 = body.addOrReplaceChild("back_r1", CubeListBuilder.create().texOffs(0, 38).addBox(-8.0F, -4.0F, -1.0F, 16.0F, 8.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -23.0F, 9.0F, 0.0F, 3.1416F, 0.0F));
+
+		PartDefinition bottom_r1 = body.addOrReplaceChild("bottom_r1", CubeListBuilder.create().texOffs(0, 10).addBox(-10.0F, -10.0F, 0.0F, 20.0F, 16.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.0F, -17.0F, 0.0F, 0.0F, 1.5708F, -1.5708F));
+
+		return LayerDefinition.create(meshdefinition, 64, 64);
+	}
+
+	@Override
+	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+
+	}
+
+	@Override
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+		light.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		body.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+	}
+}

@@ -1,8 +1,10 @@
+// Config filter.
 package net.luckystudio.spelunkers_charm.worldgen.feature.placement;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
+
 import net.luckystudio.spelunkers_charm.SpelunkersCharmConfig;
 import net.luckystudio.spelunkers_charm.init.ModPlacementModifiers;
 import net.minecraft.core.BlockPos;
@@ -22,16 +24,21 @@ import java.util.function.Supplier;
  */
 public class ConfigFilter extends PlacementFilter {
     // Suppliers, because the config values are created after this class is first loaded.
-    private static final Map<String, Supplier<ModConfigSpec.BooleanValue>> OPTIONS = Map.of(
-            "rocks", () -> SpelunkersCharmConfig.ROCKS
-    );
+    private static final Map<String, Supplier<ModConfigSpec.BooleanValue>> OPTIONS =
+            Map.of("rocks", () -> SpelunkersCharmConfig.ROCKS);
 
-    public static final MapCodec<ConfigFilter> CODEC = Codec.STRING
-            .validate(option -> OPTIONS.containsKey(option)
-                    ? DataResult.success(option)
-                    : DataResult.error(() -> "Unknown Spelunker's Charm config option: " + option))
-            .fieldOf("option")
-            .xmap(ConfigFilter::new, filter -> filter.option);
+    public static final MapCodec<ConfigFilter> CODEC =
+            Codec.STRING
+                    .validate(
+                            option ->
+                                    OPTIONS.containsKey(option)
+                                            ? DataResult.success(option)
+                                            : DataResult.error(
+                                                    () ->
+                                                            "Unknown Spelunker's Charm config option: "
+                                                                    + option))
+                    .fieldOf("option")
+                    .xmap(ConfigFilter::new, filter -> filter.option);
 
     private final String option;
 

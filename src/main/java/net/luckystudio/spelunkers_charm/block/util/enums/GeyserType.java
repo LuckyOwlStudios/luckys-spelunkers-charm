@@ -1,6 +1,8 @@
+// Geyser type.
 package net.luckystudio.spelunkers_charm.block.util.enums;
 
 import net.minecraft.util.StringRepresentable;
+
 import org.jetbrains.annotations.NotNull;
 
 public enum GeyserType implements StringRepresentable {

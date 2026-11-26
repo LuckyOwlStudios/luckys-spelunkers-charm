@@ -1,3 +1,4 @@
+// Blaster util.
 package net.luckystudio.spelunkers_charm.block.custom.blaster;
 
 import net.luckystudio.spelunkers_charm.block.util.enums.GeyserType;
@@ -38,19 +39,23 @@ public final class BlasterUtil {
         if (level.isClientSide) {
             spawnParticles(level, pos, type, facing);
         } else if (level.getGameTime() % 5 == 0) {
-            level.playSound(null, pos.above(), SoundEvents.BLAZE_SHOOT, SoundSource.BLOCKS, 1.0F, 0.75F);
+            level.playSound(
+                    null, pos.above(), SoundEvents.BLAZE_SHOOT, SoundSource.BLOCKS, 1.0F, 0.75F);
         }
 
         affectEntities(level, pos, type, facing);
     }
 
-    private static void spawnParticles(Level level, BlockPos pos, GeyserType type, Direction facing) {
-        ParticleOptions main = switch (type) {
-            case LAVA -> ParticleTypes.FLAME;
-            case WATER -> ParticleTypes.CLOUD;
-            default -> ParticleTypes.SNOWFLAKE;
-        };
-        ParticleOptions secondary = type == GeyserType.LAVA ? ParticleTypes.SMOKE : ParticleTypes.DRIPPING_WATER;
+    private static void spawnParticles(
+            Level level, BlockPos pos, GeyserType type, Direction facing) {
+        ParticleOptions main =
+                switch (type) {
+                    case LAVA -> ParticleTypes.FLAME;
+                    case WATER -> ParticleTypes.CLOUD;
+                    default -> ParticleTypes.SNOWFLAKE;
+                };
+        ParticleOptions secondary =
+                type == GeyserType.LAVA ? ParticleTypes.SMOKE : ParticleTypes.DRIPPING_WATER;
 
         double vx = facing.getStepX() * PARTICLE_SPEED;
         double vy = facing.getStepY() * PARTICLE_SPEED;
@@ -66,26 +71,37 @@ public final class BlasterUtil {
             double b = (random.nextDouble() - 0.5) * PARTICLE_SPREAD;
             double x = originX, y = originY, z = originZ;
             switch (facing.getAxis()) {
-                case X -> { y += a; z += b; }
-                case Y -> { x += a; z += b; }
-                case Z -> { x += a; y += b; }
+                case X -> {
+                    y += a;
+                    z += b;
+                }
+                case Y -> {
+                    x += a;
+                    z += b;
+                }
+                case Z -> {
+                    x += a;
+                    y += b;
+                }
             }
             level.addParticle(main, x, y, z, vx, vy, vz);
             level.addParticle(secondary, x, y, z, vx, vy, vz);
         }
     }
 
-    private static void affectEntities(Level level, BlockPos pos, GeyserType type, Direction facing) {
+    private static void affectEntities(
+            Level level, BlockPos pos, GeyserType type, Direction facing) {
         Vec3 direction = Vec3.atLowerCornerOf(facing.getNormal());
         AABB area = new AABB(pos).move(direction).expandTowards(direction.scale(RANGE));
         List<LivingEntity> targets = level.getEntitiesOfClass(LivingEntity.class, area);
         if (targets.isEmpty()) return;
 
-        DamageSource damage = switch (type) {
-            case LAVA -> level.damageSources().onFire();
-            case SNOW -> level.damageSources().freeze();
-            default -> null;
-        };
+        DamageSource damage =
+                switch (type) {
+                    case LAVA -> level.damageSources().onFire();
+                    case SNOW -> level.damageSources().freeze();
+                    default -> null;
+                };
         Vec3 push = direction.scale(PUSH);
 
         for (LivingEntity entity : targets) {

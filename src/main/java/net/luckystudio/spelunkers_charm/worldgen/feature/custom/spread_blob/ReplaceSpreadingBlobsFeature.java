@@ -1,6 +1,8 @@
+// Replace spreading blobs feature.
 package net.luckystudio.spelunkers_charm.worldgen.feature.custom.spread_blob;
 
 import com.mojang.serialization.Codec;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -26,11 +28,16 @@ public class ReplaceSpreadingBlobsFeature extends Feature<ReplaceSpreadingSphere
         RandomSource random = context.random();
         Block targetBlock = config.targetState.getBlock();
 
-        BlockPos origin = findTarget(
-                world,
-                context.origin().mutable().clamp(Direction.Axis.Y, world.getMinBuildHeight() + 1, world.getMaxBuildHeight() - 1),
-                targetBlock
-        );
+        BlockPos origin =
+                findTarget(
+                        world,
+                        context.origin()
+                                .mutable()
+                                .clamp(
+                                        Direction.Axis.Y,
+                                        world.getMinBuildHeight() + 1,
+                                        world.getMaxBuildHeight() - 1),
+                        targetBlock);
 
         if (origin == null) {
             return false;
@@ -55,7 +62,8 @@ public class ReplaceSpreadingBlobsFeature extends Feature<ReplaceSpreadingSphere
             // Check 6 directions to see if any neighbor would NOT be replaced (is outside the blob)
             for (Direction dir : Direction.values()) {
                 BlockPos neighbor = pos.relative(dir);
-                if (neighbor.distManhattan(origin) > maxRadius || !world.getBlockState(neighbor).is(targetBlock)) {
+                if (neighbor.distManhattan(origin) > maxRadius
+                        || !world.getBlockState(neighbor).is(targetBlock)) {
                     isEdge = true;
                     break;
                 }
@@ -70,7 +78,8 @@ public class ReplaceSpreadingBlobsFeature extends Feature<ReplaceSpreadingSphere
     }
 
     @Nullable
-    private static BlockPos findTarget(LevelAccessor level, BlockPos.MutableBlockPos pos, Block targetBlock) {
+    private static BlockPos findTarget(
+            LevelAccessor level, BlockPos.MutableBlockPos pos, Block targetBlock) {
         while (pos.getY() > level.getMinBuildHeight() + 1) {
             if (level.getBlockState(pos).is(targetBlock)) {
                 return pos.immutable(); // return immutable to prevent side effects

@@ -1,3 +1,4 @@
+// Lift track block.
 package net.luckystudio.spelunkers_charm.block.custom;
 
 import net.minecraft.core.BlockPos;
@@ -16,7 +17,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
-/** Shared rack orientation and observer-readable platform presence. */
 public abstract class LiftTrackBlock extends HorizontalDirectionalBlock {
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     public static final BooleanProperty LIFT_PRESENT = BooleanProperty.create("lift_present");

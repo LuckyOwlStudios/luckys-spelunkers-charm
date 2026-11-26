@@ -1,3 +1,4 @@
+// Deepslate rock.
 package net.luckystudio.spelunkers_charm.entity.custom.rock;
 
 import net.luckystudio.spelunkers_charm.init.ModBlocks;
@@ -9,6 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+
 import org.jetbrains.annotations.NotNull;
 
 public class DeepslateRock extends AbstractThrowableRock {

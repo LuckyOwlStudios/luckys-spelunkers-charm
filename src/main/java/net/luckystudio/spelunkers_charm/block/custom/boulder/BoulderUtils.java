@@ -1,3 +1,4 @@
+// Boulder utils.
 package net.luckystudio.spelunkers_charm.block.custom.boulder;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharmConfig;
@@ -57,13 +58,19 @@ public class BoulderUtils {
      * Places a full 3x3x3 boulder with the given bottom-middle position.
      * The middle of the boulder is the ore's raw block.
      */
-    public static void placeBoulder(LevelAccessor level, BlockPos origin, BoulderType type, HangingType hangingType, int flags) {
-        BlockState boulderState = getBoulderFromType(type).setValue(BoulderBlock.HANGING_TYPE, hangingType);
+    public static void placeBoulder(
+            LevelAccessor level,
+            BlockPos origin,
+            BoulderType type,
+            HangingType hangingType,
+            int flags) {
+        BlockState boulderState =
+                getBoulderFromType(type).setValue(BoulderBlock.HANGING_TYPE, hangingType);
         Direction direction = Direction.NORTH;
         BlockPart[][] layers = {
-                {BlockPart.BOTTOM_MIDDLE, BlockPart.BOTTOM_SIDE, BlockPart.BOTTOM_CORNER},
-                {null, BlockPart.MIDDLE_SIDE, BlockPart.MIDDLE_CORNER},
-                {BlockPart.TOP_MIDDLE, BlockPart.TOP_SIDE, BlockPart.TOP_CORNER}
+            {BlockPart.BOTTOM_MIDDLE, BlockPart.BOTTOM_SIDE, BlockPart.BOTTOM_CORNER},
+            {null, BlockPart.MIDDLE_SIDE, BlockPart.MIDDLE_CORNER},
+            {BlockPart.TOP_MIDDLE, BlockPart.TOP_SIDE, BlockPart.TOP_CORNER}
         };
         for (int y = 0; y < 3; y++) {
             BlockPos center = origin.above(y);
@@ -71,19 +78,29 @@ public class BoulderUtils {
             if (middle == null) {
                 level.setBlock(center, getRawCore(type).defaultBlockState(), flags);
             } else {
-                level.setBlock(center, boulderState
-                        .setValue(BoulderBlock.FACING, direction)
-                        .setValue(BoulderBlock.BLOCK_PART, middle), flags);
+                level.setBlock(
+                        center,
+                        boulderState
+                                .setValue(BoulderBlock.FACING, direction)
+                                .setValue(BoulderBlock.BLOCK_PART, middle),
+                        flags);
             }
-            // Walk around the center: each side faces outward, and each corner shares the facing of the side before it.
+            // Walk around the center: each side faces outward, and each corner shares the facing of
+            // the side before it.
             Direction facing = direction;
             for (int i = 0; i < 4; i++) {
-                level.setBlock(center.relative(facing), boulderState
-                        .setValue(BoulderBlock.FACING, facing)
-                        .setValue(BoulderBlock.BLOCK_PART, layers[y][1]), flags);
-                level.setBlock(center.relative(facing).relative(facing.getClockWise()), boulderState
-                        .setValue(BoulderBlock.FACING, facing)
-                        .setValue(BoulderBlock.BLOCK_PART, layers[y][2]), flags);
+                level.setBlock(
+                        center.relative(facing),
+                        boulderState
+                                .setValue(BoulderBlock.FACING, facing)
+                                .setValue(BoulderBlock.BLOCK_PART, layers[y][1]),
+                        flags);
+                level.setBlock(
+                        center.relative(facing).relative(facing.getClockWise()),
+                        boulderState
+                                .setValue(BoulderBlock.FACING, facing)
+                                .setValue(BoulderBlock.BLOCK_PART, layers[y][2]),
+                        flags);
                 facing = facing.getClockWise();
             }
         }

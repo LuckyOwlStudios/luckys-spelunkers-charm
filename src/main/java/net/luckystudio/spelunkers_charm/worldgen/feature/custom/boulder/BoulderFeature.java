@@ -1,6 +1,8 @@
+// Boulder feature.
 package net.luckystudio.spelunkers_charm.worldgen.feature.custom.boulder;
 
 import com.mojang.serialization.Codec;
+
 import net.luckystudio.spelunkers_charm.SpelunkersCharmConfig;
 import net.luckystudio.spelunkers_charm.block.custom.boulder.BoulderOre;
 import net.luckystudio.spelunkers_charm.block.custom.boulder.BoulderType;
@@ -30,15 +32,20 @@ public class BoulderFeature extends Feature<NoneFeatureConfiguration> {
         WorldGenLevel world = context.level();
         BlockPos origin = context.origin().above();
 
-        boolean isLushCave = world.getBiome(origin).is(ModBiomeTags.IS_JUNGLE_CAVE) || world.getBiome(origin).getKey() == Biomes.LUSH_CAVES;
-        boolean isFrozenCave = world.getBiome(origin).is(ModBiomeTags.IS_COLD_CAVE) && world.getBiome(origin).getKey() != Biomes.DRIPSTONE_CAVES;
+        boolean isLushCave =
+                world.getBiome(origin).is(ModBiomeTags.IS_JUNGLE_CAVE)
+                        || world.getBiome(origin).getKey() == Biomes.LUSH_CAVES;
+        boolean isFrozenCave =
+                world.getBiome(origin).is(ModBiomeTags.IS_COLD_CAVE)
+                        && world.getBiome(origin).getKey() != Biomes.DRIPSTONE_CAVES;
         boolean isBelowZero = origin.getY() < 0;
 
         BoulderOre ore = BoulderUtils.pickOre(context.random(), isBelowZero);
         BoulderType boulderType = BoulderType.of(ore, isLushCave);
 
         // The base under the boulder copies the natural floor it landed on, so it blends in.
-        // Only falls back to a biome-based block when the floor is something unnatural (ores, wood, our own blocks...).
+        // Only falls back to a biome-based block when the floor is something unnatural (ores, wood,
+        // our own blocks...).
         BlockState floorState = world.getBlockState(origin.below());
         BlockState surroundingBlockState;
         if (isNaturalFloor(floorState)) {
@@ -55,7 +62,8 @@ public class BoulderFeature extends Feature<NoneFeatureConfiguration> {
 
         BoulderUtils.placeBoulder(world, origin, boulderType, HangingType.NONE, Block.UPDATE_ALL);
 
-        // Fill gaps in a 5x5 under the boulder so it never hangs over a hole. Existing solid floor is left alone.
+        // Fill gaps in a 5x5 under the boulder so it never hangs over a hole. Existing solid floor
+        // is left alone.
         for (int x = -2; x <= 2; x++) {
             for (int z = -2; z <= 2; z++) {
                 BlockPos pos = origin.offset(x, -1, z);

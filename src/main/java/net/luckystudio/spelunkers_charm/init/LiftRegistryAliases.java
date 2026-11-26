@@ -1,3 +1,4 @@
+// Lift registry aliases.
 package net.luckystudio.spelunkers_charm.init;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
@@ -7,13 +8,18 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
-/** Keep existing worlds and inventory stacks readable after the rack ID cleanup. */
 @EventBusSubscriber(modid = SpelunkersCharm.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class LiftRegistryAliases {
     private LiftRegistryAliases() {}
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void registerAliases(RegisterEvent event) {
+        if (event.getRegistryKey().equals(Registries.MENU)) {
+            event.getRegistry()
+                    .addAlias(
+                            SpelunkersCharm.id("furnace_minecart_menu"),
+                            SpelunkersCharm.id("locomotive_menu"));
+        }
         if (event.getRegistryKey().equals(Registries.BLOCK)
                 || event.getRegistryKey().equals(Registries.ITEM)) {
             event.getRegistry()

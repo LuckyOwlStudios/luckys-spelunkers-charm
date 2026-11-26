@@ -1,3 +1,4 @@
+// Lift player pose mixin.
 package net.luckystudio.spelunkers_charm.mixin;
 
 import net.luckystudio.spelunkers_charm.entity.custom.lift.LiftPoseCollisions;
@@ -9,7 +10,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/** Keep vanilla pose rules, allowing only the player's actual supporting lift deck. */
 @Mixin(value = Player.class, remap = false)
 public abstract class LiftPlayerPoseMixin {
     @Inject(

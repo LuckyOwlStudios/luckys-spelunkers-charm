@@ -1,8 +1,10 @@
 {
   "values": [
+    "spelunkers_charm:mine_crate",
     "spelunkers_charm:basic_lift_track",
     "spelunkers_charm:detector_lift_track",
     "spelunkers_charm:directional_lift_track",
-    "spelunkers_charm:powered_lift_track"
+    "spelunkers_charm:powered_lift_track",
+    "spelunkers_charm:wooden_rail"
   ]
 }

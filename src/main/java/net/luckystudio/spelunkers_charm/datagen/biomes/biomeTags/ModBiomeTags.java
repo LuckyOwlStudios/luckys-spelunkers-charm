@@ -1,3 +1,4 @@
+// Biome tags.
 package net.luckystudio.spelunkers_charm.datagen.biomes.biomeTags;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
@@ -12,8 +13,7 @@ public class ModBiomeTags {
     public static final TagKey<Biome> IS_HOT_CAVE = create("is_hot_cave");
     public static final TagKey<Biome> IS_JUNGLE_CAVE = create("is_beach");
 
-    private ModBiomeTags() {
-    }
+    private ModBiomeTags() {}
 
     private static TagKey<Biome> create(String name) {
         return TagKey.create(Registries.BIOME, SpelunkersCharm.id(name));

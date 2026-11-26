@@ -1,6 +1,8 @@
+// Ice sheet feature.
 package net.luckystudio.spelunkers_charm.worldgen.feature.custom.ice_pool;
 
 import com.mojang.serialization.Codec;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
@@ -32,9 +34,7 @@ public class IceSheetFeature extends Feature<IceSheetConfiguration> {
         return !set.isEmpty();
     }
 
-    protected Set<BlockPos> placeGroundPatch(
-            WorldGenLevel level
-    ) {
+    protected Set<BlockPos> placeGroundPatch(WorldGenLevel level) {
         Set<BlockPos> set1 = new HashSet<>();
 
         for (BlockPos blockpos1 : set1) {

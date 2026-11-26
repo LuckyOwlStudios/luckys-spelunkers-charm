@@ -1,5 +1,5 @@
+// Cave mushroom block.
 package net.luckystudio.spelunkers_charm.block.custom;
-
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -20,7 +20,8 @@ public class CaveMushroomBlock extends MushroomBlock {
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    protected VoxelShape getShape(
+            BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 }

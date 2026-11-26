@@ -1,3 +1,4 @@
+// Lift shaft.
 package net.luckystudio.spelunkers_charm.entity.custom.lift;
 
 import net.minecraft.server.level.ServerLevel;
@@ -6,7 +7,6 @@ import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 
-/** Placement ownership: one platform per continuous, complete vertical guide route. */
 public final class LiftShaft {
     private static final double EPSILON = LiftCollisionGeometry.EPSILON;
 

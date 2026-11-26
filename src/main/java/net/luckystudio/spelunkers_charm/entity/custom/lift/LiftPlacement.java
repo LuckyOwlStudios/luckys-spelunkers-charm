@@ -1,3 +1,4 @@
+// Lift placement.
 package net.luckystudio.spelunkers_charm.entity.custom.lift;
 
 import net.luckystudio.spelunkers_charm.block.custom.LiftTrackBlock;
@@ -8,8 +9,8 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.phys.shapes.Shapes;
 
-/** Resolve rack clicks and floor clicks, then validate clearance and shaft ownership. */
 public final class LiftPlacement {
+    /** Stores the result of validating lift placement. */
     public record Result(AbstractLift lift, boolean occupiedShaft) {}
 
     private final ServerLevel level;

@@ -1,3 +1,4 @@
+// Structure processor type.
 package net.luckystudio.spelunkers_charm.init;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;

@@ -1,3 +1,4 @@
+// Tree features.
 package net.luckystudio.spelunkers_charm.worldgen.feature.features;
 
 import net.luckystudio.spelunkers_charm.init.ModBlocks;
@@ -13,25 +14,26 @@ import net.minecraft.world.level.levelgen.feature.configurations.HugeMushroomFea
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
 public class ModTreeFeatures {
-    public static final ResourceKey<ConfiguredFeature<?, ?>> HUGE_CAVE_MUSHROOM = ModFeatureUtils.createKey("huge_cave_mushroom");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> HUGE_CAVE_MUSHROOM =
+            ModFeatureUtils.createKey("huge_cave_mushroom");
 
     public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
-        FeatureUtils.register(context, HUGE_CAVE_MUSHROOM, ModFeature.HUGE_CAVE_MUSHROOM.get(),
+        FeatureUtils.register(
+                context,
+                HUGE_CAVE_MUSHROOM,
+                ModFeature.HUGE_CAVE_MUSHROOM.get(),
                 new HugeMushroomFeatureConfiguration(
                         BlockStateProvider.simple(
-                                ModBlocks.CAVE_MUSHROOM_BLOCK.get()
+                                ModBlocks.CAVE_MUSHROOM_BLOCK
+                                        .get()
                                         .defaultBlockState()
                                         .setValue(HugeMushroomBlock.UP, Boolean.valueOf(true))
-                                        .setValue(HugeMushroomBlock.DOWN, Boolean.valueOf(false))
-                        ),
+                                        .setValue(HugeMushroomBlock.DOWN, Boolean.valueOf(false))),
                         BlockStateProvider.simple(
                                 Blocks.MUSHROOM_STEM
                                         .defaultBlockState()
                                         .setValue(HugeMushroomBlock.UP, Boolean.valueOf(false))
-                                        .setValue(HugeMushroomBlock.DOWN, Boolean.valueOf(false))
-                        ),
-                        3
-                )
-        );
+                                        .setValue(HugeMushroomBlock.DOWN, Boolean.valueOf(false))),
+                        3));
     }
 }

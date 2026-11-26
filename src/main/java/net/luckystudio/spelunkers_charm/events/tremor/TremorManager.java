@@ -1,8 +1,9 @@
+// Tremor manager.
 package net.luckystudio.spelunkers_charm.events.tremor;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharmConfig;
-import net.luckystudio.spelunkers_charm.entity.custom.rock.AbstractThrowableRock;
 import net.luckystudio.spelunkers_charm.datagen.biomes.biomeTags.ModBiomeTags;
+import net.luckystudio.spelunkers_charm.entity.custom.rock.AbstractThrowableRock;
 import net.luckystudio.spelunkers_charm.init.ModEntityType;
 import net.luckystudio.spelunkers_charm.init.ModSoundEvents;
 import net.minecraft.core.BlockPos;
@@ -35,22 +36,31 @@ public class TremorManager {
      * @param warningChance chance each nearby player hears the warning rumble when a new tremor starts
      * @param forceSpawn   skip the dimension, sky, difficulty, biome and config checks (used by the command)
      */
-    public static void spawnTremor(Level level, BlockPos pos, int length, int magnitude, float warningChance, boolean forceSpawn) {
+    public static void spawnTremor(
+            Level level,
+            BlockPos pos,
+            int length,
+            int magnitude,
+            float warningChance,
+            boolean forceSpawn) {
         if (forceSpawn || canTremor(level, pos)) {
             AABB searchBox = new AABB(pos).inflate(64);
             List<Tremor> tremors = level.getEntitiesOfClass(Tremor.class, searchBox);
             if (!tremors.isEmpty()) {
-                // Merge into the existing tremor by keeping the stronger values instead of adding them,
+                // Merge into the existing tremor by keeping the stronger values instead of adding
+                // them,
                 // so stacked explosions can't make tremors grow without limit.
                 for (Tremor tremor : tremors) {
                     tremor.setLength(Math.max(tremor.getLength(), tremor.getLifetime() + length));
                     tremor.setMagnitude(Math.max(tremor.getMagnitude(), magnitude));
                 }
             } else {
-                List<ServerPlayer> players = level.getEntitiesOfClass(ServerPlayer.class, searchBox);
+                List<ServerPlayer> players =
+                        level.getEntitiesOfClass(ServerPlayer.class, searchBox);
                 for (ServerPlayer player : players) {
                     if (player.getRandom().nextFloat() < warningChance) {
-                        player.playNotifySound(getRumbleSound(player), SoundSource.AMBIENT, 1.0F, 1.0F);
+                        player.playNotifySound(
+                                getRumbleSound(player), SoundSource.AMBIENT, 1.0F, 1.0F);
                     }
                 }
                 Tremor tremor = new Tremor(ModEntityType.TREMOR.get(), level);
@@ -96,9 +106,11 @@ public class TremorManager {
         intensity = tremor.getIntensity();
         if (intensity <= 0.0F) return;
 
-        // Number of spots shaken this tick, scaled by the current intensity (randomly rounded so low intensities still do something).
+        // Number of spots shaken this tick, scaled by the current intensity (randomly rounded so
+        // low intensities still do something).
         float attempts = (tremor.getMagnitude() + 2) * intensity;
-        int repeatCount = Mth.floor(attempts) + (random.nextFloat() < attempts - Mth.floor(attempts) ? 1 : 0);
+        int repeatCount =
+                Mth.floor(attempts) + (random.nextFloat() < attempts - Mth.floor(attempts) ? 1 : 0);
 
         // Just to help the sounds play nicer
         SoundEvent tremorSound = getTremorSound(level, pos);
@@ -114,16 +126,20 @@ public class TremorManager {
         RockBudget rockBudget = new RockBudget(level, pos, radius);
 
         for (int i = 0; i < repeatCount; i++) {
-            Optional<BlockPos> validTopEffectPos = findValidEffectPos(level, pos, Direction.UP, radius);
-            Optional<BlockPos> validBottomEffectPos = findValidEffectPos(level, pos, Direction.DOWN, radius);
+            Optional<BlockPos> validTopEffectPos =
+                    findValidEffectPos(level, pos, Direction.UP, radius);
+            Optional<BlockPos> validBottomEffectPos =
+                    findValidEffectPos(level, pos, Direction.DOWN, radius);
 
-            validTopEffectPos.ifPresent(blockPos -> {
-                TremorBlockPosEvents.topEffectPos(level, blockPos, rockBudget);
-            });
+            validTopEffectPos.ifPresent(
+                    blockPos -> {
+                        TremorBlockPosEvents.topEffectPos(level, blockPos, rockBudget);
+                    });
 
-            validBottomEffectPos.ifPresent(blockPos -> {
-                TremorBlockPosEvents.bottomEffectPos(level, blockPos);
-            });
+            validBottomEffectPos.ifPresent(
+                    blockPos -> {
+                        TremorBlockPosEvents.bottomEffectPos(level, blockPos);
+                    });
         }
     }
 
@@ -131,7 +147,8 @@ public class TremorManager {
         return tremor.getLifetime() >= tremor.getLength() - rampTicks;
     }
 
-    public static Optional<BlockPos> findValidEffectPos(Level level, BlockPos center, Direction direction, int radius) {
+    public static Optional<BlockPos> findValidEffectPos(
+            Level level, BlockPos center, Direction direction, int radius) {
         RandomSource random = level.getRandom();
         int verticalRadius = Math.max(1, radius / 2);
 
@@ -151,7 +168,8 @@ public class TremorManager {
             if (!blockState.isAir() && !blockState.canBeReplaced()) {
                 // Special case: skip certain pointed dripstone blocks
                 if (blockState.getBlock() instanceof PointedDripstoneBlock) {
-                    DripstoneThickness thickness = blockState.getValue(PointedDripstoneBlock.THICKNESS);
+                    DripstoneThickness thickness =
+                            blockState.getValue(PointedDripstoneBlock.THICKNESS);
                     if (thickness != DripstoneThickness.BASE) {
                         continue;
                     }
@@ -173,6 +191,7 @@ public class TremorManager {
      * Limits how many rocks one tremor drops: a chance per shaken ceiling, a cap per tick,
      * a cap on falling rocks already around the tremor, and a player nearby.
      */
+    /** Limits the falling rocks created during a tremor. */
     public static class RockBudget {
         private final Level level;
         private final BlockPos center;
@@ -189,16 +208,26 @@ public class TremorManager {
 
         public boolean tryDropRock(BlockPos pos) {
             if (this.remainingThisTick <= 0) return false;
-            if (this.level.getRandom().nextFloat() >= SpelunkersCharmConfig.TREMOR_ROCK_CHANCE.get()) return false;
+            if (this.level.getRandom().nextFloat()
+                    >= SpelunkersCharmConfig.TREMOR_ROCK_CHANCE.get()) return false;
 
             int playerRange = SpelunkersCharmConfig.TREMOR_ROCK_PLAYER_RANGE.get();
-            if (!this.level.hasNearbyAlivePlayer(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, playerRange)) return false;
+            if (!this.level.hasNearbyAlivePlayer(
+                    pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, playerRange))
+                return false;
 
             if (this.nearbyRocks < 0) {
-                AABB box = new AABB(this.center).inflate(this.radius, Math.max(1, this.radius / 2) + 48, this.radius);
-                this.nearbyRocks = this.level.getEntitiesOfClass(AbstractThrowableRock.class, box).size();
+                AABB box =
+                        new AABB(this.center)
+                                .inflate(
+                                        this.radius,
+                                        Math.max(1, this.radius / 2) + 48,
+                                        this.radius);
+                this.nearbyRocks =
+                        this.level.getEntitiesOfClass(AbstractThrowableRock.class, box).size();
             }
-            if (this.nearbyRocks >= SpelunkersCharmConfig.TREMOR_MAX_ROCKS_NEARBY.get()) return false;
+            if (this.nearbyRocks >= SpelunkersCharmConfig.TREMOR_MAX_ROCKS_NEARBY.get())
+                return false;
 
             this.remainingThisTick--;
             this.nearbyRocks++;
@@ -211,7 +240,7 @@ public class TremorManager {
         Level level = serverPlayer.level();
         Holder<Biome> biomeKey = level.getBiome(serverPlayer.blockPosition());
         if (biomeKey.is(ModBiomeTags.IS_COLD_CAVE)
-//                && SpelunkersCharmConfig.STONE_REPLACERS.get()
+        //                && SpelunkersCharmConfig.STONE_REPLACERS.get()
         ) {
             return ModSoundEvents.RUMBLE_ICY.get();
         } else {
@@ -223,7 +252,7 @@ public class TremorManager {
     private static SoundEvent getTremorSound(Level level, BlockPos pos) {
         Holder<Biome> biomeKey = level.getBiome(pos);
         if (biomeKey.is(ModBiomeTags.IS_COLD_CAVE)
-//                && SpelunkersCharmConfig.STONE_REPLACERS.get()
+        //                && SpelunkersCharmConfig.STONE_REPLACERS.get()
         ) {
             return ModSoundEvents.TREMOR_ICY.get();
         } else {

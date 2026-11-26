@@ -1,3 +1,4 @@
+// Biome modifier.
 package net.luckystudio.spelunkers_charm.worldgen;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
@@ -28,54 +29,83 @@ import java.util.List;
  * The ores we replace are in a tag. This way our mod only replaces the ores we have counterparts for, that way modded ores we don't have support for stay generated.
  * Sometimes my genius is almost... frightening.
  */
-
 public class ModBiomeModifier {
-    public static final ResourceKey<BiomeModifier> OVERWORLD_UNDERGROUND_DECORATION = registerKey("overworld_underground_decoration");
+    public static final ResourceKey<BiomeModifier> OVERWORLD_UNDERGROUND_DECORATION =
+            registerKey("overworld_underground_decoration");
 
-    public static final ResourceKey<BiomeModifier> ICE_CAVE_UNDERGROUND_DECORATION = registerKey("ice_cave_vegetal_decoration");
+    public static final ResourceKey<BiomeModifier> ICE_CAVE_UNDERGROUND_DECORATION =
+            registerKey("ice_cave_vegetal_decoration");
 
-    public static final ResourceKey<BiomeModifier> JUNGLE_CAVE_UNDERGROUND_DECORATION = registerKey("jungle_cave_vegetal_decoration");
+    public static final ResourceKey<BiomeModifier> JUNGLE_CAVE_UNDERGROUND_DECORATION =
+            registerKey("jungle_cave_vegetal_decoration");
 
-    public static final ResourceKey<BiomeModifier> NETHER_UNDERGROUND_DECORATION = registerKey("nether_vegetal_decoration");
+    public static final ResourceKey<BiomeModifier> NETHER_UNDERGROUND_DECORATION =
+            registerKey("nether_vegetal_decoration");
 
     public static void bootstrap(BootstrapContext<BiomeModifier> context) {
         var placedFeatures = context.lookup(Registries.PLACED_FEATURE);
         var biomes = context.lookup(Registries.BIOME);
 
-        // We register all rocks to spawn in everywhere in the overworld because we want our rocks to be compatible with modded biomes, the ConfiguredFeature will handle the filtering
-        context.register(OVERWORLD_UNDERGROUND_DECORATION, new BiomeModifiers.AddFeaturesBiomeModifier(biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
-                HolderSet.direct(List.of(
-                        placedFeatures.getOrThrow(ModCavePlacements.DEEPSLATE_LAVA_GEYSER),
-                        placedFeatures.getOrThrow(ModCavePlacements.CLAY_PILE),
-                        placedFeatures.getOrThrow(ModCavePlacements.ROCK_PILE),
-                        placedFeatures.getOrThrow(ModCavePlacements.DEEPSLATE_ROCK_PILE),
-                        placedFeatures.getOrThrow(ModCavePlacements.DRIPSTONE_ROCK_PILE),
-                        placedFeatures.getOrThrow(ModCavePlacements.PATCH_CAVE_MUSHROOM),
-                        placedFeatures.getOrThrow(ModCavePlacements.BOULDERS)
-                )), GenerationStep.Decoration.UNDERGROUND_DECORATION));
+        // We register all rocks to spawn in everywhere in the overworld because we want our rocks
+        // to be compatible with modded biomes, the ConfiguredFeature will handle the filtering
+        context.register(
+                OVERWORLD_UNDERGROUND_DECORATION,
+                new BiomeModifiers.AddFeaturesBiomeModifier(
+                        biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
+                        HolderSet.direct(
+                                List.of(
+                                        placedFeatures.getOrThrow(
+                                                ModCavePlacements.DEEPSLATE_LAVA_GEYSER),
+                                        placedFeatures.getOrThrow(ModCavePlacements.CLAY_PILE),
+                                        placedFeatures.getOrThrow(ModCavePlacements.ROCK_PILE),
+                                        placedFeatures.getOrThrow(
+                                                ModCavePlacements.DEEPSLATE_ROCK_PILE),
+                                        placedFeatures.getOrThrow(
+                                                ModCavePlacements.DRIPSTONE_ROCK_PILE),
+                                        placedFeatures.getOrThrow(
+                                                ModCavePlacements.PATCH_CAVE_MUSHROOM),
+                                        placedFeatures.getOrThrow(ModCavePlacements.BOULDERS))),
+                        GenerationStep.Decoration.UNDERGROUND_DECORATION));
 
-        context.register(ICE_CAVE_UNDERGROUND_DECORATION, new BiomeModifiers.AddFeaturesBiomeModifier(biomes.getOrThrow(ModBiomeTags.IS_COLD_CAVE),
-                HolderSet.direct(List.of(
-                        placedFeatures.getOrThrow(ModCavePlacements.ORE_SILT),
-                        placedFeatures.getOrThrow(ModCavePlacements.ICE_PILE),
-                        placedFeatures.getOrThrow(ModCavePlacements.LARGE_ICICLE),
-                        placedFeatures.getOrThrow(ModCavePlacements.ICICLE_CLUSTER),
-                        placedFeatures.getOrThrow(ModCavePlacements.BOTTOM_ICE_SHEET)
-                )), GenerationStep.Decoration.UNDERGROUND_DECORATION));
+        context.register(
+                ICE_CAVE_UNDERGROUND_DECORATION,
+                new BiomeModifiers.AddFeaturesBiomeModifier(
+                        biomes.getOrThrow(ModBiomeTags.IS_COLD_CAVE),
+                        HolderSet.direct(
+                                List.of(
+                                        placedFeatures.getOrThrow(ModCavePlacements.ORE_SILT),
+                                        placedFeatures.getOrThrow(ModCavePlacements.ICE_PILE),
+                                        placedFeatures.getOrThrow(ModCavePlacements.LARGE_ICICLE),
+                                        placedFeatures.getOrThrow(ModCavePlacements.ICICLE_CLUSTER),
+                                        placedFeatures.getOrThrow(
+                                                ModCavePlacements.BOTTOM_ICE_SHEET))),
+                        GenerationStep.Decoration.UNDERGROUND_DECORATION));
 
-        context.register(JUNGLE_CAVE_UNDERGROUND_DECORATION, new BiomeModifiers.AddFeaturesBiomeModifier(biomes.getOrThrow(ModBiomeTags.IS_JUNGLE_CAVE),
-                HolderSet.direct(List.of(
-                        placedFeatures.getOrThrow(ModCavePlacements.NEW_LUSH_VEGETATION),
-                        placedFeatures.getOrThrow(CavePlacements.LUSH_CAVES_CEILING_VEGETATION)
-                )), GenerationStep.Decoration.UNDERGROUND_DECORATION));
+        context.register(
+                JUNGLE_CAVE_UNDERGROUND_DECORATION,
+                new BiomeModifiers.AddFeaturesBiomeModifier(
+                        biomes.getOrThrow(ModBiomeTags.IS_JUNGLE_CAVE),
+                        HolderSet.direct(
+                                List.of(
+                                        placedFeatures.getOrThrow(
+                                                ModCavePlacements.NEW_LUSH_VEGETATION),
+                                        placedFeatures.getOrThrow(
+                                                CavePlacements.LUSH_CAVES_CEILING_VEGETATION))),
+                        GenerationStep.Decoration.UNDERGROUND_DECORATION));
 
-        context.register(NETHER_UNDERGROUND_DECORATION, new BiomeModifiers.AddFeaturesBiomeModifier(biomes.getOrThrow(BiomeTags.IS_NETHER),
-                HolderSet.direct(List.of(
-                        placedFeatures.getOrThrow(ModCavePlacements.BASALT_ROCK_PILE)
-                )), GenerationStep.Decoration.UNDERGROUND_DECORATION));
+        context.register(
+                NETHER_UNDERGROUND_DECORATION,
+                new BiomeModifiers.AddFeaturesBiomeModifier(
+                        biomes.getOrThrow(BiomeTags.IS_NETHER),
+                        HolderSet.direct(
+                                List.of(
+                                        placedFeatures.getOrThrow(
+                                                ModCavePlacements.BASALT_ROCK_PILE))),
+                        GenerationStep.Decoration.UNDERGROUND_DECORATION));
     }
 
     private static ResourceKey<BiomeModifier> registerKey(String name) {
-        return ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, SpelunkersCharm.id(name));
+        return ResourceKey.create(
+                NeoForgeRegistries.Keys.BIOME_MODIFIERS, SpelunkersCharm.id(name));
     }
 }

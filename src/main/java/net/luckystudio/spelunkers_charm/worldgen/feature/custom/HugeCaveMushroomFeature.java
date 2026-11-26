@@ -1,6 +1,8 @@
+// Huge cave mushroom feature.
 package net.luckystudio.spelunkers_charm.worldgen.feature.custom;
 
 import com.mojang.serialization.Codec;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -24,8 +26,11 @@ public class HugeCaveMushroomFeature extends AbstractHugeMushroomFeature {
     }
 
     protected boolean isValidPosition(
-            LevelAccessor level, BlockPos pos, int maxHeight, BlockPos.MutableBlockPos mutablePos, HugeMushroomFeatureConfiguration config
-    ) {
+            LevelAccessor level,
+            BlockPos pos,
+            int maxHeight,
+            BlockPos.MutableBlockPos mutablePos,
+            HugeMushroomFeatureConfiguration config) {
         int i = pos.getY();
         if (i >= level.getMinBuildHeight() + 1 && i + maxHeight + 1 < level.getMaxBuildHeight()) {
             BlockState blockstate = level.getBlockState(pos.below());
@@ -37,7 +42,8 @@ public class HugeCaveMushroomFeature extends AbstractHugeMushroomFeature {
 
                     for (int l = -k; l <= k; l++) {
                         for (int i1 = -k; i1 <= k; i1++) {
-                            BlockState blockstate1 = level.getBlockState(mutablePos.setWithOffset(pos, l, j, i1));
+                            BlockState blockstate1 =
+                                    level.getBlockState(mutablePos.setWithOffset(pos, l, j, i1));
                             if (!blockstate1.isAir() && !blockstate1.is(BlockTags.LEAVES)) {
                                 return false;
                             }
@@ -53,38 +59,44 @@ public class HugeCaveMushroomFeature extends AbstractHugeMushroomFeature {
     }
 
     @Override
-    protected void makeCap(LevelAccessor level, RandomSource random, BlockPos pos, int treeHeight, BlockPos.MutableBlockPos mutablePos, HugeMushroomFeatureConfiguration config) {
+    protected void makeCap(
+            LevelAccessor level,
+            RandomSource random,
+            BlockPos pos,
+            int treeHeight,
+            BlockPos.MutableBlockPos mutablePos,
+            HugeMushroomFeatureConfiguration config) {
         BlockState capState = config.capProvider.getState(random, pos);
         BlockState lightState = Blocks.OCHRE_FROGLIGHT.defaultBlockState();
 
         int[][][] capShape = {
-                { // Top Layer (treeHeight)
-                        {0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 1, 1, 1, 0, 0},
-                        {0, 1, 1, 1, 1, 1, 0},
-                        {0, 1, 1, 1, 1, 1, 0},
-                        {0, 1, 1, 1, 1, 1, 0},
-                        {0, 0, 1, 1, 1, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0}
-                },
-                { // Second Layer (1 block below)
-                        {0, 0, 1, 1, 1, 0, 0},
-                        {0, 1, 1, 1, 1, 1, 0},
-                        {1, 1, 2, 2, 2, 1, 1},
-                        {1, 1, 2, 2, 2, 1, 1},
-                        {1, 1, 2, 2, 2, 1, 1},
-                        {0, 1, 1, 1, 1, 1, 0},
-                        {0, 0, 1, 1, 1, 0, 0}
-                },
-                { // Third Layer (2 blocks below)
-                        {0, 0, 1, 1, 1, 0, 0},
-                        {0, 1, 0, 0, 0, 1, 0},
-                        {1, 0, 0, 0, 0, 0, 1},
-                        {1, 0, 0, 0, 0, 0, 1},
-                        {1, 0, 0, 0, 0, 0, 1},
-                        {0, 1, 0, 0, 0, 1, 0},
-                        {0, 0, 1, 1, 1, 0, 0}
-                }
+            { // Top Layer (treeHeight)
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 1, 1, 1, 0, 0},
+                {0, 1, 1, 1, 1, 1, 0},
+                {0, 1, 1, 1, 1, 1, 0},
+                {0, 1, 1, 1, 1, 1, 0},
+                {0, 0, 1, 1, 1, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0}
+            },
+            { // Second Layer (1 block below)
+                {0, 0, 1, 1, 1, 0, 0},
+                {0, 1, 1, 1, 1, 1, 0},
+                {1, 1, 2, 2, 2, 1, 1},
+                {1, 1, 2, 2, 2, 1, 1},
+                {1, 1, 2, 2, 2, 1, 1},
+                {0, 1, 1, 1, 1, 1, 0},
+                {0, 0, 1, 1, 1, 0, 0}
+            },
+            { // Third Layer (2 blocks below)
+                {0, 0, 1, 1, 1, 0, 0},
+                {0, 1, 0, 0, 0, 1, 0},
+                {1, 0, 0, 0, 0, 0, 1},
+                {1, 0, 0, 0, 0, 0, 1},
+                {1, 0, 0, 0, 0, 0, 1},
+                {0, 1, 0, 0, 0, 1, 0},
+                {0, 0, 1, 1, 1, 0, 0}
+            }
         };
 
         for (int y = 0; y < capShape.length; y++) {
@@ -97,16 +109,34 @@ public class HugeCaveMushroomFeature extends AbstractHugeMushroomFeature {
 
                         if (!level.getBlockState(mutablePos).isSolidRender(level, mutablePos)) {
                             BlockState stateToPlace = (blockType == 2) ? lightState : capState;
-                            boolean isInnerSecondLayer = (y == 1 && dx >= -2 && dx <= 2 && dz >= -2 && dz <= 2 && blockType != 2);
-                            boolean isInnerThirdLayer = (y == 2 && dx > -3 && dx < 3 && dz > -3 && dz < 3);
+                            boolean isInnerSecondLayer =
+                                    (y == 1
+                                            && dx >= -2
+                                            && dx <= 2
+                                            && dz >= -2
+                                            && dz <= 2
+                                            && blockType != 2);
+                            boolean isInnerThirdLayer =
+                                    (y == 2 && dx > -3 && dx < 3 && dz > -3 && dz < 3);
 
                             if (stateToPlace == capState) {
-                                stateToPlace = stateToPlace
-                                        .setValue(HugeMushroomBlock.DOWN, y != 1)
-                                        .setValue(HugeMushroomBlock.NORTH, !(dz == 3 || dz == 2 && Math.abs(dx) == 2))
-                                        .setValue(HugeMushroomBlock.EAST, !(dx == -3 || dx == -2 && Math.abs(dz) == 2))
-                                        .setValue(HugeMushroomBlock.SOUTH, !(dz == -3 || dz == -2 && Math.abs(dx) == 2))
-                                        .setValue(HugeMushroomBlock.WEST, !(dx == 3 || dx == 2 && Math.abs(dz) == 2));
+                                stateToPlace =
+                                        stateToPlace
+                                                .setValue(HugeMushroomBlock.DOWN, y != 1)
+                                                .setValue(
+                                                        HugeMushroomBlock.NORTH,
+                                                        !(dz == 3 || dz == 2 && Math.abs(dx) == 2))
+                                                .setValue(
+                                                        HugeMushroomBlock.EAST,
+                                                        !(dx == -3
+                                                                || dx == -2 && Math.abs(dz) == 2))
+                                                .setValue(
+                                                        HugeMushroomBlock.SOUTH,
+                                                        !(dz == -3
+                                                                || dz == -2 && Math.abs(dx) == 2))
+                                                .setValue(
+                                                        HugeMushroomBlock.WEST,
+                                                        !(dx == 3 || dx == 2 && Math.abs(dz) == 2));
                             }
 
                             this.setBlock(level, mutablePos, stateToPlace);
@@ -117,46 +147,51 @@ public class HugeCaveMushroomFeature extends AbstractHugeMushroomFeature {
         }
     }
 
-
     @Override
-    protected void placeTrunk(LevelAccessor level, RandomSource random, BlockPos pos, HugeMushroomFeatureConfiguration config, int maxHeight, BlockPos.MutableBlockPos mutablePos) {
+    protected void placeTrunk(
+            LevelAccessor level,
+            RandomSource random,
+            BlockPos pos,
+            HugeMushroomFeatureConfiguration config,
+            int maxHeight,
+            BlockPos.MutableBlockPos mutablePos) {
         // Define the layers of the mushroom stem shape
         int[][][] shape = {
-                { // Bottom Layer (0)
-                        {0, 2, 1, 2, 0},
-                        {0, 1, 1, 1, 2},
-                        {1, 1, 1, 1, 1},
-                        {0, 1, 1, 1, 2},
-                        {0, 2, 1, 2, 0}
-                },
-                { // Layer 1
-                        {0, 0, 0, 0, 0},
-                        {0, 1, 1, 1, 0},
-                        {0, 1, 1, 1, 0},
-                        {0, 1, 1, 1, 0},
-                        {0, 0, 0, 0, 0}
-                },
-                { // Layer 2
-                        {0, 0, 0, 0, 0},
-                        {0, 0, 1, 0, 0},
-                        {0, 1, 1, 1, 0},
-                        {0, 0, 1, 0, 0},
-                        {0, 0, 0, 0, 0}
-                },
-                { // Layer 3
-                        {0, 0, 0, 0, 0},
-                        {0, 0, 2, 0, 0},
-                        {0, 2, 1, 2, 0},
-                        {0, 0, 2, 0, 0},
-                        {0, 0, 0, 0, 0}
-                },
-                { // Top Layer (4)
-                        {0, 0, 0, 0, 0},
-                        {0, 0, 1, 0, 0},
-                        {0, 1, 1, 1, 0},
-                        {0, 0, 1, 0, 0},
-                        {0, 0, 0, 0, 0}
-                }
+            { // Bottom Layer (0)
+                {0, 2, 1, 2, 0},
+                {0, 1, 1, 1, 2},
+                {1, 1, 1, 1, 1},
+                {0, 1, 1, 1, 2},
+                {0, 2, 1, 2, 0}
+            },
+            { // Layer 1
+                {0, 0, 0, 0, 0},
+                {0, 1, 1, 1, 0},
+                {0, 1, 1, 1, 0},
+                {0, 1, 1, 1, 0},
+                {0, 0, 0, 0, 0}
+            },
+            { // Layer 2
+                {0, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0},
+                {0, 1, 1, 1, 0},
+                {0, 0, 1, 0, 0},
+                {0, 0, 0, 0, 0}
+            },
+            { // Layer 3
+                {0, 0, 0, 0, 0},
+                {0, 0, 2, 0, 0},
+                {0, 2, 1, 2, 0},
+                {0, 0, 2, 0, 0},
+                {0, 0, 0, 0, 0}
+            },
+            { // Top Layer (4)
+                {0, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0},
+                {0, 1, 1, 1, 0},
+                {0, 0, 1, 0, 0},
+                {0, 0, 0, 0, 0}
+            }
         };
 
         // Loop through each layer and place blocks
@@ -169,9 +204,11 @@ public class HugeCaveMushroomFeature extends AbstractHugeMushroomFeature {
                         mutablePos.set(pos).move(dx, y, dz);
                         BlockState stem = config.stemProvider.getState(random, pos);
                         if (!level.getBlockState(mutablePos).isSolidRender(level, mutablePos)) {
-                            this.setBlock(level, mutablePos, stem
-                                    .setValue(HugeMushroomBlock.UP, true)
-                                    .setValue(HugeMushroomBlock.DOWN, true));
+                            this.setBlock(
+                                    level,
+                                    mutablePos,
+                                    stem.setValue(HugeMushroomBlock.UP, true)
+                                            .setValue(HugeMushroomBlock.DOWN, true));
                         }
                     }
                 }

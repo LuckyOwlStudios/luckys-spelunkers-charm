@@ -1,3 +1,4 @@
+// Lift crouch smoke.
 package net.luckystudio.spelunkers_charm.gametest;
 
 import net.luckystudio.spelunkers_charm.entity.custom.lift.AbstractLift;
@@ -166,7 +167,8 @@ public final class LiftCrouchSmoke {
             var player = level.players().getFirst();
             player.getAbilities().flying = false;
             player.onUpdateAbilities();
-            player.teleportTo(level, 0.5, 75, 0.5, 0, 15);
+            int pitch = Boolean.getBoolean("spelunkers_lifts.clientCulling") ? -75 : 15;
+            player.teleportTo(level, 0.5, 75, 0.5, 0, pitch);
             liftId = lift.getId();
         } catch (Throwable error) {
             Minecraft.getInstance().execute(() -> finish("FAIL setup " + error + "\n"));

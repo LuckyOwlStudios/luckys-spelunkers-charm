@@ -1,18 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- *
- * Could not load the following classes:
- *  com.mojang.blaze3d.vertex.PoseStack
- *  com.mojang.blaze3d.vertex.VertexConsumer
- *  net.minecraft.client.model.HierarchicalModel
- *  net.minecraft.client.model.geom.ModelPart
- *  net.minecraft.client.model.geom.PartPose
- *  net.minecraft.client.model.geom.builders.CubeDeformation
- *  net.minecraft.client.model.geom.builders.CubeListBuilder
- *  net.minecraft.client.model.geom.builders.LayerDefinition
- *  net.minecraft.client.model.geom.builders.MeshDefinition
- *  net.minecraft.client.model.geom.builders.PartDefinition
- */
+// Small lift model.
 package net.luckystudio.spelunkers_charm.entity.custom.lift.small;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -616,7 +602,7 @@ public class SmallLiftModel<T extends SmallLift> extends HierarchicalModel<T> {
         this.root().getAllParts().forEach(ModelPart::resetPose);
         ((AbstractLift) ((Object) entity))
                 .setLeverAngle((AbstractLift) ((Object) entity), this.lever);
-        // Actual travel drives the teeth, so reversing and stopping remain in sync.
+
         double height = entity.yo + (entity.getY() - entity.yo) * limbSwing;
         float angle = (float) ((height / 0.6875) % (Math.PI * 2.0));
         this.leftGear.xRot = angle;

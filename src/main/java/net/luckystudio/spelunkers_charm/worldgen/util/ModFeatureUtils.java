@@ -1,3 +1,4 @@
+// Feature utils.
 package net.luckystudio.spelunkers_charm.worldgen.util;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;

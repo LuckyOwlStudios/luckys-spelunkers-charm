@@ -1,3 +1,4 @@
+// Tremor.
 package net.luckystudio.spelunkers_charm.events.tremor;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharmConfig;
@@ -15,11 +16,16 @@ import net.minecraft.world.entity.Marker;
 import net.minecraft.world.level.Level;
 
 public class Tremor extends Marker {
-    private static final EntityDataAccessor<Integer> LIFETIME = SynchedEntityData.defineId(Tremor.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> LENGTH = SynchedEntityData.defineId(Tremor.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> MAGNITUDE = SynchedEntityData.defineId(Tremor.class, EntityDataSerializers.INT);
-    // How strong the tremor currently is, from 0 (still) to 1 (full strength). Ramps up at the start and fades out at the end.
-    private static final EntityDataAccessor<Float> INTENSITY = SynchedEntityData.defineId(Tremor.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Integer> LIFETIME =
+            SynchedEntityData.defineId(Tremor.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> LENGTH =
+            SynchedEntityData.defineId(Tremor.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> MAGNITUDE =
+            SynchedEntityData.defineId(Tremor.class, EntityDataSerializers.INT);
+    // How strong the tremor currently is, from 0 (still) to 1 (full strength). Ramps up at the
+    // start and fades out at the end.
+    private static final EntityDataAccessor<Float> INTENSITY =
+            SynchedEntityData.defineId(Tremor.class, EntityDataSerializers.FLOAT);
     // Ticks spent in the warning phase before the shaking starts.
     int startUp = 0;
 
@@ -45,7 +51,9 @@ public class Tremor extends Marker {
     }
 
     public void setMagnitude(int magnitude) {
-        this.entityData.set(MAGNITUDE, Mth.clamp(magnitude, 1, SpelunkersCharmConfig.TREMOR_MAX_MAGNITUDE.get()));
+        this.entityData.set(
+                MAGNITUDE,
+                Mth.clamp(magnitude, 1, SpelunkersCharmConfig.TREMOR_MAX_MAGNITUDE.get()));
     }
 
     public float getIntensity() {
@@ -86,7 +94,8 @@ public class Tremor extends Marker {
         super.readAdditionalSaveData(compound);
         this.entityData.set(LIFETIME, compound.getInt("Lifetime"));
         if (compound.contains("Length")) this.entityData.set(LENGTH, compound.getInt("Length"));
-        if (compound.contains("Magnitude")) this.entityData.set(MAGNITUDE, compound.getInt("Magnitude"));
+        if (compound.contains("Magnitude"))
+            this.entityData.set(MAGNITUDE, compound.getInt("Magnitude"));
         this.entityData.set(INTENSITY, compound.getFloat("Intensity"));
         this.startUp = compound.getInt("StartUp");
     }
@@ -101,7 +110,8 @@ public class Tremor extends Marker {
         compound.putInt("StartUp", this.startUp);
     }
 
-    // Vanilla markers are never sent to clients. Tremors are, so the client can read their intensity
+    // Vanilla markers are never sent to clients. Tremors are, so the client can read their
+    // intensity
     // and magnitude for camera shake (see client.TremorCameraShake).
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity serverEntity) {

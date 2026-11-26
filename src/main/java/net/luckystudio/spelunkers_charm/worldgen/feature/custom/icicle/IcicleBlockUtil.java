@@ -1,3 +1,4 @@
+// Icicle block util.
 package net.luckystudio.spelunkers_charm.worldgen.feature.custom.icicle;
 
 import net.luckystudio.spelunkers_charm.init.ModBlocks;
@@ -15,7 +16,8 @@ import java.util.function.Consumer;
 
 public class IcicleBlockUtil {
 
-    protected static void buildBaseToTipColumn(Direction direction, int height, boolean mergeTip, Consumer<BlockState> blockSetter) {
+    protected static void buildBaseToTipColumn(
+            Direction direction, int height, boolean mergeTip, Consumer<BlockState> blockSetter) {
         if (height >= 3) {
             blockSetter.accept(createIcicle(direction, DripstoneThickness.BASE));
 
@@ -29,21 +31,33 @@ public class IcicleBlockUtil {
         }
 
         if (height >= 1) {
-            blockSetter.accept(createIcicle(direction, mergeTip ? DripstoneThickness.TIP_MERGE : DripstoneThickness.TIP));
+            blockSetter.accept(
+                    createIcicle(
+                            direction,
+                            mergeTip ? DripstoneThickness.TIP_MERGE : DripstoneThickness.TIP));
         }
     }
 
-    public static void growPointedIcicle(LevelAccessor level, BlockPos pos, Direction direction, int height, boolean mergeTip) {
+    public static void growPointedIcicle(
+            LevelAccessor level, BlockPos pos, Direction direction, int height, boolean mergeTip) {
         if (isIcicleBase(level.getBlockState(pos.relative(direction.getOpposite())))) {
             BlockPos.MutableBlockPos blockpos$mutableblockpos = pos.mutable();
-            buildBaseToTipColumn(direction, height, mergeTip, blockState -> {
-                if (blockState.is(ModBlocks.ICICLE.get())) {
-                    blockState = blockState.setValue(BlockStateProperties.WATERLOGGED, Boolean.valueOf(level.isWaterAt(blockpos$mutableblockpos)));
-                }
+            buildBaseToTipColumn(
+                    direction,
+                    height,
+                    mergeTip,
+                    blockState -> {
+                        if (blockState.is(ModBlocks.ICICLE.get())) {
+                            blockState =
+                                    blockState.setValue(
+                                            BlockStateProperties.WATERLOGGED,
+                                            Boolean.valueOf(
+                                                    level.isWaterAt(blockpos$mutableblockpos)));
+                        }
 
-                level.setBlock(blockpos$mutableblockpos, blockState, 2);
-                blockpos$mutableblockpos.move(direction);
-            });
+                        level.setBlock(blockpos$mutableblockpos, blockState, 2);
+                        blockpos$mutableblockpos.move(direction);
+                    });
         }
     }
 
@@ -57,8 +71,10 @@ public class IcicleBlockUtil {
         }
     }
 
-    public static BlockState createIcicle(Direction direction, DripstoneThickness dripstoneThickness) {
-        return ModBlocks.ICICLE.get()
+    public static BlockState createIcicle(
+            Direction direction, DripstoneThickness dripstoneThickness) {
+        return ModBlocks.ICICLE
+                .get()
                 .defaultBlockState()
                 .setValue(BlockStateProperties.VERTICAL_DIRECTION, direction)
                 .setValue(BlockStateProperties.DRIPSTONE_THICKNESS, dripstoneThickness);
@@ -84,16 +100,17 @@ public class IcicleBlockUtil {
         return isIcicleBase(state) || state.is(Blocks.LAVA);
     }
 
-    public static boolean isCircleMostlyEmbeddedInStone(WorldGenLevel level, BlockPos pos, int radius) {
+    public static boolean isCircleMostlyEmbeddedInStone(
+            WorldGenLevel level, BlockPos pos, int radius) {
         if (isEmptyOrWaterOrLava(level, pos)) {
             return false;
         } else {
             float f = 6.0F;
-            float f1 = 6.0F / (float)radius;
+            float f1 = 6.0F / (float) radius;
 
             for (float f2 = 0.0F; f2 < (float) (Math.PI * 2); f2 += f1) {
-                int i = (int)(Mth.cos(f2) * (float)radius);
-                int j = (int)(Mth.sin(f2) * (float)radius);
+                int i = (int) (Mth.cos(f2) * (float) radius);
+                int j = (int) (Mth.sin(f2) * (float) radius);
                 if (isEmptyOrWaterOrLava(level, pos.offset(i, 0, j))) {
                     return false;
                 }
@@ -111,7 +128,8 @@ public class IcicleBlockUtil {
         return state.isAir() || state.is(Blocks.WATER) || state.is(Blocks.LAVA);
     }
 
-    public static double getIcicleHeight(double radius, double maxRadius, double scale, double minRadius) {
+    public static double getIcicleHeight(
+            double radius, double maxRadius, double scale, double minRadius) {
         if (radius < minRadius) {
             radius = minRadius;
         }

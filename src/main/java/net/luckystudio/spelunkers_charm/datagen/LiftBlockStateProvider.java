@@ -1,3 +1,4 @@
+// Lift block state provider.
 package net.luckystudio.spelunkers_charm.datagen;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
@@ -12,7 +13,6 @@ import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
-/** Static rack models; a station's display is independent of its command pulse. */
 public final class LiftBlockStateProvider extends BlockStateProvider {
     public LiftBlockStateProvider(PackOutput output, ExistingFileHelper helper) {
         super(output, SpelunkersCharm.MOD_ID, helper);

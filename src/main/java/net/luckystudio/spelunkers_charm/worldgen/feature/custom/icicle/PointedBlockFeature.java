@@ -1,6 +1,8 @@
+// Pointed block feature.
 package net.luckystudio.spelunkers_charm.worldgen.feature.custom.icicle;
 
 import com.mojang.serialization.Codec;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -27,17 +29,22 @@ public class PointedBlockFeature extends Feature<IcicleConfiguration> {
             return false;
         } else {
             BlockPos blockpos1 = blockpos.relative(optional.get().getOpposite());
-            createPatchOfDripstoneBlocks(levelaccessor, randomsource, blockpos1, IcicleConfiguration);
-            int i = randomsource.nextFloat() < IcicleConfiguration.chanceOfTallerDripstone
-                    && IcicleBlockUtil.isEmptyOrWater(levelaccessor.getBlockState(blockpos.relative(optional.get())))
-                    ? 2
-                    : 1;
+            createPatchOfDripstoneBlocks(
+                    levelaccessor, randomsource, blockpos1, IcicleConfiguration);
+            int i =
+                    randomsource.nextFloat() < IcicleConfiguration.chanceOfTallerDripstone
+                                    && IcicleBlockUtil.isEmptyOrWater(
+                                            levelaccessor.getBlockState(
+                                                    blockpos.relative(optional.get())))
+                            ? 2
+                            : 1;
             IcicleBlockUtil.growPointedIcicle(levelaccessor, blockpos, optional.get(), i, false);
             return true;
         }
     }
 
-    private static Optional<Direction> getTipDirection(LevelAccessor level, BlockPos pos, RandomSource random) {
+    private static Optional<Direction> getTipDirection(
+            LevelAccessor level, BlockPos pos, RandomSource random) {
         boolean flag = IcicleBlockUtil.isIcicleBase(level.getBlockState(pos.above()));
         boolean flag1 = IcicleBlockUtil.isIcicleBase(level.getBlockState(pos.below()));
         if (flag && flag1) {
@@ -50,8 +57,7 @@ public class PointedBlockFeature extends Feature<IcicleConfiguration> {
     }
 
     private static void createPatchOfDripstoneBlocks(
-            LevelAccessor level, RandomSource random, BlockPos pos, IcicleConfiguration config
-    ) {
+            LevelAccessor level, RandomSource random, BlockPos pos, IcicleConfiguration config) {
         IcicleBlockUtil.placeIcicleBlockIfPossible(level, pos);
 
         for (Direction direction : Direction.Plane.HORIZONTAL) {

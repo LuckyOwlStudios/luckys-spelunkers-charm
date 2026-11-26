@@ -233,3 +233,21 @@ Found a bug or have an idea? [Open an issue](https://github.com/LuckyOwlStudios/
 ## License
 
 Spelunker's Charm is **All Rights Reserved**. The original NeoForge MDK template files are covered by the MIT license in [`TEMPLATE_LICENSE.txt`](TEMPLATE_LICENSE.txt).
+
+## Code and performance checks
+
+Java files start with a short English purpose comment and use consistent four-space formatting.
+Connection snapshots change only when links change. Lift guide
+positions are refreshed when the lift enters another block or turns. Flight and rail physics retain their existing behavior. Rail limits, flight constraints, controls and saved data stay compatible.
+
+Build with JDK 21: `gradlew.bat build`. Development tests use a separate source set and JAR.
+Run the bounded performance fixture with `gradlew.bat runGameTestServer -PelevatorTests=true -PelevatorTestNamespaces=spelunkers_performance_tests`.
+It writes `performance.csv` and `performance.jfr` in the test run directory. It measures warmed
+server level ticks for an empty world, 64 idle carts, 8-cart and 24-cart trains, eight moving lifts,
+and a 16-cart flight. Compare repeated runs on the same machine; tick times are not FPS results.
+Generated `.cache` files are excluded from production resources. Textures, sounds and game data
+are unchanged by the cleanup.
+
+Sustained bare-ground contact brakes standalone carts and supported trains when the engine leaves the rails.
+This also stops wagons still on rails behind a grounded engine. An unpowered train brakes on ground contact.
+Short contacts during rail capture and trains with airborne members retain their existing physics.

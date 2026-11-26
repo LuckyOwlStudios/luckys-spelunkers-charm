@@ -1,3 +1,4 @@
+// Lift track load events.
 package net.luckystudio.spelunkers_charm.block.custom;
 
 import net.minecraft.core.BlockPos;
@@ -7,9 +8,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.ChunkEvent;
 
-/**
- * Reconcile saved input latches, including stations loaded from the old level-triggered version.
- */
 @EventBusSubscriber(modid = "spelunkers_charm")
 public final class LiftTrackLoadEvents {
     private LiftTrackLoadEvents() {}
@@ -18,8 +16,7 @@ public final class LiftTrackLoadEvents {
     public static void loaded(ChunkEvent.Load event) {
         if (!(event.getLevel() instanceof ServerLevel level)
                 || !(event.getChunk() instanceof LevelChunk chunk)) return;
-        // Queue explicitly: execute() runs inline on the server thread, before
-        // the chunk-load callback has necessarily finished publishing the chunk.
+
         level.getServer()
                 .tell(
                         new net.minecraft.server.TickTask(
@@ -46,7 +43,8 @@ public final class LiftTrackLoadEvents {
                                                         continue;
                                                     BlockPos pos =
                                                             new BlockPos(
-                                                                    originX + x, originY + y,
+                                                                    originX + x,
+                                                                    originY + y,
                                                                     originZ + z);
                                                     if (!level.getBlockTicks()
                                                             .hasScheduledTick(

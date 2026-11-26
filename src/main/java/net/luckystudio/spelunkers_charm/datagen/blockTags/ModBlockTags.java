@@ -1,3 +1,4 @@
+// Block tags.
 package net.luckystudio.spelunkers_charm.datagen.blockTags;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;

@@ -1,3 +1,4 @@
+// Biomes.
 package net.luckystudio.spelunkers_charm.worldgen.biomes;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;

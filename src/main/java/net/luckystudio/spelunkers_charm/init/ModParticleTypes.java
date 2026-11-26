@@ -1,13 +1,39 @@
+// Particle types.
 package net.luckystudio.spelunkers_charm.init;
 
+import net.luckystudio.spelunkers_charm.SpelunkersCharm;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class ModParticleTypes {
+    private static final DeferredRegister<ParticleType<?>> PARTICLES =
+            DeferredRegister.create(BuiltInRegistries.PARTICLE_TYPE, SpelunkersCharm.MOD_ID);
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> CART_LOAD_TRAIL =
+            PARTICLES.register("cart_load_trail", () -> new SimpleParticleType(false));
 
-    public static void spawnParticlesToServer(Level level, double posX, double posY, double posZ, int count, double offsetX, double offsetY, double offsetZ, double speed, ParticleOptions... particles) {
+    public static void register(IEventBus eventBus) {
+        PARTICLES.register(eventBus);
+    }
+
+    public static void spawnParticlesToServer(
+            Level level,
+            double posX,
+            double posY,
+            double posZ,
+            int count,
+            double offsetX,
+            double offsetY,
+            double offsetZ,
+            double speed,
+            ParticleOptions... particles) {
         for (ParticleOptions particle : particles) {
             if (particle == null || !(level instanceof ServerLevel serverLevel)) continue;
 
@@ -16,14 +42,22 @@ public class ModParticleTypes {
                     posX,
                     posY,
                     posZ,
-                    count,      // count
-                    offsetX, offsetY, offsetZ, // spread (X, Y, Z)
-                    speed     // speed
-            );
+                    count, // count
+                    offsetX,
+                    offsetY,
+                    offsetZ, // spread (X, Y, Z)
+                    speed // speed
+                    );
         }
     }
 
-    public static void spawnSquareBorderParticles(Level level, ParticleOptions particle, BlockPos pos, float radius, int particleCount, float speed) {
+    public static void spawnSquareBorderParticles(
+            Level level,
+            ParticleOptions particle,
+            BlockPos pos,
+            float radius,
+            int particleCount,
+            float speed) {
         if (radius < 1 || particleCount <= 0) return;
 
         double centerX = pos.getX() + 0.5;
@@ -67,11 +101,7 @@ public class ModParticleTypes {
             double motionX = (dx / length) * speed;
             double motionZ = (dz / length) * speed;
 
-            level.addAlwaysVisibleParticle(
-                    particle,
-                    x, centerY, z,
-                    motionX, 0.0, motionZ
-            );
+            level.addAlwaysVisibleParticle(particle, x, centerY, z, motionX, 0.0, motionZ);
         }
     }
 }

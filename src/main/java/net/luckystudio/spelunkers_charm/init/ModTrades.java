@@ -1,3 +1,4 @@
+// Trades.
 package net.luckystudio.spelunkers_charm.init;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
@@ -17,10 +18,15 @@ public class ModTrades {
 
     @SubscribeEvent
     public static void addWanderingTrades(WandererTradesEvent event) {
-//        List<VillagerTrades.ItemListing> genericTrades = event.getGenericTrades();
+        //        List<VillagerTrades.ItemListing> genericTrades = event.getGenericTrades();
         List<VillagerTrades.ItemListing> rareTrades = event.getRareTrades();
-        rareTrades.add((entity, randomSource) -> new MerchantOffer(
-                new ItemCost(Items.EMERALD, 25),
-                new ItemStack(ModItems.MINING_HELMET.get(), 1), 1, 10, 0.25f));
+        rareTrades.add(
+                (entity, randomSource) ->
+                        new MerchantOffer(
+                                new ItemCost(Items.EMERALD, 25),
+                                new ItemStack(ModItems.MINING_HELMET.get(), 1),
+                                1,
+                                10,
+                                0.25f));
     }
 }

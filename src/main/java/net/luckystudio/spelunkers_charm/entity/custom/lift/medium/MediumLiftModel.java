@@ -1,16 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- *
- * Could not load the following classes:
- *  net.minecraft.client.model.HierarchicalModel
- *  net.minecraft.client.model.geom.ModelPart
- *  net.minecraft.client.model.geom.PartPose
- *  net.minecraft.client.model.geom.builders.CubeDeformation
- *  net.minecraft.client.model.geom.builders.CubeListBuilder
- *  net.minecraft.client.model.geom.builders.LayerDefinition
- *  net.minecraft.client.model.geom.builders.MeshDefinition
- *  net.minecraft.client.model.geom.builders.PartDefinition
- */
+// Medium lift model.
 package net.luckystudio.spelunkers_charm.entity.custom.lift.medium;
 
 import net.luckystudio.spelunkers_charm.entity.custom.lift.AbstractLift;

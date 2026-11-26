@@ -1,6 +1,8 @@
+// Replace multi block blob feature.
 package net.luckystudio.spelunkers_charm.worldgen.feature.custom.replace;
 
 import com.mojang.serialization.Codec;
+
 import net.luckystudio.spelunkers_charm.SpelunkersCharmConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -30,8 +32,12 @@ public class ReplaceMultiBlockBlobFeature extends Feature<ReplaceMultiBlockSpher
         TagKey<Block> blockTag = config.blocksToReplace;
 
         BlockPos original = context.origin();
-        int clampedY = Math.max(world.getMinBuildHeight() + 1, Math.min(original.getY(), world.getMaxBuildHeight() - 1));
-        BlockPos.MutableBlockPos origin = new BlockPos.MutableBlockPos(original.getX(), clampedY, original.getZ());
+        int clampedY =
+                Math.max(
+                        world.getMinBuildHeight() + 1,
+                        Math.min(original.getY(), world.getMaxBuildHeight() - 1));
+        BlockPos.MutableBlockPos origin =
+                new BlockPos.MutableBlockPos(original.getX(), clampedY, original.getZ());
 
         BlockPos targetPos = findTarget(world, origin, blockTag);
         if (targetPos == null) {
@@ -57,7 +63,8 @@ public class ReplaceMultiBlockBlobFeature extends Feature<ReplaceMultiBlockSpher
     }
 
     @Nullable
-    private static BlockPos findTarget(LevelAccessor level, BlockPos.MutableBlockPos pos, TagKey<Block> targets) {
+    private static BlockPos findTarget(
+            LevelAccessor level, BlockPos.MutableBlockPos pos, TagKey<Block> targets) {
         while (pos.getY() > level.getMinBuildHeight() + 1) {
             BlockState state = level.getBlockState(pos);
             if (state.is(targets)) {

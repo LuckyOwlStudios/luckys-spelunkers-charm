@@ -1,0 +1,340 @@
+{
+  "variants": {
+    "cargo=0,shape=north_south": {
+      "model": "spelunkers_charm:block/cargo_rail"
+    },
+    "cargo=0,shape=east_west": {
+      "model": "spelunkers_charm:block/cargo_rail",
+      "y": 90
+    },
+    "cargo=0,shape=ascending_east": {
+      "model": "spelunkers_charm:block/cargo_rail_raised_ne",
+      "y": 90
+    },
+    "cargo=0,shape=ascending_west": {
+      "model": "spelunkers_charm:block/cargo_rail_raised_sw",
+      "y": 90
+    },
+    "cargo=0,shape=ascending_north": {
+      "model": "spelunkers_charm:block/cargo_rail_raised_ne"
+    },
+    "cargo=0,shape=ascending_south": {
+      "model": "spelunkers_charm:block/cargo_rail_raised_sw"
+    },
+    "cargo=1,shape=north_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on"
+    },
+    "cargo=1,shape=east_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on",
+      "y": 90
+    },
+    "cargo=1,shape=ascending_east": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne",
+      "y": 90
+    },
+    "cargo=1,shape=ascending_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw",
+      "y": 90
+    },
+    "cargo=1,shape=ascending_north": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne"
+    },
+    "cargo=1,shape=ascending_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw"
+    },
+    "cargo=2,shape=north_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on"
+    },
+    "cargo=2,shape=east_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on",
+      "y": 90
+    },
+    "cargo=2,shape=ascending_east": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne",
+      "y": 90
+    },
+    "cargo=2,shape=ascending_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw",
+      "y": 90
+    },
+    "cargo=2,shape=ascending_north": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne"
+    },
+    "cargo=2,shape=ascending_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw"
+    },
+    "cargo=3,shape=north_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on"
+    },
+    "cargo=3,shape=east_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on",
+      "y": 90
+    },
+    "cargo=3,shape=ascending_east": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne",
+      "y": 90
+    },
+    "cargo=3,shape=ascending_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw",
+      "y": 90
+    },
+    "cargo=3,shape=ascending_north": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne"
+    },
+    "cargo=3,shape=ascending_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw"
+    },
+    "cargo=4,shape=north_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on"
+    },
+    "cargo=4,shape=east_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on",
+      "y": 90
+    },
+    "cargo=4,shape=ascending_east": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne",
+      "y": 90
+    },
+    "cargo=4,shape=ascending_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw",
+      "y": 90
+    },
+    "cargo=4,shape=ascending_north": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne"
+    },
+    "cargo=4,shape=ascending_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw"
+    },
+    "cargo=5,shape=north_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on"
+    },
+    "cargo=5,shape=east_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on",
+      "y": 90
+    },
+    "cargo=5,shape=ascending_east": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne",
+      "y": 90
+    },
+    "cargo=5,shape=ascending_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw",
+      "y": 90
+    },
+    "cargo=5,shape=ascending_north": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne"
+    },
+    "cargo=5,shape=ascending_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw"
+    },
+    "cargo=6,shape=north_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on"
+    },
+    "cargo=6,shape=east_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on",
+      "y": 90
+    },
+    "cargo=6,shape=ascending_east": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne",
+      "y": 90
+    },
+    "cargo=6,shape=ascending_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw",
+      "y": 90
+    },
+    "cargo=6,shape=ascending_north": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne"
+    },
+    "cargo=6,shape=ascending_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw"
+    },
+    "cargo=7,shape=north_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on"
+    },
+    "cargo=7,shape=east_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on",
+      "y": 90
+    },
+    "cargo=7,shape=ascending_east": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne",
+      "y": 90
+    },
+    "cargo=7,shape=ascending_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw",
+      "y": 90
+    },
+    "cargo=7,shape=ascending_north": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne"
+    },
+    "cargo=7,shape=ascending_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw"
+    },
+    "cargo=8,shape=north_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on"
+    },
+    "cargo=8,shape=east_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on",
+      "y": 90
+    },
+    "cargo=8,shape=ascending_east": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne",
+      "y": 90
+    },
+    "cargo=8,shape=ascending_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw",
+      "y": 90
+    },
+    "cargo=8,shape=ascending_north": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne"
+    },
+    "cargo=8,shape=ascending_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw"
+    },
+    "cargo=9,shape=north_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on"
+    },
+    "cargo=9,shape=east_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on",
+      "y": 90
+    },
+    "cargo=9,shape=ascending_east": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne",
+      "y": 90
+    },
+    "cargo=9,shape=ascending_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw",
+      "y": 90
+    },
+    "cargo=9,shape=ascending_north": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne"
+    },
+    "cargo=9,shape=ascending_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw"
+    },
+    "cargo=10,shape=north_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on"
+    },
+    "cargo=10,shape=east_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on",
+      "y": 90
+    },
+    "cargo=10,shape=ascending_east": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne",
+      "y": 90
+    },
+    "cargo=10,shape=ascending_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw",
+      "y": 90
+    },
+    "cargo=10,shape=ascending_north": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne"
+    },
+    "cargo=10,shape=ascending_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw"
+    },
+    "cargo=11,shape=north_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on"
+    },
+    "cargo=11,shape=east_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on",
+      "y": 90
+    },
+    "cargo=11,shape=ascending_east": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne",
+      "y": 90
+    },
+    "cargo=11,shape=ascending_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw",
+      "y": 90
+    },
+    "cargo=11,shape=ascending_north": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne"
+    },
+    "cargo=11,shape=ascending_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw"
+    },
+    "cargo=12,shape=north_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on"
+    },
+    "cargo=12,shape=east_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on",
+      "y": 90
+    },
+    "cargo=12,shape=ascending_east": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne",
+      "y": 90
+    },
+    "cargo=12,shape=ascending_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw",
+      "y": 90
+    },
+    "cargo=12,shape=ascending_north": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne"
+    },
+    "cargo=12,shape=ascending_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw"
+    },
+    "cargo=13,shape=north_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on"
+    },
+    "cargo=13,shape=east_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on",
+      "y": 90
+    },
+    "cargo=13,shape=ascending_east": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne",
+      "y": 90
+    },
+    "cargo=13,shape=ascending_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw",
+      "y": 90
+    },
+    "cargo=13,shape=ascending_north": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne"
+    },
+    "cargo=13,shape=ascending_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw"
+    },
+    "cargo=14,shape=north_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on"
+    },
+    "cargo=14,shape=east_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on",
+      "y": 90
+    },
+    "cargo=14,shape=ascending_east": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne",
+      "y": 90
+    },
+    "cargo=14,shape=ascending_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw",
+      "y": 90
+    },
+    "cargo=14,shape=ascending_north": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne"
+    },
+    "cargo=14,shape=ascending_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw"
+    },
+    "cargo=15,shape=north_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on"
+    },
+    "cargo=15,shape=east_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on",
+      "y": 90
+    },
+    "cargo=15,shape=ascending_east": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne",
+      "y": 90
+    },
+    "cargo=15,shape=ascending_west": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw",
+      "y": 90
+    },
+    "cargo=15,shape=ascending_north": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_ne"
+    },
+    "cargo=15,shape=ascending_south": {
+      "model": "spelunkers_charm:block/cargo_rail_on_raised_sw"
+    }
+  }
+}

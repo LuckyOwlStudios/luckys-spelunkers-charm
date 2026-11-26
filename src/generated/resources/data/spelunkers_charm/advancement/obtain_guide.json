@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:adventure/root",
+  "criteria": {
+    "has_guide": {
+      "conditions": {
+        "items": [
+          {
+            "items": "spelunkers_charm:spelunkers_guide"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.spelunkers_charm.obtain_guide.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "spelunkers_charm:spelunkers_guide"
+    },
+    "title": {
+      "translate": "advancement.spelunkers_charm.obtain_guide"
+    }
+  },
+  "requirements": [
+    [
+      "has_guide"
+    ]
+  ]
+}

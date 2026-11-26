@@ -1,3 +1,4 @@
+// Lift client support.
 package net.luckystudio.spelunkers_charm.entity.custom.lift;
 
 import net.minecraft.util.Mth;
@@ -9,18 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-/** Server-confirmed client support; aligns after vanilla interpolation and while rendering. */
 public final class LiftClientSupport {
     private static final double TRANSITION_TICKS = 3.0;
     private static final Map<Level, Map<Integer, Anchor>> ANCHORS = new WeakHashMap<>();
 
     private LiftClientSupport() {}
 
-    /**
-     * Run once after vanilla has ticked/interpolated every entity. This keeps remote hitboxes and
-     * frustum bounds on their server-confirmed deck too; moving them during the lift's own tick
-     * made the result depend on order.
-     */
     public static void alignRemoteBounds(Level level) {
         Map<Integer, Anchor> anchors = ANCHORS.get(level);
         if (anchors == null) return;
@@ -36,8 +31,13 @@ public final class LiftClientSupport {
                 if (level.getGameTime() - anchor.start > 100) iterator.remove();
                 continue;
             }
-            if (anchor.liftId < 0 || root.isPassenger() || controlsLocally(root)) continue;
+            if (anchor.liftId < 0 || root.isPassenger()) continue;
             AbstractLift lift = (AbstractLift) candidate;
+            if (LiftMountedSupport.hasLocalRider(root)) {
+                LiftMountedSupport.align(root, lift, anchor.relativeY);
+                continue;
+            }
+            if (controlsLocally(root)) continue;
             double oldShift = lift.yOld + anchor.relativeY - root.yOld;
             root.setPos(root.getX(), lift.getY() + anchor.relativeY, root.getZ());
             root.yOld = lift.yOld + anchor.relativeY;
@@ -57,7 +57,6 @@ public final class LiftClientSupport {
         }
     }
 
-    /** True for the local player and the root vehicle controlled by that player. */
     public static boolean controlsLocally(Entity entity) {
         return entity instanceof Player player && player.isLocalPlayer()
                 || entity.getControllingPassenger() instanceof Player controller
@@ -83,7 +82,6 @@ public final class LiftClientSupport {
         }
     }
 
-    /** Offset added only during rendering, inherited by every mounted passenger. */
     public static double getRenderOffset(Entity entity, float partialTick) {
         if (!entity.level().isClientSide) return 0;
         Entity root = entity.getRootVehicle();
@@ -111,6 +109,7 @@ public final class LiftClientSupport {
         return anchor.lastOffset;
     }
 
+    /** Stores the local player's lift support anchor. */
     private static final class Anchor {
         int liftId;
         float relativeY;

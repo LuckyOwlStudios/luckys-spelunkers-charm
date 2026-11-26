@@ -1,7 +1,8 @@
+// Small lift.
 package net.luckystudio.spelunkers_charm.entity.custom.lift.small;
 
-import net.luckystudio.spelunkers_charm.init.ModEntityType;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.AbstractLift;
+import net.luckystudio.spelunkers_charm.init.ModEntityType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EntityType;
@@ -11,7 +12,6 @@ import java.util.List;
 
 // Heavily copied from the Boat class in Minecraft, with modifications for a small lift entity.
 public class SmallLift extends AbstractLift {
-
 
     public SmallLift(EntityType<?> entityType, Level level) {
         super(entityType, level, Type.SMALL);

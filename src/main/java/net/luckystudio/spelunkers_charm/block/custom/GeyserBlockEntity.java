@@ -1,3 +1,4 @@
+// Geyser block entity.
 package net.luckystudio.spelunkers_charm.block.custom;
 
 import net.luckystudio.spelunkers_charm.block.custom.blaster.BlasterUtil;
@@ -8,6 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -16,8 +18,7 @@ import org.jetbrains.annotations.Nullable;
  * If a chunk unloads mid-cycle, the current phase simply restarts when it loads again.
  */
 public class GeyserBlockEntity extends BlockEntity {
-    @Nullable
-    private GeyserState trackedState;
+    @Nullable private GeyserState trackedState;
     private int phaseTicks;
 
     public GeyserBlockEntity(BlockPos pos, BlockState state) {
@@ -33,7 +34,8 @@ public class GeyserBlockEntity extends BlockEntity {
         return ++phaseTicks;
     }
 
-    public static void serverTick(Level level, BlockPos pos, BlockState state, GeyserBlockEntity geyser) {
+    public static void serverTick(
+            Level level, BlockPos pos, BlockState state, GeyserBlockEntity geyser) {
         if (!(state.getBlock() instanceof GeyserBlock block)) return;
         GeyserState geyserState = state.getValue(GeyserBlock.GEYSER_STATE);
         int ticks = geyser.advance(geyserState);
@@ -47,14 +49,16 @@ public class GeyserBlockEntity extends BlockEntity {
                 if (ticks > GeyserBlock.ERUPTION_TICKS) {
                     block.stopErupting(level, pos, state);
                 } else {
-                    BlasterUtil.shoot(level, pos, state.getValue(GeyserBlock.GEYSER_TYPE), Direction.UP);
+                    BlasterUtil.shoot(
+                            level, pos, state.getValue(GeyserBlock.GEYSER_TYPE), Direction.UP);
                 }
             }
             default -> {}
         }
     }
 
-    public static void clientTick(Level level, BlockPos pos, BlockState state, GeyserBlockEntity geyser) {
+    public static void clientTick(
+            Level level, BlockPos pos, BlockState state, GeyserBlockEntity geyser) {
         // Particles, plus pushing the local player so the jet feels responsive
         BlasterUtil.shoot(level, pos, state.getValue(GeyserBlock.GEYSER_TYPE), Direction.UP);
     }

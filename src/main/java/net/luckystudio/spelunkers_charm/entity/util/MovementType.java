@@ -1,3 +1,4 @@
+// Movement type.
 package net.luckystudio.spelunkers_charm.entity.util;
 
 import net.minecraft.util.ByIdMap;
@@ -12,8 +13,10 @@ public enum MovementType implements StringRepresentable {
     FALLING("falling");
 
     private final String name;
-    public static final EnumCodec<MovementType> CODEC = StringRepresentable.fromEnum(MovementType::values);
-    private static final IntFunction<MovementType> BY_ID = ByIdMap.continuous(Enum::ordinal, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
+    public static final EnumCodec<MovementType> CODEC =
+            StringRepresentable.fromEnum(MovementType::values);
+    private static final IntFunction<MovementType> BY_ID =
+            ByIdMap.continuous(Enum::ordinal, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
 
     MovementType(String name) {
         this.name = name;

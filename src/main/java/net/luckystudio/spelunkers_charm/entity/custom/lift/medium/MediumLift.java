@@ -1,7 +1,8 @@
+// Medium lift.
 package net.luckystudio.spelunkers_charm.entity.custom.lift.medium;
 
-import net.luckystudio.spelunkers_charm.init.ModEntityType;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.AbstractLift;
+import net.luckystudio.spelunkers_charm.init.ModEntityType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EntityType;

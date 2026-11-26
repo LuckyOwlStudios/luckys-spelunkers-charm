@@ -1,3 +1,4 @@
+// Data map provider.
 package net.luckystudio.spelunkers_charm.datagen;
 
 import net.minecraft.core.HolderLookup;
@@ -13,7 +14,8 @@ public class ModDataMapProvider extends DataMapProvider {
      * @param packOutput     the output location
      * @param lookupProvider a {@linkplain CompletableFuture} supplying the registries
      */
-    protected ModDataMapProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+    protected ModDataMapProvider(
+            PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(packOutput, lookupProvider);
     }
 }

@@ -1,3 +1,4 @@
+// Surface rule data.
 package net.luckystudio.spelunkers_charm.worldgen.biomes;
 
 import net.luckystudio.spelunkers_charm.datagen.biomes.biomeTags.ModBiomeTags;
@@ -17,14 +18,15 @@ public class ModSurfaceRuleData {
 
     public static SurfaceRules.RuleSource cave() {
         SurfaceRules.ConditionSource isAtOrAboveWaterLevel = SurfaceRules.waterBlockCheck(-1, 0);
-        SurfaceRules.RuleSource grassSurface = SurfaceRules.sequence(SurfaceRules.ifTrue(isAtOrAboveWaterLevel, GRASS_BLOCK), DIRT);
+        SurfaceRules.RuleSource grassSurface =
+                SurfaceRules.sequence(
+                        SurfaceRules.ifTrue(isAtOrAboveWaterLevel, GRASS_BLOCK), DIRT);
 
         return SurfaceRules.sequence(
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.SPIDER_CAVE), STONE),
 
                 // Default to a grass and dirt surface
-                SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, grassSurface)
-        );
+                SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, grassSurface));
     }
 
     /**
@@ -39,15 +41,29 @@ public class ModSurfaceRuleData {
      * - The biome is checked per block, so cave biomes (lush caves, dripstone caves, ...) under a desert keep their own stone.
      */
     public static SurfaceRules.RuleSource biomeStones() {
-        SurfaceRules.ConditionSource belowSurface = SurfaceRules.not(SurfaceRules.abovePreliminarySurface());
-        SurfaceRules.ConditionSource aboveDeepslate = SurfaceRules.not(
-                SurfaceRules.verticalGradient("deepslate", VerticalAnchor.absolute(0), VerticalAnchor.absolute(8)));
+        SurfaceRules.ConditionSource belowSurface =
+                SurfaceRules.not(SurfaceRules.abovePreliminarySurface());
+        SurfaceRules.ConditionSource aboveDeepslate =
+                SurfaceRules.not(
+                        SurfaceRules.verticalGradient(
+                                "deepslate",
+                                VerticalAnchor.absolute(0),
+                                VerticalAnchor.absolute(8)));
 
-        return SurfaceRules.ifTrue(belowSurface, SurfaceRules.ifTrue(aboveDeepslate, SurfaceRules.sequence(
-                SurfaceRules.ifTrue(BiomeTagCondition.of(ModBiomeTags.IS_COLD_CAVE), makeStateRule(ModBlocks.PERMAFROST.get())),
-                SurfaceRules.ifTrue(BiomeTagCondition.of(ModBiomeTags.IS_HOT_CAVE), makeStateRule(ModBlocks.DUNESTONE.get())),
-                SurfaceRules.ifTrue(BiomeTagCondition.of(ModBiomeTags.IS_JUNGLE_CAVE), makeStateRule(ModBlocks.WILDSTONE.get()))
-        )));
+        return SurfaceRules.ifTrue(
+                belowSurface,
+                SurfaceRules.ifTrue(
+                        aboveDeepslate,
+                        SurfaceRules.sequence(
+                                SurfaceRules.ifTrue(
+                                        BiomeTagCondition.of(ModBiomeTags.IS_COLD_CAVE),
+                                        makeStateRule(ModBlocks.PERMAFROST.get())),
+                                SurfaceRules.ifTrue(
+                                        BiomeTagCondition.of(ModBiomeTags.IS_HOT_CAVE),
+                                        makeStateRule(ModBlocks.DUNESTONE.get())),
+                                SurfaceRules.ifTrue(
+                                        BiomeTagCondition.of(ModBiomeTags.IS_JUNGLE_CAVE),
+                                        makeStateRule(ModBlocks.WILDSTONE.get())))));
     }
 
     private static SurfaceRules.RuleSource makeStateRule(Block block) {

@@ -1,0 +1,21 @@
+{
+  "parent": "minecraft:adventure/root",
+  "criteria": {
+    "craft_locomotive": {
+      "trigger": "minecraft:recipe_crafted",
+      "conditions": {
+        "recipe_id": "spelunkers_charm:locomotive"
+      }
+    }
+  },
+  "display": {
+    "icon": {"id": "spelunkers_charm:locomotive", "count": 1},
+    "title": {"translate": "advancement.spelunkers_charm.craft_locomotive"},
+    "description": {"translate": "advancement.spelunkers_charm.craft_locomotive.desc"},
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "requirements": [["craft_locomotive"]]
+}

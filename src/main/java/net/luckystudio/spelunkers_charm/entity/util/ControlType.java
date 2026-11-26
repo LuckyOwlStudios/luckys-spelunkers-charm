@@ -1,3 +1,4 @@
+// Control type.
 package net.luckystudio.spelunkers_charm.entity.util;
 
 import net.minecraft.util.ByIdMap;
@@ -8,11 +9,14 @@ import java.util.function.IntFunction;
 public enum ControlType implements StringRepresentable {
     AUTOMATIC("automatic"),
     LEVER("lever"),
-    PRESSURE_PLATE("pressure_plate"),;
+    PRESSURE_PLATE("pressure_plate"),
+    ;
 
     private final String name;
-    public static final EnumCodec<ControlType> CODEC = StringRepresentable.fromEnum(ControlType::values);
-    private static final IntFunction<ControlType> BY_ID = ByIdMap.continuous(Enum::ordinal, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
+    public static final EnumCodec<ControlType> CODEC =
+            StringRepresentable.fromEnum(ControlType::values);
+    private static final IntFunction<ControlType> BY_ID =
+            ByIdMap.continuous(Enum::ordinal, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
 
     ControlType(String name) {
         this.name = name;

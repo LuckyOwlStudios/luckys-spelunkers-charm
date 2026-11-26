@@ -1,3 +1,4 @@
+// Lift packet collision mixin.
 package net.luckystudio.spelunkers_charm.mixin;
 
 import net.luckystudio.spelunkers_charm.entity.custom.lift.LiftPacketCollisions;
@@ -12,7 +13,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-/** Preserve vanilla validation while allowing a supported client's deck lag. */
 @Mixin(value = ServerGamePacketListenerImpl.class, remap = false)
 public abstract class LiftPacketCollisionMixin {
     @Redirect(

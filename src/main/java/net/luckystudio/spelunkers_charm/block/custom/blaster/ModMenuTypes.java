@@ -1,6 +1,9 @@
+// Menu types.
 package net.luckystudio.spelunkers_charm.block.custom.blaster;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
+import net.luckystudio.spelunkers_charm.block.custom.cartloader.CartLoaderMenu;
+import net.luckystudio.spelunkers_charm.entity.custom.minecart.LocomotiveMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -17,7 +20,19 @@ public class ModMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<BlasterMenu>> BLASTER_MENU =
             registerMenuType("blaster_menu", BlasterMenu::new);
 
-    private static <T extends AbstractContainerMenu>DeferredHolder<MenuType<?>, MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {
+    public static final DeferredHolder<MenuType<?>, MenuType<LocomotiveMenu>> LOCOMOTIVE_MENU =
+            registerMenuType(
+                    "locomotive_menu",
+                    (containerId, inventory, extraData) ->
+                            new LocomotiveMenu(containerId, inventory));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<CartLoaderMenu>> CART_LOADER_MENU =
+            registerMenuType(
+                    "cart_loader", (id, inventory, extraData) -> new CartLoaderMenu(id, inventory));
+
+    private static <T extends AbstractContainerMenu>
+            DeferredHolder<MenuType<?>, MenuType<T>> registerMenuType(
+                    String name, IContainerFactory<T> factory) {
         return MENUS.register(name, () -> IMenuTypeExtension.create(factory));
     }
 

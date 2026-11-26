@@ -1,6 +1,8 @@
+// Web vein block.
 package net.luckystudio.spelunkers_charm.block.custom.web_vein;
 
 import com.mojang.serialization.MapCodec;
+
 import net.luckystudio.spelunkers_charm.init.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,17 +29,23 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Collection;
 
-// We had to create a new one and not use the existing SimpleMultiFaceBlock because it does too much we don't need.
-// Waterloggable like sculk veins and glow lichen: without it, water flowing through a spider cave washes every vein away
+// We had to create a new one and not use the existing SimpleMultiFaceBlock because it does too much
+// we don't need.
+// Waterloggable like sculk veins and glow lichen: without it, water flowing through a spider cave
+// washes every vein away
 // and drops a pile of string items.
-public class WebVeinBlock extends MultifaceBlock implements WebVeinBehavior, SimpleWaterloggedBlock {
+public class WebVeinBlock extends MultifaceBlock
+        implements WebVeinBehavior, SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     private static final VoxelShape UP_AABB = Block.box(0.0, 15.0, 0.0, 16.0, 16.0, 16.0);
     public static final MapCodec<WebVeinBlock> CODEC = simpleCodec(WebVeinBlock::new);
-    private final MultifaceSpreader veinSpreader = new MultifaceSpreader(new WebVeinBlock.VeinSpreaderConfig(MultifaceSpreader.DEFAULT_SPREAD_ORDER));
-    private final MultifaceSpreader sameSpaceSpreader = new MultifaceSpreader(
-            new WebVeinBlock.VeinSpreaderConfig(MultifaceSpreader.SpreadType.SAME_POSITION)
-    );
+    private final MultifaceSpreader veinSpreader =
+            new MultifaceSpreader(
+                    new WebVeinBlock.VeinSpreaderConfig(MultifaceSpreader.DEFAULT_SPREAD_ORDER));
+    private final MultifaceSpreader sameSpaceSpreader =
+            new MultifaceSpreader(
+                    new WebVeinBlock.VeinSpreaderConfig(
+                            MultifaceSpreader.SpreadType.SAME_POSITION));
 
     public WebVeinBlock(Properties properties) {
         super(properties);
@@ -51,7 +59,13 @@ public class WebVeinBlock extends MultifaceBlock implements WebVeinBehavior, Sim
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    protected BlockState updateShape(
+            BlockState state,
+            Direction direction,
+            BlockState neighborState,
+            LevelAccessor level,
+            BlockPos pos,
+            BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
@@ -60,7 +74,9 @@ public class WebVeinBlock extends MultifaceBlock implements WebVeinBehavior, Sim
 
     @Override
     protected FluidState getFluidState(BlockState state) {
-        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED)
+                ? Fluids.WATER.getSource(false)
+                : super.getFluidState(state);
     }
 
     @Override
@@ -69,7 +85,8 @@ public class WebVeinBlock extends MultifaceBlock implements WebVeinBehavior, Sim
     }
 
     // Same as SculkVeinBlock.regrow, but grows web veins instead of sculk veins.
-    public static boolean regrow(LevelAccessor level, BlockPos pos, BlockState state, Collection<Direction> directions) {
+    public static boolean regrow(
+            LevelAccessor level, BlockPos pos, BlockState state, Collection<Direction> directions) {
         boolean attached = false;
         BlockState vein = ModBlocks.WEB_VEIN.get().defaultBlockState();
 
@@ -99,7 +116,8 @@ public class WebVeinBlock extends MultifaceBlock implements WebVeinBehavior, Sim
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    protected VoxelShape getShape(
+            BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return UP_AABB;
     }
 
@@ -119,7 +137,8 @@ public class WebVeinBlock extends MultifaceBlock implements WebVeinBehavior, Sim
 
     @Override
     protected boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
-        return !useContext.getItemInHand().is(this.asItem()) || super.canBeReplaced(state, useContext);
+        return !useContext.getItemInHand().is(this.asItem())
+                || super.canBeReplaced(state, useContext);
     }
 
     @Override
@@ -134,16 +153,23 @@ public class WebVeinBlock extends MultifaceBlock implements WebVeinBehavior, Sim
 
     @Override
     public int attemptUseCharge(
-            WebSpreader.ChargeCursor cursor, LevelAccessor level, BlockPos pos, RandomSource random, WebSpreader spreader, boolean shouldConvertBlocks
-    ) {
+            WebSpreader.ChargeCursor cursor,
+            LevelAccessor level,
+            BlockPos pos,
+            RandomSource random,
+            WebSpreader spreader,
+            boolean shouldConvertBlocks) {
         if (shouldConvertBlocks && this.attemptPlaceWeb(spreader, level, cursor.getPos(), random)) {
             return cursor.getCharge() - 1;
         } else {
-            return random.nextInt(spreader.chargeDecayRate()) == 0 ? Mth.floor((float)cursor.getCharge() * 0.5F) : cursor.getCharge();
+            return random.nextInt(spreader.chargeDecayRate()) == 0
+                    ? Mth.floor((float) cursor.getCharge() * 0.5F)
+                    : cursor.getCharge();
         }
     }
 
-    private boolean attemptPlaceWeb(WebSpreader spreader, LevelAccessor level, BlockPos pos, RandomSource random) {
+    private boolean attemptPlaceWeb(
+            WebSpreader spreader, LevelAccessor level, BlockPos pos, RandomSource random) {
         BlockState blockstate = level.getBlockState(pos);
         TagKey<Block> tagkey = spreader.replaceableBlocks();
 
@@ -155,8 +181,15 @@ public class WebVeinBlock extends MultifaceBlock implements WebVeinBehavior, Sim
                     BlockState blockstate2 = ModBlocks.PACKED_WEB.get().defaultBlockState();
                     level.setBlock(blockpos, blockstate2, 3);
                     Block.pushEntitiesUp(blockstate1, blockstate2, level, blockpos);
-                    level.playSound(null, blockpos, SoundEvents.SCULK_BLOCK_SPREAD, SoundSource.BLOCKS, 1.0F, 1.0F);
-                    this.veinSpreader.spreadAll(blockstate2, level, blockpos, spreader.isWorldGeneration());
+                    level.playSound(
+                            null,
+                            blockpos,
+                            SoundEvents.SCULK_BLOCK_SPREAD,
+                            SoundSource.BLOCKS,
+                            1.0F,
+                            1.0F);
+                    this.veinSpreader.spreadAll(
+                            blockstate2, level, blockpos, spreader.isWorldGeneration());
                     Direction direction1 = direction.getOpposite();
 
                     for (Direction direction2 : DIRECTIONS) {
@@ -177,6 +210,7 @@ public class WebVeinBlock extends MultifaceBlock implements WebVeinBehavior, Sim
         return false;
     }
 
+    /** Provides the settings used to spread web veins. */
     class VeinSpreaderConfig extends MultifaceSpreader.DefaultSpreaderConfig {
         private final MultifaceSpreader.SpreadType[] spreadTypes;
 
@@ -186,9 +220,16 @@ public class WebVeinBlock extends MultifaceBlock implements WebVeinBehavior, Sim
         }
 
         @Override
-        public boolean stateCanBeReplaced(BlockGetter level, BlockPos pos, BlockPos spreadPos, Direction direction, BlockState state) {
+        public boolean stateCanBeReplaced(
+                BlockGetter level,
+                BlockPos pos,
+                BlockPos spreadPos,
+                Direction direction,
+                BlockState state) {
             BlockState blockstate = level.getBlockState(spreadPos.relative(direction));
-            if (!blockstate.is(ModBlocks.PACKED_WEB) && !blockstate.is(ModBlocks.SPIDER_EGG) && !blockstate.is(Blocks.MOVING_PISTON)) {
+            if (!blockstate.is(ModBlocks.PACKED_WEB)
+                    && !blockstate.is(ModBlocks.SPIDER_EGG)
+                    && !blockstate.is(Blocks.MOVING_PISTON)) {
                 if (pos.distManhattan(spreadPos) == 2) {
                     BlockPos blockpos = pos.relative(direction.getOpposite());
                     if (level.getBlockState(blockpos).isFaceSturdy(level, blockpos, direction)) {
@@ -202,7 +243,9 @@ public class WebVeinBlock extends MultifaceBlock implements WebVeinBehavior, Sim
                 } else {
                     return state.is(BlockTags.FIRE)
                             ? false
-                            : state.canBeReplaced() || super.stateCanBeReplaced(level, pos, spreadPos, direction, state);
+                            : state.canBeReplaced()
+                                    || super.stateCanBeReplaced(
+                                            level, pos, spreadPos, direction, state);
                 }
             } else {
                 return false;

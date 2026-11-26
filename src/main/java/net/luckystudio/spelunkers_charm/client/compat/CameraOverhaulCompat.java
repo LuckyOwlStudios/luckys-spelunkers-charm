@@ -1,7 +1,10 @@
+// Camera overhaul compat.
 package net.luckystudio.spelunkers_charm.client.compat;
 
 import com.mojang.logging.LogUtils;
+
 import net.neoforged.fml.ModList;
+
 import org.joml.Vector3d;
 import org.slf4j.Logger;
 
@@ -53,7 +56,9 @@ public final class CameraOverhaulCompat {
             LOGGER.info("Camera Overhaul found, tremors will shake the camera");
             return true;
         } catch (ReflectiveOperationException | LinkageError e) {
-            LOGGER.warn("Camera Overhaul is installed but its screen shake API wasn't found, tremor camera shake is off", e);
+            LOGGER.warn(
+                    "Camera Overhaul is installed but its screen shake API wasn't found, tremor camera shake is off",
+                    e);
             return false;
         }
     }
@@ -64,8 +69,15 @@ public final class CameraOverhaulCompat {
      * @param handle the handle returned by the last call for this shake, or 0 for a new one
      * @return the handle to pass next time
      */
-    public static long shake(long handle, double x, double y, double z, float shakeTrauma, float shakeRadius,
-                             float shakeFrequency, float seconds) {
+    public static long shake(
+            long handle,
+            double x,
+            double y,
+            double z,
+            float shakeTrauma,
+            float shakeRadius,
+            float shakeFrequency,
+            float seconds) {
         if (!isAvailable()) return 0L;
         try {
             long newHandle = (long) recreate.invoke(null, handle);

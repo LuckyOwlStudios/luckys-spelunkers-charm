@@ -1,7 +1,9 @@
+// Tremor camera shake.
 package net.luckystudio.spelunkers_charm.client;
 
 import it.unimi.dsi.fastutil.ints.Int2LongMap;
 import it.unimi.dsi.fastutil.ints.Int2LongOpenHashMap;
+
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
 import net.luckystudio.spelunkers_charm.SpelunkersCharmConfig;
 import net.luckystudio.spelunkers_charm.client.compat.CameraOverhaulCompat;
@@ -21,7 +23,10 @@ import java.util.List;
  * Each tick, every tremor in range refreshes a short shake, so the shake follows the tremor's
  * intensity as it builds up and fades, and dies out quickly once the tremor ends.
  */
-@EventBusSubscriber(modid = SpelunkersCharm.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+@EventBusSubscriber(
+        modid = SpelunkersCharm.MOD_ID,
+        bus = EventBusSubscriber.Bus.GAME,
+        value = Dist.CLIENT)
 public final class TremorCameraShake {
     // Strongest trauma (0 to 1) a full strength, max magnitude tremor gives at strength 1.0.
     private static final float MAX_TRAUMA = 0.6F;
@@ -29,7 +34,8 @@ public final class TremorCameraShake {
     private static final float MIN_MAGNITUDE_SHARE = 0.3F;
     // Shake reaches this many times the tremor's effect radius, fading out with distance.
     private static final float RADIUS_SCALE = 1.5F;
-    // High frequency, so it reads as a quick rattle rather than a slow wobble. Camera Overhaul multiplies
+    // High frequency, so it reads as a quick rattle rather than a slow wobble. Camera Overhaul
+    // multiplies
     // this by its own max frequency (6 by default), so 2.0 is about 12 shakes a second.
     private static final float FREQUENCY = 2.0F;
     // How long a shake lasts after its last refresh.
@@ -48,29 +54,48 @@ public final class TremorCameraShake {
             HANDLES.clear();
             return;
         }
-        if (!SpelunkersCharmConfig.TREMOR_CAMERA_SHAKE.get() || !CameraOverhaulCompat.isAvailable()) return;
+        if (!SpelunkersCharmConfig.TREMOR_CAMERA_SHAKE.get() || !CameraOverhaulCompat.isAvailable())
+            return;
 
         float strength = SpelunkersCharmConfig.TREMOR_CAMERA_SHAKE_STRENGTH.get().floatValue();
         if (strength <= 0.0F) return;
 
         float radius = SpelunkersCharmConfig.TREMOR_EFFECT_RADIUS.get() * RADIUS_SCALE;
         int maxMagnitude = SpelunkersCharmConfig.TREMOR_MAX_MAGNITUDE.get();
-        List<Tremor> tremors = minecraft.level.getEntitiesOfClass(Tremor.class, player.getBoundingBox().inflate(radius));
+        List<Tremor> tremors =
+                minecraft.level.getEntitiesOfClass(
+                        Tremor.class, player.getBoundingBox().inflate(radius));
 
         Int2LongMap active = new Int2LongOpenHashMap();
         for (Tremor tremor : tremors) {
             float intensity = tremor.getIntensity();
             if (intensity <= 0.0F) continue;
 
-            float magnitudeShare = maxMagnitude <= 1 ? 1.0F : Mth.clamp((tremor.getMagnitude() - 1) / (float) (maxMagnitude - 1), 0.0F, 1.0F);
+            float magnitudeShare =
+                    maxMagnitude <= 1
+                            ? 1.0F
+                            : Mth.clamp(
+                                    (tremor.getMagnitude() - 1) / (float) (maxMagnitude - 1),
+                                    0.0F,
+                                    1.0F);
             float magnitudeFactor = Mth.lerp(magnitudeShare, MIN_MAGNITUDE_SHARE, 1.0F);
-            float trauma = Mth.clamp(MAX_TRAUMA * magnitudeFactor * intensity * strength, 0.0F, 1.0F);
+            float trauma =
+                    Mth.clamp(MAX_TRAUMA * magnitudeFactor * intensity * strength, 0.0F, 1.0F);
 
-            long handle = CameraOverhaulCompat.shake(HANDLES.get(tremor.getId()), tremor.getX(), tremor.getY(), tremor.getZ(),
-                    trauma, radius, FREQUENCY, LINGER_SECONDS);
+            long handle =
+                    CameraOverhaulCompat.shake(
+                            HANDLES.get(tremor.getId()),
+                            tremor.getX(),
+                            tremor.getY(),
+                            tremor.getZ(),
+                            trauma,
+                            radius,
+                            FREQUENCY,
+                            LINGER_SECONDS);
             if (handle != 0L) active.put(tremor.getId(), handle);
         }
-        // Tremors that ended or went out of range are dropped; their last shake fades out on its own.
+        // Tremors that ended or went out of range are dropped; their last shake fades out on its
+        // own.
         HANDLES.clear();
         HANDLES.putAll(active);
     }

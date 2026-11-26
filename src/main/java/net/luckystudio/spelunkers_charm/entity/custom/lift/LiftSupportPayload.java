@@ -1,3 +1,4 @@
+// Lift support payload.
 package net.luckystudio.spelunkers_charm.entity.custom.lift;
 
 import io.netty.buffer.ByteBuf;
@@ -10,7 +11,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
-/** A server-observed support relation, independent of entity movement snapshots. */
 public record LiftSupportPayload(int entityId, int liftId, float relativeY)
         implements CustomPacketPayload {
     public static final Type<LiftSupportPayload> TYPE =
@@ -31,6 +31,7 @@ public record LiftSupportPayload(int entityId, int liftId, float relativeY)
     }
 
     @EventBusSubscriber(modid = "spelunkers_charm", bus = EventBusSubscriber.Bus.MOD)
+    /** Registers the lift support network payload. */
     public static final class Registration {
         @SubscribeEvent
         public static void register(RegisterPayloadHandlersEvent event) {

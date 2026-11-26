@@ -50,6 +50,9 @@ description='''${mod_description}'''
 [[mixins]]
 config="spelunkers_lifts.mixins.json"
 
+[[mixins]]
+config="spelunkers_minecarts.mixins.json"
+
 # The [[accessTransformers]] block allows you to declare where your AT file is.
 # If this block is omitted, a fallback attempt will be made to load an AT from META-INF/accesstransformer.cfg
 [[accessTransformers]]
@@ -115,8 +118,9 @@ side="BOTH"
     ordering="NONE"
     side="BOTH"
 
-#[modproperties.${mod_id}."yumi:entrypoints"]
-#"lambdynlights:initializer" = "net.luckystudio.spelunkers_charm.SpelunkersCharmDynamicLightsInitializer"
+# LambDynamicLights support: minecarts with a lantern glow as dynamic lights.
+[modproperties.${mod_id}."yumi:entrypoints"]
+"lambdynlights:initializer" = "net.luckystudio.spelunkers_charm.client.compat.SpelunkersCharmDynamicLightsInitializer"
 
 # Features are specific properties of the game environment, that you may want to declare you require. This example declares
 # that your mod requires GL version 3.2 or higher. Other features will be added. They are side aware so declaring this won't

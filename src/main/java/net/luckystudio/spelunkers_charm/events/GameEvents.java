@@ -1,19 +1,19 @@
+// Game events.
 package net.luckystudio.spelunkers_charm.events;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
-import net.luckystudio.spelunkers_charm.events.tremor.Tremor;
-import net.luckystudio.spelunkers_charm.init.ModBlocks;
-import net.luckystudio.spelunkers_charm.block.custom.RockBlock;
 import net.luckystudio.spelunkers_charm.block.util.ModBlockStateProperties;
+import net.luckystudio.spelunkers_charm.events.tremor.Tremor;
 import net.luckystudio.spelunkers_charm.events.tremor.TremorManager;
+import net.luckystudio.spelunkers_charm.init.ModBlocks;
 import net.luckystudio.spelunkers_charm.item.potion.ModPotions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -35,7 +35,7 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.neoforge.event.entity.player.UseItemOnBlockEvent;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -52,41 +52,78 @@ public class GameEvents {
         var dispatcher = event.getDispatcher();
 
         dispatcher.register(
-                Commands.literal(Component.translatable("command.spelunkers_charm.tremor").getString()).requires(s -> s.hasPermission(4))
-                        .then(Commands.literal(Component.translatable("command.spelunkers_charm.tremor.start").getString())
-                                .then(Commands.argument(Component.translatable("command.spelunkers_charm.tremor.lengthInSeconds").getString(), IntegerArgumentType.integer(5, 100))
-                                        .then(Commands.argument(Component.translatable("command.spelunkers_charm.tremor.intensity").getString(), IntegerArgumentType.integer(1, 5))
-                                                .executes(ctx -> {
-                                                    runTremorStart(ctx);
+                Commands.literal(
+                                Component.translatable("command.spelunkers_charm.tremor")
+                                        .getString())
+                        .requires(s -> s.hasPermission(4))
+                        .then(
+                                Commands.literal(
+                                                Component.translatable(
+                                                                "command.spelunkers_charm.tremor.start")
+                                                        .getString())
+                                        .then(
+                                                Commands.argument(
+                                                                Component.translatable(
+                                                                                "command.spelunkers_charm.tremor.lengthInSeconds")
+                                                                        .getString(),
+                                                                IntegerArgumentType.integer(5, 100))
+                                                        .then(
+                                                                Commands.argument(
+                                                                                Component
+                                                                                        .translatable(
+                                                                                                "command.spelunkers_charm.tremor.intensity")
+                                                                                        .getString(),
+                                                                                IntegerArgumentType
+                                                                                        .integer(
+                                                                                                1,
+                                                                                                5))
+                                                                        .executes(
+                                                                                ctx -> {
+                                                                                    runTremorStart(
+                                                                                            ctx);
+                                                                                    return 1;
+                                                                                }))))
+                        .then(
+                                Commands.literal(
+                                                Component.translatable(
+                                                                "command.spelunkers_charm.tremor.stop")
+                                                        .getString())
+                                        .executes(
+                                                ctx -> {
+                                                    runTremorStop(ctx);
                                                     return 1;
-                                                })
-                                        )
-                                )
-                        )
-                        .then(Commands.literal(Component.translatable("command.spelunkers_charm.tremor.stop").getString())
-                                .executes(ctx -> {
-                                    runTremorStop(ctx);
-                                    return 1;
-                                })
-                        )
-                        .then(Commands.literal(Component.translatable("command.spelunkers_charm.tremor.help").getString())
-                                .executes(ctx -> {
-                                    runTremorHelp(ctx);
-                                    return 1;
-                                })
-                        )
-        );
+                                                }))
+                        .then(
+                                Commands.literal(
+                                                Component.translatable(
+                                                                "command.spelunkers_charm.tremor.help")
+                                                        .getString())
+                                        .executes(
+                                                ctx -> {
+                                                    runTremorHelp(ctx);
+                                                    return 1;
+                                                })));
     }
 
     private static void runTremorStart(CommandContext<CommandSourceStack> ctx) {
         Level level = ctx.getSource().getUnsidedLevel();
         Entity entity = ctx.getSource().getEntity();
         assert entity != null;
-        BlockPos blockPos = new BlockPos((int) entity.getX(), (int) entity.getY(), (int) entity.getZ());
-        int length = ctx.getArgument(Component.translatable("command.spelunkers_charm.tremor.lengthInSeconds").getString(), Integer.class);
-        int intensity = ctx.getArgument(Component.translatable("command.spelunkers_charm.tremor.intensity").getString(), Integer.class);
+        BlockPos blockPos =
+                new BlockPos((int) entity.getX(), (int) entity.getY(), (int) entity.getZ());
+        int length =
+                ctx.getArgument(
+                        Component.translatable("command.spelunkers_charm.tremor.lengthInSeconds")
+                                .getString(),
+                        Integer.class);
+        int intensity =
+                ctx.getArgument(
+                        Component.translatable("command.spelunkers_charm.tremor.intensity")
+                                .getString(),
+                        Integer.class);
         if (entity instanceof Player player) {
-            player.displayClientMessage(Component.translatable("command.spelunkers_charm.tremor.start.message"), false);
+            player.displayClientMessage(
+                    Component.translatable("command.spelunkers_charm.tremor.start.message"), false);
         }
         TremorManager.spawnTremor(level, blockPos, length * 20, intensity, 1.0F, true);
     }
@@ -100,30 +137,36 @@ public class GameEvents {
         int radius = 64;
 
         // Replace TremorEntity.class with your actual class
-        List<Tremor> tremors = level.getEntitiesOfClass(
-                Tremor.class,
-                new AABB(blockPos).inflate(radius)
-        );
+        List<Tremor> tremors =
+                level.getEntitiesOfClass(Tremor.class, new AABB(blockPos).inflate(radius));
 
         for (Tremor tremor : tremors) {
             tremor.discard();
         }
 
         if (entity instanceof Player player) {
-            player.displayClientMessage(Component.translatable("command.spelunkers_charm.tremor.stop.message", tremors.size()), false);
+            player.displayClientMessage(
+                    Component.translatable(
+                            "command.spelunkers_charm.tremor.stop.message", tremors.size()),
+                    false);
         }
     }
 
     private static void runTremorHelp(CommandContext<CommandSourceStack> ctx) {
         CommandSourceStack source = ctx.getSource();
-        source.sendSuccess(() -> Component.translatable("command.spelunkers_charm.tremor.help.message"), false);
+        source.sendSuccess(
+                () -> Component.translatable("command.spelunkers_charm.tremor.help.message"),
+                false);
     }
 
     @SubscribeEvent
     public static void onItemTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
         if (stack.getItem() == Items.MINECART) {
-            event.getToolTip().add(Component.translatable("tooltip.spelunkers_charm.minecart").withStyle(ChatFormatting.GRAY));
+            event.getToolTip()
+                    .add(
+                            Component.translatable("tooltip.spelunkers_charm.minecart")
+                                    .withStyle(ChatFormatting.GRAY));
         }
     }
 
@@ -133,11 +176,13 @@ public class GameEvents {
 
         builder.addMix(Potions.AWKWARD, ModBlocks.CAVE_MUSHROOM.asItem(), ModPotions.HASTE_POTION);
         builder.addMix(ModPotions.HASTE_POTION, Items.REDSTONE, ModPotions.LONG_HASTE_POTION);
-        builder.addMix(ModPotions.HASTE_POTION, Items.GLOWSTONE_DUST, ModPotions.STRONG_HASTE_POTION);
+        builder.addMix(
+                ModPotions.HASTE_POTION, Items.GLOWSTONE_DUST, ModPotions.STRONG_HASTE_POTION);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
-    public static ItemInteractionResult onUseClayBallOnBlock(PlayerInteractEvent.RightClickBlock event) {
+    public static ItemInteractionResult onUseClayBallOnBlock(
+            PlayerInteractEvent.RightClickBlock event) {
         Level level = event.getLevel();
         ItemStack stack = event.getItemStack();
         BlockPos pos = event.getPos();
@@ -146,19 +191,23 @@ public class GameEvents {
         Player player = event.getEntity();
         InteractionHand hand = event.getHand();
 
-//        if (level.isClientSide()) return ItemInteractionResult.FAIL;
+        //        if (level.isClientSide()) return ItemInteractionResult.FAIL;
 
         // Only process if this hand actually has a clay ball
-        if (stack.getItem() != Items.CLAY_BALL) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        if (stack.getItem() != Items.CLAY_BALL)
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 
         // Only process main hand
         if (event.getHand().equals(InteractionHand.OFF_HAND)) return ItemInteractionResult.FAIL;
 
-        if (state.is(ModBlocks.CLAY_PILE.get()) && state.getValue(ModBlockStateProperties.ROCKS) < 3) {
+        if (state.is(ModBlocks.CLAY_PILE.get())
+                && state.getValue(ModBlockStateProperties.ROCKS) < 3) {
             level.setBlock(pos, state.cycle(ModBlockStateProperties.ROCKS), 3);
             useClayBall(player, level, pos, stack, hand);
             return ItemInteractionResult.SUCCESS;
-        } else if (player.isCrouching() && level.getBlockState(offset).canBeReplaced() && ModBlocks.CLAY_PILE.get().defaultBlockState().canSurvive(level, offset)) {
+        } else if (player.isCrouching()
+                && level.getBlockState(offset).canBeReplaced()
+                && ModBlocks.CLAY_PILE.get().defaultBlockState().canSurvive(level, offset)) {
             level.setBlock(offset, ModBlocks.CLAY_PILE.get().defaultBlockState(), 3);
             useClayBall(player, level, pos, stack, hand);
         }
@@ -166,7 +215,12 @@ public class GameEvents {
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
-    private static void useClayBall(@NotNull Player player, Level level, BlockPos pos, ItemStack stack, InteractionHand hand) {
+    private static void useClayBall(
+            @NotNull Player player,
+            Level level,
+            BlockPos pos,
+            ItemStack stack,
+            InteractionHand hand) {
         level.playSound(null, pos, SoundEvents.WET_GRASS_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
         player.awardStat(Stats.ITEM_USED.get(Items.CLAY_BALL));
         stack.consume(1, player);

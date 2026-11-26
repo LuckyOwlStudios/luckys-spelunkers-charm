@@ -1,3 +1,4 @@
+// Block part.
 package net.luckystudio.spelunkers_charm.block.util.enums;
 
 import net.minecraft.util.StringRepresentable;
@@ -11,7 +12,6 @@ public enum BlockPart implements StringRepresentable {
     TOP_CORNER("top_corner"),
     TOP_SIDE("top_side"),
     TOP_MIDDLE("top_middle");
-
 
     private final String name;
 

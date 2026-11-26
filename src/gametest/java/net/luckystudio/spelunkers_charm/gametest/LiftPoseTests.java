@@ -1,3 +1,4 @@
+// Lift pose tests.
 package net.luckystudio.spelunkers_charm.gametest;
 
 import net.luckystudio.spelunkers_charm.entity.custom.lift.AbstractLift;
@@ -15,7 +16,7 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 import java.lang.reflect.Method;
 
-@GameTestHolder(LiftTestMod.ID)
+@GameTestHolder("spelunkers_cleanup_lift_tests")
 @PrefixGameTestTemplate(false)
 public final class LiftPoseTests {
     private static Player supportedPlayer(GameTestHelper helper) {

@@ -1,3 +1,4 @@
+// Lift client support events.
 package net.luckystudio.spelunkers_charm.entity.custom.lift;
 
 import net.minecraft.client.Minecraft;
@@ -10,6 +11,11 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 @EventBusSubscriber(modid = "spelunkers_charm", value = Dist.CLIENT)
 public final class LiftClientSupportEvents {
     private LiftClientSupportEvents() {}
+
+    @SubscribeEvent
+    public static void beforeEntityInterpolation(ClientTickEvent.Pre event) {
+        LiftMountedSupport.capture(Minecraft.getInstance().player);
+    }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void afterEntityInterpolation(ClientTickEvent.Post event) {

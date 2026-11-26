@@ -1,16 +1,18 @@
+// Block loot table provider.
 package net.luckystudio.spelunkers_charm.datagen;
 
 import net.luckystudio.spelunkers_charm.block.custom.boulder.BoulderOre;
 import net.luckystudio.spelunkers_charm.block.custom.boulder.BoulderType;
-import net.luckystudio.spelunkers_charm.init.ModBlocks;
 import net.luckystudio.spelunkers_charm.block.util.ModBlockStateProperties;
+import net.luckystudio.spelunkers_charm.init.ModBlocks;
+import net.luckystudio.spelunkers_charm.init.ModDataComponents;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
-import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -25,17 +27,18 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.TagEntry;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
+import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Set;
 
-// Look at this class for help VanillaBlockLoot
 public class ModBlockLootTableProvider extends BlockLootSubProvider {
 
     protected ModBlockLootTableProvider(HolderLookup.Provider registries) {
@@ -45,8 +48,11 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
     @Override
     protected void generate() {
 
-        // Building Blocks
-        this.add(ModBlocks.DUNESTONE.get(), block -> this.createSingleItemTableWithSilkTouch(block, ModBlocks.COBBLED_DUNESTONE));
+        this.add(
+                ModBlocks.DUNESTONE.get(),
+                block ->
+                        this.createSingleItemTableWithSilkTouch(
+                                block, ModBlocks.COBBLED_DUNESTONE));
         dropSelf(ModBlocks.DUNESTONE_STAIRS.get());
         dropSelf(ModBlocks.DUNESTONE_SLAB.get());
         dropSelf(ModBlocks.DUNESTONE_WALL.get());
@@ -60,7 +66,11 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.COBBLED_DUNESTONE_SLAB.get());
         dropSelf(ModBlocks.COBBLED_DUNESTONE_WALL.get());
 
-        this.add(ModBlocks.PERMAFROST.get(), block -> this.createSingleItemTableWithSilkTouch(block, ModBlocks.COBBLED_PERMAFROST));
+        this.add(
+                ModBlocks.PERMAFROST.get(),
+                block ->
+                        this.createSingleItemTableWithSilkTouch(
+                                block, ModBlocks.COBBLED_PERMAFROST));
         dropSelf(ModBlocks.PERMAFROST_STAIRS.get());
         dropSelf(ModBlocks.PERMAFROST_SLAB.get());
         dropSelf(ModBlocks.PERMAFROST_WALL.get());
@@ -74,7 +84,11 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.COBBLED_PERMAFROST_SLAB.get());
         dropSelf(ModBlocks.COBBLED_PERMAFROST_WALL.get());
 
-        this.add(ModBlocks.WILDSTONE.get(), block -> this.createSingleItemTableWithSilkTouch(block, ModBlocks.COBBLED_WILDSTONE));
+        this.add(
+                ModBlocks.WILDSTONE.get(),
+                block ->
+                        this.createSingleItemTableWithSilkTouch(
+                                block, ModBlocks.COBBLED_WILDSTONE));
         dropSelf(ModBlocks.WILDSTONE_STAIRS.get());
         dropSelf(ModBlocks.WILDSTONE_SLAB.get());
         dropSelf(ModBlocks.WILDSTONE_WALL.get());
@@ -94,52 +108,106 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.AMETHYST_BRICK_WALL.get());
         dropSelf(ModBlocks.CHISELED_AMETHYST_BLOCK.get());
 
-        // Natural Blocks
         this.add(ModBlocks.SILT.get(), this.createSiltDrops(ModBlocks.SILT.get()));
         dropSelf(ModBlocks.ICICLE.get());
-        this.add(ModBlocks.DUNESTONE_COAL_ORE.get(), createOreDrop(ModBlocks.PERMAFROST_COAL_ORE.get(), Items.COAL));
-        this.add(ModBlocks.DUNESTONE_IRON_ORE.get(), createOreDrop(ModBlocks.PERMAFROST_IRON_ORE.get(), Items.RAW_IRON));
-        this.add(ModBlocks.DUNESTONE_COPPER_ORE.get(), createCopperOreDrops(ModBlocks.PERMAFROST_COPPER_ORE.get()));
-        this.add(ModBlocks.DUNESTONE_GOLD_ORE.get(), createOreDrop(ModBlocks.PERMAFROST_GOLD_ORE.get(), Items.RAW_GOLD));
-        this.add(ModBlocks.DUNESTONE_REDSTONE_ORE.get(), createRedstoneOreDrops(ModBlocks.PERMAFROST_REDSTONE_ORE.get()));
-        this.add(ModBlocks.DUNESTONE_EMERALD_ORE.get(), createOreDrop(ModBlocks.PERMAFROST_EMERALD_ORE.get(), Items.EMERALD));
-        this.add(ModBlocks.DUNESTONE_LAPIS_ORE.get(), createLapisOreDrops(ModBlocks.PERMAFROST_LAPIS_ORE.get()));
-        this.add(ModBlocks.DUNESTONE_DIAMOND_ORE.get(), createOreDrop(ModBlocks.PERMAFROST_DIAMOND_ORE.get(), Items.DIAMOND));
-        this.add(ModBlocks.PERMAFROST_COAL_ORE.get(), this.createOreDrop(ModBlocks.PERMAFROST_COAL_ORE.get(), Items.COAL));
-        this.add(ModBlocks.PERMAFROST_IRON_ORE.get(), this.createOreDrop(ModBlocks.PERMAFROST_IRON_ORE.get(), Items.RAW_IRON));
-        this.add(ModBlocks.PERMAFROST_COPPER_ORE.get(), this.createCopperOreDrops(ModBlocks.PERMAFROST_COPPER_ORE.get()));
-        this.add(ModBlocks.PERMAFROST_GOLD_ORE.get(), this.createOreDrop(ModBlocks.PERMAFROST_GOLD_ORE.get(), Items.RAW_GOLD));
-        this.add(ModBlocks.PERMAFROST_REDSTONE_ORE.get(), this.createRedstoneOreDrops(ModBlocks.PERMAFROST_REDSTONE_ORE.get()));
-        this.add(ModBlocks.PERMAFROST_EMERALD_ORE.get(), this.createOreDrop(ModBlocks.PERMAFROST_EMERALD_ORE.get(), Items.EMERALD));
-        this.add(ModBlocks.PERMAFROST_LAPIS_ORE.get(), this.createLapisOreDrops(ModBlocks.PERMAFROST_LAPIS_ORE.get()));
-        this.add(ModBlocks.PERMAFROST_DIAMOND_ORE.get(), this.createOreDrop(ModBlocks.PERMAFROST_DIAMOND_ORE.get(), Items.DIAMOND));
-        this.add(ModBlocks.WILDSTONE_COAL_ORE.get(), createOreDrop(ModBlocks.WILDSTONE_COAL_ORE.get(), Items.COAL));
-        this.add(ModBlocks.WILDSTONE_IRON_ORE.get(), createOreDrop(ModBlocks.WILDSTONE_IRON_ORE.get(), Items.RAW_IRON));
-        this.add(ModBlocks.WILDSTONE_COPPER_ORE.get(), createCopperOreDrops(ModBlocks.WILDSTONE_COPPER_ORE.get()));
-        this.add(ModBlocks.WILDSTONE_GOLD_ORE.get(), createOreDrop(ModBlocks.WILDSTONE_GOLD_ORE.get(), Items.RAW_GOLD));
-        this.add(ModBlocks.WILDSTONE_REDSTONE_ORE.get(), createRedstoneOreDrops(ModBlocks.WILDSTONE_REDSTONE_ORE.get()));
-        this.add(ModBlocks.WILDSTONE_EMERALD_ORE.get(), createOreDrop(ModBlocks.WILDSTONE_EMERALD_ORE.get(), Items.EMERALD));
-        this.add(ModBlocks.WILDSTONE_LAPIS_ORE.get(), createLapisOreDrops(ModBlocks.WILDSTONE_LAPIS_ORE.get()));
-        this.add(ModBlocks.WILDSTONE_DIAMOND_ORE.get(), createOreDrop(ModBlocks.WILDSTONE_DIAMOND_ORE.get(), Items.DIAMOND));
+        this.add(
+                ModBlocks.DUNESTONE_COAL_ORE.get(),
+                createOreDrop(ModBlocks.PERMAFROST_COAL_ORE.get(), Items.COAL));
+        this.add(
+                ModBlocks.DUNESTONE_IRON_ORE.get(),
+                createOreDrop(ModBlocks.PERMAFROST_IRON_ORE.get(), Items.RAW_IRON));
+        this.add(
+                ModBlocks.DUNESTONE_COPPER_ORE.get(),
+                createCopperOreDrops(ModBlocks.PERMAFROST_COPPER_ORE.get()));
+        this.add(
+                ModBlocks.DUNESTONE_GOLD_ORE.get(),
+                createOreDrop(ModBlocks.PERMAFROST_GOLD_ORE.get(), Items.RAW_GOLD));
+        this.add(
+                ModBlocks.DUNESTONE_REDSTONE_ORE.get(),
+                createRedstoneOreDrops(ModBlocks.PERMAFROST_REDSTONE_ORE.get()));
+        this.add(
+                ModBlocks.DUNESTONE_EMERALD_ORE.get(),
+                createOreDrop(ModBlocks.PERMAFROST_EMERALD_ORE.get(), Items.EMERALD));
+        this.add(
+                ModBlocks.DUNESTONE_LAPIS_ORE.get(),
+                createLapisOreDrops(ModBlocks.PERMAFROST_LAPIS_ORE.get()));
+        this.add(
+                ModBlocks.DUNESTONE_DIAMOND_ORE.get(),
+                createOreDrop(ModBlocks.PERMAFROST_DIAMOND_ORE.get(), Items.DIAMOND));
+        this.add(
+                ModBlocks.PERMAFROST_COAL_ORE.get(),
+                this.createOreDrop(ModBlocks.PERMAFROST_COAL_ORE.get(), Items.COAL));
+        this.add(
+                ModBlocks.PERMAFROST_IRON_ORE.get(),
+                this.createOreDrop(ModBlocks.PERMAFROST_IRON_ORE.get(), Items.RAW_IRON));
+        this.add(
+                ModBlocks.PERMAFROST_COPPER_ORE.get(),
+                this.createCopperOreDrops(ModBlocks.PERMAFROST_COPPER_ORE.get()));
+        this.add(
+                ModBlocks.PERMAFROST_GOLD_ORE.get(),
+                this.createOreDrop(ModBlocks.PERMAFROST_GOLD_ORE.get(), Items.RAW_GOLD));
+        this.add(
+                ModBlocks.PERMAFROST_REDSTONE_ORE.get(),
+                this.createRedstoneOreDrops(ModBlocks.PERMAFROST_REDSTONE_ORE.get()));
+        this.add(
+                ModBlocks.PERMAFROST_EMERALD_ORE.get(),
+                this.createOreDrop(ModBlocks.PERMAFROST_EMERALD_ORE.get(), Items.EMERALD));
+        this.add(
+                ModBlocks.PERMAFROST_LAPIS_ORE.get(),
+                this.createLapisOreDrops(ModBlocks.PERMAFROST_LAPIS_ORE.get()));
+        this.add(
+                ModBlocks.PERMAFROST_DIAMOND_ORE.get(),
+                this.createOreDrop(ModBlocks.PERMAFROST_DIAMOND_ORE.get(), Items.DIAMOND));
+        this.add(
+                ModBlocks.WILDSTONE_COAL_ORE.get(),
+                createOreDrop(ModBlocks.WILDSTONE_COAL_ORE.get(), Items.COAL));
+        this.add(
+                ModBlocks.WILDSTONE_IRON_ORE.get(),
+                createOreDrop(ModBlocks.WILDSTONE_IRON_ORE.get(), Items.RAW_IRON));
+        this.add(
+                ModBlocks.WILDSTONE_COPPER_ORE.get(),
+                createCopperOreDrops(ModBlocks.WILDSTONE_COPPER_ORE.get()));
+        this.add(
+                ModBlocks.WILDSTONE_GOLD_ORE.get(),
+                createOreDrop(ModBlocks.WILDSTONE_GOLD_ORE.get(), Items.RAW_GOLD));
+        this.add(
+                ModBlocks.WILDSTONE_REDSTONE_ORE.get(),
+                createRedstoneOreDrops(ModBlocks.WILDSTONE_REDSTONE_ORE.get()));
+        this.add(
+                ModBlocks.WILDSTONE_EMERALD_ORE.get(),
+                createOreDrop(ModBlocks.WILDSTONE_EMERALD_ORE.get(), Items.EMERALD));
+        this.add(
+                ModBlocks.WILDSTONE_LAPIS_ORE.get(),
+                createLapisOreDrops(ModBlocks.WILDSTONE_LAPIS_ORE.get()));
+        this.add(
+                ModBlocks.WILDSTONE_DIAMOND_ORE.get(),
+                createOreDrop(ModBlocks.WILDSTONE_DIAMOND_ORE.get(), Items.DIAMOND));
         for (BoulderType type : BoulderType.values()) {
             Block boulder = ModBlocks.BOULDERS.get(type).get();
             BoulderOre ore = type.getOre();
             if (ore == BoulderOre.NONE) {
                 this.add(boulder, createOreDrop(Blocks.STONE, Items.COBBLESTONE));
             } else if (ore.isModded()) {
-                this.add(boulder, createTagBoulderDrops(ore.getRawBlockItemTag(), ore.getRawMaterialTag()));
+                this.add(
+                        boulder,
+                        createTagBoulderDrops(ore.getRawBlockItemTag(), ore.getRawMaterialTag()));
             } else {
                 Block rawBlock = ore.getCore();
-                this.add(boulder, createBoulderDrops(rawBlock, switch (ore) {
-                    case IRON -> Items.RAW_IRON;
-                    case COPPER -> Items.RAW_COPPER;
-                    default -> Items.RAW_GOLD;
-                }));
+                this.add(
+                        boulder,
+                        createBoulderDrops(
+                                rawBlock,
+                                switch (ore) {
+                                    case IRON -> Items.RAW_IRON;
+                                    case COPPER -> Items.RAW_COPPER;
+                                    default -> Items.RAW_GOLD;
+                                }));
             }
         }
-        this.add(ModBlocks.CAVE_MUSHROOM_BLOCK.get(), createMushroomBlockDrop(
-                ModBlocks.CAVE_MUSHROOM_BLOCK.get(), ModBlocks.CAVE_MUSHROOM
-        ));
+        this.add(
+                ModBlocks.CAVE_MUSHROOM_BLOCK.get(),
+                createMushroomBlockDrop(
+                        ModBlocks.CAVE_MUSHROOM_BLOCK.get(), ModBlocks.CAVE_MUSHROOM));
         dropSelf(ModBlocks.CAVE_MUSHROOM.get());
         dropOther(ModBlocks.CLAY_PILE.get(), Items.CLAY_BALL);
         rockDrops(ModBlocks.ROCK.get());
@@ -147,97 +215,187 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         rockDrops(ModBlocks.DEEPSLATE_ROCK.get());
         rockDrops(ModBlocks.DRIPSTONE_ROCK.get());
         rockDrops(ModBlocks.BASALT_ROCK.get());
-        this.add(ModBlocks.PACKED_WEB.get(), createOreDrop(ModBlocks.PACKED_WEB.get(), Items.STRING));
+        this.add(
+                ModBlocks.PACKED_WEB.get(),
+                createOreDrop(ModBlocks.PACKED_WEB.get(), Items.STRING));
         this.add(ModBlocks.WEB_VEIN.get(), createOreDrop(ModBlocks.WEB_VEIN.get(), Items.STRING));
-        this.add(ModBlocks.HANGING_WEB.get(), createOreDrop(ModBlocks.HANGING_WEB.get(), Items.STRING));
+        this.add(
+                ModBlocks.HANGING_WEB.get(),
+                createOreDrop(ModBlocks.HANGING_WEB.get(), Items.STRING));
         dropWhenSilkTouch(ModBlocks.SPIDER_EGG.get());
-        this.add(ModBlocks.DEEPSLATE_GEYSER.get(), block -> this.createSingleItemTableWithSilkTouch(block, Blocks.COBBLED_DEEPSLATE));
-        this.add(ModBlocks.BASALT_GEYSER.get(), block -> this.createSingleItemTableWithSilkTouch(block, Blocks.BASALT));
+        this.add(
+                ModBlocks.DEEPSLATE_GEYSER.get(),
+                block -> this.createSingleItemTableWithSilkTouch(block, Blocks.COBBLED_DEEPSLATE));
+        this.add(
+                ModBlocks.BASALT_GEYSER.get(),
+                block -> this.createSingleItemTableWithSilkTouch(block, Blocks.BASALT));
 
-        // Redstone Blocks
         dropSelf(ModBlocks.BLASTER.get());
+        dropSelf(ModBlocks.CART_LOADER.get());
+        add(
+                ModBlocks.MINE_CRATE.get(),
+                block ->
+                        createSingleItemTable(block)
+                                .apply(
+                                        CopyComponentsFunction.copyComponents(
+                                                        CopyComponentsFunction.Source.BLOCK_ENTITY)
+                                                .include(ModDataComponents.CRATE_CONTENTS.get())));
+        dropSelf(ModBlocks.TANK.get());
         dropSelf(ModBlocks.BASIC_LIFT_TRACK.get());
         dropSelf(ModBlocks.DIRECTIONAL_LIFT_TRACK.get());
         dropSelf(ModBlocks.DETECTOR_LIFT_TRACK.get());
         dropSelf(ModBlocks.POWERED_LIFT_TRACK.get());
+        dropSelf(ModBlocks.WOODEN_RAIL.get());
+        dropSelf(ModBlocks.EJECTOR_RAIL.get());
+        dropSelf(ModBlocks.DIRECTIONAL_RAIL.get());
+        dropSelf(ModBlocks.CARGO_RAIL.get());
+        // A crossing is two rails, so it gives both back.
+        add(
+                ModBlocks.CROSSING_RAIL.get(),
+                block ->
+                        LootTable.lootTable()
+                                .withPool(
+                                        applyExplosionCondition(
+                                                block,
+                                                LootPool.lootPool()
+                                                        .setRolls(ConstantValue.exactly(1.0F))
+                                                        .add(
+                                                                LootItem.lootTableItem(Items.RAIL)
+                                                                        .apply(
+                                                                                SetItemCountFunction
+                                                                                        .setCount(
+                                                                                                ConstantValue
+                                                                                                        .exactly(
+                                                                                                                2.0F)))))));
     }
 
     protected LootTable.Builder createBoulderDrops(Block block, ItemLike drop) {
-        HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+        HolderLookup.RegistryLookup<Enchantment> registrylookup =
+                this.registries.lookupOrThrow(Registries.ENCHANTMENT);
         return this.createSilkTouchDispatchTable(
                 block,
                 this.applyExplosionDecay(
                         block,
                         LootItem.lootTableItem(drop)
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(5.0F, 8.0F)))
-                                .apply(ApplyBonusCount.addOreBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE)))
-                )
-        );
+                                .apply(
+                                        SetItemCountFunction.setCount(
+                                                UniformGenerator.between(5.0F, 8.0F)))
+                                .apply(
+                                        ApplyBonusCount.addOreBonusCount(
+                                                registrylookup.getOrThrow(Enchantments.FORTUNE)))));
     }
 
-    /**
-     * Drops for a modded ore boulder: the raw block with silk touch, otherwise raw materials.
-     * Both come from {@code c:} item tags, so whichever mod adds the ore supplies the items.
-     */
-    protected LootTable.Builder createTagBoulderDrops(TagKey<Item> rawBlockTag, TagKey<Item> rawMaterialTag) {
-        HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
-        return LootTable.lootTable().withPool(LootPool.lootPool()
-                .setRolls(ConstantValue.exactly(1.0F))
-                .add(AlternativesEntry.alternatives(
-                        TagEntry.expandTag(rawBlockTag).when(this.hasSilkTouch()),
-                        TagEntry.expandTag(rawMaterialTag)
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(5.0F, 8.0F)))
-                                .apply(ApplyBonusCount.addOreBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE)))
-                                .apply(ApplyExplosionDecay.explosionDecay())
-                )));
+    protected LootTable.Builder createTagBoulderDrops(
+            TagKey<Item> rawBlockTag, TagKey<Item> rawMaterialTag) {
+        HolderLookup.RegistryLookup<Enchantment> registrylookup =
+                this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+        return LootTable.lootTable()
+                .withPool(
+                        LootPool.lootPool()
+                                .setRolls(ConstantValue.exactly(1.0F))
+                                .add(
+                                        AlternativesEntry.alternatives(
+                                                TagEntry.expandTag(rawBlockTag)
+                                                        .when(this.hasSilkTouch()),
+                                                TagEntry.expandTag(rawMaterialTag)
+                                                        .apply(
+                                                                SetItemCountFunction.setCount(
+                                                                        UniformGenerator.between(
+                                                                                5.0F, 8.0F)))
+                                                        .apply(
+                                                                ApplyBonusCount.addOreBonusCount(
+                                                                        registrylookup.getOrThrow(
+                                                                                Enchantments
+                                                                                        .FORTUNE)))
+                                                        .apply(
+                                                                ApplyExplosionDecay
+                                                                        .explosionDecay()))));
     }
 
     private LootTable.Builder createSiltDrops(Block block) {
-        HolderLookup.RegistryLookup<Enchantment> enchantments = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+        HolderLookup.RegistryLookup<Enchantment> enchantments =
+                this.registries.lookupOrThrow(Registries.ENCHANTMENT);
 
-        // LootPool for no silk touch drops: either block with 85% chance, or nuggets with 15% chance
-        LootPool.Builder noSilkTouchPool = LootPool.lootPool()
-                .setRolls(ConstantValue.exactly(1.0F))
-                .when(this.doesNotHaveSilkTouch())
-                .add(applyExplosionDecay(block,
-                        LootItem.lootTableItem(block)
-                                .when(LootItemRandomChanceCondition.randomChance(0.85f))
-                ))
-                .add(applyExplosionDecay(block,
-                        LootItem.lootTableItem(Items.FLINT)
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 5.0F)))
-                                .apply(ApplyBonusCount.addOreBonusCount(enchantments.getOrThrow(Enchantments.FORTUNE)))
-                                .when(LootItemRandomChanceCondition.randomChance(0.15f))
-                ))
-                .add(applyExplosionDecay(block,
-                        LootItem.lootTableItem(Items.BONE)
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 5.0F)))
-                                .apply(ApplyBonusCount.addOreBonusCount(enchantments.getOrThrow(Enchantments.FORTUNE)))
-                                .when(LootItemRandomChanceCondition.randomChance(0.15f))
-                ))
-                .add(applyExplosionDecay(block,
-                        LootItem.lootTableItem(Items.IRON_NUGGET)
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 5.0F)))
-                                .apply(ApplyBonusCount.addOreBonusCount(enchantments.getOrThrow(Enchantments.FORTUNE)))
-                                .when(LootItemRandomChanceCondition.randomChance(0.10f))
-                ))
-                .add(applyExplosionDecay(block,
-                        LootItem.lootTableItem(Items.GOLD_NUGGET)
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 5.0F)))
-                                .apply(ApplyBonusCount.addOreBonusCount(enchantments.getOrThrow(Enchantments.FORTUNE)))
-                                .when(LootItemRandomChanceCondition.randomChance(0.05f))
-                ));
-
-        // Silk touch always drops block
-        return LootTable.lootTable()
-                .withPool(LootPool.lootPool()
+        LootPool.Builder noSilkTouchPool =
+                LootPool.lootPool()
                         .setRolls(ConstantValue.exactly(1.0F))
-                        .when(this.hasSilkTouch())
-                        .add(LootItem.lootTableItem(block))
-                )
+                        .when(this.doesNotHaveSilkTouch())
+                        .add(
+                                applyExplosionDecay(
+                                        block,
+                                        LootItem.lootTableItem(block)
+                                                .when(
+                                                        LootItemRandomChanceCondition.randomChance(
+                                                                0.85f))))
+                        .add(
+                                applyExplosionDecay(
+                                        block,
+                                        LootItem.lootTableItem(Items.FLINT)
+                                                .apply(
+                                                        SetItemCountFunction.setCount(
+                                                                UniformGenerator.between(
+                                                                        2.0F, 5.0F)))
+                                                .apply(
+                                                        ApplyBonusCount.addOreBonusCount(
+                                                                enchantments.getOrThrow(
+                                                                        Enchantments.FORTUNE)))
+                                                .when(
+                                                        LootItemRandomChanceCondition.randomChance(
+                                                                0.15f))))
+                        .add(
+                                applyExplosionDecay(
+                                        block,
+                                        LootItem.lootTableItem(Items.BONE)
+                                                .apply(
+                                                        SetItemCountFunction.setCount(
+                                                                UniformGenerator.between(
+                                                                        2.0F, 5.0F)))
+                                                .apply(
+                                                        ApplyBonusCount.addOreBonusCount(
+                                                                enchantments.getOrThrow(
+                                                                        Enchantments.FORTUNE)))
+                                                .when(
+                                                        LootItemRandomChanceCondition.randomChance(
+                                                                0.15f))))
+                        .add(
+                                applyExplosionDecay(
+                                        block,
+                                        LootItem.lootTableItem(Items.IRON_NUGGET)
+                                                .apply(
+                                                        SetItemCountFunction.setCount(
+                                                                UniformGenerator.between(
+                                                                        2.0F, 5.0F)))
+                                                .apply(
+                                                        ApplyBonusCount.addOreBonusCount(
+                                                                enchantments.getOrThrow(
+                                                                        Enchantments.FORTUNE)))
+                                                .when(
+                                                        LootItemRandomChanceCondition.randomChance(
+                                                                0.10f))))
+                        .add(
+                                applyExplosionDecay(
+                                        block,
+                                        LootItem.lootTableItem(Items.GOLD_NUGGET)
+                                                .apply(
+                                                        SetItemCountFunction.setCount(
+                                                                UniformGenerator.between(
+                                                                        2.0F, 5.0F)))
+                                                .apply(
+                                                        ApplyBonusCount.addOreBonusCount(
+                                                                enchantments.getOrThrow(
+                                                                        Enchantments.FORTUNE)))
+                                                .when(
+                                                        LootItemRandomChanceCondition.randomChance(
+                                                                0.05f))));
+
+        return LootTable.lootTable()
+                .withPool(
+                        LootPool.lootPool()
+                                .setRolls(ConstantValue.exactly(1.0F))
+                                .when(this.hasSilkTouch())
+                                .add(LootItem.lootTableItem(block)))
                 .withPool(noSilkTouchPool);
     }
-
 
     private void rockDrops(Block block) {
         if (block == ModBlocks.CLAY_PILE.get()) {
@@ -258,17 +416,27 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
                                                 LootItem.lootTableItem(block)
                                                         .apply(
                                                                 List.of(2, 3, 4),
-                                                                amount -> SetItemCountFunction.setCount(ConstantValue.exactly((float)amount.intValue()))
-                                                                        .when(
-                                                                                LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
-                                                                                        .setProperties(
-                                                                                                StatePropertiesPredicate.Builder.properties().hasProperty(ModBlockStateProperties.ROCKS, amount.intValue())
-                                                                                        )
-                                                                        )
-                                                        )
-                                        )
-                                )
-                );
+                                                                amount ->
+                                                                        SetItemCountFunction
+                                                                                .setCount(
+                                                                                        ConstantValue
+                                                                                                .exactly(
+                                                                                                        (float)
+                                                                                                                amount
+                                                                                                                        .intValue()))
+                                                                                .when(
+                                                                                        LootItemBlockStatePropertyCondition
+                                                                                                .hasBlockStateProperties(
+                                                                                                        block)
+                                                                                                .setProperties(
+                                                                                                        StatePropertiesPredicate
+                                                                                                                .Builder
+                                                                                                                .properties()
+                                                                                                                .hasProperty(
+                                                                                                                        ModBlockStateProperties
+                                                                                                                                .ROCKS,
+                                                                                                                        amount
+                                                                                                                                .intValue())))))));
     }
 
     @Override

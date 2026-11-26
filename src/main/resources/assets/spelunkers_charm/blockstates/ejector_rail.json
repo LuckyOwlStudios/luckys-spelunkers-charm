@@ -1,0 +1,25 @@
+{
+  "variants": {
+    "shape=north_south": {
+      "model": "spelunkers_charm:block/ejector_rail"
+    },
+    "shape=east_west": {
+      "model": "spelunkers_charm:block/ejector_rail",
+      "y": 90
+    },
+    "shape=ascending_east": {
+      "model": "spelunkers_charm:block/ejector_rail_raised_ne",
+      "y": 90
+    },
+    "shape=ascending_west": {
+      "model": "spelunkers_charm:block/ejector_rail_raised_sw",
+      "y": 90
+    },
+    "shape=ascending_north": {
+      "model": "spelunkers_charm:block/ejector_rail_raised_ne"
+    },
+    "shape=ascending_south": {
+      "model": "spelunkers_charm:block/ejector_rail_raised_sw"
+    }
+  }
+}

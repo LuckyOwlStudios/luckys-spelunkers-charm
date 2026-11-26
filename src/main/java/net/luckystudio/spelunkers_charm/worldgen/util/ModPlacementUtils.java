@@ -1,3 +1,4 @@
+// Placement utils.
 package net.luckystudio.spelunkers_charm.worldgen.util;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
@@ -12,7 +13,8 @@ public class ModPlacementUtils {
         ModCavePlacements.bootstrap(context);
     }
 
-    // A simple copy of the createKey method from the PlacementUtils class, with the namespace changed to SpelunkersCharm.id(key)
+    // A simple copy of the createKey method from the PlacementUtils class, with the namespace
+    // changed to SpelunkersCharm.id(key)
     public static ResourceKey<PlacedFeature> createKey(String key) {
         return ResourceKey.create(Registries.PLACED_FEATURE, SpelunkersCharm.id(key));
     }

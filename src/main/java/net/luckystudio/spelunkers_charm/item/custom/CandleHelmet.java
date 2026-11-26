@@ -1,3 +1,4 @@
+// Candle helmet.
 package net.luckystudio.spelunkers_charm.item.custom;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
@@ -18,6 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.phys.Vec3;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
@@ -31,12 +33,18 @@ public class CandleHelmet extends ArmorItem {
     }
 
     @Override
-    public @Nullable ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
+    public @Nullable ResourceLocation getArmorTexture(
+            ItemStack stack,
+            Entity entity,
+            EquipmentSlot slot,
+            ArmorMaterial.Layer layer,
+            boolean innerModel) {
         return TEXTURE;
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+    public void inventoryTick(
+            ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         super.inventoryTick(stack, level, entity, slotId, isSelected);
 
         if (!(entity instanceof LivingEntity living)) return;
@@ -74,7 +82,8 @@ public class CandleHelmet extends ArmorItem {
     private static final double WICK_FORWARD_PX = 5.0;
     // PlayerRenderer scales the player model by 15/16.
     private static final double PLAYER_MODEL_SCALE = 0.9375;
-    // Head pivot height above the feet in model pixels (24px), and how far HumanoidModel lowers it when crouching.
+    // Head pivot height above the feet in model pixels (24px), and how far HumanoidModel lowers it
+    // when crouching.
     private static final double HEAD_PIVOT_PX = 24.0;
     private static final double CROUCH_HEAD_DROP_PX = 4.2;
 
@@ -85,12 +94,9 @@ public class CandleHelmet extends ArmorItem {
         Vec3 position = getWickPosition(living);
 
         // Spawn candle flame particles
-        level.addParticle(ParticleTypes.SMALL_FLAME,
-                position.x, position.y, position.z,
-                0, 0.01, 0);
-        level.addParticle(ParticleTypes.SMOKE,
-                position.x, position.y, position.z,
-                0, 0.01, 0);
+        level.addParticle(
+                ParticleTypes.SMALL_FLAME, position.x, position.y, position.z, 0, 0.01, 0);
+        level.addParticle(ParticleTypes.SMOKE, position.x, position.y, position.z, 0, 0.01, 0);
     }
 
     /**
@@ -102,7 +108,8 @@ public class CandleHelmet extends ArmorItem {
         double crouchOffset = 0.0;
         if (living.isCrouching()) {
             pivotPx -= CROUCH_HEAD_DROP_PX;
-            // PlayerRenderer#getRenderOffset shifts a crouching player down by 2px (unscaled by the model scale)
+            // PlayerRenderer#getRenderOffset shifts a crouching player down by 2px (unscaled by the
+            // model scale)
             crouchOffset = -2.0 / 16.0 * living.getScale();
         }
         Vec3 headPivot = living.position().add(0.0, pivotPx * pxToBlocks + crouchOffset, 0.0);
@@ -155,9 +162,9 @@ public class CandleHelmet extends ArmorItem {
                 entity.getZ(),
                 SoundEvents.FIRE_EXTINGUISH,
                 SoundSource.PLAYERS,
-                0.8f,  // Volume
-                1.2f   // Pitch (slightly higher for small candle)
-        );
+                0.8f, // Volume
+                1.2f // Pitch (slightly higher for small candle)
+                );
 
         // Also play a subtle lava extinguish (sizzle) for water
         if (entity.isUnderWater()) {
@@ -168,9 +175,9 @@ public class CandleHelmet extends ArmorItem {
                     entity.getZ(),
                     SoundEvents.LAVA_EXTINGUISH,
                     SoundSource.PLAYERS,
-                    0.4f,  // Quieter
-                    2.0f   // High pitch for small sizzle
-            );
+                    0.4f, // Quieter
+                    2.0f // High pitch for small sizzle
+                    );
         }
     }
 
@@ -185,9 +192,9 @@ public class CandleHelmet extends ArmorItem {
                 entity.getZ(),
                 SoundEvents.FLINTANDSTEEL_USE,
                 SoundSource.PLAYERS,
-                0.6f,  // Volume
-                1.4f   // Pitch (higher for small candle)
-        );
+                0.6f, // Volume
+                1.4f // Pitch (higher for small candle)
+                );
     }
 
     /**

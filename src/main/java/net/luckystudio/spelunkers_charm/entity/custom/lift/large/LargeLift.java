@@ -1,7 +1,8 @@
+// Large lift.
 package net.luckystudio.spelunkers_charm.entity.custom.lift.large;
 
-import net.luckystudio.spelunkers_charm.init.ModEntityType;
 import net.luckystudio.spelunkers_charm.entity.custom.lift.AbstractLift;
+import net.luckystudio.spelunkers_charm.init.ModEntityType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EntityType;
@@ -44,6 +45,14 @@ public class LargeLift extends AbstractLift {
         BlockPos backTrackOnePos = backLinePos.relative(leftDirection, 2);
         BlockPos backTrackTwoPos = backLinePos.relative(rightDirection, 2);
 
-        return List.of(frontTrackOnePos, frontTrackTwoPos, leftTrackOnePos, leftTrackTwoPos, rightTrackOnePos, rightTrackTwoPos, backTrackOnePos, backTrackTwoPos);
+        return List.of(
+                frontTrackOnePos,
+                frontTrackTwoPos,
+                leftTrackOnePos,
+                leftTrackTwoPos,
+                rightTrackOnePos,
+                rightTrackTwoPos,
+                backTrackOnePos,
+                backTrackTwoPos);
     }
 }

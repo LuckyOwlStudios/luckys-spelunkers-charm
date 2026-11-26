@@ -1,3 +1,4 @@
+// Lift recipes.
 package net.luckystudio.spelunkers_charm.datagen;
 
 import net.luckystudio.spelunkers_charm.init.ModBlocks;
@@ -18,7 +19,6 @@ import net.minecraft.world.level.ItemLike;
 import java.util.List;
 import java.util.Optional;
 
-/** All elevator crafting in one place, including the recipe-book unlocks. */
 public final class LiftRecipes {
     private LiftRecipes() {}
 

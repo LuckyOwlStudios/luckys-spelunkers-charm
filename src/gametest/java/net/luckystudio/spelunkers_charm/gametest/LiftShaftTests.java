@@ -1,3 +1,4 @@
+// Lift shaft tests.
 package net.luckystudio.spelunkers_charm.gametest;
 
 import net.luckystudio.spelunkers_charm.entity.custom.lift.AbstractLift;
@@ -20,7 +21,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-@GameTestHolder(LiftTestMod.ID)
+@GameTestHolder("spelunkers_cleanup_lift_tests")
 @PrefixGameTestTemplate(false)
 public final class LiftShaftTests {
     private static AbstractLift platform(

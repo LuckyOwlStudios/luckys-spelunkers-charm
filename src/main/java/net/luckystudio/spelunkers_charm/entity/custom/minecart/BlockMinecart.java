@@ -1,9 +1,7 @@
+// Block minecart.
 package net.luckystudio.spelunkers_charm.entity.custom.minecart;
 
 import net.luckystudio.spelunkers_charm.init.ModEntityType;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -22,12 +20,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+
 import org.jetbrains.annotations.NotNull;
 
-public class BlockMinecart extends AbstractMinecart {
+public class BlockMinecart extends AbstractMinecart implements net.minecraft.world.Container {
+    public static final int FULL_AMOUNT = 27 * 64;
 
-    private static final EntityDataAccessor<Integer> BLOCK_AMOUNT = SynchedEntityData.defineId(BlockMinecart.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> BLOCK_AMOUNT =
+            SynchedEntityData.defineId(BlockMinecart.class, EntityDataSerializers.INT);
 
     public BlockMinecart(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -73,6 +74,18 @@ public class BlockMinecart extends AbstractMinecart {
         this.entityData.set(BLOCK_AMOUNT, amount);
     }
 
+    public int addBlocks(BlockState state, int amount) {
+        if (state.isAir()
+                || amount <= 0
+                || (!getDisplayBlockState().isAir() && state != getDisplayBlockState())) return 0;
+        int loaded = Math.min(amount, Integer.MAX_VALUE - getBlockAmount());
+        if (loaded <= 0) return 0;
+        setDisplayBlockState(state);
+        setBlockAmount(getBlockAmount() + loaded);
+        updateName();
+        return loaded;
+    }
+
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
         ItemStack heldItem = player.getItemInHand(hand);
@@ -80,42 +93,20 @@ public class BlockMinecart extends AbstractMinecart {
             return InteractionResult.PASS;
         }
 
-        // ADDING blocks
-        if (heldItem.getItem() instanceof BlockItem blockItem) {
-            if (getDisplayBlockState().isAir() || blockItem.getBlock().defaultBlockState() == getDisplayBlockState()) {
-                this.setDisplayBlockState(blockItem.getBlock().defaultBlockState());
-                this.setBlockAmount(getBlockAmount() + heldItem.getCount());
-                heldItem.shrink(heldItem.getCount());
-                level().playSound(this, this.blockPosition(),
-                        blockItem.getBlock().defaultBlockState().getSoundType(level(), this.blockPosition(), this).getPlaceSound(),
-                        player.getSoundSource(), 1.0F, 1.0F);
-                updateName();
-                return InteractionResult.SUCCESS;
-            }
-        }
-
-        // REMOVING blocks (when not holding a block)
-        else if (getBlockAmount() > 0) {
+        if (heldItem.getItem() instanceof BlockItem) {
+            if (MinecartBlockLoading.load(this, heldItem, player)) return InteractionResult.SUCCESS;
+        } else if (getBlockAmount() > 0) {
             int toRemove = Math.min(64, getBlockAmount());
-            this.setBlockAmount(getBlockAmount() - toRemove);
             ItemStack dropStack = new ItemStack(getDisplayBlockState().getBlock(), toRemove);
-            player.addItem(dropStack);
-
-            // If that was the last of the blocks, clear the block type
-            if (getBlockAmount() <= 0) {
-                this.setCustomDisplay(false);
-                this.setDisplayBlockState(Blocks.AIR.defaultBlockState());
-                Entity newMinecart = new Minecart(level(), this.getX(), this.getY(), this.getZ());
-                // Copy motion and rotation from the original minecart
-                newMinecart.setPosRaw(this.getX(), this.getY(), this.getZ());
-                newMinecart.setDeltaMovement(this.getDeltaMovement());
-                newMinecart.setYRot(this.getYRot());
-                newMinecart.setXRot(this.getXRot());
-                this.remove(RemovalReason.DISCARDED);
-                level().addFreshEntity(newMinecart);
+            if (toRemove == getBlockAmount()) {
+                Minecart empty = new Minecart(level(), getX(), getY(), getZ());
+                if (!MinecartCouplings.replaceEntity(this, empty)) return InteractionResult.FAIL;
+            } else {
+                setBlockAmount(getBlockAmount() - toRemove);
+                updateName();
             }
+            if (!player.addItem(dropStack)) player.drop(dropStack, false);
             player.playNotifySound(SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1.0F, 1.0F);
-            updateName();
             return InteractionResult.SUCCESS;
         }
 
@@ -123,25 +114,95 @@ public class BlockMinecart extends AbstractMinecart {
     }
 
     public void updateName() {
-        if (getBlockAmount() > 0) {
-            this.setCustomName(Component.literal(getBlockAmount() + "x").setStyle(Style.EMPTY.withColor(ChatFormatting.GOLD).applyFormat(ChatFormatting.BOLD)));
-        } else {
-            this.setCustomName(null);
-            this.setCustomNameVisible(false);
-        }
+        setCustomName(CargoCountLabel.forAmount(getBlockAmount()));
+        if (getBlockAmount() <= 0) setCustomNameVisible(false);
+    }
+
+    /** 0 when empty, up to 15 when full. */
+    public int getComparatorLevel() {
+        int amount = getBlockAmount();
+        if (amount <= 0) return 0;
+        return 1 + (int) Math.floor(14.0 * Math.min(amount, FULL_AMOUNT) / FULL_AMOUNT);
+    }
+
+    /** Turns the cart back into a plain minecart once its last block is gone. Server side. */
+    private void convertIfEmpty() {
+        if (getBlockAmount() > 0 || level().isClientSide() || isRemoved()) return;
+        MinecartCouplings.replaceEntity(this, new Minecart(level(), getX(), getY(), getZ()));
     }
 
     @Override
+    public void tick() {
+        super.tick();
+        convertIfEmpty();
+    }
+
+    // Container: this is what lets hoppers pull blocks out of the cart. It shows up as one slot
+    // holding up to a stack of the blocks, and taking from it lowers the cart's block count.
+
+    @Override
+    public int getContainerSize() {
+        return 1;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return getBlockAmount() <= 0 || getDisplayBlockState().isAir();
+    }
+
+    @Override
+    public ItemStack getItem(int slot) {
+        if (slot != 0 || isEmpty()) return ItemStack.EMPTY;
+        return new ItemStack(getDisplayBlockState().getBlock(), Math.min(64, getBlockAmount()));
+    }
+
+    @Override
+    public ItemStack removeItem(int slot, int amount) {
+        if (slot != 0 || isEmpty() || amount <= 0) return ItemStack.EMPTY;
+        int taken = Math.min(Math.min(amount, 64), getBlockAmount());
+        ItemStack result = new ItemStack(getDisplayBlockState().getBlock(), taken);
+        setBlockAmount(getBlockAmount() - taken);
+        updateName();
+        return result;
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int slot) {
+        return removeItem(slot, 64);
+    }
+
+    @Override
+    public void setItem(int slot, ItemStack stack) {
+        // Hoppers can't put blocks in.
+    }
+
+    @Override
+    public boolean canPlaceItem(int slot, ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public void setChanged() {}
+
+    @Override
+    public boolean stillValid(Player player) {
+        return false;
+    }
+
+    @Override
+    public void clearContent() {}
+
+    @Override
     public void kill() {
-        // Drop the stored blocks as an ItemStack if any
+
         if (getBlockAmount() > 0 && !getDisplayBlockState().isAir()) {
-            ItemStack dropStack = new ItemStack(getDisplayBlockState().getBlock(), getBlockAmount());
+            ItemStack dropStack =
+                    new ItemStack(getDisplayBlockState().getBlock(), getBlockAmount());
             this.spawnAtLocation(dropStack);
         }
         super.kill();
     }
 
-    // Copeid from VehicleEntity but removed the custom name logic
     @Override
     public void destroy(Item dropItem) {
         this.kill();

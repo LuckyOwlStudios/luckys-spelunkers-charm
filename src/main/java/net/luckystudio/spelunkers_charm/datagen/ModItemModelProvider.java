@@ -1,3 +1,4 @@
+// Item model provider.
 package net.luckystudio.spelunkers_charm.datagen;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
@@ -19,5 +20,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.SMALL_LIFT.get());
         basicItem(ModItems.MEDIUM_LIFT.get());
         basicItem(ModItems.LARGE_LIFT.get());
+        basicItem(ModItems.CART_COUPLING_HOOK.get());
+        basicItem(ModItems.SPELUNKERS_GUIDE.get());
+        basicItem(ModItems.LOCOMOTIVE.get());
     }
 }

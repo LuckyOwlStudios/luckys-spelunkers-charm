@@ -1,3 +1,4 @@
+// Geyser state.
 package net.luckystudio.spelunkers_charm.block.util.enums;
 
 import net.minecraft.util.StringRepresentable;

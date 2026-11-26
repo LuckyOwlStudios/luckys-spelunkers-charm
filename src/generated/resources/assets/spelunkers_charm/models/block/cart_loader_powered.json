@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "spelunkers_charm:block/cart_loader_bottom",
+    "side": "spelunkers_charm:block/cart_loader_side_powered",
+    "top": "spelunkers_charm:block/cart_loader_top"
+  }
+}

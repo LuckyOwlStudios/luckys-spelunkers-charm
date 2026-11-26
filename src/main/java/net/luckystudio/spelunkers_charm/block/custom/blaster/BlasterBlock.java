@@ -1,6 +1,8 @@
+// Blaster block.
 package net.luckystudio.spelunkers_charm.block.custom.blaster;
 
 import com.mojang.serialization.MapCodec;
+
 import net.luckystudio.spelunkers_charm.init.ModBlockEntityType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,6 +23,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
+
 import org.jetbrains.annotations.Nullable;
 
 public class BlasterBlock extends BaseEntityBlock {
@@ -28,11 +31,14 @@ public class BlasterBlock extends BaseEntityBlock {
     public static final MapCodec<BlasterBlock> CODEC = simpleCodec(BlasterBlock::new);
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty TRIGGERED = BlockStateProperties.TRIGGERED;
+
     public BlasterBlock(Properties properties) {
         super(properties.lightLevel(BlasterBlock::lightLevel));
-        this.registerDefaultState(this.stateDefinition.any()
-                .setValue(FACING, Direction.UP)
-                .setValue(TRIGGERED, Boolean.valueOf(false)));
+        this.registerDefaultState(
+                this.stateDefinition
+                        .any()
+                        .setValue(FACING, Direction.UP)
+                        .setValue(TRIGGERED, Boolean.valueOf(false)));
     }
 
     private static int lightLevel(BlockState state) {
@@ -62,25 +68,52 @@ public class BlasterBlock extends BaseEntityBlock {
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         Direction direction = context.getClickedFace();
-        BlockState blockstate = context.getLevel().getBlockState(context.getClickedPos().relative(direction.getOpposite()));
+        BlockState blockstate =
+                context.getLevel()
+                        .getBlockState(context.getClickedPos().relative(direction.getOpposite()));
         return blockstate.is(this) && blockstate.getValue(FACING) == direction
-                ? this.defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(TRIGGERED, Boolean.valueOf(context.getLevel().hasNeighborSignal(context.getClickedPos())))
-                : this.defaultBlockState().setValue(FACING, direction).setValue(TRIGGERED, Boolean.valueOf(context.getLevel().hasNeighborSignal(context.getClickedPos())));
+                ? this.defaultBlockState()
+                        .setValue(FACING, direction.getOpposite())
+                        .setValue(
+                                TRIGGERED,
+                                Boolean.valueOf(
+                                        context.getLevel()
+                                                .hasNeighborSignal(context.getClickedPos())))
+                : this.defaultBlockState()
+                        .setValue(FACING, direction)
+                        .setValue(
+                                TRIGGERED,
+                                Boolean.valueOf(
+                                        context.getLevel()
+                                                .hasNeighborSignal(context.getClickedPos())));
     }
 
     @Override
-    public boolean canConnectRedstone(BlockState state, BlockGetter level, BlockPos pos, @Nullable Direction direction) {
+    public boolean canConnectRedstone(
+            BlockState state, BlockGetter level, BlockPos pos, @Nullable Direction direction) {
         return true;
     }
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return state.getValue(TRIGGERED) ? createTickerHelper(blockEntityType, ModBlockEntityType.BLASTER_BLOCK_ENTITY.get(), BlasterBlockEntity::tick) : null;
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+            Level level, BlockState state, BlockEntityType<T> blockEntityType) {
+        return state.getValue(TRIGGERED)
+                ? createTickerHelper(
+                        blockEntityType,
+                        ModBlockEntityType.BLASTER_BLOCK_ENTITY.get(),
+                        BlasterBlockEntity::tick)
+                : null;
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+    protected void neighborChanged(
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Block block,
+            BlockPos fromPos,
+            boolean isMoving) {
         if (!level.isClientSide) {
             boolean flag = level.hasNeighborSignal(pos);
             if (flag != state.getValue(TRIGGERED)) {
@@ -94,21 +127,31 @@ public class BlasterBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+    protected InteractionResult useWithoutItem(
+            BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
             if (level.getBlockEntity(pos) instanceof BlasterBlockEntity blasterBlockEntity) {
-                player.openMenu(new SimpleMenuProvider(blasterBlockEntity, Component.translatable("block.spelunkers_charm.blaster")), pos);
+                player.openMenu(
+                        new SimpleMenuProvider(
+                                blasterBlockEntity,
+                                Component.translatable("block.spelunkers_charm.blaster")),
+                        pos);
             }
             return InteractionResult.CONSUME;
         }
     }
 
     @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if(state.getBlock() != newState.getBlock()) {
-            if(level.getBlockEntity(pos) instanceof BlasterBlockEntity blasterBlockEntity) {
+    protected void onRemove(
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            BlockState newState,
+            boolean movedByPiston) {
+        if (state.getBlock() != newState.getBlock()) {
+            if (level.getBlockEntity(pos) instanceof BlasterBlockEntity blasterBlockEntity) {
                 blasterBlockEntity.drops();
                 level.updateNeighbourForOutputSignal(pos, this);
             }

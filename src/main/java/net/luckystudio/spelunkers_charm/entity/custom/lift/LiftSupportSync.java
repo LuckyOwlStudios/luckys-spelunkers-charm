@@ -1,3 +1,4 @@
+// Lift support sync.
 package net.luckystudio.spelunkers_charm.entity.custom.lift;
 
 import net.minecraft.server.level.ServerLevel;
@@ -16,7 +17,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-/** Sends attachment transitions; normal movement continues through vanilla sync. */
 @EventBusSubscriber(modid = "spelunkers_charm")
 public final class LiftSupportSync {
     private static final Map<Level, State> STATES = new WeakHashMap<>();
@@ -65,7 +65,7 @@ public final class LiftSupportSync {
         Entity root = target.getRootVehicle();
         Contact contact = state.contacts.get(root.getId());
         if (contact != null) PacketDistributor.sendToPlayer(player, payload(root.getId(), contact));
-        // The rider can enter tracking range before its supporting platform.
+
         if (target instanceof AbstractLift lift) {
             for (Map.Entry<Integer, Contact> entry : state.contacts.entrySet()) {
                 if (entry.getValue().liftId == lift.getId()) {
@@ -121,10 +121,12 @@ public final class LiftSupportSync {
             PacketDistributor.sendToPlayer(player, payload);
     }
 
+    /** Tracks a player's last synchronized lift support. */
     private static final class State {
         long serial;
         final Map<Integer, Contact> contacts = new HashMap<>();
     }
 
+    /** Stores a passenger's current lift contact. */
     private record Contact(int liftId, float relativeY, long serial, long time) {}
 }

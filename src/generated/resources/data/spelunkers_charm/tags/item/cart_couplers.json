@@ -1,0 +1,13 @@
+{
+  "values": [
+    "minecraft:chain",
+    {
+      "id": "#c:chains",
+      "required": false
+    },
+    {
+      "id": "supplementaries:rope",
+      "required": false
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+// Potions.
 package net.luckystudio.spelunkers_charm.item.potion;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
@@ -13,14 +14,20 @@ public class ModPotions {
     public static final DeferredRegister<Potion> POTIONS =
             DeferredRegister.create(BuiltInRegistries.POTION, SpelunkersCharm.MOD_ID);
 
-    public static final Holder<Potion> HASTE_POTION = POTIONS.register("haste_potion",
-            () -> new Potion(new MobEffectInstance(MobEffects.DIG_SPEED, 3600, 0)));
+    public static final Holder<Potion> HASTE_POTION =
+            POTIONS.register(
+                    "haste_potion",
+                    () -> new Potion(new MobEffectInstance(MobEffects.DIG_SPEED, 3600, 0)));
 
-    public static final Holder<Potion> LONG_HASTE_POTION = POTIONS.register("long_haste_potion",
-            () -> new Potion(new MobEffectInstance(MobEffects.DIG_SPEED, 9600, 0)));
+    public static final Holder<Potion> LONG_HASTE_POTION =
+            POTIONS.register(
+                    "long_haste_potion",
+                    () -> new Potion(new MobEffectInstance(MobEffects.DIG_SPEED, 9600, 0)));
 
-    public static final Holder<Potion> STRONG_HASTE_POTION = POTIONS.register("strong_haste_potion",
-            () -> new Potion(new MobEffectInstance(MobEffects.DIG_SPEED, 1800, 1)));
+    public static final Holder<Potion> STRONG_HASTE_POTION =
+            POTIONS.register(
+                    "strong_haste_potion",
+                    () -> new Potion(new MobEffectInstance(MobEffects.DIG_SPEED, 1800, 1)));
 
     public static void register(IEventBus eventBus) {
         POTIONS.register(eventBus);

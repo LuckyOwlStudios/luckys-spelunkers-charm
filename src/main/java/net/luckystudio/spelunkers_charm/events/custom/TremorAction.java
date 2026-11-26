@@ -1,3 +1,4 @@
+// Tremor action.
 package net.luckystudio.spelunkers_charm.events.custom;
 
 import net.minecraft.util.StringRepresentable;

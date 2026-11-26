@@ -1,3 +1,4 @@
+// Hanging type.
 package net.luckystudio.spelunkers_charm.block.custom.boulder;
 
 import net.minecraft.util.ByIdMap;
@@ -8,12 +9,13 @@ import java.util.function.IntFunction;
 public enum HangingType implements StringRepresentable {
     NONE("none"),
     TIED("rope"),
-    CHAINED("chain")
-    ;
+    CHAINED("chain");
 
     private final String name;
-    public static final EnumCodec<HangingType> CODEC = StringRepresentable.fromEnum(HangingType::values);
-    private static final IntFunction<HangingType> BY_ID = ByIdMap.continuous(Enum::ordinal, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
+    public static final EnumCodec<HangingType> CODEC =
+            StringRepresentable.fromEnum(HangingType::values);
+    private static final IntFunction<HangingType> BY_ID =
+            ByIdMap.continuous(Enum::ordinal, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
 
     HangingType(String name) {
         this.name = name;

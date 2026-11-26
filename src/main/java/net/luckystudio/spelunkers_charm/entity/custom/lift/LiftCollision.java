@@ -1,3 +1,4 @@
+// Lift collision.
 package net.luckystudio.spelunkers_charm.entity.custom.lift;
 
 import net.minecraft.nbt.CompoundTag;
@@ -11,7 +12,6 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
-/** Collision for an entity-backed lift deck; no additional mod dependency. */
 public final class LiftCollision {
     private static final double EPSILON = LiftCollisionGeometry.EPSILON;
     private static final double SUPPORT_TOLERANCE = LiftCollisionGeometry.SUPPORT_TOLERANCE;
@@ -27,9 +27,7 @@ public final class LiftCollision {
         double dx = newBounds.minX - oldBounds.minX;
         double dz = newBounds.minZ - oldBounds.minZ;
         for (Entity entity : lift.level().getEntities(lift, search, LiftCollision::canAffect)) {
-            // Remote entities have their own vanilla interpolation. Rewriting
-            // their physical position every lift tick fought those lerp targets.
-            // Their support is applied after entity interpolation and at render.
+
             if (lift.level().isClientSide && !LiftClientSupport.controlsLocally(entity)) continue;
             AABB box = entity.getBoundingBox();
             if (!overlapsDeck(box, oldBounds) && !overlapsDeck(box, newBounds)) {
@@ -37,9 +35,7 @@ public final class LiftCollision {
             }
             double previousFeet = previousFeet(entity, box);
             Vec3 velocity = entity.getDeltaMovement();
-            // ItemEntity reflects a tiny floor velocity upward, which can clear
-            // onGround before the lift's next tick. Close contact identifies that
-            // passive resting bounce; airborne thrown items keep their velocity.
+
             double supportVelocity =
                     entity instanceof ItemEntity
                                     && Math.abs(box.minY - oldBounds.maxY) <= SUPPORT_TOLERANCE
@@ -65,15 +61,11 @@ public final class LiftCollision {
                             previousFeet,
                             supportVelocity,
                             allowPull)) {
-                // Position absolutely, rather than adding the lift's velocity:
-                // server correction and local prediction cannot carry twice.
+
                 boolean landingFromFall =
                         entity.fallDistance > 3.0F
                                 && previousFeet > oldBounds.maxY + SUPPORT_TOLERANCE;
-                // ItemEntity checks noCollision with a deflated box, while
-                // EntityGetter inflates its query by the same epsilon. At an
-                // exactly touching deck, rounding can falsely trigger its
-                // embedded-item ejection (+0.2Y). A tiny skin avoids that path.
+
                 double skin = entity instanceof ItemEntity ? EPSILON : 0.0;
                 entity.setPos(
                         entity.getX() + dx,
@@ -104,7 +96,6 @@ public final class LiftCollision {
         if (!lift.level().isClientSide) LiftSupportSync.finish(lift, supportSerial);
     }
 
-    /** Stops the deck before a supported rider's head reaches a solid ceiling. */
     public static double limitMovementForRiders(
             AbstractLift lift, AABB oldBounds, double requestedY) {
         if (Math.abs(requestedY) < EPSILON) {
@@ -130,7 +121,7 @@ public final class LiftCollision {
             } else if (requestedY < 0.0
                     && box.maxY <= oldBounds.minY + EPSILON
                     && box.maxY >= oldBounds.minY + requestedY - EPSILON) {
-                // A descending deck must not squash a creature against a floor.
+
                 double gap = Math.max(0.0, oldBounds.minY - box.maxY);
                 double push = Math.min(0.0, requestedY + gap);
                 Vec3 allowed = collideWithBlocks(entity, push);
@@ -186,7 +177,6 @@ public final class LiftCollision {
         }
     }
 
-    /** A new entity or a teleport has no usable previous-tick sweep. */
     private static double previousFeet(Entity entity, AABB box) {
         double delta = entity.getY() - entity.yo;
         double maximumSweep = Math.max(4.0, Math.abs(entity.getDeltaMovement().y) + 2.0);
@@ -208,11 +198,6 @@ public final class LiftCollision {
                 && data.getUUID(CONTACT_LIFT).equals(lift.getUUID());
     }
 
-    /**
-     * Only vanilla packet validation uses this bounded interpolation exception. A server-observed
-     * deck contact is required; blocks and other entities keep their normal collisions, and
-     * ordinary entity physics stays fully solid.
-     */
     public static boolean isPacketSupport(Entity entity, AbstractLift lift, AABB proposedBounds) {
         return !entity.level().isClientSide
                 && clientControls(entity)

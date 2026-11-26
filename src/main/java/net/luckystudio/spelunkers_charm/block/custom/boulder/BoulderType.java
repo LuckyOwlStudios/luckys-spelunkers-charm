@@ -1,3 +1,4 @@
+// Boulder type.
 package net.luckystudio.spelunkers_charm.block.custom.boulder;
 
 import net.minecraft.util.ByIdMap;
@@ -32,8 +33,10 @@ public enum BoulderType implements StringRepresentable {
     private final String name;
     private final BoulderOre ore;
     private final boolean lush;
-    public static final EnumCodec<BoulderType> CODEC = StringRepresentable.fromEnum(BoulderType::values);
-    private static final IntFunction<BoulderType> BY_ID = ByIdMap.continuous(Enum::ordinal, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
+    public static final EnumCodec<BoulderType> CODEC =
+            StringRepresentable.fromEnum(BoulderType::values);
+    private static final IntFunction<BoulderType> BY_ID =
+            ByIdMap.continuous(Enum::ordinal, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
 
     BoulderType(String name, BoulderOre ore, boolean lush) {
         this.name = name;

@@ -1,8 +1,10 @@
+// Web patch feature.
 package net.luckystudio.spelunkers_charm.worldgen.feature.custom.web_patch;
 
 import com.mojang.serialization.Codec;
-import net.luckystudio.spelunkers_charm.init.ModBlocks;
+
 import net.luckystudio.spelunkers_charm.block.custom.web_vein.WebSpreader;
+import net.luckystudio.spelunkers_charm.init.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -42,7 +44,8 @@ public class WebPatchFeature extends Feature<SculkPatchConfiguration> {
 
             for (int j = 0; j < i; j++) {
                 for (int k = 0; k < sculkpatchconfiguration.chargeCount(); k++) {
-                    worldGenSpreader.addCursors(blockpos, sculkpatchconfiguration.amountPerCharge());
+                    worldGenSpreader.addCursors(
+                            blockpos, sculkpatchconfiguration.amountPerCharge());
                 }
 
                 boolean flag = j < sculkpatchconfiguration.spreadRounds();
@@ -56,19 +59,24 @@ public class WebPatchFeature extends Feature<SculkPatchConfiguration> {
 
             BlockPos blockpos2 = blockpos.below();
             if (randomsource.nextFloat() <= sculkpatchconfiguration.catalystChance()
-                    && worldgenlevel.getBlockState(blockpos2).isCollisionShapeFullBlock(worldgenlevel, blockpos2)) {
+                    && worldgenlevel
+                            .getBlockState(blockpos2)
+                            .isCollisionShapeFullBlock(worldgenlevel, blockpos2)) {
                 worldgenlevel.setBlock(blockpos, ModBlocks.SPIDER_EGG.get().defaultBlockState(), 3);
             }
 
             int i1 = sculkpatchconfiguration.extraRareGrowths().sample(randomsource);
 
             for (int j1 = 0; j1 < i1; j1++) {
-                BlockPos blockpos1 = blockpos.offset(randomsource.nextInt(5) - 2, 0, randomsource.nextInt(5) - 2);
+                BlockPos blockpos1 =
+                        blockpos.offset(
+                                randomsource.nextInt(5) - 2, 0, randomsource.nextInt(5) - 2);
                 if (worldgenlevel.getBlockState(blockpos1).isAir()
-                        && worldgenlevel.getBlockState(blockpos1.below()).isFaceSturdy(worldgenlevel, blockpos1.below(), Direction.UP)) {
+                        && worldgenlevel
+                                .getBlockState(blockpos1.below())
+                                .isFaceSturdy(worldgenlevel, blockpos1.below(), Direction.UP)) {
                     worldgenlevel.setBlock(
-                            blockpos1, ModBlocks.SPIDER_EGG.get().defaultBlockState(), 3
-                    );
+                            blockpos1, ModBlocks.SPIDER_EGG.get().defaultBlockState(), 3);
                 }
             }
 
@@ -81,11 +89,16 @@ public class WebPatchFeature extends Feature<SculkPatchConfiguration> {
         if (blockstate.getBlock() instanceof SculkBehaviour) {
             return true;
         } else {
-            return !blockstate.isAir() && (!blockstate.is(Blocks.WATER) || !blockstate.getFluidState().isSource())
+            return !blockstate.isAir()
+                            && (!blockstate.is(Blocks.WATER)
+                                    || !blockstate.getFluidState().isSource())
                     ? false
                     : Direction.stream()
-                    .map(pos::relative)
-                    .anyMatch(p_225245_ -> level.getBlockState(p_225245_).isCollisionShapeFullBlock(level, p_225245_));
+                            .map(pos::relative)
+                            .anyMatch(
+                                    p_225245_ ->
+                                            level.getBlockState(p_225245_)
+                                                    .isCollisionShapeFullBlock(level, p_225245_));
         }
     }
 }

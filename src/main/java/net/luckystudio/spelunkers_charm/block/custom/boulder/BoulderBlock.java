@@ -1,11 +1,13 @@
+// Boulder block.
 package net.luckystudio.spelunkers_charm.block.custom.boulder;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.luckystudio.spelunkers_charm.block.util.ModBlockStateProperties;
-import net.luckystudio.spelunkers_charm.datagen.blockTags.ModBlockTags;
-import net.luckystudio.spelunkers_charm.block.util.enums.BlockPart;
+
 import net.luckystudio.spelunkers_charm.block.custom.boulder.entity.Boulder;
+import net.luckystudio.spelunkers_charm.block.util.ModBlockStateProperties;
+import net.luckystudio.spelunkers_charm.block.util.enums.BlockPart;
+import net.luckystudio.spelunkers_charm.datagen.blockTags.ModBlockTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -30,19 +32,24 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nullable;
 import java.util.List;
+
+import javax.annotation.Nullable;
 
 public class BoulderBlock extends Block {
 
-    public static final MapCodec<BoulderBlock> CODEC = RecordCodecBuilder.mapCodec(instance ->
-            instance.group(
-                    propertiesCodec(), // This comes from Block base class
-                    BoulderType.CODEC.fieldOf("type").forGetter(block -> block.type)
-            ).apply(instance, BoulderBlock::new)
-    );
+    public static final MapCodec<BoulderBlock> CODEC =
+            RecordCodecBuilder.mapCodec(
+                    instance ->
+                            instance.group(
+                                            propertiesCodec(), // This comes from Block base class
+                                            BoulderType.CODEC
+                                                    .fieldOf("type")
+                                                    .forGetter(block -> block.type))
+                                    .apply(instance, BoulderBlock::new));
 
-    public static final EnumProperty<HangingType> HANGING_TYPE = ModBlockStateProperties.HANGING_TYPE;
+    public static final EnumProperty<HangingType> HANGING_TYPE =
+            ModBlockStateProperties.HANGING_TYPE;
     public static final EnumProperty<BlockPart> BLOCK_PART = ModBlockStateProperties.BLOCK_PART;
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty GENERATE = BooleanProperty.create("generate");
@@ -52,12 +59,16 @@ public class BoulderBlock extends Block {
     public BoulderBlock(Properties properties, BoulderType type) {
         super(properties.pushReaction(PushReaction.BLOCK));
         this.type = type;
-        this.registerDefaultState(this.stateDefinition.any()
-                .setValue(FACING, Direction.NORTH)
-                .setValue(BLOCK_PART, BlockPart.TOP_MIDDLE)
-                .setValue(GENERATE, false) // Default to true to generate the boulder structure
-                .setValue(FULL, true) // Default to true for full boulder
-                .setValue(HANGING_TYPE, HangingType.NONE));
+        this.registerDefaultState(
+                this.stateDefinition
+                        .any()
+                        .setValue(FACING, Direction.NORTH)
+                        .setValue(BLOCK_PART, BlockPart.TOP_MIDDLE)
+                        .setValue(
+                                GENERATE,
+                                false) // Default to true to generate the boulder structure
+                        .setValue(FULL, true) // Default to true for full boulder
+                        .setValue(HANGING_TYPE, HangingType.NONE));
     }
 
     @Override
@@ -77,18 +88,23 @@ public class BoulderBlock extends Block {
         BlockPos center = clickedPos.relative(clickedDirection); // pos.move(0,1,0)
 
         // Define bounding box for entity check
-        AABB entityBox = new AABB(
-                Vec3.atLowerCornerOf(center.offset(-1, -1, -1)),
-                Vec3.atLowerCornerOf(center.offset(2, 2, 2))
-        );
+        AABB entityBox =
+                new AABB(
+                        Vec3.atLowerCornerOf(center.offset(-1, -1, -1)),
+                        Vec3.atLowerCornerOf(center.offset(2, 2, 2)));
 
         // Entity check
         if (!level.getEntitiesOfClass(LivingEntity.class, entityBox).isEmpty()) {
             return null;
         }
 
-        BlockPos minPos = new BlockPos((int) entityBox.minX, (int) entityBox.minY, (int) entityBox.minZ);
-        BlockPos maxPos = new BlockPos((int) entityBox.maxX - 1, (int) entityBox.maxY - 1, (int) entityBox.maxZ - 1);
+        BlockPos minPos =
+                new BlockPos((int) entityBox.minX, (int) entityBox.minY, (int) entityBox.minZ);
+        BlockPos maxPos =
+                new BlockPos(
+                        (int) entityBox.maxX - 1,
+                        (int) entityBox.maxY - 1,
+                        (int) entityBox.maxZ - 1);
 
         for (BlockPos searchPos : BlockPos.betweenClosed(minPos, maxPos)) {
             if (!level.getBlockState(searchPos).canBeReplaced()) {
@@ -106,7 +122,8 @@ public class BoulderBlock extends Block {
     }
 
     private static HangingType getHangType(BlockState hangingFromState) {
-        if (hangingFromState.getBlock() instanceof ChainBlock && hangingFromState.getValue(BlockStateProperties.AXIS) == Direction.Axis.Y) {
+        if (hangingFromState.getBlock() instanceof ChainBlock
+                && hangingFromState.getValue(BlockStateProperties.AXIS) == Direction.Axis.Y) {
             return HangingType.CHAINED;
         }
         if (hangingFromState.is(ModBlockTags.BOULDER_ROPES)) {
@@ -121,7 +138,8 @@ public class BoulderBlock extends Block {
     }
 
     @Override
-    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
+    public void onPlace(
+            BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
         Direction offsetDirection = state.getValue(FACING);
         BlockPos offsetPos;
         if (offsetDirection == Direction.DOWN) {
@@ -136,13 +154,16 @@ public class BoulderBlock extends Block {
         }
     }
 
-    public static void placeBoulder(Level level, BlockPos pos, BoulderType type, HangingType hangingType) {
+    public static void placeBoulder(
+            Level level, BlockPos pos, BoulderType type, HangingType hangingType) {
         if (level instanceof ServerLevel serverLevel) {
             // Place everything quietly first, then update neighbours once the whole boulder exists,
             // so the half-built boulder never checks its own support.
             BoulderUtils.placeBoulder(serverLevel, pos, type, hangingType, Block.UPDATE_CLIENTS);
-            for (BlockPos placedPos : BlockPos.betweenClosed(pos.offset(-1, 0, -1), pos.offset(1, 2, 1))) {
-                serverLevel.blockUpdated(placedPos, serverLevel.getBlockState(placedPos).getBlock());
+            for (BlockPos placedPos :
+                    BlockPos.betweenClosed(pos.offset(-1, 0, -1), pos.offset(1, 2, 1))) {
+                serverLevel.blockUpdated(
+                        placedPos, serverLevel.getBlockState(placedPos).getBlock());
             }
         }
     }
@@ -160,7 +181,13 @@ public class BoulderBlock extends Block {
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
+    protected void neighborChanged(
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Block neighborBlock,
+            BlockPos neighborPos,
+            boolean movedByPiston) {
         if (!state.getValue(FULL)) return;
         BlockPos bottomMiddlePos = getBottomMiddlePos(state, pos);
         BlockState blockStateHangingFrom = level.getBlockState(bottomMiddlePos.above(3));
@@ -180,7 +207,11 @@ public class BoulderBlock extends Block {
                 BlockState checkState = level.getBlockState(checkPos);
                 if (isBoulderBlock(checkState)) {
                     if (checkState.getBlock() instanceof BoulderBlock) {
-                        level.setBlock(checkPos, checkState.setValue(HANGING_TYPE, getHangType(blockStateHangingFrom)), 3);
+                        level.setBlock(
+                                checkPos,
+                                checkState.setValue(
+                                        HANGING_TYPE, getHangType(blockStateHangingFrom)),
+                                3);
                     }
                 }
             }
@@ -245,16 +276,15 @@ public class BoulderBlock extends Block {
                 bottomMiddlePos.above(2).south(),
                 bottomMiddlePos.above(2).south().west(),
                 bottomMiddlePos.above(2).west(),
-                bottomMiddlePos.above(2).north().west()
-        );
+                bottomMiddlePos.above(2).north().west());
     }
 
     // Should only be run at the bottom_middle part of the boulder
     private boolean isSupported(Level level, BlockPos pos) {
         BlockPos bottomMiddlePos = getBottomMiddlePos(level.getBlockState(pos), pos);
         // Has block under it to be supported
-        return isSuspended(level, bottomMiddlePos) ||
-                !level.getBlockState(bottomMiddlePos.below()).canBeReplaced()
+        return isSuspended(level, bottomMiddlePos)
+                || !level.getBlockState(bottomMiddlePos.below()).canBeReplaced()
                 || !level.getBlockState(bottomMiddlePos.below().north()).canBeReplaced()
                 || !level.getBlockState(bottomMiddlePos.below().north().east()).canBeReplaced()
                 || !level.getBlockState(bottomMiddlePos.below().east()).canBeReplaced()
@@ -283,8 +313,14 @@ public class BoulderBlock extends Block {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+    public void appendHoverText(
+            ItemStack stack,
+            Item.TooltipContext context,
+            List<Component> tooltipComponents,
+            TooltipFlag tooltipFlag) {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
-        tooltipComponents.add(Component.translatable("tooltip.spelunkers_charm.boulder_block").withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(
+                Component.translatable("tooltip.spelunkers_charm.boulder_block")
+                        .withStyle(ChatFormatting.GRAY));
     }
 }

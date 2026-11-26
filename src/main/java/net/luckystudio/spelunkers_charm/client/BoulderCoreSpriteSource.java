@@ -1,9 +1,11 @@
+// Boulder core sprite source.
 package net.luckystudio.spelunkers_charm.client;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import net.minecraft.client.renderer.texture.SpriteContents;
 import net.minecraft.client.renderer.texture.atlas.SpriteSource;
 import net.minecraft.client.renderer.texture.atlas.SpriteSourceType;
@@ -12,13 +14,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceMetadata;
+
 import org.slf4j.Logger;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
+
+import javax.annotation.Nullable;
 
 /**
  * Paints another mod's raw ore block texture into the cut face of our modded ore boulders.
@@ -30,14 +34,27 @@ import java.util.Optional;
  * <p>
  * Used from {@code assets/minecraft/atlases/blocks.json}.
  */
-public record BoulderCoreSpriteSource(List<ResourceLocation> sprites, ResourceLocation mask, List<ResourceLocation> cores) implements SpriteSource {
+public record BoulderCoreSpriteSource(
+        List<ResourceLocation> sprites, ResourceLocation mask, List<ResourceLocation> cores)
+        implements SpriteSource {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final MapCodec<BoulderCoreSpriteSource> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ResourceLocation.CODEC.listOf().fieldOf("sprites").forGetter(BoulderCoreSpriteSource::sprites),
-            ResourceLocation.CODEC.fieldOf("mask").forGetter(BoulderCoreSpriteSource::mask),
-            ResourceLocation.CODEC.listOf().fieldOf("cores").forGetter(BoulderCoreSpriteSource::cores)
-    ).apply(instance, BoulderCoreSpriteSource::new));
+    public static final MapCodec<BoulderCoreSpriteSource> CODEC =
+            RecordCodecBuilder.mapCodec(
+                    instance ->
+                            instance.group(
+                                            ResourceLocation.CODEC
+                                                    .listOf()
+                                                    .fieldOf("sprites")
+                                                    .forGetter(BoulderCoreSpriteSource::sprites),
+                                            ResourceLocation.CODEC
+                                                    .fieldOf("mask")
+                                                    .forGetter(BoulderCoreSpriteSource::mask),
+                                            ResourceLocation.CODEC
+                                                    .listOf()
+                                                    .fieldOf("cores")
+                                                    .forGetter(BoulderCoreSpriteSource::cores))
+                                    .apply(instance, BoulderCoreSpriteSource::new));
 
     /** Set when the type is registered in {@link net.luckystudio.spelunkers_charm.SpelunkersCharmClient}. */
     public static SpriteSourceType TYPE;
@@ -50,13 +67,15 @@ public record BoulderCoreSpriteSource(List<ResourceLocation> sprites, ResourceLo
             if (core.isPresent()) break;
         }
         if (core.isEmpty()) return;
-        Optional<Resource> maskResource = resourceManager.getResource(TEXTURE_ID_CONVERTER.idToFile(mask));
+        Optional<Resource> maskResource =
+                resourceManager.getResource(TEXTURE_ID_CONVERTER.idToFile(mask));
         if (maskResource.isEmpty()) {
             LOGGER.warn("Missing boulder core mask {}", mask);
             return;
         }
         for (ResourceLocation sprite : sprites) {
-            Optional<Resource> base = resourceManager.getResource(TEXTURE_ID_CONVERTER.idToFile(sprite));
+            Optional<Resource> base =
+                    resourceManager.getResource(TEXTURE_ID_CONVERTER.idToFile(sprite));
             if (base.isEmpty()) {
                 LOGGER.warn("Missing boulder texture {}", sprite);
                 continue;
@@ -64,20 +83,28 @@ public record BoulderCoreSpriteSource(List<ResourceLocation> sprites, ResourceLo
             Resource baseResource = base.get();
             Resource coreResource = core.get();
             Resource maskRes = maskResource.get();
-            output.add(sprite, loader -> {
-                SpriteContents contents = compose(sprite, baseResource, maskRes, coreResource);
-                // If anything went wrong, fall back to the texture as we painted it.
-                return contents != null ? contents : loader.loadSprite(sprite, baseResource);
-            });
+            output.add(
+                    sprite,
+                    loader -> {
+                        SpriteContents contents =
+                                compose(sprite, baseResource, maskRes, coreResource);
+                        // If anything went wrong, fall back to the texture as we painted it.
+                        return contents != null
+                                ? contents
+                                : loader.loadSprite(sprite, baseResource);
+                    });
         }
     }
 
     @Nullable
-    private static SpriteContents compose(ResourceLocation sprite, Resource base, Resource mask, Resource core) {
+    private static SpriteContents compose(
+            ResourceLocation sprite, Resource base, Resource mask, Resource core) {
         try {
             NativeImage image = read(base);
-            try (NativeImage maskImage = read(mask); NativeImage coreImage = read(core)) {
-                if (maskImage.getWidth() != image.getWidth() || maskImage.getHeight() != image.getHeight()) {
+            try (NativeImage maskImage = read(mask);
+                    NativeImage coreImage = read(core)) {
+                if (maskImage.getWidth() != image.getWidth()
+                        || maskImage.getHeight() != image.getHeight()) {
                     LOGGER.warn("Boulder core mask does not match the size of {}", sprite);
                     image.close();
                     return null;
@@ -93,7 +120,11 @@ public record BoulderCoreSpriteSource(List<ResourceLocation> sprites, ResourceLo
                     }
                 }
             }
-            return new SpriteContents(sprite, new FrameSize(image.getWidth(), image.getHeight()), image, ResourceMetadata.EMPTY);
+            return new SpriteContents(
+                    sprite,
+                    new FrameSize(image.getWidth(), image.getHeight()),
+                    image,
+                    ResourceMetadata.EMPTY);
         } catch (IOException e) {
             LOGGER.error("Could not build boulder texture {}", sprite, e);
             return null;

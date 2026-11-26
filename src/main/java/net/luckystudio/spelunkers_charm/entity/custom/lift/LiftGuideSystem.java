@@ -1,3 +1,4 @@
+// Lift guide system.
 package net.luckystudio.spelunkers_charm.entity.custom.lift;
 
 import net.luckystudio.spelunkers_charm.block.custom.DetectorLiftTrackBlock;
@@ -16,7 +17,6 @@ import net.minecraft.world.phys.AABB;
 import java.util.HashSet;
 import java.util.Set;
 
-/** Guide validation, motor thresholds, station commands and track occupancy signals. */
 public final class LiftGuideSystem {
     private static final double EPSILON = LiftCollisionGeometry.EPSILON;
     private final AbstractLift lift;
@@ -123,8 +123,7 @@ public final class LiftGuideSystem {
                 for (BlockPos guide : lift.getGuidePositions())
                     present.add(guide.atY(row).immutable());
         }
-        // Genuine block-state transitions let vanilla observers detect both
-        // arrival and departure. A stationary lift never repeatedly updates it.
+
         for (BlockPos old : stoppedGuidePositions)
             if (!present.contains(old)) setGuidePresent(old, false);
         for (BlockPos pos : present) setGuidePresent(pos, true);

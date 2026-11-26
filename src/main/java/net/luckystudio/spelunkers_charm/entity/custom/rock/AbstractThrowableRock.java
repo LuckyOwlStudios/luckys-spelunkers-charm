@@ -1,3 +1,4 @@
+// Abstract throwable rock.
 package net.luckystudio.spelunkers_charm.entity.custom.rock;
 
 import net.minecraft.core.particles.BlockParticleOption;
@@ -17,21 +18,31 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
 public abstract class AbstractThrowableRock extends ThrowableItemProjectile {
 
-    public AbstractThrowableRock(EntityType<? extends ThrowableItemProjectile> entityType, Level level) {
+    public AbstractThrowableRock(
+            EntityType<? extends ThrowableItemProjectile> entityType, Level level) {
         super(entityType, level);
     }
 
-    public AbstractThrowableRock(EntityType<? extends ThrowableItemProjectile> entityType, double x, double y, double z, Level level) {
+    public AbstractThrowableRock(
+            EntityType<? extends ThrowableItemProjectile> entityType,
+            double x,
+            double y,
+            double z,
+            Level level) {
         super(entityType, x, y, z, level);
     }
 
-    public AbstractThrowableRock(EntityType<? extends ThrowableItemProjectile> entityType, LivingEntity shooter, Level level) {
+    public AbstractThrowableRock(
+            EntityType<? extends ThrowableItemProjectile> entityType,
+            LivingEntity shooter,
+            Level level) {
         super(entityType, shooter, level);
     }
 
@@ -41,18 +52,20 @@ public abstract class AbstractThrowableRock extends ThrowableItemProjectile {
             double y,
             double z,
             AbstractThrowableRock.Type type,
-            @Nullable Player player
-    ) {
-        AbstractThrowableRock abstractRock = (AbstractThrowableRock)(switch (type) {
-            case DEEPSLATE_ROCK -> new DeepslateRock(level, x, y, z);
-            case DRIPSTONE_ROCK -> new DripstoneRock(level, x, y, z);
-            case BASALT_ROCK -> new BasaltRock(level, x, y, z);
-            case ICE_BALL -> new IceBall(level, x, y, z);
-            default -> new Rock(level, x, y, z);
-        });
+            @Nullable Player player) {
+        AbstractThrowableRock abstractRock =
+                (AbstractThrowableRock)
+                        (switch (type) {
+                            case DEEPSLATE_ROCK -> new DeepslateRock(level, x, y, z);
+                            case DRIPSTONE_ROCK -> new DripstoneRock(level, x, y, z);
+                            case BASALT_ROCK -> new BasaltRock(level, x, y, z);
+                            case ICE_BALL -> new IceBall(level, x, y, z);
+                            default -> new Rock(level, x, y, z);
+                        });
         return abstractRock;
     }
 
+    /** Lists the supported thrown rock variants. */
     public static enum Type {
         ROCK,
         DEEPSLATE_ROCK,
@@ -80,7 +93,15 @@ public abstract class AbstractThrowableRock extends ThrowableItemProjectile {
             ParticleOptions particleoptions = this.getParticle();
 
             for (int i = 0; i < 8; i++) {
-                this.level().addParticle(particleoptions, this.getX(), this.getY(), this.getZ(), 0.0, 0.0, 0.0);
+                this.level()
+                        .addParticle(
+                                particleoptions,
+                                this.getX(),
+                                this.getY(),
+                                this.getZ(),
+                                0.0,
+                                0.0,
+                                0.0);
             }
         }
     }
@@ -108,8 +129,17 @@ public abstract class AbstractThrowableRock extends ThrowableItemProjectile {
     }
 
     private void rockHit() {
-        this.level().playSound(this, this.blockPosition(), getCopiedBlockState().getSoundType(this.level(), this.blockPosition(), null).getBreakSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
-        this.level().broadcastEntityEvent(this, (byte)3);
+        this.level()
+                .playSound(
+                        this,
+                        this.blockPosition(),
+                        getCopiedBlockState()
+                                .getSoundType(this.level(), this.blockPosition(), null)
+                                .getBreakSound(),
+                        SoundSource.BLOCKS,
+                        1.0F,
+                        1.0F);
+        this.level().broadcastEntityEvent(this, (byte) 3);
         this.discard();
     }
 }

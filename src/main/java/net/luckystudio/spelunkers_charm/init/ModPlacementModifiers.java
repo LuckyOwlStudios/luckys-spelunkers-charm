@@ -1,3 +1,4 @@
+// Placement modifiers.
 package net.luckystudio.spelunkers_charm.init;
 
 import net.luckystudio.spelunkers_charm.SpelunkersCharm;
@@ -12,8 +13,9 @@ public class ModPlacementModifiers {
     public static final DeferredRegister<PlacementModifierType<?>> PLACEMENT_MODIFIERS =
             DeferredRegister.create(Registries.PLACEMENT_MODIFIER_TYPE, SpelunkersCharm.MOD_ID);
 
-    public static final DeferredHolder<PlacementModifierType<?>, PlacementModifierType<ConfigFilter>> CONFIG_FILTER =
-            PLACEMENT_MODIFIERS.register("config", () -> () -> ConfigFilter.CODEC);
+    public static final DeferredHolder<
+                    PlacementModifierType<?>, PlacementModifierType<ConfigFilter>>
+            CONFIG_FILTER = PLACEMENT_MODIFIERS.register("config", () -> () -> ConfigFilter.CODEC);
 
     public static void register(IEventBus eventBus) {
         PLACEMENT_MODIFIERS.register(eventBus);

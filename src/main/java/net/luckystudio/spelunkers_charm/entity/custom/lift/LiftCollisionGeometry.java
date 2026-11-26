@@ -1,6 +1,6 @@
+// Lift collision geometry.
 package net.luckystudio.spelunkers_charm.entity.custom.lift;
 
-/** Arithmetic shared by the physical deck and its passenger collision tests. */
 public final class LiftCollisionGeometry {
     public static final double EPSILON = 1.0E-5;
     public static final double SUPPORT_TOLERANCE = 0.1;
@@ -11,10 +11,6 @@ public final class LiftCollisionGeometry {
         return maxA > minB + EPSILON && minA < maxB - EPSILON;
     }
 
-    /**
-     * Tests the swept upper face, including the explicit pull required on descent. A positive
-     * passenger velocity is a jump, and must not be overwritten.
-     */
     public static boolean supports(
             double oldTop,
             double newTop,
